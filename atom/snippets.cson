@@ -1,0 +1,182 @@
+# Your snippets
+#
+# Atom snippets allow you to enter a simple prefix in the editor and hit tab to
+# expand the prefix into a larger code block with templated values.
+#
+# You can create a new snippet in this file by typing "snip" and then hitting
+# tab.
+#
+# An example CoffeeScript snippet to expand log to console.log:
+#
+# '.source.coffee':
+#   'Console log':
+#     prefix: 'log'
+#     body: 'console.log $1'
+#
+# Each scope (e.g. '.source.coffee' above) can only be declared once.
+#
+# This file uses CoffeeScript Object Notation (CSON).
+# If you are unfamiliar with CSON, you can read more about it in the
+# Atom Flight Manual:
+# https://atom.io/docs/latest/using-atom-basic-customization#cson
+
+'.text.html':
+  'Polymer 2 Element':
+    prefix: 'pec'
+    "body": """
+      <link rel="import" href="../$3bower_components/polymer/polymer-element.html">
+
+      <dom-module id="${2}">
+        <template>
+          <style>
+            :host {
+              display: block;
+            }
+          </style>
+        </template>
+        <script>
+          class ${1} extends Polymer.Element {
+
+            static get is() {return '${2}';}
+
+            static get properties() {
+              return {
+                $3
+              };
+            }$0
+          }
+          customElements.define(${1}.is, ${1});
+        </script>
+      </dom-module>
+    """
+
+  'module':
+    prefix: 'module'
+    body: '<script type="module" src="$1"></script>'
+
+'.text.html.basic':
+  localize:
+    prefix: 'localize'
+    body: '[[localize(\'$1\')]]'
+
+'.text.html .source.css':
+  'Iron Flex Layout Prefix':
+    prefix: 'apl'
+    body: '@apply --layout$1;'
+  'CSS Variable Reference':
+    prefix: 'var'
+    body: 'var(--$1);'
+
+'.source.js':
+  'compose':
+    prefix: 'compose';
+    body: 'const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)));'
+  'trace':
+    prefix: 'trace';
+    body: 'const trace = tag => x => console.log(tag, x) || x;'
+  'LitElement':
+    prefix: 'lite'
+    body: """
+    import { LitElement, html } from '@polymer/lit-element';
+
+    /**
+     * <${2}>
+     * @customElement
+     * @extends LitElement
+     */
+    class ${1} extends LitElement {
+      render() {
+        return html`
+          <style>
+            :host {
+              display: block;
+            }
+          </style>
+          $4
+        `;
+      }
+
+      static get is() {
+        return '${2}';
+      }
+
+      static get properties() {
+        return {
+          $3
+        };
+      }
+    }
+
+    customElements.define(${1}.is, ${1})
+    """
+  'console.log()':
+    prefix: 'log'
+    body: 'console.log($1)'
+
+  'Mocha test':
+    prefix: 'test'
+    body: """
+      test('$1', () => {
+        $2
+      });
+    """
+
+  'Mocha async test':
+    prefix: 'testd'
+    body: """
+      test('$1', (done) => {
+        $2
+        done();
+      });
+      """
+
+  'Mocha suite':
+    prefix: 'suite'
+    body: """
+      suite('$1', () => {
+        $2
+      });
+      """
+
+  'Test Setup block':
+    prefix: 'setup'
+    body: """
+      setup(() => {
+        $1
+      });
+
+    """
+
+  'Test Teardown block':
+    prefix: 'teardown'
+    body: """
+      teardown(() => {
+        $1
+      });
+
+    """
+
+  'Polymer property':
+    prefix: 'prop'
+    body: """
+      /**
+       * ${4:[description]}
+       */
+      ${1:property}: {
+        type: ${2:Object},
+        value: ${3:null},
+      },
+
+    """
+
+  'ESlint disable line max-len':
+    prefix: 'esldlml'
+    body: '// eslint-disable-line max-len'
+
+  'ESlint disable next line':
+    prefix: 'esldnl'
+    body: '// eslint-disable-next-line'
+
+  'ESlint disable next line max-len':
+    prefix: 'esldnlml'
+    body: '// eslint-disable-next-line max-len'

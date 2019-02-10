@@ -1,0 +1,79 @@
+# Your keymap
+#
+# Atom keymaps work similarly to style sheets. Just as style sheets use
+# selectors to apply styles to elements, Atom keymaps use selectors to associate
+# keystrokes with events in specific contexts. Unlike style sheets however,
+# each selector can only be declared once.
+#
+# You can create a new keybinding in this file by typing "key" and then hitting
+# tab.
+#
+# Here's an example taken from Atom's built-in keymap:
+#
+# 'atom-text-editor':
+#   'enter': 'editor:newline'
+#
+# 'atom-workspace':
+#   'ctrl-shift-p': 'core:move-up'
+#   'ctrl-p': 'core:move-down'
+#
+# You can find more information about keymaps in these guides:
+# * https://atom.io/docs/latest/using-atom-basic-customization#customizing-key-bindings
+# * https://atom.io/docs/latest/behind-atom-keymaps-in-depth
+#
+# This file uses CoffeeScript Object Notation (CSON).
+# If you are unfamiliar with CSON, you can read more about it in the
+# Atom Flight Manual:
+# https://atom.io/docs/latest/using-atom-basic-customization#cson
+
+'atom-text-editor':
+  'cmd-shift-j': 'import-js:import'
+
+# Stop emmet from hijacking tab from snippets and autocomplete
+'atom-text-editor.autocomplete-active:not([mini])':
+  'tab': 'autocomplete-plus:confirm'
+  'ctrl-y': 'clip-history:paste'
+  'cmd-y': 'clip-history:paste-newer'
+  'ctrl-Y': 'clip-history:paste-last'
+
+'atom-text-editor.vim-mode-plus:not(.insert-mode)':
+  'cmd-;':    'choose-pane:start'
+  'm m':      'choose-pane:focus-last-focused'
+
+'atom-text-editor.vim-mode-plus.normal-mode':
+  'g f':      'open-this:here'
+  'g d':      'symbols-view:go-to-declaration'
+  'ctrl-w f': 'open-this:split-down'
+  'ctrl-w F': 'open-this:split-right'
+
+'.markdown-preview':
+  'cmd-;': 'choose-pane:start'
+  'm m': 'choose-pane:focus-last-focused'
+
+# For tree-view
+'.tree-view':
+  'cmd-;': 'choose-pane:start'
+  'm m': 'choose-pane:focus-last-focused'
+
+# Map '-', so that I can focus last-focused element by typing `-` twice.
+'atom-text-editor#choose-pane-editor':
+  'cmd-;': 'choose-pane:last-focused'
+
+# Stop emmet from hijacking tab from snippet tab stops
+'atom-text-editor[data-grammar="text html basic"]:not([mini]), atom-text-editor[data-grammar~="jade"]:not([mini]), atom-text-editor[data-grammar~="css"]:not([mini]), atom-text-editor[data-grammar~="sass"]:not([mini])':
+  'tab': 'snippets:next-tab-stop'
+
+# Restore ctrl-tab behaviour to left-to-right
+'body':
+  'ctrl-tab': 'pane:show-next-item'
+  'ctrl-tab ^ctrl': 'unset!'
+  'ctrl-shift-tab': 'pane:show-previous-item'
+  'ctrl-shift-tab ^ctrl': 'unset!'
+  'cmd-alt-j': 'linter-ui-default:next'
+  'cmd-alt-k': 'linter-ui-default:previous'
+  'cmd-;': 'choose-pane:start'
+  'ctrl-h': 'api-docs:search-under-cursor'
+  'ctrl-`': 'atom-ide-terminal:new-terminal'
+
+'terminal-pane':
+  'cmd-;': 'choose-pane:start'

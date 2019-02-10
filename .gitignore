@@ -1,0 +1,37 @@
+node_modules
+
+atom/*
+atom/*/*
+atom/*/*/*
+atom/*/*/*/*
+atom/*/*/*/*/*
+atom/*/*/*/*/*/*
+!atom/.stylelintrc
+!atom/config.cson
+!atom/init.coffee
+!atom/keymap.cson
+!atom/snippets.cson
+!atom/styles.less
+
+fish/fishd.*
+
+# Vim plugins, ftplugins, syntax etc etc !.vim !.vim/*
+!vim/*/*
+!vim/*/*/*
+!vim/*/*/*/*
+!vim/*/*/*/*/*
+!vim/*/*/*/*/*/*
+# Do ignore netrw history
+vim/.netrwhist
+# Do ignore vim-plug stuff, sigh
+vim/plugged
+# Vim settings
+!.vimrc
+!vimrc
+# Ignore swapfiles
+vim/.*.swp
+vim/*/.*.swp
+vim/*/*/.*.swp
+vim/*/*/*/.*.swp
+vim/.netrwhist
+vim/bundle/*

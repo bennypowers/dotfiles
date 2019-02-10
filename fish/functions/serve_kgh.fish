@@ -1,0 +1,9 @@
+function serve_kgh
+	set -lx STRIPE_KEY "sk_test_MDC5wMfEio3tKb3IYkarvmzD"
+	set -lx FACEBOOK_ACCESS_TOKEN "EAAXzEJelhlMBANSlXhGSmfpag3VqWEoQtmTTqgTPqyJwEugZAGx7TFxnaRxaRMsGA4djfpmVbkncy7Ehi7Kyqx90nklZAW36xNcwUpZAsiqDm4PkAb6xea5QMm6brnTZAwZADXwciNwpACnDn4NpXtofvWOY3iSWPPHZB7lZCTtAgZDZD"
+	set -lx TWITTER_ACCESS_TOKEN_KEY "718183199814365184-rYRM2BudNtHMqReRQVek854DXSyS0Iz"
+	set -lx TWITTER_ACCESS_TOKEN_SECRET "NpqsY5uKK1xOL7V5OGHXniqdOusiqaqRF7OvdB9p5KC5a"
+	set -lx TWITTER_ACCESS_CONSUMER_KEY "QSvdafMKEzN3jY2Xn6bE6o3OY"
+	set -lx TWITTER_ACCESS_CONSUMER_SECRET "dVsE6sEu6FIQZVd6nVosibmRdPxChL7LXczPfCkrx51oz0Zu2W"
+	nodemon ~/web/kupat-givat-hamivtar/server.js
+end

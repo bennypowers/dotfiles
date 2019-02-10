@@ -1,0 +1,183 @@
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed and saved.
+ *
+ * Add your own CSS or Less to fully customize Atom.
+ * If you are unfamiliar with Less, you can read more about it here:
+ * http://lesscss.org
+ */
+
+
+html, body, atom-workspace {
+  background-color: black;
+}
+
+.api-docs-doc {
+  color: initial;
+}
+
+.editor .selection .region {
+  border-radius: 4px;
+}
+
+.wrap-guide {
+  opacity: 0.3;
+}
+
+.tree-view {
+
+  li {
+    padding-left: 14px !important;
+  }
+
+  .entry.expanded > .entries {
+    animation: tree-view-expanded 0.4s cubic-bezier(0.15, 0.7, 0.3, 1);
+    -webkit-animation: tree-view-expanded 0.4s cubic-bezier(0.15, 0.7, 0.3, 1);
+  }
+
+  @keyframes tree-view-expanded {
+    0% {
+      transform: translateY(-10px);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
+  }
+}
+
+// style the background and foreground colors on the atom-text-editor-element itself
+atom-text-editor {
+  // color: white;
+  // background-color: hsl(180, 24%, 12%);
+  text-rendering: optimizeLegibility;
+}
+
+.recent-projects-view {
+  .btn-default {
+    background-color: #dddddd;
+
+    &:focus,
+    &:hover {
+      background-color: #eee;
+    }
+  }
+
+  .project-meta {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.indent-guide-improved {
+  background-color: darken(rgba(255,255,255,0.5), 70%);
+
+  &.indent-guide-stack {
+    background-color: darken(rgba(255,255,255,0.5), 30%);
+
+    &.indent-guide-active {
+      background-color: darken(rgba(255,255,255,0.5), 10%);
+    }
+  }
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'),;
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+// Fira Code ligatures
+atom-text-editor {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.editor {
+  .syntax--keyword.syntax--operator:not(.accessor),
+  .syntax--punctuation.syntax--definition,
+  .syntax--storage.syntax--type.syntax--function.syntax--arrow {
+    font-family: "Fira Code", monospace;
+  }
+
+  .syntax--string.syntax--quoted,
+  .syntax--string.syntax--regexp {
+    font-feature-settings: "liga" off, "calt" off;
+    -webkit-font-feature-settings: "liga" off, "calt" off;
+  }
+}
+
+.line.highlight-line-multi-line-dashed-bottom {
+  border-bottom-color: fade(yellow, 20%);
+}
+
+terminal-view {
+  .xterm {
+    font-family: 'Operator Mono', 'Fira Code', monospace !important;
+    font-size: 24px;
+  }
+}
+
+.theme-GobbieGobGoo {
+  --ggg-bg-color: darken(#1f252f, 3%);
+  // --ggg-bg-color: lighten(black, 3%);
+  background-color: var(--ggg-bg-color);
+  .tab-bar,
+  .title-bar,
+  .tree-view,
+  atom-text-editor,
+  atom-text-editor .gutter {
+    background-color: var(--ggg-bg-color);
+  }
+}
+
+.theme-atom-dark-syntax {
+  atom-text-editor, atom-text-editor .gutter {
+    background: none;
+  }
+}
+
+.theme-advanced-railscasts-syntax {
+  @syntax-background-color: black !important;
+}
+
+.theme-atom-material-syntax-dark {
+  atom-text-editor {
+    @app-background-color: black;
+    @base-background-color: black;
+    @syntax-background-color: black !important;
+  }
+
+  .tree-view {
+    background-color: darken(#212121, 5%);
+  }
+
+  .title-bar,
+  .tab-bar,
+  .tab {
+    background-color: darken(#212121, 2%);
+  }
+
+  atom-panel.header {
+    border: none;
+  }
+
+}
