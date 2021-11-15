@@ -30,3 +30,5 @@ node_modules
 
 # Dotfiles repo see https://www.atlassian.com/git/tutorials/dotfiles
 .cfg
+
+~/.config/karabiner/automatic_backups

@@ -13,8 +13,6 @@
 [mergetool "sourcetree"]
 	cmd = /Users/bennyp/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
-[commit]
-	template = /Users/bennyp/.stCommitMsg
 [alias]
 	ap = add -p
 	ca = commit --amend
@@ -23,6 +21,7 @@
 	co  = checkout
 	count = "!f() { compareBranch=${1-master}; git rev-list --count HEAD ^$compareBranch; }; f"
 	f = !git ls-files | grep -i
+	fush = push --force
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	pt = push --tags
 	ra = rebase --abort

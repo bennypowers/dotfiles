@@ -59,6 +59,7 @@ set laststatus=2
 set pastetoggle=<F10>
 set guifont=Fira\ Code:h14
 set virtualedit=all
+set cursorline
 :set wrap
 :set linebreak
 :set nolist  " list disables linebreak
