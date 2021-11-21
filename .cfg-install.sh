@@ -15,9 +15,10 @@ else
   mkdir -p .config-backup/.config
   FILE_NAME=$(config checkout 2>&1 | egrep "\s+\." | awk {'print $1'})
   for file in $FILE_NAME; do
+    echo "Backing up $file"
     mkdir -p $(dirname $file)
+    mv $file .config-backup/$file
   done
-  echo $FILE_NAME | xargs -I{} mv {} .config-backup/{}
   echo "Finished Backup";
 fi;
 
