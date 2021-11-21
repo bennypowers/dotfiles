@@ -5,6 +5,7 @@ function config {
   /usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
 }
 
+echo "Checking out config files..."
 config checkout
 
 if [ $? = 0 ]; then
@@ -13,8 +14,10 @@ else
   echo "Backing up pre-existing dot files.";
   mkdir -p .config-backup/.config
   config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
+  echo "Finished Backup";
 fi;
 
+echo "Verifying checkout..."
 config checkout
 
 config config status.showUntrackedFiles no
