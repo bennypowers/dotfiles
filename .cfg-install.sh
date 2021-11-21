@@ -15,8 +15,7 @@ else
   FILES=$(config checkout 2>&1 | egrep "\s+\." | awk {'print $1'})
   for file in $FILES; do
     echo "Backing up $file"
-    echo "Making dir $(dirname $file)"
-    mkdir -p $(dirname $file)
+    mkdir -p .config-backup/$(dirname $file)
     mv $file .config-backup/$file
   done
   echo "Finished Backup";
