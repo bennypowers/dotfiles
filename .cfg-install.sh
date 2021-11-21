@@ -1,7 +1,13 @@
 git clone --bare https://github.com/bennypowers/dotfiles.git $HOME/.cfg
 
+# Ansi color code variables
+lblue="\e[1;34m"
+lgreen="\e[1;32m"
+reset="\e[0m"
+
 function pecho {
-  echo -e "\e[1;34m$1\e[0m"
+  color = $2 || $lblue
+  echo -e "${color}$1${reset}"
 }
 
 function config {
@@ -21,11 +27,14 @@ else
     mkdir -p .config-backup/$(dirname $file)
     mv $file .config-backup/$file
   done
-  pecho "Finished Backup";
+  pecho "Finished Backup" $lgreen;
 fi;
 
 pecho "Verifying checkout..."
 config checkout
+
+pecho "Install Vundle..."
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 config config status.showUntrackedFiles no
 
@@ -48,4 +57,4 @@ pip3 install powerline-status
 pecho "Installing Vim Plugins..."
 vim +PluginInstall +qall
 
-pecho "Done!"
+pecho "Done!" $lgreen
