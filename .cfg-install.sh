@@ -12,10 +12,10 @@ if [ $? = 0 ]; then
   echo "Checked out config.";
 else
   echo "Backing up pre-existing dot files.";
-  mkdir -p .config-backup/.config
   FILES=$(config checkout 2>&1 | egrep "\s+\." | awk {'print $1'})
   for file in $FILES; do
     echo "Backing up $file"
+    echo "Making dir $(dirname $file)"
     mkdir -p $(dirname $file)
     mv $file .config-backup/$file
   done
