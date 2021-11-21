@@ -1,50 +1,40 @@
 git clone --bare https://github.com/bennypowers/dotfiles.git $HOME/.cfg
 
-# Ansi color code variables
-lblue="\e[1;34m"
-lgreen="\e[1;32m"
-reset="\e[0m"
-
-function pecho {
-  color = $2 || $lblue
-  echo -e "${color}$1${reset}"
-}
-
 function config {
   /usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
 }
 
-pecho "Checking out config files..."
+echo "Checking out config files..."
 config checkout
 
 if [ $? = 0 ]; then
-  pecho "Checked out config.";
+  echo "Checked out config.";
 else
-  pecho "Backing up pre-existing dot files.";
+  echo "Backing up pre-existing dot files.";
   FILES=$(config checkout 2>&1 | egrep "\s+\." | awk {'print $1'})
   for file in $FILES; do
-    pecho "Backing up $file"
+    echo "Backing up $file"
     mkdir -p .config-backup/$(dirname $file)
     mv $file .config-backup/$file
   done
-  pecho "Finished Backup" $lgreen;
+  echo "Finished Backup"
 fi;
 
-pecho "Verifying checkout..."
+echo "Verifying checkout..."
 config checkout
 
-pecho "Install Vundle..."
+echo "Install Vundle..."
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 config config status.showUntrackedFiles no
 
-pecho "Homebrew..."
+echo "Homebrew..."
 brew --version || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-pecho "Fish Shell..."
+echo "Fish Shell..."
 fish --version || brew install fish
 
-pecho "Installing Dependencies..."
+echo "Installing Dependencies..."
 brew install                 \
   reattach-to-user-namespace \
   thefuck                    \
@@ -54,7 +44,7 @@ brew install                 \
 
 pip3 install powerline-status
 
-pecho "Installing Vim Plugins..."
+echo "Installing Vim Plugins..."
 vim +PluginInstall +qall
 
-pecho "Done!" $lgreen
+echo "Done!"
