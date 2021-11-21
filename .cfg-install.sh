@@ -1,38 +1,41 @@
-echo "Cloning dotfiles repo..."
 git clone --bare https://github.com/bennypowers/dotfiles.git $HOME/.cfg
+
+function pecho {
+  echo -e "\e[1;34m$1\e[0m"
+}
 
 function config {
   /usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
 }
 
-echo "Checking out config files..."
+pecho "Checking out config files..."
 config checkout
 
 if [ $? = 0 ]; then
-  echo "Checked out config.";
+  pecho "Checked out config.";
 else
-  echo "Backing up pre-existing dot files.";
+  pecho "Backing up pre-existing dot files.";
   FILES=$(config checkout 2>&1 | egrep "\s+\." | awk {'print $1'})
   for file in $FILES; do
-    echo "Backing up $file"
+    pecho "Backing up $file"
     mkdir -p .config-backup/$(dirname $file)
     mv $file .config-backup/$file
   done
-  echo "Finished Backup";
+  pecho "Finished Backup";
 fi;
 
-echo "Verifying checkout..."
+pecho "Verifying checkout..."
 config checkout
 
 config config status.showUntrackedFiles no
 
-echo "Homebrew..."
+pecho "Homebrew..."
 brew --version || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-echo "Fish Shell..."
+pecho "Fish Shell..."
 fish --version || brew install fish
 
-echo "Installing Dependencies..."
+pecho "Installing Dependencies..."
 brew install                 \
   reattach-to-user-namespace \
   thefuck                    \
@@ -42,4 +45,7 @@ brew install                 \
 
 pip3 install powerline-status
 
-echo "Done!"
+pecho "Installing Vim Plugins..."
+vim +PluginInstall +qall
+
+pecho "Done!"
