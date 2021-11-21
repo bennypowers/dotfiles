@@ -14,7 +14,9 @@ else
   echo "Backing up pre-existing dot files.";
   mkdir -p .config-backup/.config
   FILE_NAME=$(config checkout 2>&1 | egrep "\s+\." | awk {'print $1'})
-  echo $FILE_NAME
+  for file in $FILE_NAME; do
+    mkdir -p $(dirname $file)
+  done
   echo $FILE_NAME | xargs -I{} mv {} .config-backup/{}
   echo "Finished Backup";
 fi;
