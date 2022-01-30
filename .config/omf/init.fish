@@ -12,6 +12,8 @@ alias nr="npm run"
 alias run="nr"
 alias rn="nr"
 alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+alias realvim="vim"
+alias vim="nvim"
 
 # unicode
 set -x LANG en_US.UTF-8

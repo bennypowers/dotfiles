@@ -2,9 +2,11 @@
 // which will not automatically be merged into this file.
 // See https://hyper.is#cfg for all currently supported options.
 
+const fontFamily = '"Hack Nerd Font", Recursive, "Fira Code", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace';
+
 const recursive = `
     .xterm {
-      font-family: 'Hack, Recursive, "Fira Code", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace';
+      font-family: ${fontFamily};
       font-feature-settings:
           "ss01",
           "ss02",
@@ -35,7 +37,7 @@ module.exports = {
 
     // font family with optional fallbacks
     // fontFamily: '"Operator Mono", "Fira Code", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
-    fontFamily: '"Fira Code", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+    fontFamily,
 
     // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
     // cursorColor: 'rgba(248,28,229,0.8)',
