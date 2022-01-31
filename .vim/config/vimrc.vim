@@ -90,7 +90,6 @@ if &shell =~# 'fish$'
 endif
 
 " Markdown fenced code blocks
-let g:polyglot_disabled = ['md', 'markdown']
 let g:vim_markdown_fenced_languages = [
       \ 'css', 'scss', 'html',
       \ 'python', 'py=python',
@@ -101,7 +100,7 @@ let g:vim_markdown_fenced_languages = [
       \ 'vim']
 
 " Auto-close tags
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.md'
-let g:closetag_filetypes = 'html,xhtml,phtml,md'
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.md,*.ts,*.js'
+let g:closetag_filetypes = 'html,xhtml,phtml,md,js,ts'
 
 highlight Comment cterm=italic

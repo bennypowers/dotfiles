@@ -52,6 +52,7 @@ lua << EOF
 
   -- Setup lspconfig.
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
   local lspconfig = require('lspconfig')
 
   lspconfig.tsserver.setup { capabilities = capabilities }
@@ -61,4 +62,5 @@ lua << EOF
   lspconfig.cssls.setup { capabilities = capabilities }
   lspconfig.clojure_lsp.setup { capabilities = capabilities }
   lspconfig.gopls.setup { capabilities = capabilities }
+
 EOF
