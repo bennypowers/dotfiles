@@ -1,6 +1,46 @@
+env:
+  TERM: xterm-256color
 window:
-  decorations: buttonless
+  decorations: transparent
+  opacity: 0.9
+  dynamic_title: true
+  dynamic_padding: true
 font:
+  size: 16
+  use_thin_strokes: true
+  draw_bold_text_with_bright_colors: true
   normal:
-    family: Hack Nerd Font
+    # family: VictorMono Nerd Font
+    # family: Operator Mono
+    family: FiraCode Nerd Font
+    # family: Hack Nerd Font
+  bold:
+    # family: VictorMono Nerd Font
+    
+    family: FiraCode Nerd Font
 
+    # family: Operator Mono
+    
+    style: Bold
+  italic:
+    # family: Hack Nerd Font
+    # style: Italic
+    
+    # family: VictorMono Nerd Font
+    # style: Thin Italic
+    
+    family: Operator Mono
+    style: Book Italic
+  bold_italic:
+    # family: Hack Nerd Font
+    # style: Bold Italic
+    
+    # family: VictorMono Nerd Font
+    # style: SemiBold Italic
+    
+    family: Operator Mono
+    style: Bold Italic
+colors:
+  primary:
+    background: '#111111'
+    foreground: '#c5c8c6'

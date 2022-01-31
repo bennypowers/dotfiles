@@ -2,7 +2,18 @@
 // which will not automatically be merged into this file.
 // See https://hyper.is#cfg for all currently supported options.
 
-const fontFamily = '"Hack Nerd Font", Recursive, "Fira Code", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace';
+const fontFamily = [
+  '"Hack Nerd Font"',
+  '"FiraCode Nerd Font"',
+  'Recursive',
+  'Hack',
+  'Fira Code',
+  'Menlo',
+  '"DejaVu Sans Mono"',
+  'Consolas',
+  '"Lucida Console"',
+  'monospace',
+].join(', ');
 
 const recursive = `
     .xterm {
@@ -73,7 +84,7 @@ module.exports = {
     // default: `false` on Linux, `true` on Windows (ignored on macOS)
     showHamburgerMenu: false,
 
-    // set to `false` if you want to hide the minimize, maximize and close buttons
+    / set to `false` if you want to hide the minimize, maximize and close buttons
     // additionally, set to `'left'` if you want them on the left, like in Ubuntu
     // default: `true` on windows and Linux (ignored on macOS)
     showWindowControls: false,
