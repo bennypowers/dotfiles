@@ -31,26 +31,31 @@
 	ri = rebase --interactive
 	s	= status
 
-[difftool "Kaleidoscope"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-
-# If you want to set up Kaleidoscope as the default diff tool,
-# then also set the following variables:
-[difftool]
-	prompt = false
-[diff]
-	tool = Kaleidoscope
-
-[mergetool "Kaleidoscope"]
-	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
-
-# If you want to set up Kaleidoscope as the default merge tool,
-# then also set the following variables:
-[mergetool]
-	prompt = false
-[merge]
-	tool = Kaleidoscope
 [pull]
 	ff = only
 [init]
 	defaultBranch = main
+
+# If you want to set up Kaleidoscope as the default diff tool,
+# then also set the following variables:
+# [mergetool "Kaleidoscope"]
+# 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
+# [difftool]
+# 	prompt = false
+# [diff]
+#	  tool = Kaleidoscope
+# [mergetool]
+# 	prompt = false
+# [merge]
+# 	tool = Kaleidoscope
+
+[merge]
+  tool = vimdiff
+[mergetool]
+  prompt = true
+[mergetool "vimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[difftool]
+  prompt = false
+[diff]
+  tool = vimdiff
