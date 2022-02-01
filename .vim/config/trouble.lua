@@ -1,4 +1,3 @@
-lua << EOF
 local trouble = require("trouble")
 trouble.setup({
   auto_open = true,
@@ -6,4 +5,3 @@ trouble.setup({
   auto_preview = true,
   use_diagnostic_signs = false,
 })
-EOF

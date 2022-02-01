@@ -1,3 +1,4 @@
+vim.cmd([[
 let g:nvim_tree_quit_on_open = 0 "0 by default, closes the tree when you open a file
 let g:nvim_tree_indent_markers = 0 "0 by default, this option shows indent markers when folders are open
 let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
@@ -72,7 +73,8 @@ nnoremap <leader>n :NvimTreeFindFile<CR>
 
 " a list of groups can be found at `:help nvim_tree_highlight`
 highlight NvimTreeFolderIcon guibg=blue
-lua << END
+]])
+
 -- following options are the default
 -- each of these are documented in `:help nvim-tree.OPTION_NAME`
 
@@ -138,4 +140,3 @@ tree.setup({
     require_confirm = true
   }
 })
-END

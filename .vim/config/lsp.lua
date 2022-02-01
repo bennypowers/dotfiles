@@ -1,12 +1,12 @@
-let g:diagnostic_enable_virtual_text = 1
-let g:diagnostic_virtual_text_prefix = ' '
+vim.cmd([[
+  let g:diagnostic_enable_virtual_text = 1
+  let g:diagnostic_virtual_text_prefix = ' '
+  call sign_define("LspDiagnosticsSignError", {"text" : "🔥", "texthl" : "LspDiagnosticsError"})
+  call sign_define("LspDiagnosticsSignWarning", {"text" : "🚧", "texthl" : "LspDiagnosticsWarning"})
+  call sign_define("LspDiagnosticsSignInformation", {"text" : "👷", "texthl" : "LspDiagnosticsInformation"})
+  call sign_define("LspDiagnosticsSignHint", {"text" : "🙋", "texthl" : "LspDiagnosticsHint"})
+]])
 
-call sign_define("LspDiagnosticsSignError", {"text" : "🔥", "texthl" : "LspDiagnosticsError"})
-call sign_define("LspDiagnosticsSignWarning", {"text" : "🚧", "texthl" : "LspDiagnosticsWarning"})
-call sign_define("LspDiagnosticsSignInformation", {"text" : "👷", "texthl" : "LspDiagnosticsInformation"})
-call sign_define("LspDiagnosticsSignHint", {"text" : "🙋", "texthl" : "LspDiagnosticsHint"})
-
-lua << EOF
 local lsp_status = require('lsp-status')
 local lsp_installer_servers = require('nvim-lsp-installer.servers')
 local util = require 'vim.lsp.util'
@@ -94,7 +94,10 @@ local server_settings = {
     lintTask = {
       enable = true,
     },
-  }
+  },
+  remark_ls = {
+    defaultProcessor = 'remark'
+  },
 }
 
 -- Loop through the servers listed above.
@@ -127,5 +130,3 @@ for _, name in pairs(servers) do
 
   end
 end
-
-EOF

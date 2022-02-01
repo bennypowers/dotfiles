@@ -1,8 +1,8 @@
-lua << END
 local actions = require('telescope.actions')
 local telescope = require("telescope")
 
-telescope.setup{
+telescope.setup({
+
     defaults = {
         vimgrep_arguments = {
             'rg',
@@ -28,6 +28,7 @@ telescope.setup{
             }
         }
     },
+
     pickers = {
         lsp_code_actions = {
             theme = "cursor"
@@ -36,12 +37,13 @@ telescope.setup{
             theme = "dropdown"
         }
     },
-}
+})
 
-END
-
-
+--[=[
+vim.cmd([[
 " Telly colors not really working for me
 highlight TelescopeSelection guifg=#FF38A2 gui=bold
 highlight TelescopeMatching guifg=#d9bcef
+]])
+]=]
 
