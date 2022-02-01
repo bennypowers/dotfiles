@@ -76,7 +76,8 @@ lua << END
 -- following options are the default
 -- each of these are documented in `:help nvim-tree.OPTION_NAME`
 
-require('nvim-tree').setup({
+local tree = require('nvim-tree')
+tree.setup({
   disable_netrw       = true,
   hijack_netrw        = true,
   open_on_setup       = true,
@@ -113,7 +114,7 @@ require('nvim-tree').setup({
   },
   git = {
     enable = true,
-    ignore = true,
+    ignore = false,
     timeout = 500,
   },
   view = {
