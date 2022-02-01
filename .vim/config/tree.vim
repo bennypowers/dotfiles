@@ -124,7 +124,9 @@ require('nvim-tree').setup({
     auto_resize = false,
     mappings = {
       custom_only = false,
-      list = {}
+      list = {
+          { key = '<MiddleMouse>', action = "tabnew" },
+      }
     },
     number = false,
     relativenumber = false,

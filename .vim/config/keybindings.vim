@@ -36,8 +36,7 @@ nnoremap <Leader>.          <cmd>Telescope lsp_code_actions<CR>
 nnoremap <Leader>sd         <cmd>Telescope lsp_workspace_diagnostics<CR>
 nnoremap <silent>gd         <cmd>Telescope lsp_definitions<CR>
 nnoremap <silent>gi         <cmd>Telescope lsp_implementations<CR>
-nnoremap <Leader>k          <cmd>Telescope commands<CR>
-
+nnoremap <Leader>k          :lua require'telescope.builtin'.commands(require('telescope.themes').get_dropdown({}))<cr>
 " COMPLETIONS
 "
 " inoremap <silent><expr> <C-Space> compe#complete()

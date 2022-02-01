@@ -51,6 +51,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'mattn/emmet-vim'
 Plug 'pechorin/any-jump.vim'
+Plug 'monkoose/matchparen.nvim'
 
 "--- LSP
 Plug 'neovim/nvim-lspconfig'

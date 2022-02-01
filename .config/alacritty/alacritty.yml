@@ -1,10 +1,12 @@
 env:
   TERM: xterm-256color
+
 window:
   decorations: transparent
   opacity: 0.9
   dynamic_title: true
   dynamic_padding: true
+
 font:
   size: 16
   use_thin_strokes: true
@@ -12,35 +14,101 @@ font:
   normal:
     # family: VictorMono Nerd Font
     # family: Operator Mono
+    #
     family: FiraCode Nerd Font
+    #
     # family: Hack Nerd Font
   bold:
     # family: VictorMono Nerd Font
-    
+    #
     family: FiraCode Nerd Font
-
-    # family: Operator Mono
-    
     style: Bold
+    #
+    # family: Operator Mono
   italic:
     # family: Hack Nerd Font
     # style: Italic
-    
+    #
     # family: VictorMono Nerd Font
     # style: Thin Italic
-    
+    #
     family: Operator Mono
     style: Book Italic
   bold_italic:
     # family: Hack Nerd Font
     # style: Bold Italic
-    
+    #
     # family: VictorMono Nerd Font
     # style: SemiBold Italic
-    
+    #
     family: Operator Mono
     style: Bold Italic
+
+# colors:
+#   primary:
+#     # background: '#111111'
+#     background: '#000000'
+#     foreground: '#c5c8c6'
+
+# Nightfox Alacritty Colors
+# Style: duskfox
+# Upstream: https://github.com/edeneast/nightfox.nvim/raw/main/extra/duskfox/nightfox_alacritty.yml
 colors:
+  # Default colors
   primary:
-    background: '#111111'
-    foreground: '#c5c8c6'
+    # background: '0x232136'
+    background: '#000000'
+    foreground: '0xe0def4'
+  # Normal colors
+  normal:
+    black:   '0x393552'
+    red:     '0xeb6f92'
+    green:   '0xa3be8c'
+    yellow:  '0xf6c177'
+    blue:    '0x569FBA'
+    magenta: '0xc4a7e7'
+    cyan:    '0x9ccfd8'
+    white:   '0xe0def4'
+  # Bright colors
+  bright:
+    black:   '0x47407d'
+    red:     '0xf083a2'
+    green:   '0xb1d196'
+    yellow:  '0xf9cb8c'
+    blue:    '0x65b1cd'
+    magenta: '0xccb1ed'
+    cyan:    '0xa6dae3'
+    white:   '0xe2e0f7'
+  indexed_colors:
+    - { index: 16, color: '0xea9a97' }
+    - { index: 17, color: '0xEB98C3' }
+
+# Colors (Smyck)
+# colors:
+#   bright:
+#     black: '#7a7a7a'
+#     blue: '#8dcff0'
+#     cyan: '#6ad9cf'
+#     green: '#c4f137'
+#     magenta: '#f79aff'
+#     red: '#d6837c'
+#     white: '#f7f7f7'
+#     yellow: '#fee14d'
+#   cursor:
+#     cursor: '#bbbbbb'
+#     text: '#ffffff'
+#   normal:
+#     black: '#000000'
+#     blue: '#62a3c4'
+#     cyan: '#207383'
+#     green: '#7da900'
+#     magenta: '#ba8acc'
+#     red: '#b84131'
+#     white: '#a1a1a1'
+#     yellow: '#c4a500'
+#   primary:
+#     background: '#1b1b1b'
+#     foreground: '#f7f7f7'
+#   selection:
+#     background: '#207483'
+#     text: '#f7f7f7'
