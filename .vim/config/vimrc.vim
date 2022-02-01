@@ -39,6 +39,7 @@ set laststatus=2
 set pastetoggle=<F10>
 set virtualedit=all
 set cursorline
+set cursorcolumn
 :set wrap
 :set linebreak
 :set nolist

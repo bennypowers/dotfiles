@@ -7,9 +7,11 @@ call sign_define("LspDiagnosticsSignInformation", {"text" : "👷", "texthl" : "
 call sign_define("LspDiagnosticsSignHint", {"text" : "🙋", "texthl" : "LspDiagnosticsHint"})
 
 lua << EOF
---vim.lsp.set_log_level("debug")
-
 local lsp_status = require('lsp-status')
+local lsp_installer_servers = require('nvim-lsp-installer.servers')
+local util = require 'vim.lsp.util'
+
+vim.notify = require("notify")
 
 lsp_status.config({
   kind_labels = vim.g.completion_customize_lsp_label,
@@ -25,129 +27,103 @@ lsp_status.config({
 
 lsp_status.register_progress()
 
-local on_attach_vim = function(client)
-    require'completion'.on_attach(client)
-    lsp_status.on_attach(client)
-    capabilities = lsp_status.capabilities
-end
+local servers = {
+    "angularls",
+    "bash",
+    "cssls",
+    -- "denols",
+    "dockerls",
+    "eslint",
+    "graphql",
+    "html",
+    "hls",            -- haskell
+    "tsserver",       -- typescript
+    "sumneko_lua",    -- lua
+    "remark_ls",      -- markdown
+    "spectral",       -- OpenAPI
+    "vimls",
+    "yamlls",
+    "emmet_ls",
+    "rust_analyzer",
+    "clangd",
+    "pyright",
+}
 
-local lspconfig = require('lspconfig')
-
-lspconfig.tsserver.setup{ on_attach=on_attach_vim }
-lspconfig.jsonls.setup{ on_attach=on_attach_vim }
-lspconfig.html.setup{ on_attach=on_attach_vim }
-lspconfig.jdtls.setup{ on_attach=on_attach_vim }
-lspconfig.cssls.setup{ on_attach=on_attach_vim }
-lspconfig.clojure_lsp.setup{ on_attach=on_attach_vim }
-lspconfig.gopls.setup { on_attach=on_attach_vim }
-
-require('lspkind').init({
-    -- enables text annotations
-    --
-    -- default: true
-    with_text = true,
-
-    -- default symbol map
-    -- can be either 'default' or
-    -- 'codicons' for codicon preset (requires vscode-codicons font installed)
-    --
-    -- default: 'default'
-    preset = 'codicons',
-
-    -- override preset symbols
-    --
-    -- default: {}
-    symbol_map = {
-      Text = '',
-      Method = 'ƒ',
-      Function = '',
-      Constructor = '',
-      Variable = '',
-      Class = '',
-      Interface = 'ﰮ',
-      Module = '',
-      Property = '',
-      Unit = '',
-      Value = '',
-      Enum = '了',
-      Keyword = '',
-      Snippet = '﬌',
-      Color = '',
-      File = '',
-      Folder = '',
-      EnumMember = '',
-      Constant = '',
-      Struct = ''
+local server_settings = {
+  tsserver = {
+    format = { enable = false },
+  },
+  eslint = {
+    enable = true,
+    format = { enable = true }, -- this will enable formatting
+    packageManager = "npm",
+    autoFixOnSave = true,
+    codeActionsOnSave = {
+      mode = "all",
+      rules = { "!debugger", "!no-only-tests/*" },
     },
-})
-
-local nvim_lsp = require('lspconfig')
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-local servers = { 'pyright', 'rust_analyzer', 'tsserver' }
-
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = function(client, bufnr)
-      local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-      local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-      -- Enable completion triggered by <c-x><c-o>
-      buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-      -- Mappings.
-      local opts = { noremap=true, silent=true }
-    end,
-    flags = {
-      debounce_text_changes = 150,
-    }
+    lintTask = {
+      enable = true,
+    },
   }
+}
+
+function common_on_attach(client, bufnr)
+  -- Setup lspconfig.
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+  if client.resolved_capabilities.document_formatting then
+    vim.cmd([[
+    augroup LspFormatting
+        autocmd! * <buffer>
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+    augroup END
+    ]])
+  end
 end
 
-local null_ls = require("null-ls")
-local eslint = require("eslint")
+function disable_formatting(client, bufnr)
+  client.resolved_capabilities.document_formatting = false
+  client.resolved_capabilities.document_range_formatting = false
+  common_on_attach(client, bufnr)
+end
 
-null_ls.setup({
-    sources = {
-        null_ls.builtins.formatting.stylua,
-        null_ls.builtins.diagnostics.eslint,
-        null_ls.builtins.completion.spell,
-    },
+function enable_formatting(client, bufnr)
+  client.resolved_capabilities.document_formatting = true
+  client.resolved_capabilities.document_range_formatting = true
+  common_on_attach(client, bufnr)
+end
 
-    -- you can reuse a shared lspconfig on_attach callback here
-    on_attach = function(client)
-        if client.resolved_capabilities.document_formatting then
-            vim.cmd([[
-            augroup LspFormatting
-                autocmd! * <buffer>
-                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-            augroup END
-            ]])
-        end
-    end,
-})
+-- Loop through the servers listed above.
+for _, server_name in pairs(servers) do
+  local server_available, server = lsp_installer_servers.get_server(server_name)
 
-eslint.setup({
-  bin = 'eslint_d', -- or `eslint_d`
-  code_actions = {
-    enable = true,
-    apply_on_save = {
-      enable = true,
-      types = { "problem" }, -- "directive", "problem", "suggestion", "layout"
-    },
-    disable_rule_comment = {
-      enable = true,
-      location = "separate_line", -- or `same_line`
-    },
-  },
-  diagnostics = {
-    enable = true,
-    report_unused_disable_directives = false,
-    run_on = "type", -- or `save`
-  },
-})
+  if server_available then
+    -- When this particular server is ready (i.e. when installation is finished or the server is already installed),
+    -- this function will be invoked. Make sure not to use the "catch-all" lsp_installer.on_server_ready()
+    -- function to set up servers, to avoid doing setting up a server twice.
+    server:on_ready(function ()
+      local opts = {
+        on_attach = common_on_attach,
+      }
+
+      if server_settings[server.name] then opts.settings = server_settings[server.name] end
+
+      -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
+      -- the resolved capabilities of the eslint server ourselves!
+      -- Disable formatting for typescript, so that eslint can take over. see below
+      if server.name == 'tsserver' then opts.on_attach = disable_formatting end
+      if server.name == 'denols'   then opts.on_attach = disable_formatting end
+      if server.name == "eslint"   then opts.on_attach = enable_formatting end
+
+      server:setup(opts)
+    end)
+    
+    -- Queue the server to be installed.
+    if not server:is_installed() then server:install() end
+
+  end
+end
+
 EOF
