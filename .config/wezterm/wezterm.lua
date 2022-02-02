@@ -1,47 +1,73 @@
-local wezterm = require'wezterm'
+local wezterm = require 'wezterm'
 
 local function font_with_fallback(name, params)
 	local names = { name, "Noto Color Emoji", "FiraCode Nerd Font" }
 	return wezterm.font_with_fallback(names, params)
 end
 
+local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
+
+local Grey = "#0f1419"
+local LightGrey = "#191f26"
+
+local TAB_BAR_BG = "Black"
+local ACTIVE_TAB_BG = "Yellow"
+local ACTIVE_TAB_FG = "Black"
+local HOVER_TAB_BG = Grey
+local HOVER_TAB_FG = "White"
+local NORMAL_TAB_BG = LightGrey
+local NORMAL_TAB_FG = "White"
+
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-	-- The filled in variant of the < symbol
-	local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+	local background = NORMAL_TAB_BG
+	local foreground = NORMAL_TAB_FG
 
-	-- The filled in variant of the > symbol
-	local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
-
-	local edge_background = "#0b0022"
-	local background = "#1b1032"
-	local foreground = "#808080"
+	local is_first = tab.tab_id == tabs[1].tab_id
+	local is_last = tab.tab_id == tabs[#tabs].tab_id
 
 	if tab.is_active then
-		background = "#2b2042"
-		foreground = "#c0c0c0"
+		background = ACTIVE_TAB_BG
+		foreground = ACTIVE_TAB_FG
 	elseif hover then
-		background = "#3b3052"
-		foreground = "#909090"
+		background = HOVER_TAB_BG
+		foreground = HOVER_TAB_FG
 	end
 
-	local edge_foreground = background
+	local leading_fg = NORMAL_TAB_FG
+	local leading_bg = background
 
-	-- ensure that the titles fit in the available space,
-	-- and that we have room for the edges.
-	local title = wezterm.truncate_to_width(tab.active_pane.title, max_width-2)
+	local trailing_fg = background
+	local trailing_bg = NORMAL_TAB_BG
+
+	if is_first then
+		leading_fg = TAB_BAR_BG
+	else
+		leading_fg = NORMAL_TAB_BG
+	end
+
+	if is_last then
+		trailing_bg = TAB_BAR_BG
+	else
+		trailing_bg = NORMAL_TAB_BG
+	end
+
+	local title = tab.active_pane.title
+	-- broken?
+	-- local title = " " .. wezterm.truncate_to_width(tab.active_pane.title, 30) .. " "
 
 	return {
-		{Background={Color=edge_background}},
-		{Foreground={Color=edge_foreground}},
-		{Text=SOLID_LEFT_ARROW},
-		{Background={Color=background}},
-		{Foreground={Color=foreground}},
-		{Text=title},
-		{Background={Color=edge_background}},
-		{Foreground={Color=edge_foreground }},
-		{Text=SOLID_RIGHT_ARROW},
+		{Attribute={Italic=false}},
+		{Attribute={Intensity=hover and "Bold" or "Normal"}},
+		{Background={Color=leading_bg}},  {Foreground={Color=leading_fg}},
+			{Text=SOLID_RIGHT_ARROW},
+		{Background={Color=background}},  {Foreground={Color=foreground}},
+			{Text=" "..title.." "},
+		{Background={Color=trailing_bg}}, {Foreground={Color=trailing_fg}},
+			{Text=SOLID_RIGHT_ARROW},
 	}
 end)
+
 
 return {
 	window_decorations = "RESIZE",
@@ -54,6 +80,27 @@ return {
 	tab_max_width = 32,
 
 	leader = { key="b", mods="CTRL", timeout_milliseconds=1000 },
+
+	colors = {
+		tab_bar = {
+			background = TAB_BAR_BG,
+		},
+	},
+
+	tab_bar_style = {
+		new_tab = wezterm.format{
+			{Background={Color=HOVER_TAB_BG}},			{Foreground={Color=TAB_BAR_BG}},			{Text=SOLID_RIGHT_ARROW}, {Background={Color=HOVER_TAB_BG}}, {Foreground={Color=HOVER_TAB_FG}},
+			{Text=" + "},
+			{Background={Color=TAB_BAR_BG}},			{Foreground={Color=HOVER_TAB_BG}},	{Text=SOLID_RIGHT_ARROW},
+		},
+		new_tab_hover = wezterm.format{
+			{Attribute={Italic=false}},
+			{Attribute={Intensity="Bold"}},
+			{Background={Color=NORMAL_TAB_BG}},		{Foreground={Color=TAB_BAR_BG}},			{Text=SOLID_RIGHT_ARROW}, {Background={Color=NORMAL_TAB_BG}}, {Foreground={Color=NORMAL_TAB_FG}},
+			{Text=" + "},
+			{Background={Color=TAB_BAR_BG}},			{Foreground={Color=NORMAL_TAB_BG}},	{Text=SOLID_RIGHT_ARROW},
+		},
+	},
 
 	keys = {
 		{ key="-",  mods="LEADER", action=wezterm.action{ SplitVertical={ domain="CurrentPaneDomain" } } },
