@@ -34,6 +34,10 @@ set linebreak
 set list
 set mouse=a
 
+set foldlevel=20
+set foldmethod=expr
+set foldexpr="nvim_treesitter#foldexpr()"
+
 filetype off
 filetype plugin indent on
 
@@ -71,4 +75,5 @@ source ~/.vim/config/cmp.lua
 source ~/.vim/config/tree.lua
 source ~/.vim/config/vgit.lua
 source ~/.vim/config/nightfox.lua
+source ~/.vim/config/treesitter.lua
 

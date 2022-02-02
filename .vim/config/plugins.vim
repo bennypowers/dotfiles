@@ -36,6 +36,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'seblj/nvim-tabline'
 Plug 'rcarriga/nvim-notify'
+Plug 'anuvyklack/pretty-fold.nvim'
 
 "-- Sessions
 Plug 'tpope/vim-obsession'
