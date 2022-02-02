@@ -1,0 +1,185 @@
+# Functions
+
+# Function
+snippet fun "function"
+	function ${1:function_name}(${2}) {
+		${0:${VISUAL}}
+	}
+
+# Asynchronous Function
+snippet asf "async function"
+	async function ${1:function_name}(${2}) {
+		${0:${VISUAL}}
+	}
+
+# IIFE
+snippet iife
+	(function(${1}) {
+		${0:${VISUAL}}
+	}(${2}));
+
+# Flow control
+# if
+snippet if "if (condition) { ... }"
+	if (${1:true}) {
+		${0:${VISUAL}}
+	}
+
+# if ... else
+snippet ife "if (condition) { ... } else { ... }"
+	if (${1:true}) {
+		${0:${VISUAL}}
+	} else {
+		${2}
+	}
+
+# switch
+snippet switch
+	switch (${1:expression}) {
+		case '${3:case}':
+			${4}
+			break;
+		${0}
+		default:
+			${2}
+	}
+
+snippet case "case 'xyz': ... break"
+	case '${1:case}':
+		${0:${VISUAL}}
+		break;
+
+snippet try "try { ... } catch(e) { ... }"
+	try {
+		${0:${VISUAL}}
+	} catch (${1:e}) {
+		${2:/* handle error */}
+	}
+
+snippet tryf "try { ... } catch(e) { ... } finally { ... }"
+	try {
+		${0:${VISUAL}}
+	} catch (${1:e}) {
+		${2:/* handle error */}
+	} finally {
+		${3:/* be executed regardless of the try / catch result*/}
+	}
+
+# throw Error
+snippet terr
+	throw new Error('${1:error message}')
+
+# return
+snippet foro "for (const x of ..) {...}"
+	for (const ${2:x} of ${1:Things}) {
+		${0:${VISUAL}}
+	}
+
+# Documentation
+# docstring
+snippet /**
+	/**
+	 * ${0:description}
+	 *
+	 */
+
+snippet @par
+	@param {${1:type}} ${2:name} ${0:description}
+
+snippet @ret
+	@returns {${1:type}} ${0:description}
+
+# JSON.parse
+snippet jsonp
+	JSON.parse(${0:jstr});
+
+# JSON.stringify
+snippet jsons
+	JSON.stringify(${0:object});
+
+# DOM selectors
+
+# Element by ID
+snippet by
+	${1:document}.getElementById('${0:element ID}')
+
+# Query selector
+snippet qs
+	${1:document}.querySelector('${0:CSS selector}')
+
+# Query selector all
+snippet qsa
+	${1:document}.querySelectorAll('${0:CSS selector}')
+
+# Debugging
+snippet de
+	debugger;
+
+snippet cl "console.log"
+	console.log(${0});
+snippet cd "console.debug"
+	console.debug(${0});
+snippet ce "console.error"
+	console.error(${0});
+snippet cw "console.warn"
+	console.warn(${0});
+snippet ci "console.info"
+	console.info(${0});
+snippet ct "console.trace"
+	console.trace(${0:label});
+snippet ctime "console.time ... console.timeEnd"
+	console.time("${1:label}");
+	${0:${VISUAL}}
+	console.timeEnd("$1");
+snippet ctimestamp "console.timeStamp"
+	console.timeStamp("${1:label}");
+snippet ca "console.assert"
+	console.assert(${1:expression}, ${0:obj});
+snippet cclear "console.clear"
+	console.clear();
+snippet cdir "console.dir"
+	console.dir(${0:obj});
+snippet cdirx "console.dirxml"
+	console.dirxml(${1:object});
+snippet cgroup "console.group"
+	console.group("${1:label}");
+	${0:${VISUAL}}
+	console.groupEnd();
+snippet cgroupc "console.groupCollapsed"
+	console.groupCollapsed("${1:label}");
+	${0:${VISUAL}}
+	console.groupEnd();
+snippet cprof "console.profile"
+	console.profile("${1:label}");
+	${0:${VISUAL}}
+	console.profileEnd();
+snippet ctable "console.table"
+	console.table(${1:"${2:value}"});
+snippet clstr "console.log stringified"
+	console.log(JSON.stringify(${0}, null, 2));
+
+# Misc
+snippet const
+	const ${1} = ${0};
+snippet let
+	let ${1} = ${0};
+snippet im "import xyz from 'xyz'"
+	import ${1} from '${2:$1}';
+snippet imas "import * as xyz from 'xyz'"
+	import * as ${1} from '${2:$1}';
+snippet imm "import { member } from 'xyz'"
+	import { ${1} } from '${2}';
+snippet cla
+	class ${1} {
+		${0:${VISUAL}}
+	}
+snippet clax
+	class ${1} extends ${2} {
+		${0:${VISUAL}}
+	}
+snippet clac
+	class ${1} {
+		constructor(${2}) {
+			${0:${VISUAL}}
+		}
+	}

@@ -1,0 +1,28 @@
+snippet pfereadme "PFE readme"
+		# PatternFly Elements ${1:title}
+					
+		${$VISUAL}
+
+		Read more about ${1} in the [PatternFly Elements ${1} documentation](https://patternflyelements.org/components/${2:slug})
+
+		##  Installation
+
+		Load \`<pfe-${2}>\` via CDN:
+
+		\`\`\`html
+		<script src="https://unpkg.com/@patternfly/pfe-${2}?module"></script>
+		\`\`\`
+
+		Or, if you are using [NPM](https://npm.im), install it
+
+		\`\`\`bash
+		npm install @patternfly/pfe-${2}
+		\`\`\`
+
+		Then once installed, import it to your application:
+
+		\`\`\`js
+		import '@patternfly/pfe-${2}';
+		\`\`\`
+
+		## Usage

@@ -9,7 +9,6 @@ vim.cmd([[
 
 local lsp_status = require('lsp-status')
 local lsp_installer_servers = require('nvim-lsp-installer.servers')
-local util = require 'vim.lsp.util'
 
 vim.notify = require("notify")
 
@@ -27,12 +26,12 @@ lsp_status.config({
 
 lsp_status.register_progress()
 
-function common_on_attach(client, bufnr)
+local function common_on_attach(client)
   -- Setup lspconfig.
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  -- autocmd BufWritePre * :!{bash -c "while ![ -e $1 ]; do echo $1; sleep 0.1s; done"} %:p  
+  -- autocmd BufWritePre * :!{bash -c "while ![ -e $1 ]; do echo $1; sleep 0.1s; done"} %:p
   if client.resolved_capabilities.document_formatting then
     vim.cmd([[
     augroup LspFormatting
@@ -44,16 +43,16 @@ function common_on_attach(client, bufnr)
   end
 end
 
-function disable_formatting(client, bufnr)
+local function disable_formatting(client)
   client.resolved_capabilities.document_formatting = false
   client.resolved_capabilities.document_range_formatting = false
-  common_on_attach(client, bufnr)
+  common_on_attach(client)
 end
 
-function enable_formatting(client, bufnr)
+local function enable_formatting(client)
   client.resolved_capabilities.document_formatting = true
   client.resolved_capabilities.document_range_formatting = true
-  common_on_attach(client, bufnr)
+  common_on_attach(client)
 end
 
 local servers = {
@@ -68,7 +67,7 @@ local servers = {
   "hls",            -- haskell
   "tsserver",       -- typescript
   "sumneko_lua",    -- lua
-  "remark_ls",      -- markdown
+  -- "remark_ls",      -- markdown
   "spectral",       -- OpenAPI
   "vimls",
   "yamlls",
@@ -78,10 +77,19 @@ local servers = {
   "pyright",
 }
 
+-- Setup your lua path
+-- needed to get IDE features in lua files
+-- I promised Clason in the neovim gitter i wouldn't call it 'intellisense'
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
 local server_settings = {
+
   tsserver = {
     format = { enable = false },
   },
+
   eslint = {
     enable = true,
     format = { enable = true }, -- this will enable formatting
@@ -95,9 +103,30 @@ local server_settings = {
       enable = true,
     },
   },
+
   remark_ls = {
     defaultProcessor = 'remark'
   },
+
+  sumneko_lua = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+        path = runtime_path,
+      },
+      diagnostics = {
+        globals = { 'vim' }, -- Get the language server to recognize the `vim` global
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true), -- Make the server aware of Neovim runtime files
+        checkThirdParty = false,
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  }
 }
 
 -- Loop through the servers listed above.
@@ -124,7 +153,7 @@ for _, name in pairs(servers) do
 
       server:setup(opts)
     end)
-    
+
     -- Queue the server to be installed.
     if not server:is_installed() then server:install() end
 

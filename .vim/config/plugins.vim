@@ -20,6 +20,8 @@ Plug 'yonlu/omni.vim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'xiyaowong/telescope-emoji.nvim'
+Plug 'windwp/nvim-spectre'
 
 "-- Syntax
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }

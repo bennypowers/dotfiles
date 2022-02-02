@@ -10,6 +10,7 @@ if &shell =~# 'fish$'
 endif
 
 syntax on
+
 set nocompatible
 set completeopt=menu,menuone,noselect
 set termguicolors
@@ -28,10 +29,10 @@ set pastetoggle=<F10>
 set virtualedit=all
 set cursorline
 set cursorcolumn
-:set wrap
-:set linebreak
-:set nolist
-:set mouse=a
+set wrap
+set linebreak
+set list
+set mouse=a
 
 filetype off
 filetype plugin indent on
@@ -60,6 +61,7 @@ let g:vim_markdown_fenced_languages = [
 source ~/.vim/config/keybindings.vim
 source ~/.vim/config/background.vim
 source ~/.vim/config/plugins.vim
+source ~/.vim/config/tree-settings.vim
 
 source ~/.vim/config/tabline.lua
 source ~/.vim/config/trouble.lua

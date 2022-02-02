@@ -27,6 +27,7 @@
                                             "^co\\.zeit\\.hyperterm$",
                                             "^co\\.zeit\\.hyper$",
                                             "^io\\.alacritty$",
+                                            "^com\\.github\\.wez\\.wezterm$",
                                             "^net\\.kovidgoyal\\.kitty$"
                                         ],
                                         "type": "frontmost_application_if"

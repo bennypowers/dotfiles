@@ -2,7 +2,9 @@ vim.o.updatetime = 300
 vim.o.incsearch = false
 vim.wo.signcolumn = 'yes'
 
-require('vgit').setup({
+local vgit = require('vgit')
+
+vgit.setup({
   keymaps = {
     ['n <C-k>'] = 'hunk_up',
     ['n <C-j>'] = 'hunk_down',

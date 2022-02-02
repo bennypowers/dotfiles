@@ -1,7 +1,8 @@
-local actions = require('telescope.actions')
-local telescope = require("telescope")
+local actions = require'telescope.actions'
+local telescope = require'telescope'
+local emoji = require'telescope-emoji'
 
-telescope.setup({
+telescope.setup{
 
     defaults = {
         vimgrep_arguments = {
@@ -15,11 +16,14 @@ telescope.setup({
             '--ignore',
             '--hidden'
         },
+
         file_ignore_patterns = {
             ".git",
             "node_modules"
         },
+
         prompt_prefix = "🔎 ",
+
         mappings = {
             i = {
                 ["<C-k>"] = actions.move_selection_previous,
@@ -30,20 +34,23 @@ telescope.setup({
     },
 
     pickers = {
+
         lsp_code_actions = {
             theme = "cursor"
         },
+
         lsp_workspace_diagnostics = {
             theme = "dropdown"
         }
     },
-})
+}
 
---[=[
-vim.cmd([[
-" Telly colors not really working for me
-highlight TelescopeSelection guifg=#FF38A2 gui=bold
-highlight TelescopeMatching guifg=#d9bcef
-]])
-]=]
+telescope.load_extension'emoji'
 
+local function print_emoji(e)
+    vim.api.nvim_put({ e.value }, "c", false, true)
+end
+
+emoji.setup{
+    action = print_emoji,
+}
