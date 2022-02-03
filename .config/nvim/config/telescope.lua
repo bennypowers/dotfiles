@@ -1,6 +1,5 @@
 local actions = require'telescope.actions'
 local telescope = require'telescope'
-local emoji = require'telescope-emoji'
 
 telescope.setup{
 
@@ -43,14 +42,4 @@ telescope.setup{
             theme = "dropdown"
         }
     },
-}
-
-telescope.load_extension'emoji'
-
-local function print_emoji(e)
-    vim.api.nvim_put({ e.value }, "c", false, true)
-end
-
-emoji.setup{
-    action = print_emoji,
 }

@@ -2,9 +2,9 @@ vim.o.updatetime = 300
 vim.o.incsearch = false
 vim.wo.signcolumn = 'yes'
 
-local vgit = require('vgit')
+local vgit = require'vgit'
 
-vgit.setup({
+vgit.setup{
   keymaps = {
     ['n <C-k>'] = 'hunk_up',
     ['n <C-j>'] = 'hunk_down',
@@ -81,7 +81,7 @@ vgit.setup({
           author = 'You'
         end
         local time = os.difftime(os.time(), blame.author_time)
-          / (60 * 60 * 24 * 30 * 12)
+        / (60 * 60 * 24 * 30 * 12)
         local time_divisions = {
           { 1, 'years' },
           { 12, 'months' },
@@ -118,9 +118,9 @@ vgit.setup({
             '%s %s ago',
             time >= 0 and math.floor(time + 0.5) or math.ceil(time - 0.5),
             time_postfix
-          ),
+            ),
           commit_message
-        )
+          )
       end,
     },
     live_gutter = {
@@ -187,4 +187,4 @@ vgit.setup({
       void = '⣿',
     },
   }
-})
+}

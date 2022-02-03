@@ -1,6 +1,6 @@
 "-- Get Plug if not installed
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
@@ -20,23 +20,43 @@ Plug 'yonlu/omni.vim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'xiyaowong/telescope-emoji.nvim'
+Plug 'nvim-telescope/telescope-symbols.nvim'
 Plug 'windwp/nvim-spectre'
+Plug 'MunifTanjim/nui.nvim'
+Plug 'VonHeikemen/fine-cmdline.nvim'
 
 "-- Syntax
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/playground'
 Plug 'sheerun/vim-polyglot'
 Plug 'dag/vim-fish'
+Plug 'folke/twilight.nvim'
+Plug 'lepture/vim-jinja'
 
 "-- Functional
 Plug 'tpope/vim-fugitive'
 Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'seblj/nvim-tabline'
+Plug 'romgrk/barbar.nvim'
 Plug 'rcarriga/nvim-notify'
 Plug 'anuvyklack/pretty-fold.nvim'
+
+if has('nvim')
+  function! UpdateRemotePlugins(...)
+    " Needed to refresh runtime files
+    let &rtp=&rtp
+    UpdateRemotePlugins
+  endfunction
+
+  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+else
+  Plug 'gelguy/wilder.nvim'
+
+  " To use Python remote plugin features in Vim, can be skipped
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 "-- Sessions
 Plug 'tpope/vim-obsession'
@@ -49,6 +69,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
 Plug 'mattn/emmet-vim'
 Plug 'pechorin/any-jump.vim'
 Plug 'monkoose/matchparen.nvim'

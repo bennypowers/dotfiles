@@ -13,6 +13,7 @@ syntax on
 
 set nocompatible
 set completeopt=menu,menuone,noselect
+set colorcolumn=100
 set termguicolors
 set encoding=UTF-8
 set number
@@ -26,7 +27,7 @@ set shiftwidth=2
 set expandtab
 set laststatus=2
 set pastetoggle=<F10>
-set virtualedit=all
+set virtualedit=block,onemore
 set cursorline
 set cursorcolumn
 set wrap
@@ -49,8 +50,8 @@ let g:webdevicons_enable_airline_statusline = 1
 let g:airline_powerline_fonts=1
 
 " Auto-close tags
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.md,*.ts,*.js'
-let g:closetag_filetypes = 'html,xhtml,phtml,md,js,ts'
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.md,*.ts,*.js,*.njk'
+let g:closetag_filetypes = 'html,xhtml,phtml,md,js,ts,njk,jinja'
 
 " Markdown fenced code blocks
 let g:vim_markdown_fenced_languages = [
@@ -62,18 +63,30 @@ let g:vim_markdown_fenced_languages = [
       \ 'graphql', 'gql=graphql',
       \ 'vim']
 
-source ~/.vim/config/keybindings.vim
-source ~/.vim/config/background.vim
-source ~/.vim/config/plugins.vim
-source ~/.vim/config/tree-settings.vim
+au BufNewFile,BufRead *.njk set ft=jinja
 
-source ~/.vim/config/tabline.lua
-source ~/.vim/config/trouble.lua
-source ~/.vim/config/telescope.lua
-source ~/.vim/config/lsp.lua
-source ~/.vim/config/cmp.lua
-source ~/.vim/config/tree.lua
-source ~/.vim/config/vgit.lua
-source ~/.vim/config/nightfox.lua
-source ~/.vim/config/treesitter.lua
+source ~/.config/nvim/config/background.vim
+source ~/.config/nvim/config/plugins.vim
+source ~/.config/nvim/config/tree-settings.vim
+
+call wilder#setup({'modes': [':', '/', '?']})
+
+source ~/.config/nvim/config/barbar.lua
+source ~/.config/nvim/config/trouble.lua
+source ~/.config/nvim/config/telescope.lua
+source ~/.config/nvim/config/lsp.lua
+source ~/.config/nvim/config/cmp.lua
+source ~/.config/nvim/config/tree.lua
+source ~/.config/nvim/config/vgit.lua
+source ~/.config/nvim/config/nightfox.lua
+source ~/.config/nvim/config/treesitter.lua
+
+source ~/.config/nvim/config/keybindings.vim
+
+" Hide cmdline
+" set noshowmode
+" set noshowcmd
+" set shortmess+=F
+" set laststatus=0 " For some reason this doesnt work
+" autocmd BufRead,BufNewFile * set laststatus=0 " This will work instead
 

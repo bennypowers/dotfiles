@@ -5,7 +5,7 @@ local function font_with_fallback(name, params)
 	return wezterm.font_with_fallback(names, params)
 end
 
-local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+-- local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
 local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
 
 local Grey = "#0f1419"
@@ -20,6 +20,10 @@ local NORMAL_TAB_BG = LightGrey
 local NORMAL_TAB_FG = "White"
 
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
+	panes = panes
+	config = config
+	max_width = max_width
+
 	local background = NORMAL_TAB_BG
 	local foreground = NORMAL_TAB_FG
 
@@ -81,6 +85,12 @@ return {
 
 	leader = { key="b", mods="CTRL", timeout_milliseconds=1000 },
 
+	inactive_pane_hsb = {
+		saturation = 0.5,
+		brightness = 0.5,
+	},
+
+	color_scheme = "duskfox",
 	colors = {
 		tab_bar = {
 			background = TAB_BAR_BG,
@@ -103,14 +113,13 @@ return {
 	},
 
 	keys = {
-		{ key="-",  mods="LEADER", action=wezterm.action{ SplitVertical={ domain="CurrentPaneDomain" } } },
-		{ key="\\", mods="LEADER", action=wezterm.action{ SplitHorizontal={ domain="CurrentPaneDomain" } } },
-		{ key="h",  mods="LEADER", action=wezterm.action{ ActivatePaneDirection="Left" } },
-		{ key="l",  mods="LEADER", action=wezterm.action{ ActivatePaneDirection="Right" } },
-		{ key="j",  mods="LEADER", action=wezterm.action{ ActivatePaneDirection="Down" } },
-		{ key="k",  mods="LEADER", action=wezterm.action{ ActivatePaneDirection="Up" } },
-		{ key="n",  mods="LEADER", action=wezterm.action{ ActivateTabRelative=1 } },
-		{ key="p",  mods="LEADER", action=wezterm.action{ ActivateTabRelative=-1 } },
+		{ key="-",  mods="SUPER", action=wezterm.action{ SplitVertical={ domain="CurrentPaneDomain" } } },
+		{ key="\\", mods="SUPER", action=wezterm.action{ SplitHorizontal={ domain="CurrentPaneDomain" } } },
+		{ key="h",  mods="SUPER", action=wezterm.action{ ActivatePaneDirection="Left" } },
+		{ key="l",  mods="SUPER", action=wezterm.action{ ActivatePaneDirection="Right" } },
+		{ key="j",  mods="SUPER", action=wezterm.action{ ActivatePaneDirection="Down" } },
+		{ key="k",  mods="SUPER", action=wezterm.action{ ActivatePaneDirection="Up" } },
+		{ key="w",  mods="SUPER", action=wezterm.action{ CloseCurrentPane={confirm=true} } },
 	},
 
 	font = font_with_fallback("FiraCode Nerd Font"),

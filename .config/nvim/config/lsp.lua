@@ -7,12 +7,13 @@ vim.cmd([[
   call sign_define("LspDiagnosticsSignHint", {"text" : "🙋", "texthl" : "LspDiagnosticsHint"})
 ]])
 
-local lsp_status = require('lsp-status')
-local lsp_installer_servers = require('nvim-lsp-installer.servers')
+local lsp_status = require'lsp-status'
+local lsp_installer_servers = require'nvim-lsp-installer.servers'
+local cmp_nvim_lsp = require'cmp_nvim_lsp'
 
-vim.notify = require("notify")
+vim.notify = require'notify'
 
-lsp_status.config({
+lsp_status.config{
   kind_labels = vim.g.completion_customize_lsp_label,
   current_function = false,
   status_symbol = '💬: ',
@@ -22,13 +23,13 @@ lsp_status.config({
   indicator_hint = '🙋 ',
   indicator_ok = '✅',
   spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
-})
+}
 
 lsp_status.register_progress()
 
 local function common_on_attach(client)
   -- Setup lspconfig.
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
   -- autocmd BufWritePre * :!{bash -c "while ![ -e $1 ]; do echo $1; sleep 0.1s; done"} %:p
@@ -115,7 +116,7 @@ local server_settings = {
         path = runtime_path,
       },
       diagnostics = {
-        globals = { 'vim' }, -- Get the language server to recognize the `vim` global
+        globals = { 'utf8', 'vim' }, -- Get the language server to recognize the `vim` global
       },
       workspace = {
         library = vim.api.nvim_get_runtime_file("", true), -- Make the server aware of Neovim runtime files
@@ -158,4 +159,25 @@ for _, name in pairs(servers) do
     if not server:is_installed() then server:install() end
 
   end
+end
+
+-- Hover on.. uhh. hover
+vim.lsp.handlers['textDocument/hover'] = function(_, method, result)
+  vim.lsp.util.focusable_float(method, function()
+    if not (result and result.contents) then
+      -- return { 'No information available' }
+      return
+    end
+    local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+    markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)
+    if vim.tbl_isempty(markdown_lines) then
+      -- return { 'No information available' }
+      return
+    end
+    local bufnr, winnr = vim.lsp.util.fancy_floating_markdown(markdown_lines, {
+      pad_left = 1; pad_right = 1;
+    })
+    vim.lsp.util.close_preview_autocmd({"CursorMoved", "BufHidden"}, winnr)
+    return bufnr, winnr
+  end)
 end
