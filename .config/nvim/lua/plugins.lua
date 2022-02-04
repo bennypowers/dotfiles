@@ -16,12 +16,11 @@ return require'packer'.startup(function(use)
   use { 'EdenEast/nightfox.nvim',
     config = function()
       local nightfox = require'nightfox'
-      ---@diagnostic disable-next-line: unused-local
       local c = require'nightfox.colors'.load()
 
       -- This function set the configuration of nightfox. If a value is not passed in the setup function
       -- it will be taken from the default configuration above
-      nightfox.setup{
+      nightfox.setup {
         fox = 'duskfox',
         alt_nc = true,
         styles = {
@@ -53,7 +52,10 @@ return require'packer'.startup(function(use)
       -- Load the configuration set above and apply the colorscheme
       nightfox.load()
 
-      require'matchparen'.setup()
+      require'matchparen'.setup {
+        on_startup = true,
+        hl_group = 'MatchParen',
+      }
     end
   }
 
@@ -127,14 +129,15 @@ return require'packer'.startup(function(use)
   use { 'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
     config = function()
-      local fold = require'pretty-fold'
-      local preview = require'pretty-fold.preview'
+      local treesitter = require'nvim-treesitter.configs'
       local twilight = require'twilight'
 
-      fold.setup{ }
-
-      preview.setup {
-        key = 'h', -- choose 'h' or 'l' key
+      treesitter.setup {
+        ensure_installed = 'maintained',
+        highlight = { enable = true },
+        incremental_selection = { enable = true },
+        textobjects = { enable = true },
+        indent = { enable = true },
       }
 
       twilight.setup {
@@ -415,29 +418,29 @@ return require'packer'.startup(function(use)
     end
   }
 
-    -- Completions
-    use { 'hrsh7th/cmp-nvim-lsp', requires = 'hrsh7th/nvim-cmp' }
-    use { 'hrsh7th/cmp-buffer', requires = 'hrsh7th/nvim-cmp' }
-    use { 'hrsh7th/cmp-path', requires = 'hrsh7th/nvim-cmp' }
-    use { 'hrsh7th/cmp-cmdline',
-      requires = { 'hrsh7th/nvim-cmp', },
-      config = function()
-        local cmp = require'cmp'
-        -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-        cmp.setup.cmdline("/", {
-          sources = {
-            { name = "buffer" },
-          },
-        })
+  -- Completions
+  use { 'hrsh7th/cmp-nvim-lsp', requires = 'hrsh7th/nvim-cmp' }
+  use { 'hrsh7th/cmp-buffer', requires = 'hrsh7th/nvim-cmp' }
+  use { 'hrsh7th/cmp-path', requires = 'hrsh7th/nvim-cmp' }
+  use { 'hrsh7th/cmp-cmdline',
+    requires = { 'hrsh7th/nvim-cmp', },
+    config = function()
+      local cmp = require'cmp'
+      -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+      cmp.setup.cmdline("/", {
+        sources = {
+          { name = "buffer" },
+        },
+      })
 
-        -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-        cmp.setup.cmdline(":", {
-          sources = cmp.config.sources({
-            { name = "path" },
-          }, {
-            { name = "cmdline" },
-          }),
-        })
+      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+      cmp.setup.cmdline(":", {
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          { name = "cmdline" },
+        }),
+      })
     end
   }
 

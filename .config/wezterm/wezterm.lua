@@ -12,7 +12,7 @@ local Grey = "#0f1419"
 local LightGrey = "#191f26"
 
 local TAB_BAR_BG = "Black"
-local ACTIVE_TAB_BG = "Yellow"
+local ACTIVE_TAB_BG = "#dcff00"
 local ACTIVE_TAB_FG = "Black"
 local HOVER_TAB_BG = Grey
 local HOVER_TAB_FG = "White"
@@ -20,10 +20,6 @@ local NORMAL_TAB_BG = LightGrey
 local NORMAL_TAB_FG = "White"
 
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-	panes = panes
-	config = config
-	max_width = max_width
-
 	local background = NORMAL_TAB_BG
 	local foreground = NORMAL_TAB_FG
 
@@ -45,7 +41,9 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
 	local trailing_bg = NORMAL_TAB_BG
 
 	if is_first then
-		leading_fg = TAB_BAR_BG
+		-- leading_fg = TAB_BAR_BG
+		leading_fg = background
+		leading_bg = background
 	else
 		leading_fg = NORMAL_TAB_BG
 	end
