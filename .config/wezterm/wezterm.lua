@@ -113,13 +113,16 @@ return {
 	},
 
 	keys = {
-		{ key="-",  mods="SUPER", action=wezterm.action{ SplitVertical={ domain="CurrentPaneDomain" } } },
-		{ key="\\", mods="SUPER", action=wezterm.action{ SplitHorizontal={ domain="CurrentPaneDomain" } } },
-		{ key="h",  mods="SUPER", action=wezterm.action{ ActivatePaneDirection="Left" } },
-		{ key="l",  mods="SUPER", action=wezterm.action{ ActivatePaneDirection="Right" } },
-		{ key="j",  mods="SUPER", action=wezterm.action{ ActivatePaneDirection="Down" } },
-		{ key="k",  mods="SUPER", action=wezterm.action{ ActivatePaneDirection="Up" } },
-		{ key="w",  mods="SUPER", action=wezterm.action{ CloseCurrentPane={confirm=true} } },
+		{ key="-",  mods="SUPER", 			action=wezterm.action{ SplitVertical={ domain="CurrentPaneDomain" } } },
+		{ key="\\", mods="SUPER", 			action=wezterm.action{ SplitHorizontal={ domain="CurrentPaneDomain" } } },
+		{ key="h",  mods="SUPER", 			action=wezterm.action{ ActivatePaneDirection="Left" } },
+		{ key="l",  mods="SUPER", 			action=wezterm.action{ ActivatePaneDirection="Right" } },
+		{ key="j",  mods="SUPER", 			action=wezterm.action{ ActivatePaneDirection="Down" } },
+		{ key="k",  mods="SUPER", 			action=wezterm.action{ ActivatePaneDirection="Up" } },
+		{ key="w",  mods="SUPER", 			action=wezterm.action{ CloseCurrentPane={confirm=true} } },
+		{ key="w",  mods="SUPER", 			action=wezterm.action{ CloseCurrentPane={confirm=true} } },
+		{ key="{",	mods="SHIFT|ALT",		action=wezterm.action{ MoveTabRelative=-1 } },
+    { key="}",	mods="SHIFT|ALT",		action=wezterm.action{ MoveTabRelative=1 } },
 	},
 
 	font = font_with_fallback("FiraCode Nerd Font"),
