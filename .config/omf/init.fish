@@ -14,6 +14,7 @@ alias rn="nr"
 alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias realvim="vim"
 alias vim="nvim"
+alias vim-update="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
 # unicode
 set -x LANG en_US.UTF-8
