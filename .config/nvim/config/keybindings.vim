@@ -1,37 +1,41 @@
+let mapleader = " "
+
 " LSP
 "
 nnoremap gD                   <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap K                    <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <C-k>                <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <leader>wa           <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
-nnoremap <leader>wr           <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
-nnoremap <leader>wl           <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
+
+nnoremap <leader>lf           <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <leader>lr           <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <leader>lk           <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <leader>ld           <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <leader>le           <cmd>lua vim.diagnostic.open_float({ focus = false })<CR>
+
 nnoremap <leader>D            <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <leader>rn           <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <leader>e            <cmd>lua vim.diagnostic.open_float()<CR>
+nnoremap <leader>R            <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <leader>e            <cmd>lua vim.diagnostic.open_float({ focus = false })<CR>
+
 nnoremap <silent><M-,>        <cmd>lua vim.diagnostic.goto_prev()<CR>
 nnoremap <silent><M-.>        <cmd>lua vim.diagnostic.goto_next()<CR>
-nnoremap <leader>f            <cmd>lua vim.lsp.buf.formatting()<CR>
+
 " nnoremap <leader>q            <cmd>lua vim.diagnostic.setloclist()<CR>
+
+" Colors
+nnoremap <leader>cc :lua require'color-converter'.cycle()<CR>
+nnoremap <leader>ch :lua require'color-converter'.to_hsl()<CR>:s/%//g<CR>
 
 " Tabs
 "
 nnoremap <C-i>     :source ~/.config/nvim/init.vim<CR>
 nnoremap <leader>s :w<CR>
 
-" Native Tab Bar Bindings
+" Align anything
 "
-" nnoremap <leader>t :tabnew<CR>
-" nnoremap <leader>} :tabnext<CR>
-" nnoremap <leader>{ :tabprevious<CR>
-" nnoremap <leader>w :tabclose<CR>
-
-" Bar Bar bindings
-"
-" nnoremap <leader>t :tabnew<CR>
-" nnoremap <leader>} :BufferNext<CR>
-" nnoremap <leader>{ :BufferPrevious<CR>
-" nnoremap <leader>w <cmd>BufferClose<CR>
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " bufferline.nvim bindings
 "
@@ -39,16 +43,11 @@ nnoremap <leader>t :BufferLinePick<CR>
 nnoremap <leader>} :BufferLineCycleNext<CR>
 nnoremap <leader>{ :BufferLineCyclePrev<CR>
 nnoremap <leader>w :BufferClose<CR>
-nnoremap <leader>q :quitall<CR>
+nnoremap <leader>q :qa<CR>
 
 " Tree
-" NvimTreeOpen, NvimTreeClose, NvimTreeFocus, NvimTreeFindFileToggle, and NvimTreeResize are also available if you need them
 "
-" nnoremap <C-n>     :NvimTreeToggle<CR>
-" nnoremap <leader>\ :NvimTreeFocus<CR>
-" nnoremap <leader>r :NvimTreeRefresh<CR>
-" nnoremap <leader>n :NvimTreeFindFile<CR>
-nnoremap <leader>\ :NeoTreeReveal<cr>
+nnoremap <leader>\ :NeoTreeFocusToggle<cr>
 
 " Edge motion
 "
@@ -101,20 +100,22 @@ onoremap <silent> ]j    :call NextIndent(1, 1, 1, 1)<CR>
 "
 " nnoremap : <cmd>FineCmdline<CR>
 nnoremap <leader>p          <cmd>Telescope find_files hidden=true<CR>
+nnoremap <leader>F          <cmd>Telescope live_grep<CR>
+
 nnoremap <leader>fg         <cmd>Telescope live_grep<CR>
-nnoremap <leader><S-f>      <cmd>Telescope live_grep<CR>
 nnoremap <leader>fb         <cmd>Telescope buffers<CR>
 nnoremap <leader>fh         <cmd>Telescope help_tags<CR>
-nnoremap <leader>gs         <cmd>Telescope git_status<CR>
-nnoremap <silent>gr         <cmd>Telescope lsp_references<CR>
+nnoremap <leader>fs         <cmd>Telescope symbols<CR>
+
 nnoremap <leader>.          <cmd>Telescope lsp_code_actions<CR>
-nnoremap <leader>sd         <cmd>Telescope lsp_workspace_diagnostics<CR>
+
 nnoremap <silent>gd         <cmd>Telescope lsp_definitions<CR>
 nnoremap <silent>gi         <cmd>Telescope lsp_implementations<CR>
-nnoremap <leader>ge         <cmd>Telescope symbols<CR>
+nnoremap <silent>gr         <cmd>Telescope lsp_references<CR>
+
 nnoremap <leader>k          :lua require'telescope.builtin'.commands(require('telescope.themes').get_dropdown({}))<cr>
 
-imap <A-M-Space>              <cmd>Telescope symbols<CR>
+imap <A-M-Space>            <cmd>Telescope symbols<CR>
 
 " Multiple Cursors
 let g:VM_maps = {}
