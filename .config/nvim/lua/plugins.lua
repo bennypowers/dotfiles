@@ -29,16 +29,18 @@ return require'packer'.startup({ function(use)
   use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
 
   -- 🔭 Telescope
-  use 'stevearc/dressing.nvim'                                               -- telescope as UI for various vim built-in things
-  use { 'nvim-telescope/telescope.nvim',                                     -- generic fuzzy finder with popup window
+  use 'stevearc/dressing.nvim'                        -- telescope as UI for various vim built-in things
+  use { 'nvim-telescope/telescope.nvim',              -- generic fuzzy finder with popup window
         config = c'telescope',
         requires = {
           'nvim-lua/plenary.nvim',
           'nvim-lua/popup.nvim' } }
-  use { 'nvim-telescope/telescope-frecency.nvim',                            -- tries to sort files helpfully
-        config = function() require'telescope'.load_extension'frecency' end,
+  use { 'nvim-telescope/telescope-frecency.nvim',     -- tries to sort files helpfully
+        config = function()
+          require'telescope'.load_extension'frecency'
+        end,
         requires = 'tami5/sqlite.lua' }
-  use { 'nvim-telescope/telescope-symbols.nvim',                             -- mostly for emoji
+  use { 'nvim-telescope/telescope-symbols.nvim',      -- mostly for emoji
         requires = 'nvim-telescope/telescope.nvim' }
 
   -- 🌳 Syntax
