@@ -1,25 +1,25 @@
 -- https://github.com/wbthomason/packer.nvim#bootstrapping
-local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-local packer_bootstrap = nil
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
-
--- load a config function for a plugin
--- the module should be located in `~/.config/nvim/lua/config/${name}.lua`
--- and should return a single function
--- @param type 'config' or 'setup'
-local function loader(type)
-  -- @param name the name of the lua module to load
-  return function(name)
-    return require(type..'.'..name)
-  end
-end
-
-local c = loader('config')
-local s = loader('setup')
 
 return require'packer'.startup({ function(use)
+  -- load a config function for a plugin
+  -- the module should be located in `~/.config/nvim/lua/config/${name}.lua`
+  -- and should return a single function
+  -- @param type 'config' or 'setup'
+  local function loader(type)
+    -- @param name the name of the lua module to load
+    return function(name)
+      return require(type..'.'..name)
+    end
+  end
+
+  local c = loader('config')
+  local s = loader('setup')
+
   use 'wbthomason/packer.nvim'
 
   use 'lewis6991/impatient.nvim'
