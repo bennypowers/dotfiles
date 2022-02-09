@@ -39,8 +39,6 @@ endif
 
 au BufNewFile,BufRead *.njk set ft=jinja
 
-let g:easy_align_ignore_groups = []
-
 source ~/.config/nvim/config/keybindings.vim
 source ~/.config/nvim/config/scratch-capture.vim
 
