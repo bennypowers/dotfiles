@@ -29,7 +29,7 @@ return require'packer'.startup({ function(use)
   use 'yonlu/omni.vim'                                   -- dark neon kinda theme
   use 'mangeshrex/uwu.vim'                               -- a meme of a theme
   use 'rktjmp/lush.nvim'                                 -- custom color themes
-  use '~/.config/nvim/themes/framed'                     -- WIP custom color theme based on lush
+  -- use '~/.config/nvim/themes/framed'                     -- WIP custom color theme based on lush
   use { 'EdenEast/nightfox.nvim', config = c'nightfox' } -- 🦊
 
   -- 🔥 Browser Integration
@@ -103,18 +103,24 @@ return require'packer'.startup({ function(use)
   --       requires = 'nvim-telescope/nvim-telescope' }
 
   -- ⌨️  Editing
-  use 'tpope/vim-surround'                                       -- surround objects with chars, change surround, remove, etc
-  use 'tpope/vim-commentary'                                     -- comment/uncomment text objects
-  use 'tpope/vim-repeat'                                         -- dot-repeat for various plugin actions
-  use 'mattn/emmet-vim'                                          -- HTML but faster
-  use 'windwp/nvim-spectre'                                      -- project find/replace
-  use 'rafcamlet/nvim-luapad'                                    -- lua REPL/scratchpad
-  use 'monkoose/matchparen.nvim'                                 -- highlight matching paren
-  use 'arthurxavierx/vim-caser'                                  -- change case (camel, dash, etc)
-  use 'tommcdo/vim-lion'                                         -- align anything
-  use { 'mg979/vim-visual-multi', branch = 'master' }            -- multiple cursors, kinda like atom + vim-mode-plus
-  use { 'windwp/nvim-autopairs', config = c'autopairs' }         -- automatically pair brackets etc
-  use { 'anuvyklack/pretty-fold.nvim', config = c'pretty-fold' } -- beautiful folds with previews
+  use 'tpope/vim-surround'                                                        -- surround objects with chars, change surround, remove, etc
+  use { 'numToStr/Comment.nvim', c'comment' }                                     -- comment/uncomment text objects
+  use 'tpope/vim-repeat'                                                          -- dot-repeat for various plugin actions
+  use 'mattn/emmet-vim'                                                           -- HTML but faster
+  use 'windwp/nvim-spectre'                                                       -- project find/replace
+  use 'rafcamlet/nvim-luapad'                                                     -- lua REPL/scratchpad
+  use { 'monkoose/matchparen.nvim',                                               -- highlight matching paren
+        config = function()
+          require'matchparen'.setup {
+            on_startup = true,
+            hl_group = 'MatchParen',
+          }
+        end }
+  use 'arthurxavierx/vim-caser'                                                   -- change case (camel, dash, etc)
+  use 'tommcdo/vim-lion'                                                          -- align anything
+  use { 'mg979/vim-visual-multi', branch = 'master' }                             -- multiple cursors, kinda like atom + vim-mode-plus
+  use { 'windwp/nvim-autopairs', config = c'autopairs' }                          -- automatically pair brackets etc
+  use { 'anuvyklack/pretty-fold.nvim', config = c'pretty-fold' }                  -- beautiful folds with previews
 
   -- 🤖 Language Server
   use 'neovim/nvim-lspconfig'              -- basic facility to configure language servers

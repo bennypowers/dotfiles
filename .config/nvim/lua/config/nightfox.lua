@@ -44,9 +44,4 @@ return function()
 
   -- Load the configuration set above and apply the colorscheme
   nightfox.load'duskfox'
-
-  require'matchparen'.setup {
-    on_startup = true,
-    hl_group = 'MatchParen',
-  }
 end
