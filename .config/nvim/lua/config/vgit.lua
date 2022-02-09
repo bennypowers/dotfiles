@@ -45,7 +45,7 @@ return function()
           fg = '#f16d0a',
           bg = nil,
           sp = nil,
-          override = false,
+          override = true,
         },
         GitSignsDelete = {
           gui = nil,
@@ -152,21 +152,21 @@ return function()
           GitSignsAdd = {
             texthl = 'GitSignsAdd',
             numhl = nil,
-            icon = nil,
+            icon = '⊞',
             linehl = nil,
             text = '┃',
           },
           GitSignsDelete = {
             texthl = 'GitSignsDelete',
             numhl = nil,
-            icon = nil,
+            icon = '−',
             linehl = nil,
             text = '┃',
           },
           GitSignsChange = {
             texthl = 'GitSignsChange',
             numhl = nil,
-            icon = nil,
+            icon = '⟫',
             linehl = nil,
             text = '┃',
           },

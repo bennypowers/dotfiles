@@ -1,6 +1,7 @@
 return function()
   vim.g.diagnostic_enable_virtual_text = 1
   vim.g.diagnostic_virtual_text_prefix = ' '
+
   vim.cmd [[
     call sign_define("LspDiagnosticsSignError", {"text" : "🔥", "texthl" : "LspDiagnosticsError"})
     call sign_define("LspDiagnosticsSignWarning", {"text" : "🚧", "texthl" : "LspDiagnosticsWarning"})
@@ -30,6 +31,13 @@ return function()
     -- Setup lspconfig.
     local capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
     capabilities.textDocument.completion.completionItem.snippetSupport = true
+    capabilities.textDocument.completion.completionItem.resolveSupport = {
+      properties = {
+        'documentation',
+        'detail',
+        'additionalTextEdits',
+      }
+    }
 
     -- autocmd BufWritePre * :!{bash -c "while ![ -e $1 ]; do echo $1; sleep 0.1s; done"} %:p
     if client.resolved_capabilities.document_formatting then
@@ -150,6 +158,11 @@ return function()
         --
         if server.name == 'tsserver' then opts.on_attach = disable_formatting end
         if server.name == 'denols'   then opts.on_attach = disable_formatting end
+
+        if server.name == 'emmet_ls' then
+          opts.filetypes = { 'html', 'css', 'scss', 'njk', 'ts', 'js', 'md', 'markdown', 'jinja', 'typescript', 'javascript' }
+          opts.root_dir = function() return vim.loop.cwd() end
+        end
 
         server:setup(opts)
       end)

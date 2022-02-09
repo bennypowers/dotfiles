@@ -25,6 +25,15 @@ return function()
     },
     hlgroups = {
       TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
+
+      Comment = { style = "italic" },
+      MatchParen = { fg = "yellow" },
+      IndentBlankLineContextChar = { fg = '#88ddff' },
+      GitSignsChange = { fg='#f16d0a' },
+
+      Folded = {
+        bg = '${bg}',
+      },
       LspCodeLens = {
         bg = "${bg}",
         style = "italic"

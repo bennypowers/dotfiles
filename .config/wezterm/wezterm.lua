@@ -112,6 +112,7 @@ return {
 
 	keys = {
 		{ key="-",  mods="SUPER", 			action=wezterm.action{ SplitVertical={ domain="CurrentPaneDomain" } } },
+		{ key="-",  mods="SUPER|SHIFT", action='DecreaseFontSize' },
 		{ key="\\", mods="SUPER", 			action=wezterm.action{ SplitHorizontal={ domain="CurrentPaneDomain" } } },
 		{ key="h",  mods="SUPER", 			action=wezterm.action{ ActivatePaneDirection="Left" } },
 		{ key="l",  mods="SUPER", 			action=wezterm.action{ ActivatePaneDirection="Right" } },

@@ -41,21 +41,15 @@ au BufNewFile,BufRead *.njk set ft=jinja
 
 let g:easy_align_ignore_groups = []
 
-lua require'plugins'
-
 source ~/.config/nvim/config/keybindings.vim
 source ~/.config/nvim/config/scratch-capture.vim
 
-colorscheme duskfox
+lua require'plugins'
 
-highlight Comment cterm=italic
-highlight Folded  guibg=#000000 guifg=#ffffff
-highlight MatchParen guifg=Yellow
-highlight IndentBlankLineContextChar guifg=#88ddff
-highlight GitSignsChange guifg=#f16d0a
+colorscheme duskfox
 
 augroup packer_user_config
   autocmd!
-  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+  autocmd BufWritePost plugins.lua,~/.config/nvim/lua/config/*,~/.config/nvim/lua/setup/* source <afile> | PackerCompile
 augroup end
 

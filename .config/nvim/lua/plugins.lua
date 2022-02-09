@@ -7,15 +7,22 @@ end
 
 -- load a config function for a plugin
 -- the module should be located in `~/.config/nvim/lua/config/${name}.lua`
--- @param name the name of the lua module to load
-local c = function(name) return require('config.'..name) end
--- load a setup function for a plugin
--- the module should be located in `~/.config/nvim/lua/setup/${name}.lua`
--- @param name the name of the lua module to load
-local s = function(name) return require('setup.'..name) end
+-- and should return a single function
+-- @param type 'config' or 'setup'
+local function loader(type)
+  -- @param name the name of the lua module to load
+  return function(name)
+    return require(type..'.'..name)
+  end
+end
+
+local c = loader('config')
+local s = loader('setup')
 
 return require'packer'.startup({ function(use)
   use 'wbthomason/packer.nvim'
+
+  use 'lewis6991/impatient.nvim'
 
   -- 🎨 Themes
   use 'yonlu/omni.vim'                                   -- dark neon kinda theme
@@ -103,7 +110,7 @@ return require'packer'.startup({ function(use)
   use 'rafcamlet/nvim-luapad'                                    -- lua REPL/scratchpad
   use 'monkoose/matchparen.nvim'                                 -- highlight matching paren
   use 'arthurxavierx/vim-caser'                                  -- change case (camel, dash, etc)
-  use 'godlygeek/tabular'                                        -- tabularize anything
+  use 'tommcdo/vim-lion'                                         -- align anything
   use { 'mg979/vim-visual-multi', branch = 'master' }            -- multiple cursors, kinda like atom + vim-mode-plus
   use { 'windwp/nvim-autopairs', config = c'autopairs' }         -- automatically pair brackets etc
   use { 'anuvyklack/pretty-fold.nvim', config = c'pretty-fold' } -- beautiful folds with previews
@@ -152,7 +159,8 @@ return require'packer'.startup({ function(use)
   end
 end,
 config =  {
+  compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua',
   display = {
     open_fn = require'packer.util'.float
-  }
+  },
 } })
