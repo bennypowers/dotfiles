@@ -17,10 +17,10 @@ local function loader(type)
   end
 end
 
-local c = loader('config')
-local s = loader('setup')
+local c = loader'config'
+local s = loader'setup'
 
-local function setup_plugins (use)
+return require'packer'.startup({ function(use)
   use 'wbthomason/packer.nvim'
 
   use 'lewis6991/impatient.nvim'
@@ -158,12 +158,8 @@ local function setup_plugins (use)
   if packer_bootstrap then
     require'packer'.sync()
   end
-end
-
-return require'packer'.startup({
-  setup_plugins,
+end,
   config =  {
-    compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua',
     display = {
       open_fn = require'packer.util'.float
     },
