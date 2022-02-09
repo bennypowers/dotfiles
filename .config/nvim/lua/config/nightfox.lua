@@ -1,5 +1,6 @@
 return function()
-  local nightfox = require'nightfox'
+  local can, nightfox = pcall(require, 'nightfox');
+  if not can then return end
 
   -- This function set the configuration of nightfox. If a value is not passed in the setup function
   -- it will be taken from the default configuration above
