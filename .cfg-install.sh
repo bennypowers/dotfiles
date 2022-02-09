@@ -1,4 +1,11 @@
-git clone --bare https://github.com/bennypowers/dotfiles.git $HOME/.cfg
+if [ -d "$HOME/.cfg" ]; then
+  set MY_CWD = `pwd`
+  cd $HOME/.cfg
+  git pull
+  cd `echo $MY_CWD`
+else
+  git clone --bare https://github.com/bennypowers/dotfiles.git $HOME/.cfg
+fi
 
 function config {
   /usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
@@ -23,9 +30,6 @@ fi;
 echo "Verifying checkout..."
 config checkout
 
-echo "Install Vundle..."
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-
 config config status.showUntrackedFiles no
 
 echo "Homebrew..."
@@ -38,13 +42,18 @@ echo "Installing Dependencies..."
 brew install                 \
   reattach-to-user-namespace \
   thefuck                    \
+  tmux                       \
   python                     \
-  highlight
+  highlight                  \
+  go
 
-
+echo "Installing Powerline..."
 pip3 install powerline-status
 
+echo "Install nvim Packer..."
+git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+
 echo "Installing Vim Plugins..."
-vim +PluginInstall +qall
+nvim -u .config/nvim/lua/plugins.lua --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
 echo "Done!"
