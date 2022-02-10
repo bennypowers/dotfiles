@@ -6,8 +6,8 @@
     'sh', 'bash=sh',
     'fish',
 
-    'typescript', 'ts=typescript',
-    'javascript', 'js=javascript',
+    'typescript', 'ts=typescript', 'diff-ts=typescript',
+    'javascript', 'js=javascript', 'diff-js=javascript',
     'json=javascript',
 
     'graphql', 'gql=graphql',
