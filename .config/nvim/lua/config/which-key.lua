@@ -9,10 +9,11 @@ return function ()
         },
     }
 
+    -- <space>
     wk.register({
 
-        D = 'type definition',
-        R = 'rename',
+        D = 'goto type definition',
+        R = 'rename refactor',
         e = 'open diagnostics in floating window',
 
         s = 'save file',
@@ -62,25 +63,25 @@ return function ()
             name = 'git',
             s = 'stage hunk',
             r = 'unstage hunk',
-            p = 'preview hunks (buffer)',
+            p = 'preview hunks        (buffer)',
 
-            b = 'blame preview (buffer)',
-            f = 'diff preview (buffer)',
-            h = 'history preview (buffer)',
+            b = 'preview blame        (buffer)',
+            f = 'preview diff         (buffer)',
+            h = 'preview history      (buffer)',
             u = 'reset buffer',
-            g = 'gutter blame preview (buffer)',
+            g = 'preview gutter blame (buffer)',
 
-            l = 'hunks preview (project)',
-            d = 'diff preview (project)',
+            l = 'preview hunks        (project)',
+            d = 'preview diff         (project)',
 
-            q = 'hunks quickfix (project)',
+            q = 'hunks quickfix       (project)',
 
             x = 'toggle diff preference',
         }
 
-
     }, { prefix = '<leader>' })
 
+    -- g
     wk.register({
 
          D = 'goto declaration',
@@ -115,7 +116,15 @@ return function ()
             ['<space>'] = 'space case',
             ['-'] = 'dash-case',
             k = 'dash-case',
-        }
+        },
+
+        l = {
+            name = 'align left',
+        },
+        L = {
+            name = 'align Right',
+        },
 
     }, { prefix = 'g' })
 end
+

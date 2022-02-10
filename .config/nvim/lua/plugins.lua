@@ -104,7 +104,7 @@ return require'packer'.startup({ function(use)
 
   -- ⌨️  Editing
   use 'tpope/vim-surround'                                                        -- surround objects with chars, change surround, remove, etc
-  use { 'numToStr/Comment.nvim', c'comment' }                                     -- comment/uncomment text objects
+  use { 'numToStr/Comment.nvim', config = c'comment' }                                     -- comment/uncomment text objects
   use 'tpope/vim-repeat'                                                          -- dot-repeat for various plugin actions
   use 'mattn/emmet-vim'                                                           -- HTML but faster
   use 'windwp/nvim-spectre'                                                       -- project find/replace
@@ -128,7 +128,8 @@ return require'packer'.startup({ function(use)
   use 'onsails/lspkind-nvim'               -- fancy icons for lsp AST types and such
   use { 'williamboman/nvim-lsp-installer', -- automatically install language servers
         config = c'lsp-installer',
-        requires = 'hrsh7th/nvim-cmp' }
+        setup = s'lsp-installer',
+        requires = { 'hrsh7th/nvim-cmp', 'neovim/nvim-lspconfig' } }
   use { 'folke/lsp-trouble.nvim',          -- language-server diagnostics panel
         config = c'trouble',
         requires = {
@@ -157,7 +158,7 @@ return require'packer'.startup({ function(use)
   -- 🕸️  Webdev
   use 'jonsmithers/vim-html-template-literals'             -- lit-html
   use 'NTBBloodbath/color-converter.nvim'                  -- convert colour values
-  use { 'rrethy/vim-hexokinase', run = 'make hexokinase' } -- display colour values
+  --use { 'rrethy/vim-hexokinase', run = 'make hexokinase' } -- display colour values
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

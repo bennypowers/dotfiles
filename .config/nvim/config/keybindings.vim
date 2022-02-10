@@ -30,13 +30,6 @@ nnoremap <leader>ch :lua require'color-converter'.to_hsl()<CR>:s/%//g<CR>
 nnoremap <C-i>     :source ~/.config/nvim/init.vim<CR>
 nnoremap <leader>s :w<CR>
 
-" Align anything
-"
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
 " bufferline.nvim bindings
 "
 nnoremap <leader>t :BufferLinePick<CR>

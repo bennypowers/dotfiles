@@ -1,17 +1,31 @@
 return function()
-  vim.g.diagnostic_enable_virtual_text = 1
-  vim.g.diagnostic_virtual_text_prefix = ' '
-
-  vim.cmd [[
-    call sign_define("LspDiagnosticsSignError", {"text" : "🔥", "texthl" : "LspDiagnosticsError"})
-    call sign_define("LspDiagnosticsSignWarning", {"text" : "🚧", "texthl" : "LspDiagnosticsWarning"})
-    call sign_define("LspDiagnosticsSignInformation", {"text" : "👷", "texthl" : "LspDiagnosticsInformation"})
-    call sign_define("LspDiagnosticsSignHint", {"text" : "🙋", "texthl" : "LspDiagnosticsHint"})
-  ]]
-
   local lsp_status = require'lsp-status'
   local lsp_installer_servers = require'nvim-lsp-installer.servers'
   local cmp_nvim_lsp = require'cmp_nvim_lsp'
+
+  -- Install these, k?
+  local servers = {
+    "angularls",
+    "bashls",
+    "clangd",
+    "cssls",
+    "dockerls",
+    "emmet_ls",
+    "eslint",
+    "graphql",
+    "hls",            -- haskell
+    "html",
+    "jsonls",
+    "pyright",
+    -- "remark_ls",      -- markdown. see https://github.com/unifiedjs/unified-language-server/issues/31
+    "rust_analyzer",
+    "spectral",       -- OpenAPI
+    "stylelint_lsp",
+    "sumneko_lua",    -- lua
+    "tsserver",       -- typescript
+    "vimls",
+    "yamlls",
+  }
 
   lsp_status.config {
     kind_labels = vim.g.completion_customize_lsp_label,
@@ -62,28 +76,6 @@ return function()
     client.resolved_capabilities.document_range_formatting = true
     common_on_attach(client)
   end
-
-  local servers = {
-    "angularls",
-    "bash",
-    "cssls",
-    -- "denols",
-    "dockerls",
-    "eslint",
-    "graphql",
-    "html",
-    "hls",            -- haskell
-    "tsserver",       -- typescript
-    "sumneko_lua",    -- lua
-    -- "remark_ls",      -- markdown
-    "spectral",       -- OpenAPI
-    "vimls",
-    "yamlls",
-    "emmet_ls",
-    "rust_analyzer",
-    "clangd",
-    "pyright",
-  }
 
   -- Setup your lua path
   -- needed to get IDE features in lua files
@@ -147,17 +139,18 @@ return function()
 
         -- set server-specific settings
         --
-        if server_settings[server.name] then opts.settings = server_settings[server.name] end
+        if server_settings[server.name]   then opts.settings = server_settings[server.name] end
 
         -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
         -- the resolved capabilities of the eslint server ourselves!
         --
-        if server.name == "eslint"   then opts.on_attach = enable_formatting end
+        if server.name == "eslint"        then opts.on_attach = enable_formatting end
+        if server.name == "sumneko_lua"   then opts.on_attach = enable_formatting end
 
         -- Disable formatting for typescript, so that eslint can take over.
         --
-        if server.name == 'tsserver' then opts.on_attach = disable_formatting end
-        if server.name == 'denols'   then opts.on_attach = disable_formatting end
+        if server.name == 'tsserver'      then opts.on_attach = disable_formatting end
+        if server.name == 'denols'        then opts.on_attach = disable_formatting end
 
         if server.name == 'emmet_ls' then
           opts.filetypes = { 'html', 'css', 'scss', 'njk', 'ts', 'js', 'md', 'markdown', 'jinja', 'typescript', 'javascript' }
