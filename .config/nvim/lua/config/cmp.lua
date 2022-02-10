@@ -25,16 +25,39 @@ return function()
     },
 
     sources = cmp.config.sources({
-      { name = "nvim_lsp" },
-      { name = "snippy" },
+      { name = 'nvim_lsp' },
+      { name = 'nvim-lsp-signature-help' },
+      { name = 'nvim_lua' },
+      { name = 'npm' },
+      { name = 'calc' },
+      { name = 'emoji' },
+      { name = 'snippy' },
+      { name = 'fish' },
     }, {
-      { name = "buffer" },
+      { name = "buffer", keyword_length = 5 },
     }),
+
+    sorting = {
+      comparators = {
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.score,
+        require 'cmp-under-comparator'.under,
+        cmp.config.compare.kind,
+        cmp.config.compare.sort_text,
+        cmp.config.compare.length,
+        cmp.config.compare.order,
+      },
+    },
 
     formatting = {
       format = lspkind.cmp_format({
         with_text = true,
       }),
+    },
+
+    experimental = {
+      ghost_text = true,
     },
   })
 

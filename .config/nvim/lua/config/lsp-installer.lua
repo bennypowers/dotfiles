@@ -121,9 +121,14 @@ return function()
           library = vim.api.nvim_get_runtime_file("", true), -- Make the server aware of Neovim runtime files
           checkThirdParty = false,
         },
-        -- Do not send telemetry data containing a randomized but unique identifier
+        completion = {
+          autoRequire = false,
+        },
+        hint = {
+          enable = true,
+        },
         telemetry = {
-          enable = false,
+          enable = false, -- Do not send telemetry data containing a randomized but unique identifier
         },
       },
     }
@@ -145,7 +150,6 @@ return function()
         -- the resolved capabilities of the eslint server ourselves!
         --
         if server.name == "eslint"        then opts.on_attach = enable_formatting end
-        if server.name == "sumneko_lua"   then opts.on_attach = enable_formatting end
 
         -- Disable formatting for typescript, so that eslint can take over.
         --

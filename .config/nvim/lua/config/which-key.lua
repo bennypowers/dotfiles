@@ -122,7 +122,7 @@ return function ()
             name = 'align left',
         },
         L = {
-            name = 'align Right',
+            name = 'align right',
         },
 
     }, { prefix = 'g' })

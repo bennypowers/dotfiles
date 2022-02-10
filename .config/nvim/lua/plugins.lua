@@ -138,10 +138,17 @@ return require'packer'.startup({ function(use)
         } }
 
   -- 📎 Completions and Snippets
+  use 'dcampos/cmp-snippy'                                                      -- snippet completions
   use 'hrsh7th/cmp-nvim-lsp'                                                    -- language-server-based completions
+  use 'hrsh7th/cmp-nvim-lua'                                                    -- lua
+  use 'hrsh7th/cmp-calc'                                                        -- math
   use 'hrsh7th/cmp-buffer'                                                      -- buffer contents completion
   use 'hrsh7th/cmp-path'                                                        -- path completions
-  use 'dcampos/cmp-snippy'                                                      -- snippet completions
+  use 'hrsh7th/cmp-emoji'                                                       -- ok boomer
+  use 'hrsh7th/cmp-nvim-lsp-signature-help'                                     -- ffffunction
+  use 'David-Kunz/cmp-npm'                                                      -- npm package versions
+  use 'lukas-reineke/cmp-under-comparator'                                      -- _afterOthers
+  use { 'mtoohey31/cmp-fish', ft = "fish" }                                     -- 🐟
   use { 'hrsh7th/nvim-cmp', config = c'cmp', requires = 'dcampos/nvim-snippy' } -- completion engine
   use { 'hrsh7th/cmp-cmdline', config = c'cmp-cmdline' }                        -- cmdline completions
 
