@@ -19,6 +19,7 @@ set tabstop=2
 set termguicolors
 set virtualedit=block,onemore
 set nowrap
+set shell=fish
 
 set foldlevel=20
 set foldmethod=expr
@@ -33,9 +34,9 @@ else
   source ~/.config/nvim/config/background.vim
 endif
 
-if &shell =~# 'fish$'
-	set shell=sh
-endif
+" if &shell =~# 'fish$'
+" 	set shell=sh
+" endif
 
 au BufNewFile,BufRead *.njk set ft=jinja
 

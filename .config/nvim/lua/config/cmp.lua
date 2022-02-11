@@ -26,6 +26,7 @@ return function()
 
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
+      { name = 'cmp_git' },
       { name = 'nvim_lsp_signature_help' },
       { name = 'nvim_lua' },
       { name = 'npm' },

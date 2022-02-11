@@ -148,6 +148,7 @@ return require'packer'.startup({ function(use)
   use 'hrsh7th/cmp-nvim-lsp-signature-help'                                     -- ffffunction
   use 'David-Kunz/cmp-npm'                                                      -- npm package versions
   use 'lukas-reineke/cmp-under-comparator'                                      -- _afterOthers
+  use { 'petertriho/cmp-git', requires = 'nvim-lua/plenary.nvim' }              -- autocomplete git issues
   use { 'mtoohey31/cmp-fish', ft = "fish" }                                     -- 🐟
   use { 'hrsh7th/nvim-cmp', config = c'cmp', requires = 'dcampos/nvim-snippy' } -- completion engine
   use { 'hrsh7th/cmp-cmdline', config = c'cmp-cmdline' }                        -- cmdline completions
@@ -161,7 +162,6 @@ return require'packer'.startup({ function(use)
 
   -- ⬇ Markdown
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' } -- markdown previews
-
   -- 🕸️  Webdev
   use 'jonsmithers/vim-html-template-literals'             -- lit-html
   use 'NTBBloodbath/color-converter.nvim'                  -- convert colour values

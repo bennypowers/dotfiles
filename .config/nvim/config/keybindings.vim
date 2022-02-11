@@ -1,5 +1,9 @@
 let mapleader = " "
 
+" Integrated Terminal
+"
+nmap <c-t> :term<cr>
+
 " LSP
 "
 nnoremap gD                   <cmd>lua vim.lsp.buf.declaration()<CR>
