@@ -19,7 +19,7 @@ set tabstop=2
 set termguicolors
 set virtualedit=block,onemore
 set nowrap
-set shell=fish
+set shell=bash
 
 set foldlevel=20
 set foldmethod=expr

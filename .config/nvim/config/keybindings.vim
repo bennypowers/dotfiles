@@ -39,7 +39,7 @@ nnoremap <leader>s :w<CR>
 nnoremap <leader>t :BufferLinePick<CR>
 nnoremap <leader>} :BufferLineCycleNext<CR>
 nnoremap <leader>{ :BufferLineCyclePrev<CR>
-nnoremap <leader>w :BufferClose<CR>
+nnoremap <leader>w :Bdelete<CR>
 nnoremap <leader>q :qa<CR>
 
 " Tree
@@ -110,7 +110,7 @@ nnoremap <silent>gd         <cmd>Telescope lsp_definitions<CR>
 nnoremap <silent>gi         <cmd>Telescope lsp_implementations<CR>
 nnoremap <silent>gr         <cmd>Telescope lsp_references<CR>
 
-nnoremap <leader>k          :lua require'telescope.builtin'.commands(require('telescope.themes').get_dropdown({}))<cr>
+nnoremap <leader>k          :Legendary<cr>
 
 imap <A-M-Space>            <cmd>Telescope symbols<CR>
 

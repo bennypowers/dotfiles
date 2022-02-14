@@ -1,16 +1,16 @@
-return function ()
+math.randomseed(os.time(os.date("!*t")))
+
+
+return function()
     local status_ok, alpha = pcall(require, "alpha")
-    if not status_ok then
-      return
-    end
+    if not status_ok then return end
 
     local path_ok, path = pcall(require, "plenary.path")
-    if not path_ok then
-      return
-    end
+    if not path_ok then return end
 
-    local dashboard = require("alpha.themes.dashboard")
-    local nvim_web_devicons = require "nvim-web-devicons"
+    local dashboard = require'alpha.themes.dashboard'
+    local nvim_web_devicons = require'nvim-web-devicons'
+
     local cdir = vim.fn.getcwd()
 
     local function get_extension(fn)
@@ -23,9 +23,8 @@ return function ()
     end
 
     local function icon(fn)
-        local nwd = require("nvim-web-devicons")
         local ext = get_extension(fn)
-        return nwd.get_icon(fn, ext, { default = true })
+        return nvim_web_devicons.get_icon(fn, ext, { default = true })
     end
 
     local function file_button(fn, sc, short_fn)
@@ -35,14 +34,17 @@ return function ()
 
         local ico, hl = icon(fn)
         local hl_option_type = type(nvim_web_devicons.highlight)
+
         if hl_option_type == "boolean" then
             if hl and nvim_web_devicons.highlight then
                 table.insert(fb_hl, { hl, 0, 1 })
             end
         end
+
         if hl_option_type == "string" then
             table.insert(fb_hl, { nvim_web_devicons.highlight, 0, 1 })
         end
+
         ico_txt = ico .. "  "
 
         local file_button_el = dashboard.button(sc, ico_txt .. short_fn, "<cmd>e " .. fn .. " <CR>")
@@ -57,8 +59,8 @@ return function ()
     local default_mru_ignore = { "gitcommit" }
 
     local mru_opts = {
-        ignore = function(pth, ext)
-            return (string.find(pth, "COMMIT_EDITMSG")) or (vim.tbl_contains(default_mru_ignore, ext))
+        ignore = function(filepath, ext)
+            return (string.find(filepath, "COMMIT_EDITMSG")) or (vim.tbl_contains(default_mru_ignore, ext))
         end,
     }
 
@@ -115,6 +117,7 @@ return function ()
             local file_button_el = file_button(fn, " " .. shortcut, short_fn)
             tbl[i] = file_button_el
         end
+
         return {
             type = "group",
             val = tbl,
@@ -122,28 +125,37 @@ return function ()
         }
     end
 
-    local headers_dirname = vim.fn.expand('~/.config/nvim/headers')
+    local headers_basedir = vim.fn.expand('~/.config/nvim/headers/')
+
+    local headers_dirnames = { headers_basedir .. 'small' }
+
+    if vim.fn.winwidth('%') >= 100 then
+      table.insert(headers_dirnames, headers_basedir .. 'wide')
+    end
+
+    if vim.fn.winheight('%') >= 60 then
+      table.insert(headers_dirnames, headers_basedir .. 'large')
+    end
 
     local headers = {}
 
-    for i,filename in ipairs(vim.fn.readdir(headers_dirname)) do
-        local header_path = headers_dirname .. '/' .. filename
-        headers[i] = vim.fn.readfile(header_path)
-    end
-
-    local function header_chars()
-      return headers[ math.random(#headers) ]
+    for _, dirname in ipairs(headers_dirnames) do
+      for _,filename in ipairs(vim.fn.readdir(dirname)) do
+        table.insert(headers, vim.fn.readfile(dirname .. '/' .. filename))
+      end
     end
 
     local function header_color()
+      local idx = math.random(1, #headers)
+      local header_string_split = headers[idx]
       local lines = {}
-      for i, line_chars in pairs(header_chars()) do
-        -- local hi = "StartLogo" .. i
+      for i, line_chars in ipairs(header_string_split) do
+        local hi = "StartLogo" .. i
         local line = {
           type = "text",
           val = line_chars,
           opts = {
-            hl = 'Normal',
+            hl = hi,
             shrink_margin = false,
             position = "center",
           },
@@ -151,11 +163,13 @@ return function ()
         table.insert(lines, line)
       end
 
-      return {
+      local output = {
         type = "group",
         val = lines,
         opts = { position = "center", },
       }
+
+      return output
     end
 
     local section_mru = {
@@ -186,30 +200,27 @@ return function ()
       val = {
         { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
         { type = "padding", val = 1 },
-        dashboard.button("f", "  Find file", ":Telescope find_files <CR>"),
-        dashboard.button("F", "  Find text", ":Telescope live_grep <CR>"),
-        dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
-        dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.vim <CR>"),
-        dashboard.button("p", "  Manage plugins", ":e ~/.config/nvim/lua/plugins.lua <CR>"),
-        dashboard.button("u", "  Update plugins" , ":PackerSync<CR>"),
-        dashboard.button("q", "  Quit" , ":qa<CR>"),
+        dashboard.button("<leader>p",  "  Find file",       ":Telescope find_files <CR>"),
+        dashboard.button("<leader>fg", "  Find text",       ":Telescope live_grep <CR>"),
+        dashboard.button("n",          "  New file",        ":ene <BAR> startinsert <CR>"),
+        dashboard.button("c",          "  Configuration",   ":e ~/.config/nvim/init.lua <CR>"),
+        dashboard.button("u",          "  Update plugins" , ":PackerSync<CR>"),
+        dashboard.button("q",          "  Quit" ,           ":qa<CR>"),
       },
       position = "center",
     }
 
-    local config = {
-      layout = {
-        { type = "padding", val = 2 },
-        header_color(),
-        { type = "padding", val = 2 },
-        section_mru,
-        { type = "padding", val = 2 },
-        buttons,
-      },
-      opts = {
-        margin = 5,
-      },
+    alpha.setup {
+        layout = {
+            { type = "padding", val = 2 },
+            header_color(),
+            { type = "padding", val = 2 },
+            section_mru,
+            { type = "padding", val = 2 },
+            buttons,
+        },
+        opts = {
+            margin = 5,
+        },
     }
-
-  alpha.setup(config)
 end
