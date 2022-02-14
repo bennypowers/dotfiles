@@ -1,8 +1,12 @@
 let mapleader = " "
 
 " Integrated Terminal
+" Prompts for a command then runs it
 "
-nmap <c-t> :term<cr>
+" TODO: get ++close to work
+" nmap <c-t> :lua vim.ui.input({}, function(val) vim.cmd(string.gsub([[ :term {} ++close ]], '{}', val)) end)<cr>
+" nnoremap <c-t> :lua vim.ui.input({}, function(val) if val then vim.cmd(string.gsub(':term {}', '{}', val)) end end)<cr>
+nnoremap <c-t> :lua vim.ui.input({}, function(val) if val then vim.cmd(string.format(':term %s', val)) end end)<cr>
 
 " LSP
 "

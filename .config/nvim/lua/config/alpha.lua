@@ -200,7 +200,8 @@ return function()
       val = {
         { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
         { type = "padding", val = 1 },
-        dashboard.button("<leader>p",  "  Find file",       ":Telescope find_files <CR>"),
+        dashboard.button("<leader> /", "  File Explorer",   ":NeoTreeShow<CR>"),
+        dashboard.button("<leader> p", "  Find file",       ":Telescope find_files <CR>"),
         dashboard.button("<leader>fg", "  Find text",       ":Telescope live_grep <CR>"),
         dashboard.button("n",          "  New file",        ":ene <BAR> startinsert <CR>"),
         dashboard.button("c",          "  Configuration",   ":e ~/.config/nvim/init.lua <CR>"),
