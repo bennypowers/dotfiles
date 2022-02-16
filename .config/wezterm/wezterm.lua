@@ -1,23 +1,106 @@
 local wezterm = require 'wezterm'
 
 local function font_with_fallback(name, params)
-	local names = { name, "Noto Color Emoji", "FiraCode Nerd Font" }
-	return wezterm.font_with_fallback(names, params)
+	return wezterm.font_with_fallback({
+		name,
+		"Noto Color Emoji",
+		"FiraCode Nerd Font",
+		"Hack Nerd Font"
+	}, params)
 end
 
--- local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
 local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
+local LEFT_ARROW = utf8.char(0xe0b3);
 
-local Grey = "#0f1419"
-local LightGrey = "#191f26"
+local Black       = "Black"
+local White       = "White"
+local Grey        = "#0f1419"
+local LightGrey   = "#191f26"
+local BrightGreen = "#dcff00"
 
-local TAB_BAR_BG = "Black"
-local ACTIVE_TAB_BG = "#dcff00"
-local ACTIVE_TAB_FG = "Black"
-local HOVER_TAB_BG = Grey
-local HOVER_TAB_FG = "White"
+local TAB_BAR_BG    = Black
+local ACTIVE_TAB_BG = BrightGreen
+local ACTIVE_TAB_FG = Black
+local HOVER_TAB_BG  = Grey
+local HOVER_TAB_FG  = White
 local NORMAL_TAB_BG = LightGrey
-local NORMAL_TAB_FG = "White"
+local NORMAL_TAB_FG = White
+
+wezterm.on('update-right-status', function(window, pane)
+	-- Each element holds the text for a cell in a "powerline" style << fade
+	local cells = {};
+
+	-- Figure out the cwd and host of the current pane.
+	-- This will pick up the hostname for the remote host if your
+	-- shell is using OSC 7 on the remote host.
+  local cwd_uri = pane:get_current_working_dir()
+  if cwd_uri then
+    cwd_uri = cwd_uri:sub(8);
+    local slash = cwd_uri:find("/")
+    local hostname = ""
+    if slash then
+      hostname = cwd_uri:sub(1, slash-1)
+      -- Remove the domain name portion of the hostname
+      local dot = hostname:find("[.]")
+      if dot then
+        hostname = hostname:sub(1, dot-1)
+      end
+
+      table.insert(cells, hostname);
+    end
+  end
+
+  -- An entry for each battery (typically 0 or 1 battery)
+  for _,  b in ipairs(wezterm.battery_info()) do
+    table.insert(cells, string.format("%.0f%%", b.state_of_charge * 100))
+  end
+
+  -- I like my date/time in this style: "2022-02-15 07:05"
+  local date = wezterm.strftime("%Y-%m-%-d %H:%M");
+  table.insert(cells, date);
+
+  -- Color palette for the backgrounds of each cell
+  local colors = {
+    "#3c1361",
+    "#52307c",
+    "#663a82",
+    "#7c5295",
+    "#b491c8",
+  };
+
+  -- Foreground color for the text across the fade
+  local text_fg = "#c0c0c0";
+
+  -- The elements to be formatted
+  local elements = {
+    {Foreground={Color=colors[1]}},
+    {Text=SOLID_LEFT_ARROW},
+  };
+
+  -- How many cells have been formatted
+  local num_cells = 0;
+
+  -- Translate a cell into elements
+  local function push(text, is_last)
+    local cell_no = num_cells + 1
+    table.insert(elements, {Foreground={Color=text_fg}})
+    table.insert(elements, {Background={Color=colors[cell_no]}})
+    table.insert(elements, {Text=" "..text.." "})
+    if not is_last then
+      table.insert(elements, {Foreground={Color=colors[cell_no+1]}})
+      table.insert(elements, {Text=SOLID_LEFT_ARROW})
+    end
+    num_cells = num_cells + 1
+  end
+
+  while #cells > 0 do
+    local cell = table.remove(cells, 1)
+    push(cell, #cells == 0)
+  end
+
+  window:set_right_status(wezterm.format(elements));
+end);
 
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
 	local background = NORMAL_TAB_BG
@@ -76,10 +159,12 @@ return {
 	native_macos_fullscreen_mode = true,
 
 	hide_tab_bar_if_only_one_tab = true,
-	tab_bar_at_bottom = true,
+	-- tab_bar_at_bottom = true,
 	use_fancy_tab_bar = false,
 	enable_tab_bar = true,
 	tab_max_width = 32,
+
+	enable_kitty_graphics = true,
 
 	leader = { key="b", mods="CTRL", timeout_milliseconds=1000 },
 
