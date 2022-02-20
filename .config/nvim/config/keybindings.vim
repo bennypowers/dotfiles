@@ -1,5 +1,9 @@
 let mapleader = " "
 
+" Window management
+"
+nnoremap ; <C-w>
+
 " Integrated Terminal
 " Prompts for a command then runs it
 "
@@ -48,7 +52,7 @@ nnoremap <leader>q :qa<CR>
 
 " Tree
 "
-nnoremap <leader>\ :NeoTreeFocusToggle<cr>
+nnoremap <leader>\ :NeoTreeFloatToggle<cr>
 
 " Edge motion
 "
@@ -101,18 +105,24 @@ onoremap <silent> ]j    :call NextIndent(1, 1, 1, 1)<CR>
 "
 " nnoremap : <cmd>FineCmdline<CR>
 nnoremap <leader>p          <cmd>Telescope find_files hidden=true<CR>
-nnoremap <leader>F          <cmd>Telescope live_grep<CR>
+nnoremap <leader>F          <cmd>Telescope live_grep             <CR>
 
-nnoremap <leader>fg         <cmd>Telescope live_grep<CR>
-nnoremap <leader>fb         <cmd>Telescope buffers<CR>
-nnoremap <leader>fh         <cmd>Telescope help_tags<CR>
-nnoremap <leader>fs         <cmd>Telescope symbols<CR>
+nnoremap <leader>fg         <cmd>Telescope live_grep             <CR>
+nnoremap <leader>fb         <cmd>Telescope buffers               <CR>
+nnoremap <leader>fh         <cmd>Telescope help_tags             <CR>
+nnoremap <leader>fH         <cmd>Telescope headers               <CR>
+nnoremap <leader>fs         <cmd>Telescope symbols               <CR>
 
-nnoremap <leader>.          <cmd>Telescope lsp_code_actions<CR>
+nnoremap <leader>.          <cmd>Telescope lsp_code_actions      <CR>
 
-nnoremap <silent>gd         <cmd>Telescope lsp_definitions<CR>
-nnoremap <silent>gi         <cmd>Telescope lsp_implementations<CR>
-nnoremap <silent>gr         <cmd>Telescope lsp_references<CR>
+" nnoremap <silent>gd         <cmd>Telescope lsp_definitions<CR>
+" nnoremap <silent>gi         <cmd>Telescope lsp_implementations<CR>
+" nnoremap <silent>gr         <cmd>Telescope lsp_references<CR>
+
+nnoremap gd <cmd>lua require'goto-preview'.goto_preview_definition()    <CR>
+nnoremap gi <cmd>lua require'goto-preview'.goto_preview_implementation()<CR>
+nnoremap gr <cmd>lua require'goto-preview'.goto_preview_references()    <CR>
+nnoremap gP <cmd>lua require'goto-preview'.close_all_win()              <CR>
 
 nnoremap <leader>k          :Legendary<cr>
 

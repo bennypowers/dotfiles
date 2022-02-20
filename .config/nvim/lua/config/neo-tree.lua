@@ -1,9 +1,4 @@
  return function()
-  vim.cmd([[
-    hi link NeoTreeDirectoryName Directory
-    hi link NeoTreeDirectoryIcon NeoTreeDirectoryName
-  ]])
-
   local tree = require'neo-tree'
   local highlights = require'neo-tree.ui.highlights'
 
@@ -159,6 +154,8 @@
             vim.cmd [[
               setlocal nocursorcolumn
               setlocal virtualedit=all
+              hi link NeoTreeDirectoryName Directory
+              hi link NeoTreeDirectoryIcon NeoTreeDirectoryName
             ]]
           end
         end

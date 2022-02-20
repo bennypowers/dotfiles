@@ -3,7 +3,16 @@ return function()
     ensure_installed = 'maintained',
     highlight = { enable = true },
     incremental_selection = { enable = true },
-    textobjects = { enable = true },
+    textobjects = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+      },
+    },
     indent = { enable = true },
     endwise = { enable = true },
     autotag = { enable = true, filetypes = {

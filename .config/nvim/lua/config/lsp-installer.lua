@@ -1,49 +1,57 @@
 return function()
-  local lsp_status = require'lsp-status'
   local lsp_installer_servers = require'nvim-lsp-installer.servers'
   local cmp_nvim_lsp = require'cmp_nvim_lsp'
+  local lsp_status = require'lsp-status'
 
   -- Install these, k?
   local servers = {
-    "angularls",
-    "bashls",
-    "clangd",
-    "cssls",
-    "dockerls",
-    "emmet_ls",
-    "eslint",
-    "graphql",
-    "hls",            -- haskell
-    "html",
-    "jsonls",
-    "pyright",
+    'angularls',
+    'bashls',
+    'clangd',
+    'cssls',
+    'dockerls',
+    'emmet_ls',
+    'eslint',
+    'graphql',
+    'hls',            -- haskell
+    'html',
+    'jsonls',
+    'pyright',
+    'rust_analyzer',
+    'spectral',       -- OpenAPI
+    'stylelint_lsp',
+    'sumneko_lua',    -- lua
+    'tsserver',       -- typescript
+    'vimls',
+    'yamlls',
+
     -- "remark_ls",      -- markdown. see https://github.com/unifiedjs/unified-language-server/issues/31
-    "rust_analyzer",
-    "spectral",       -- OpenAPI
-    "stylelint_lsp",
-    "sumneko_lua",    -- lua
-    "tsserver",       -- typescript
-    "vimls",
-    "yamlls",
   }
 
   lsp_status.config {
     kind_labels = vim.g.completion_customize_lsp_label,
     current_function = false,
-    status_symbol = '💬: ',
-    indicator_errors = '🔥 ',
-    indicator_warnings = '🚧 ',
-    indicator_info = '👷 ',
+    -- status_symbol = '💬: ',
+    -- status_symbol = ' ',
+    status_symbol = ': ',
+    indicator_errors = '🔥',
+    indicator_warnings = ' 🚧',
+    indicator_info = 'ℹ️ ',
     indicator_hint = '🙋 ',
-    indicator_ok = '✅',
+    indicator_ok = ' ',
     spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
   }
 
   lsp_status.register_progress()
 
-  local function common_on_attach(client)
-    -- Setup lspconfig.
-    local capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  -- Setup lspconfig with some default capabilities
+  --
+  local function default_on_attach(client)
+    local capabilities = vim.tbl_extend(
+      'keep',
+      cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+      lsp_status.capabilities
+    )
     capabilities.textDocument.completion.completionItem.snippetSupport = true
     capabilities.textDocument.completion.completionItem.resolveSupport = {
       properties = {
@@ -52,121 +60,166 @@ return function()
         'additionalTextEdits',
       }
     }
+    lsp_status.on_attach(client)
+  end
 
-    -- autocmd BufWritePre * :!{bash -c "while ![ -e $1 ]; do echo $1; sleep 0.1s; done"} %:p
-    if client.resolved_capabilities.document_formatting then
-      vim.cmd([[
-      augroup LspFormatting
-          autocmd! * <buffer>
-          autocmd BufWritePre * sleep 200m
-          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-      augroup END
-      ]])
+  -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
+  -- the resolved capabilities of the eslint server ourselves!
+  --
+  -- @param #boolean allow_formatting whether to enable formating
+  -- @param #boolean format_on_save   whether to enable format on save
+  --
+  local function toggle_formatting(allow_formatting, format_on_save)
+    return function(client)
+      default_on_attach(client)
+
+      client.resolved_capabilities.document_formatting = allow_formatting
+      client.resolved_capabilities.document_range_formatting = allow_formatting
+
+      -- format on save
+      if format_on_save then
+        vim.cmd([[
+          augroup LspFormatting
+              autocmd! * <buffer>
+              autocmd BufWritePre * sleep 200m
+              autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+          augroup END
+        ]])
+      end
     end
-  end
-
-  local function disable_formatting(client)
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
-    common_on_attach(client)
-  end
-
-  local function enable_formatting(client)
-    client.resolved_capabilities.document_formatting = true
-    client.resolved_capabilities.document_range_formatting = true
-    common_on_attach(client)
   end
 
   -- Setup your lua path
   -- needed to get IDE features in lua files
-  -- I promised Clason in the neovim gitter i wouldn't call it 'intellisense'
+  -- I promised clason in the neovim gitter i wouldn't call it 'intellisense'
+  --
   local runtime_path = vim.split(package.path, ';')
   table.insert(runtime_path, "lua/?.lua")
   table.insert(runtime_path, "lua/?/init.lua")
 
-  local server_settings = {
+  -- Specify server options and settings per server
+  -- servers not configured here will use the defaul on_attach function
+  --
+  local server_opts = {
 
-    tsserver = {
-      format = { enable = false },
+    denols = {
+      on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
     },
 
     eslint = {
-      enable = true,
-      format = { enable = true }, -- this will enable formatting
-      packageManager = "npm",
-      autoFixOnSave = true,
-      codeActionsOnSave = {
-        mode = "all",
-        rules = { "!debugger", "!no-only-tests/*" },
-      },
-      lintTask = {
+      on_attach = toggle_formatting(true, true),
+      settings = {
         enable = true,
+        format = { enable = true }, -- this will enable formatting
+        packageManager = "npm",
+        autoFixOnSave = true,
+        codeActionsOnSave = {
+          mode = "all",
+          rules = { "!debugger", "!no-only-tests/*" },
+        },
+        lintTask = {
+          enable = true,
+        },
+      },
+    },
+
+    emmet_ls = {
+      root_dir = function() return vim.loop.cwd() end,
+      filetypes = {
+        'html',
+        'css', 'scss',
+        'njk', 'nunjucks', 'jinja',
+        'ts', 'typescript',
+        'md', 'markdown',
+        'js', 'javascript',
+      },
+    },
+
+    jsonls = {
+      settings = {
+        json = {
+          schemas = require'schemastore'.json.schemas(),
+        },
       },
     },
 
     remark_ls = {
-      defaultProcessor = 'remark'
+      settings = {
+        defaultProcessor = 'remark',
+      },
+    },
+
+    stylelint_lsp = {
+      on_attach = toggle_formatting(true, true),
+      filetypes = {
+        'css',
+        'less',
+        'scss',
+        'sugarss',
+        'vue',
+        'wxss',
+      },
+      settings = {
+        stylelintplus = {
+          cssInJs = false,
+        },
+      },
     },
 
     sumneko_lua = {
-      Lua = {
-        runtime = {
-          version = 'LuaJIT',
-          path = runtime_path,
-        },
-        diagnostics = {
-          globals = { 'utf8', 'vim' }, -- Get the language server to recognize the `vim` global
-        },
-        workspace = {
-          library = vim.api.nvim_get_runtime_file("", true), -- Make the server aware of Neovim runtime files
-          checkThirdParty = false,
-        },
-        completion = {
-          autoRequire = false,
-        },
-        hint = {
-          enable = true,
-        },
-        telemetry = {
-          enable = false, -- Do not send telemetry data containing a randomized but unique identifier
+      on_attach = toggle_formatting(true, true),
+      settings = {
+        Lua = {
+          runtime = {
+            version = 'LuaJIT',
+            path = runtime_path,
+          },
+          diagnostics = {
+            globals = { 'utf8', 'vim' }, -- Get the language server to recognize the `vim` global
+          },
+          workspace = {
+            library = vim.api.nvim_get_runtime_file('', true), -- Make the server aware of Neovim runtime files
+            checkThirdParty = false,
+          },
+          completion = {
+            autoRequire = false,
+          },
+          hint = {
+            enable = true,
+          },
+          telemetry = {
+            enable = false, -- Do not send telemetry data containing a randomized but unique identifier
+          },
         },
       },
-    }
+    },
+
+    tsserver = {
+      on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
+      settings = {
+        format = { enable = false },
+      },
+    },
+
   }
 
   -- Loop through the servers listed above.
+  -- installing each, then if install succeeded,
+  -- setup the server with the options specified in server_opts,
+  -- or just use the default options
+  --
   for _, name in pairs(servers) do
     local available, server = lsp_installer_servers.get_server(name)
 
     if available then
       server:on_ready(function ()
-        local opts = { on_attach = common_on_attach }
-
-        -- set server-specific settings
-        --
-        if server_settings[server.name]   then opts.settings = server_settings[server.name] end
-
-        -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
-        -- the resolved capabilities of the eslint server ourselves!
-        --
-        if server.name == "eslint"        then opts.on_attach = enable_formatting end
-
-        -- Disable formatting for typescript, so that eslint can take over.
-        --
-        if server.name == 'tsserver'      then opts.on_attach = disable_formatting end
-        if server.name == 'denols'        then opts.on_attach = disable_formatting end
-
-        if server.name == 'emmet_ls' then
-          opts.filetypes = { 'html', 'css', 'scss', 'njk', 'ts', 'js', 'md', 'markdown', 'jinja', 'typescript', 'javascript' }
-          opts.root_dir = function() return vim.loop.cwd() end
-        end
-
+        local opts = server_opts[server.name] or {}
+              opts.on_attach = opts.on_attach or default_on_attach
         server:setup(opts)
       end)
 
       -- Queue the server to be installed.
       if not server:is_installed() then server:install() end
-
     end
   end
 

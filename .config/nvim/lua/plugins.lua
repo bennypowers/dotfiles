@@ -25,6 +25,7 @@ local s = loader'setup'
 return require'packer'.startup({ function(use)
   use 'wbthomason/packer.nvim'                    -- manage plugins
   use 'lewis6991/impatient.nvim'                  -- faster startup?
+  use 'milisims/nvim-luaref'                      -- lua docs in vim help
 
   -- 🎨 Themes
 
@@ -48,9 +49,7 @@ return require'packer'.startup({ function(use)
           'nvim-lua/plenary.nvim',
           'nvim-lua/popup.nvim' } }
   use { 'nvim-telescope/telescope-frecency.nvim',     -- tries to sort files helpfully
-        config = function()
-          require'telescope'.load_extension'frecency'
-        end,
+        config = function() require'telescope'.load_extension'frecency' end,
         requires = 'tami5/sqlite.lua' }
   use { 'nvim-telescope/telescope-symbols.nvim',      -- mostly for emoji
         requires = 'nvim-telescope/telescope.nvim' }
@@ -70,12 +69,15 @@ return require'packer'.startup({ function(use)
           'RRethy/nvim-treesitter-endwise',            -- append `end` in useful places
           'windwp/nvim-ts-autotag',                    -- close HTML tags, but using treesitter
         } }
+  use { 'nvim-treesitter/nvim-treesitter-textobjects', -- select a comment
+        requires = 'nvim-treesitter/nvim-treesitter' }
 
   -- 🪟 UI
 
   use 'famiu/bufdelete.nvim'                                         -- close buffers (tabs) with less headache
   use 'ryanoasis/vim-devicons'                                       -- some icon s
   use 'folke/twilight.nvim'                                          -- focus mode editing
+  use 'kosayoda/nvim-lightbulb'                                      -- 💡
   use { 'kyazdani42/nvim-web-devicons', config = c'web-devicons' }   -- yet more icons
   use { 'goolord/alpha-nvim',                                        -- startup screen
         config = c'alpha' }
@@ -101,6 +103,9 @@ return require'packer'.startup({ function(use)
           'MunifTanjim/nui.nvim',
         } }
 
+  -- 🍇 Graphics
+  use {'edluffy/hologram.nvim'}
+
   -- 📒 Sessions
 
   -- Disabling because neo-tree doesn't play nice.
@@ -112,6 +117,29 @@ return require'packer'.startup({ function(use)
 
   -- ⌨️  Editing
 
+  use { 'bennypowers/nvim-regexplainer',
+        config = function()
+          require'nvim-regexplainer'.setup {
+            display = 'split',
+            narrative = {
+              separator = function(component)
+                local sep = '\n';
+                if component.depth > 0 then
+                  for _ = 1, component.depth do
+                    sep = sep .. '> '
+                  end
+                end
+                return sep
+              end
+            },
+          }
+        end,
+        requires = {
+          'nvim-lua/plenary.nvim',
+          'MunifTanjim/nui.nvim',
+          'edluffy/hologram.nvim',
+        } }
+
   use 'arthurxavierx/vim-caser'                                  -- change case (camel, dash, etc)
   use 'tommcdo/vim-lion'                                         -- align anything
   use 'tpope/vim-surround'                                       -- surround objects with chars, change surround, remove, etc
@@ -119,6 +147,16 @@ return require'packer'.startup({ function(use)
   use 'mattn/emmet-vim'                                          -- HTML but faster
   use 'windwp/nvim-spectre'                                      -- project find/replace
   use 'rafcamlet/nvim-luapad'                                    -- lua REPL/scratchpad
+  use 'chentau/marks.nvim'                                       -- better vim marks
+  use { 'AndrewRadev/splitjoin.vim',                             -- like vmp `g,` action
+        setup = function()
+          vim.cmd [[
+            let g:splitjoin_split_mapping = ''
+            let g:splitjoin_join_mapping = ''
+            nmap gj :SplitjoinJoin<cr>
+            nmap g, :SplitjoinSplit<cr>
+          ]]
+        end }
   use { 'numToStr/Comment.nvim', config = c'comment' }           -- comment/uncomment text objects
   use { 'mg979/vim-visual-multi', branch = 'master' }            -- multiple cursors, kinda like atom + vim-mode-plus
   use { 'windwp/nvim-autopairs', config = c'autopairs' }         -- automatically pair brackets etc
@@ -136,6 +174,7 @@ return require'packer'.startup({ function(use)
   use 'neovim/nvim-lspconfig'              -- basic facility to configure language servers
   use 'nvim-lua/lsp-status.nvim'           -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
   use 'onsails/lspkind-nvim'               -- fancy icons for lsp AST types and such
+  use 'b0o/schemastore.nvim'               -- json schema support
   use { 'williamboman/nvim-lsp-installer', -- automatically install language servers
         config = c'lsp-installer',
         setup = s'lsp-installer',
@@ -148,6 +187,8 @@ return require'packer'.startup({ function(use)
           'folke/trouble.nvim',
           'kyazdani42/nvim-web-devicons'
         } }
+  use { 'rmagatti/goto-preview',           -- gd, but in a floating window
+        config = function() require'goto-preview'.setup {} end }
 
   -- 📎 Completions and Snippets
 
@@ -159,7 +200,7 @@ return require'packer'.startup({ function(use)
   use 'hrsh7th/cmp-path'                                                        -- path completions
   use 'hrsh7th/cmp-emoji'                                                       -- ok boomer
   use 'hrsh7th/cmp-nvim-lsp-signature-help'                                     -- ffffunction
-  -- use 'David-Kunz/cmp-npm'                                                      -- npm package versions
+  use 'David-Kunz/cmp-npm'                                                      -- npm package versions
   use 'lukas-reineke/cmp-under-comparator'                                      -- _afterOthers
   use { 'petertriho/cmp-git', requires = 'nvim-lua/plenary.nvim' }              -- autocomplete git issues
   use { 'mtoohey31/cmp-fish', ft = "fish" }                                     -- 🐟
@@ -178,6 +219,7 @@ return require'packer'.startup({ function(use)
 
   use 'jonsmithers/vim-html-template-literals'                           -- lit-html
   use 'NTBBloodbath/color-converter.nvim'                                -- convert colour values
+  use 'crispgm/telescope-heading.nvim'                                   -- navigate to markdown headers
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' } -- markdown previews
   use { 'rrethy/vim-hexokinase', run = 'make hexokinase' }               -- display colour values
 

@@ -214,26 +214,22 @@ return {
 	font_rules = {
 		{ -- BOLD
 			intensity = "Bold",
-			weight = "Bold",
 			font = font_with_fallback("FiraCode Nerd Font", { weight = "Bold" }),
 		},
 
 		{ -- ITALIC
 			italic = true,
-			weight = "Light",
 			font = font_with_fallback("Operator Mono SSm Lig", { italic = true }),
 		},
 
 		{ -- BOLD ITALIC
 			italic = true,
 			intensity = "Bold",
-			weight = "Book",
 			font = font_with_fallback("Operator Mono SSm Lig", { weight = "Bold", italic = true }),
 		},
 
 		{ -- LIGHT
 			intensity = "Half",
-			weight = "Light",
 			font = font_with_fallback("Operator Mono SSm Lig"),
 		},
 	},
