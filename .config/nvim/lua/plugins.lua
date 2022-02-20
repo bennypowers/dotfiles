@@ -120,7 +120,7 @@ return require'packer'.startup({ function(use)
   use { 'bennypowers/nvim-regexplainer',
         config = function()
           require'nvim-regexplainer'.setup {
-            display = 'split',
+            display = 'popup',
             narrative = {
               separator = function(component)
                 local sep = '\n';
