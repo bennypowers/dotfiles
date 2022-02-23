@@ -103,9 +103,6 @@ return require'packer'.startup({ function(use)
           'MunifTanjim/nui.nvim',
         } }
 
-  -- 🍇 Graphics
-  use {'edluffy/hologram.nvim'}
-
   -- 📒 Sessions
 
   -- Disabling because neo-tree doesn't play nice.
@@ -117,27 +114,11 @@ return require'packer'.startup({ function(use)
 
   -- ⌨️  Editing
 
-  use { 'bennypowers/nvim-regexplainer',
-        config = function()
-          require'nvim-regexplainer'.setup {
-            display = 'popup',
-            narrative = {
-              separator = function(component)
-                local sep = '\n';
-                if component.depth > 0 then
-                  for _ = 1, component.depth do
-                    sep = sep .. '> '
-                  end
-                end
-                return sep
-              end
-            },
-          }
-        end,
+  use { 'bennypowers/nvim-regexplainer', config = c'regexplainer',
         requires = {
           'nvim-lua/plenary.nvim',
           'MunifTanjim/nui.nvim',
-          'edluffy/hologram.nvim',
+          'romgrk/hologram.nvim',
         } }
 
   use 'arthurxavierx/vim-caser'                                  -- change case (camel, dash, etc)
