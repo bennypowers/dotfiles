@@ -4,14 +4,6 @@ let mapleader = " "
 "
 nnoremap ; <C-w>
 
-" Integrated Terminal
-" Prompts for a command then runs it
-"
-" TODO: get ++close to work
-" nmap <c-t> :lua vim.ui.input({}, function(val) vim.cmd(string.gsub([[ :term {} ++close ]], '{}', val)) end)<cr>
-" nnoremap <c-t> :lua vim.ui.input({}, function(val) if val then vim.cmd(string.gsub(':term {}', '{}', val)) end end)<cr>
-nnoremap <c-t> :lua vim.ui.input({}, function(val) if val then vim.cmd(string.format(':term %s', val)) end end)<cr>
-
 " LSP
 "
 nnoremap gD                   <cmd>lua vim.lsp.buf.declaration()<CR>
@@ -40,15 +32,19 @@ nnoremap <leader>ch :lua require'color-converter'.to_hsl()<CR>:s/%//g<CR>
 " Tabs
 "
 nnoremap <C-i>     :source ~/.config/nvim/init.vim<CR>
-nnoremap <leader>s :w<CR>
+nnoremap <leader>w :w<CR>
 
 " bufferline.nvim bindings
 "
-nnoremap <leader>t :BufferLinePick<CR>
-nnoremap <leader>} :BufferLineCycleNext<CR>
-nnoremap <leader>{ :BufferLineCyclePrev<CR>
-nnoremap <leader>w :Bdelete<CR>
-nnoremap <leader>q :qa<CR>
+nnoremap <leader>bp :BufferLinePick<CR>
+nnoremap <leader>bd :Bdelete<CR>
+nnoremap <leader>bj :BufferLineCycleNext<CR>
+nnoremap <leader>bk :BufferLineCyclePrev<CR>
+nnoremap <leader>}  :BufferLineCycleNext<CR>
+nnoremap <leader>{  :BufferLineCyclePrev<CR>
+
+" Splits
+nnoremap <leader>; :vnew<CR>
 
 " Tree
 "

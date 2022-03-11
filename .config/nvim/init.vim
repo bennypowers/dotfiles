@@ -19,6 +19,8 @@ set tabstop=2
 set termguicolors
 set virtualedit=block,onemore
 set nowrap
+
+let $BASH_ENV = "~/.config/bashrc"
 set shell=bash
 
 set foldlevel=20

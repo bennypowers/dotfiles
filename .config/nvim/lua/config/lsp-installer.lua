@@ -1,7 +1,7 @@
 return function()
   local lsp_installer_servers = require'nvim-lsp-installer.servers'
-  local cmp_nvim_lsp = require'cmp_nvim_lsp'
-  local lsp_status = require'lsp-status'
+  local cmp_nvim_lsp          = require'cmp_nvim_lsp'
+  local lsp_status            = require'lsp-status'
 
   -- Install these, k?
   local servers = {
@@ -33,7 +33,7 @@ return function()
     current_function = false,
     -- status_symbol = '💬: ',
     -- status_symbol = ' ',
-    status_symbol = ': ',
+    status_symbol = '',
     indicator_errors = '🔥',
     indicator_warnings = ' 🚧',
     indicator_info = 'ℹ️ ',
@@ -63,12 +63,12 @@ return function()
     lsp_status.on_attach(client)
   end
 
-  -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
-  -- the resolved capabilities of the eslint server ourselves!
-  --
-  -- @param #boolean allow_formatting whether to enable formating
-  -- @param #boolean format_on_save   whether to enable format on save
-  --
+  --- Neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
+  --- the resolved capabilities of the eslint server ourselves!
+  ---
+  ---@param  allow_formatting boolean whether to enable formating
+  ---@param  format_on_save   boolean whether to enable format on save
+  ---
   local function toggle_formatting(allow_formatting, format_on_save)
     return function(client)
       default_on_attach(client)
@@ -89,13 +89,17 @@ return function()
     end
   end
 
-  -- Setup your lua path
-  -- needed to get IDE features in lua files
-  -- I promised clason in the neovim gitter i wouldn't call it 'intellisense'
-  --
-  local runtime_path = vim.split(package.path, ';')
-  table.insert(runtime_path, "lua/?.lua")
-  table.insert(runtime_path, "lua/?/init.lua")
+  --- Setup your lua path
+  --- needed to get IDE features in lua files
+  --- I promised clason in the neovim gitter i wouldn't call it 'intellisense'
+  ---@return string[]
+  ---
+  local function get_sumneko_lua_runtime_path()
+    local runtime_path = vim.split(package.path, ';')
+    table.insert(runtime_path, "lua/?.lua")
+    table.insert(runtime_path, "lua/?/init.lua")
+    return runtime_path
+  end
 
   -- Specify server options and settings per server
   -- servers not configured here will use the defaul on_attach function
@@ -172,7 +176,7 @@ return function()
         Lua = {
           runtime = {
             version = 'LuaJIT',
-            path = runtime_path,
+            path = get_sumneko_lua_runtime_path(),
           },
           diagnostics = {
             globals = { 'utf8', 'vim' }, -- Get the language server to recognize the `vim` global
@@ -226,7 +230,10 @@ return function()
   -- uncomment for automatic hover on cursor-hold
   -- see also https://github.com/neovim/neovim/issues/9534
   -- vim.cmd [[
+  -- augroup
+  --   au!
   --   autocmd CursorHold  * :lua vim.lsp.buf.hover()
+  -- augroup END
   -- ]]
 
 end

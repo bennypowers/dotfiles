@@ -3,6 +3,9 @@ return function()
   local cmp = require'cmp'
   local lspkind = require'lspkind'
   local snippy = require'snippy'
+  local cmp_npm = require'cmp-npm'
+
+  cmp_npm.setup()
 
   cmp.setup({
     snippet = {
@@ -17,26 +20,28 @@ return function()
       ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
       ["<C-S-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
       ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-      ["<C-e>"] = cmp.mapping({
+      ["<C-e>"] = cmp.mapping {
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
-      }),
-      ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      },
+      ["<CR>"] = cmp.mapping.confirm {
+        select = true,
+      }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     },
 
-    sources = cmp.config.sources({
+    sources = cmp.config.sources {
       { name = 'nvim_lsp' },
       { name = 'cmp_git' },
       { name = 'nvim_lsp_signature_help' },
       { name = 'nvim_lua' },
-      { name = 'npm' },
+      { name = 'npm', keyword_length = 4 },
       { name = 'calc' },
       { name = 'emoji' },
       { name = 'snippy' },
       { name = 'fish' },
     }, {
       { name = "buffer", keyword_length = 5 },
-    }),
+    },
 
     sorting = {
       comparators = {

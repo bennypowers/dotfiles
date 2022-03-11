@@ -1,6 +1,20 @@
 return function ()
     local wk = require'which-key'
 
+    local function input_wrapper(fn)
+        return function()
+            vim.ui.input({ prompt = '$' }, fn)
+         end
+    end
+
+    local scratch_with_command = input_wrapper(function(input)
+        require'FTerm'.scratch({ cmd = input })
+    end)
+
+    local term_with_command = input_wrapper(function(input)
+        BuiltinTerminalWrapper:open({ cmd = input })
+    end)
+
     wk.setup {
         plugins = {
             spelling = {
@@ -21,6 +35,14 @@ return function ()
     -- <space>
     wk.register({
 
+        b = {
+            name = "buffers",
+            j = 'next buffer',
+            k = 'previous buffer',
+            p = 'pick buffer',
+            d = 'delete buffer',
+        },
+
         D = 'goto type definition',
         R = 'rename refactor',
         e = 'open diagnostics in floating window',
@@ -31,10 +53,17 @@ return function ()
         ['}'] = 'next buffer',
         ['{'] = 'previous buffer',
 
-        t = 'choose buffer',
+        t = {
+            name = 'terminals',
+            t = { function() BuiltinTerminalWrapper:open() end, 'open shell' },
+            f = { term_with_command, 'open terminal with command' },
+            s = { scratch_with_command, 'scratch terminal with command' },
+        },
+
         w = 'close buffer',
 
-        ['\\'] = 'toggle file tree',
+        ['\\'] = 'toggle file tree (float)',
+        ['|'] = {'<cmd>NeoTreeRevealToggle<CR>', 'toggle file tree (sidebar)'},
 
         p = 'find files',
         F = 'find in files (live grep)',

@@ -1,11 +1,12 @@
  return function ()
   vim.g.indent_blankline_filetype_exclude = {
-    'VGit',
     'Regexplainer',
+    'VGit',
     'alpha',
     'fugitive',
     'help',
     'neo-tree',
     'notify',
+    'unix',
   }
 end

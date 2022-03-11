@@ -25,20 +25,26 @@ local s = loader'setup'
 return require'packer'.startup({ function(use)
   use 'wbthomason/packer.nvim'                    -- manage plugins
   use 'lewis6991/impatient.nvim'                  -- faster startup?
+  use 'nathom/filetype.nvim'                      -- faster startup!
   use 'milisims/nvim-luaref'                      -- lua docs in vim help
+
+  -- 🖥️ terminal emulator
+  use { 'numToStr/FTerm.nvim',
+        config = c'FTerm',
+        requires = 'pianocomposer321/consolation.nvim' }
 
   -- 🎨 Themes
 
-  use 'yonlu/omni.vim'                                   -- dark neon kinda theme
-  use 'mangeshrex/uwu.vim'                               -- a meme of a theme
-  use 'rktjmp/lush.nvim'                                 -- custom color themes
-  -- use '~/.config/nvim/themes/framed'                  -- WIP custom color theme based on lush
+  -- use '~/.config/nvim/themes/framed'                     -- WIP custom color theme based on lush
+  -- use 'rktjmp/lush.nvim'                                 -- custom color themes
+  -- use 'yonlu/omni.vim'                                   -- dark neon kinda theme
+  -- use 'mangeshrex/uwu.vim'                               -- a meme of a theme
   use { 'EdenEast/nightfox.nvim', config = c'nightfox' } -- 🦊
 
   -- 🔥 Browser Integration
   --    here be 🐉 🐲
 
-  use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
+  -- use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
 
   -- 🔭 Telescope
 
@@ -56,6 +62,7 @@ return require'packer'.startup({ function(use)
 
   -- 🌳 Syntax
 
+  -- use 'powerman/vim-plugin-AnsiEsc'
   use 'lepture/vim-jinja'                              -- regexp-based syntax for njk
   use 'nvim-treesitter/playground'                     -- tool for exploring treesitter ASTs
   use { 'sheerun/vim-polyglot', setup = s'polyglot' }  -- regexp-based syntax
@@ -79,8 +86,7 @@ return require'packer'.startup({ function(use)
   use 'folke/twilight.nvim'                                          -- focus mode editing
   use 'kosayoda/nvim-lightbulb'                                      -- 💡
   use { 'kyazdani42/nvim-web-devicons', config = c'web-devicons' }   -- yet more icons
-  use { 'goolord/alpha-nvim',                                        -- startup screen
-        config = c'alpha' }
+  use { 'goolord/alpha-nvim', config = c'alpha' }                    -- startup screen
   use { 'akinsho/bufferline.nvim', config = c'bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"
   use { 'rcarriga/nvim-notify', config = c'notify' }                 -- pretty notifications
   use { 'antoinemadec/FixCursorHold.nvim',
@@ -92,8 +98,7 @@ return require'packer'.startup({ function(use)
   use { 'nvim-lualine/lualine.nvim',                                 -- pretty statusline
         config = c'lualine',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
-  use { 'folke/which-key.nvim',                                      -- which key was it, again?
-        config = c'which-key' }
+  use { 'folke/which-key.nvim', config = c'which-key' }              -- which key was it, again?
   use { 'nvim-neo-tree/neo-tree.nvim',                               -- tree browser
         branch = 'v1.x',
         config = c'neo-tree',
@@ -110,34 +115,20 @@ return require'packer'.startup({ function(use)
   --
   -- use { 'Shatur/neovim-session-manager',
   --       config = c'neovim-session-manager',
-  --       requires = 'nvim-telescope/nvim-telescope' }
+  --       requires = {
+  --         'nvim-telescope/telescope.nvim',
+  --         'JoseConseco/telescope_sessions_picker.nvim' } }
 
   -- ⌨️  Editing
-
-  use { 'bennypowers/nvim-regexplainer', config = c'regexplainer',
-        requires = {
-          'nvim-lua/plenary.nvim',
-          'MunifTanjim/nui.nvim',
-          'romgrk/hologram.nvim',
-        } }
 
   use 'arthurxavierx/vim-caser'                                  -- change case (camel, dash, etc)
   use 'tommcdo/vim-lion'                                         -- align anything
   use 'tpope/vim-surround'                                       -- surround objects with chars, change surround, remove, etc
   use 'tpope/vim-repeat'                                         -- dot-repeat for various plugin actions
-  use 'mattn/emmet-vim'                                          -- HTML but faster
   use 'windwp/nvim-spectre'                                      -- project find/replace
   use 'rafcamlet/nvim-luapad'                                    -- lua REPL/scratchpad
   use 'chentau/marks.nvim'                                       -- better vim marks
-  use { 'AndrewRadev/splitjoin.vim',                             -- like vmp `g,` action
-        setup = function()
-          vim.cmd [[
-            let g:splitjoin_split_mapping = ''
-            let g:splitjoin_join_mapping = ''
-            nmap gj :SplitjoinJoin<cr>
-            nmap g, :SplitjoinSplit<cr>
-          ]]
-        end }
+  use { 'mvllow/modes.nvim', config = c'modes' }                 -- the colours!
   use { 'numToStr/Comment.nvim', config = c'comment' }           -- comment/uncomment text objects
   use { 'mg979/vim-visual-multi', branch = 'master' }            -- multiple cursors, kinda like atom + vim-mode-plus
   use { 'windwp/nvim-autopairs', config = c'autopairs' }         -- automatically pair brackets etc
@@ -149,6 +140,22 @@ return require'packer'.startup({ function(use)
             hl_group = 'MatchParen',
           }
         end }
+  use { 'AndrewRadev/splitjoin.vim',                             -- like vmp `g,` action
+        setup = function()
+          vim.cmd [[
+            let g:splitjoin_split_mapping = ''
+            let g:splitjoin_join_mapping = ''
+            nmap gj :SplitjoinJoin<cr>
+            nmap g, :SplitjoinSplit<cr>
+          ]]
+        end }
+  use { '~/Developer/nvim-regexplainer', config = c'regexplainer',
+        requires = {
+          'nvim-lua/plenary.nvim',
+          'MunifTanjim/nui.nvim',
+          'romgrk/hologram.nvim',
+        } }
+
 
   -- 🤖 Language Server
 
