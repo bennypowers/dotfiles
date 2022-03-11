@@ -8,11 +8,14 @@ set -g fish_user_paths "~/.yarn/bin" $fish_user_paths
 # My Additions
 
 # aliases
+alias g="git"
 alias nr="npm run"
 alias run="nr"
 alias rn="nr"
 alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias realvim="vim"
+alias oldvim="realvim"
+alias bramvim="realvim"
 alias vim="nvim"
 alias vim-update="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
@@ -41,7 +44,7 @@ set -x LESS " -R"
 
 set -x PATH $PATH ~/.ghcup/bin
 set -x PATH $HOME"/.cabal/bin" $PATH
-set -x PATH $HOME/.local/bin $PATH
+set -x PATH $HOME/.local/bin $PATH []
 set -x PATH /usr/local/opt/python/bin/ $PATH
 set -x PATH /usr/local/opt/gnu-sed/libexec/gnubin $PATH
 
