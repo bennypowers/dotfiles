@@ -1,0 +1,14 @@
+# aliases
+shopt -s expand_aliases 
+alias g="git"
+alias nr="npm run"
+alias run="nr"
+alias rn="nr"
+alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+alias realvim="vim"
+alias oldvim="realvim"
+alias bramvim="realvim"
+alias vim="nvim"
+alias vim-update="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
+
+
