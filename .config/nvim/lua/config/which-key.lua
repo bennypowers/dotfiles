@@ -1,6 +1,4 @@
 return function ()
-    local wk = require'which-key'
-
     local function input_wrapper(fn)
         return function()
             vim.ui.input({ prompt = '$' }, fn)
@@ -14,6 +12,8 @@ return function ()
     local term_with_command = input_wrapper(function(input)
         BuiltinTerminalWrapper:open({ cmd = input })
     end)
+
+    local wk = require'which-key'
 
     wk.setup {
         plugins = {
@@ -32,26 +32,35 @@ return function ()
         }
     end
 
+    -- no leader
+    wk.register {
+        K = { vim.lsp.buf.hover, 'hover' },
+        ['c-k'] = { vim.lsp.buf.signature_help, 'signature help' },
+        ['M-,'] = { vim.diagnostic.goto_prev, 'previous diagnostic' },
+        ['M-.'] = { vim.diagnostic.goto_next, 'next diagnostic' },
+    }
+
     -- <space>
     wk.register({
 
         b = {
             name = "buffers",
-            j = 'next buffer',
-            k = 'previous buffer',
-            p = 'pick buffer',
-            d = 'delete buffer',
+            j = { ':BufferLineCycleNext<cr>', 'next buffer' },
+            k = { ':BufferLineCyclePrev<cr>', 'previous buffer' },
+            p = { ':BufferLinePick<cr>', 'pick buffer' },
+            d = { ':Bdelete<cr>', 'delete buffer' },
+            b = { ':Telescope buffers<cr>', 'search buffers' }
         },
 
+        ['}'] = { ':BufferLineCycleNext<cr>', 'next buffer' },
+        ['{'] = { ':BufferLineCyclePrev<cr>', 'previous buffer' },
+
         D = 'goto type definition',
-        R = 'rename refactor',
-        e = 'open diagnostics in floating window',
+        R = { vim.lsp.buf.rename, 'rename refactor' },
+        e = { function() vim.diagnostic.open_float({ focus = false }) end, 'open diagnostics in floating window' },
 
         s = 'save file',
         q = 'quit',
-
-        ['}'] = 'next buffer',
-        ['{'] = 'previous buffer',
 
         t = {
             name = 'terminals',
@@ -60,41 +69,39 @@ return function ()
             s = { scratch_with_command, 'scratch terminal with command' },
         },
 
-        w = 'close buffer',
+        ['\\'] = { '<cmd>Neotree filesystem show float<cr>', 'toggle file tree (float)' },
+        ['|'] =  { '<cmd>Neotree filesystem show left toggle=true<cr>', 'toggle file tree (sidebar)'},
 
-        ['\\'] = 'toggle file tree (float)',
-        ['|'] = {'<cmd>NeoTreeRevealToggle<CR>', 'toggle file tree (sidebar)'},
+        p = {'<cmd>Telescope find_files hidden=true<cr>', 'find files'},
 
-        p = 'find files',
-        F = 'find in files (live grep)',
-
-        ['.'] = 'code actions',
+        ['.'] = {'<cmd>Telescope lsp_code_actions<cr>','code actions'},
 
         k = 'command pallete',
 
         c = {
             name = 'colours',
-            c = 'cycle colour format',
-            h = 'format as hsl()',
+
+            c = { function() require'color-converter'.cycle() end, 'cycle colour format' },
+            h = { ':lua require"color-converter".to_hsl()<cr>:s/%//g<cr>', 'format as hsl()' },
         },
 
         l = {
             name = 'lsp',
-            f = 'format file',
-            r = 'rename',
-            k = 'signature_help',
-            d = 'goto declaration',
-            D = 'goto type definition',
-            e = 'open diagnostics in floating window',
+            f = { vim.lsp.buf.formatting, 'format file' },
+            r = { vim.lsp.buf.rename, 'rename' },
+            k = { vim.lsp.buf.signature_help, 'signature_help' },
+            d = { vim.lsp.buf.declaration, 'goto declaration' },
+            D = { vim.lsp.buf.type_definition, 'goto type definition' },
+            e = { function() vim.diagnostic.open_float({ focus = false }) end, 'open diagnostics in floating window' },
         },
 
         f = {
             name = 'find',
-            f = 'format file',
-            g = 'find in files (live grep)',
-            b = 'find buffers',
-            h = 'find in help',
-            s = 'find symbol',
+            g = {'<cmd>Telescope live_grep<cr>', 'find in files (live grep)'},
+            b = {'<cmd>Telescope buffers<cr>', 'find buffers'},
+            h = {'<cmd>Telescope help_tags<cr>', 'find in help'},
+            s = {'<cmd>Telescope symbols<cr>', 'find symbol'},
+            r = {'<cmd>Telescope resume<cr>', 'resume finding'},
         },
 
         g = {
@@ -122,12 +129,14 @@ return function ()
     -- g
     wk.register({
 
-         D = 'goto declaration',
-         d = 'goto definitions',
-         i = 'goto implementations',
-         r = 'goto references',
-         u = 'lowercase',
-         U = 'uppercase',
+        D = { vim.lsp.buf.declaration, 'goto declaration' },
+        d = {function () require'goto-preview'.goto_preview_definition() end, 'goto definitions'},
+        i = {function() require'goto-preview'.goto_preview_implementation() end, 'goto implementations'},
+        r = {function() require'goto-preview'.goto_preview_references() end, 'goto references'},
+        P = {function() require'goto-preview'.close_all_win() end, 'close all preview windows'},
+
+        u = 'lowercase',
+        U = 'uppercase',
 
         ['%'] = 'match surround backwards',
 
@@ -165,5 +174,9 @@ return function ()
 
     }, { prefix = 'g' })
 
+    -- ;
+    wk.register({
+        w = { function() require'nvim-window'.pick() end, 'pick window' },
+    }, { prefix = ';' })
 end
 

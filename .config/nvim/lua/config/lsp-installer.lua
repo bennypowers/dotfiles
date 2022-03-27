@@ -2,6 +2,7 @@ return function()
   local lsp_installer_servers = require'nvim-lsp-installer.servers'
   local cmp_nvim_lsp          = require'cmp_nvim_lsp'
   local lsp_status            = require'lsp-status'
+  local lsp_util              = require'lspconfig.util'
 
   -- Install these, k?
   local servers = {
@@ -60,6 +61,8 @@ return function()
         'additionalTextEdits',
       }
     }
+    local has_illuminate, illuminate = pcall(require, 'illuminate')
+    if has_illuminate then illuminate.on_attach(client) end
     lsp_status.on_attach(client)
   end
 
@@ -112,6 +115,7 @@ return function()
 
     eslint = {
       on_attach = toggle_formatting(true, true),
+      root_dir = lsp_util.find_git_ancestor,
       settings = {
         enable = true,
         format = { enable = true }, -- this will enable formatting
@@ -128,7 +132,7 @@ return function()
     },
 
     emmet_ls = {
-      root_dir = function() return vim.loop.cwd() end,
+      root_dir = lsp_util.find_git_ancestor,
       filetypes = {
         'html',
         'css', 'scss',
@@ -157,7 +161,7 @@ return function()
       on_attach = toggle_formatting(true, true),
       filetypes = {
         'css',
-        'less',
+        'les',
         'scss',
         'sugarss',
         'vue',
@@ -171,7 +175,7 @@ return function()
     },
 
     sumneko_lua = {
-      on_attach = toggle_formatting(true, true),
+      -- on_attach = toggle_formatting(true, true),
       settings = {
         Lua = {
           runtime = {
@@ -200,6 +204,7 @@ return function()
 
     tsserver = {
       on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
+      root_dir = lsp_util.find_git_ancestor,
       settings = {
         format = { enable = false },
       },

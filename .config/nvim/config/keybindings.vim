@@ -4,51 +4,12 @@ let mapleader = " "
 "
 nnoremap ; <C-w>
 
-" LSP
-"
-nnoremap gD                   <cmd>lua vim.lsp.buf.declaration()<CR>
-nnoremap K                    <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <C-k>                <cmd>lua vim.lsp.buf.signature_help()<CR>
-
-nnoremap <leader>lf           <cmd>lua vim.lsp.buf.formatting()<CR>
-nnoremap <leader>lr           <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <leader>lk           <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <leader>ld           <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <leader>le           <cmd>lua vim.diagnostic.open_float({ focus = false })<CR>
-
-nnoremap <leader>D            <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <leader>R            <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <leader>e            <cmd>lua vim.diagnostic.open_float({ focus = false })<CR>
-
-nnoremap <silent><M-,>        <cmd>lua vim.diagnostic.goto_prev()<CR>
-nnoremap <silent><M-.>        <cmd>lua vim.diagnostic.goto_next()<CR>
-
-" nnoremap <leader>q            <cmd>lua vim.diagnostic.setloclist()<CR>
-
-" Colors
-nnoremap <leader>cc :lua require'color-converter'.cycle()<CR>
-nnoremap <leader>ch :lua require'color-converter'.to_hsl()<CR>:s/%//g<CR>
-
 " Tabs
 "
 nnoremap <C-i>     :source ~/.config/nvim/init.vim<CR>
-nnoremap <leader>w :w<CR>
-
-" bufferline.nvim bindings
-"
-nnoremap <leader>bp :BufferLinePick<CR>
-nnoremap <leader>bd :Bdelete<CR>
-nnoremap <leader>bj :BufferLineCycleNext<CR>
-nnoremap <leader>bk :BufferLineCyclePrev<CR>
-nnoremap <leader>}  :BufferLineCycleNext<CR>
-nnoremap <leader>{  :BufferLineCyclePrev<CR>
 
 " Splits
 nnoremap <leader>; :vnew<CR>
-
-" Tree
-"
-nnoremap <leader>\ :NeoTreeFloatToggle<cr>
 
 " Edge motion
 "
@@ -96,29 +57,6 @@ onoremap <silent> [h    :call NextIndent(0, 0, 0, 1)<CR>
 onoremap <silent> ]j    :call NextIndent(0, 1, 0, 1)<CR>
 onoremap <silent> [h    :call NextIndent(1, 0, 1, 1)<CR>
 onoremap <silent> ]j    :call NextIndent(1, 1, 1, 1)<CR>
-
-" Telescope
-"
-" nnoremap : <cmd>FineCmdline<CR>
-nnoremap <leader>p          <cmd>Telescope find_files hidden=true<CR>
-nnoremap <leader>F          <cmd>Telescope live_grep             <CR>
-
-nnoremap <leader>fg         <cmd>Telescope live_grep             <CR>
-nnoremap <leader>fb         <cmd>Telescope buffers               <CR>
-nnoremap <leader>fh         <cmd>Telescope help_tags             <CR>
-nnoremap <leader>fH         <cmd>Telescope headers               <CR>
-nnoremap <leader>fs         <cmd>Telescope symbols               <CR>
-
-nnoremap <leader>.          <cmd>Telescope lsp_code_actions      <CR>
-
-" nnoremap <silent>gd         <cmd>Telescope lsp_definitions<CR>
-" nnoremap <silent>gi         <cmd>Telescope lsp_implementations<CR>
-" nnoremap <silent>gr         <cmd>Telescope lsp_references<CR>
-
-nnoremap gd <cmd>lua require'goto-preview'.goto_preview_definition()    <CR>
-nnoremap gi <cmd>lua require'goto-preview'.goto_preview_implementation()<CR>
-nnoremap gr <cmd>lua require'goto-preview'.goto_preview_references()    <CR>
-nnoremap gP <cmd>lua require'goto-preview'.close_all_win()              <CR>
 
 nnoremap <leader>k          :Legendary<cr>
 

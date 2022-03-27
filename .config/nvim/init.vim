@@ -5,7 +5,7 @@ set cursorcolumn
 set cursorline
 set encoding=UTF-8
 set expandtab
-set laststatus=2
+set laststatus=3
 set linebreak
 set list
 set mouse=a
@@ -32,7 +32,7 @@ filetype plugin indent on
 
 if exists('g:started_by_firenvim')
   source ~/.config/nvim/config/firenvim.vim
-else
+elseif has('gui_vimr')
   source ~/.config/nvim/config/background.vim
 endif
 
@@ -45,9 +45,9 @@ au BufNewFile,BufRead *.njk set ft=jinja
 source ~/.config/nvim/config/keybindings.vim
 source ~/.config/nvim/config/scratch-capture.vim
 
-lua require'plugins'
-
 colorscheme duskfox
+
+lua require'plugins'
 
 augroup packer_user_config
   autocmd!

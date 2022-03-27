@@ -3,6 +3,7 @@
     'Regexplainer',
     'VGit',
     'alpha',
+    'packer',
     'fugitive',
     'help',
     'neo-tree',

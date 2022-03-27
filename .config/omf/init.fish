@@ -32,12 +32,12 @@ set -x LC_ALL en_US.UTF-8
 set fish_key_bindings fish_vi_key_bindings
 set hilite (which highlight)
 
-set -gx VISUAL vim
-set -gx EDITOR vim
+set -gx VISUAL nvim
+set -gx EDITOR nvim
 
 set -x SHELL fish
-set -x EDITOR vim
-set -x GIT_EDITOR vim
+set -x EDITOR nvim
+set -x GIT_EDITOR nvim
 
 set -x LESSOPEN "| $hilite %s --out-format xterm256 --quiet --force "
 set -x LESS " -R"

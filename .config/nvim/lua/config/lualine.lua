@@ -4,6 +4,7 @@ return function ()
     extentions = { 'fugitive' },
     options = {
       disabled_filetypes = { 'neo-tree' },
+      globalstatus = true,
     },
     sections = {
       lualine_a = {'mode'},

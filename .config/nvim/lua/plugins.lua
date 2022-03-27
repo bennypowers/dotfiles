@@ -39,7 +39,9 @@ return require'packer'.startup({ function(use)
   -- use 'rktjmp/lush.nvim'                                 -- custom color themes
   -- use 'yonlu/omni.vim'                                   -- dark neon kinda theme
   -- use 'mangeshrex/uwu.vim'                               -- a meme of a theme
-  use { 'EdenEast/nightfox.nvim', config = c'nightfox' } -- 🦊
+  use { 'EdenEast/nightfox.nvim',
+        config = c'nightfox',
+        tag = 'v1.0.0' } -- 🦊
 
   -- 🔥 Browser Integration
   --    here be 🐉 🐲
@@ -81,26 +83,32 @@ return require'packer'.startup({ function(use)
 
   -- 🪟 UI
 
+  use 'https://gitlab.com/yorickpeterse/nvim-window.git'
   use 'famiu/bufdelete.nvim'                                         -- close buffers (tabs) with less headache
   use 'ryanoasis/vim-devicons'                                       -- some icon s
   use 'folke/twilight.nvim'                                          -- focus mode editing
+  use 'mvllow/modes.nvim'                                            -- the colours!
   use 'kosayoda/nvim-lightbulb'                                      -- 💡
+  use { 'mvllow/modes.nvim', config = c'modes' }
   use { 'kyazdani42/nvim-web-devicons', config = c'web-devicons' }   -- yet more icons
   use { 'goolord/alpha-nvim', config = c'alpha' }                    -- startup screen
   use { 'akinsho/bufferline.nvim', config = c'bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"
   use { 'rcarriga/nvim-notify', config = c'notify' }                 -- pretty notifications
   use { 'antoinemadec/FixCursorHold.nvim',
-        setup = function() vim.g.cursorhold_updatetime = 500 end }   -- bug fix for neovim's CursorHold event
-  use { 'yamatsum/nvim-cursorline',
-        setup = function () vim.g.cursorline_timeout=0 end }         -- highlight word under cursor
+        setup = function() vim.g.cursorhold_updatetime = 100 end }   -- bug fix for neovim's CursorHold event
+  -- use 'RRethy/vim-illuminate'
+  -- use { 'yamatsum/nvim-cursorline',
+  --       setup = function () vim.g.cursorline_timeout=0 end }         -- highlight word under cursor
   use { 'lukas-reineke/indent-blankline.nvim',
         config = c'indent', setup = s'indent' }                      -- indentation guide with context
   use { 'nvim-lualine/lualine.nvim',                                 -- pretty statusline
         config = c'lualine',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
-  use { 'folke/which-key.nvim', config = c'which-key' }              -- which key was it, again?
+  use { 'folke/which-key.nvim',                                      -- which key was it, again?
+        config = c'which-key',
+        requires = 'mrjones2014/legendary.nvim' }
   use { 'nvim-neo-tree/neo-tree.nvim',                               -- tree browser
-        branch = 'v1.x',
+        branch = 'v2.x',
         config = c'neo-tree',
         requires = {
           'nvim-lua/plenary.nvim',
@@ -128,7 +136,6 @@ return require'packer'.startup({ function(use)
   use 'windwp/nvim-spectre'                                      -- project find/replace
   use 'rafcamlet/nvim-luapad'                                    -- lua REPL/scratchpad
   use 'chentau/marks.nvim'                                       -- better vim marks
-  use { 'mvllow/modes.nvim', config = c'modes' }                 -- the colours!
   use { 'numToStr/Comment.nvim', config = c'comment' }           -- comment/uncomment text objects
   use { 'mg979/vim-visual-multi', branch = 'master' }            -- multiple cursors, kinda like atom + vim-mode-plus
   use { 'windwp/nvim-autopairs', config = c'autopairs' }         -- automatically pair brackets etc
@@ -153,7 +160,6 @@ return require'packer'.startup({ function(use)
         requires = {
           'nvim-lua/plenary.nvim',
           'MunifTanjim/nui.nvim',
-          'romgrk/hologram.nvim',
         } }
 
 
@@ -180,7 +186,6 @@ return require'packer'.startup({ function(use)
 
   -- 📎 Completions and Snippets
 
-  use 'dcampos/cmp-snippy'                                                      -- snippet completions
   use 'hrsh7th/cmp-nvim-lsp'                                                    -- language-server-based completions
   use 'hrsh7th/cmp-nvim-lua'                                                    -- lua
   use 'hrsh7th/cmp-calc'                                                        -- math

@@ -4,8 +4,8 @@ local function font_with_fallback(name, params)
 	return wezterm.font_with_fallback({
 		name,
 		"Noto Color Emoji",
-		"FiraCode Nerd Font",
-		"Hack Nerd Font"
+    "Fira Code",
+		"Hack",
 	}, params)
 end
 
