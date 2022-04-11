@@ -47,13 +47,4 @@ return function()
             vim.cmd("bd! "..self.bufnr)
         end,
     }
-
-    --- Toggle a floating terminal with lazygit
-    function _G.lazygit_term()
-        return fterm.scratch {
-            ft = 'fterm_lazygit',
-            cmd = 'lazygit',
-            auto_close = true,
-        }
-    end
 end

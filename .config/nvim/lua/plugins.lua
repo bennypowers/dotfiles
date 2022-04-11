@@ -87,9 +87,8 @@ return require'packer'.startup({ function(use)
   use 'famiu/bufdelete.nvim'                                         -- close buffers (tabs) with less headache
   use 'ryanoasis/vim-devicons'                                       -- some icon s
   use 'folke/twilight.nvim'                                          -- focus mode editing
-  use 'mvllow/modes.nvim'                                            -- the colours!
   use 'kosayoda/nvim-lightbulb'                                      -- 💡
-  use { 'mvllow/modes.nvim', config = c'modes' }
+  use { 'mvllow/modes.nvim', config = c'modes' }                     -- the colors!
   use { 'kyazdani42/nvim-web-devicons', config = c'web-devicons' }   -- yet more icons
   use { 'goolord/alpha-nvim', config = c'alpha' }                    -- startup screen
   use { 'akinsho/bufferline.nvim', config = c'bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"

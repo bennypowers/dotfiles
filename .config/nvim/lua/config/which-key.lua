@@ -13,6 +13,15 @@ return function ()
         BuiltinTerminalWrapper:open({ cmd = input })
     end)
 
+    local can_legendary, legendary = pcall(require, 'legendary')
+    if can_legendary then
+        legendary.setup {
+            include_builtin = true,
+            auto_register_which_key = true,
+            select_prompt = 'Command Pallete'
+        }
+    end
+
     local wk = require'which-key'
 
     wk.setup {
@@ -22,15 +31,6 @@ return function ()
             },
         },
     }
-
-    local can_legendary, legendary = pcall(require, 'legendary')
-    if can_legendary then
-        legendary.setup {
-            include_builtin = true,
-            auto_register_which_key = true,
-            select_prompt = 'Command Pallete'
-        }
-    end
 
     -- no leader
     wk.register({
@@ -139,7 +139,13 @@ return function ()
         r = {function() require'goto-preview'.goto_preview_references() end, 'goto references'},
         P = {function() require'goto-preview'.close_all_win() end, 'close all preview windows'},
 
-        G = {_G.lazygit_term, 'lazygit'},
+        G = { function () --- Toggle a floating terminal with lazygit
+            return require'FTerm'.scratch {
+                ft = 'fterm_lazygit',
+                cmd = 'lazygit',
+                auto_close = true,
+                }
+        end , 'lazygit'},
 
         u = 'lowercase',
         U = 'uppercase',
