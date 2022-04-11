@@ -1,6 +1,6 @@
 local wezterm = require 'wezterm'
 
-local function font_with_fallback(name, params)
+local function f(name, params)
 	return wezterm.font_with_fallback({
 		name,
 		"Noto Color Emoji",
@@ -209,28 +209,28 @@ return {
     { key="}",	mods="SHIFT|ALT",		action=wezterm.action{ MoveTabRelative=1 } },
 	},
 
-	font = font_with_fallback("FiraCode Nerd Font"),
+	font = f("Fira Code"),
 
 	font_rules = {
 		{ -- BOLD
 			intensity = "Bold",
-			font = font_with_fallback("FiraCode Nerd Font", { weight = "Bold" }),
+			font = f("Fira Code", { weight = "Bold" }),
 		},
 
 		{ -- ITALIC
 			italic = true,
-			font = font_with_fallback("Operator Mono SSm Lig", { italic = true }),
+			font = f("Operator Mono SSm Lig", { italic = true }),
 		},
 
 		{ -- BOLD ITALIC
 			italic = true,
 			intensity = "Bold",
-			font = font_with_fallback("Operator Mono SSm Lig", { weight = "Bold", italic = true }),
+			font = f("Operator Mono SSm Lig", { weight = "Bold", italic = true }),
 		},
 
 		{ -- LIGHT
 			intensity = "Half",
-			font = font_with_fallback("Operator Mono SSm Lig"),
+			font = f("Operator Mono SSm Lig"),
 		},
 	},
 }

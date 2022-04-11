@@ -16,7 +16,7 @@ alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias realvim="vim"
 alias oldvim="realvim"
 alias bramvim="realvim"
-alias vim="nvim"
+alias vim="env TERM=wezterm nvim"
 alias vim-update="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
 # unicode
@@ -34,6 +34,7 @@ set hilite (which highlight)
 
 set -gx VISUAL nvim
 set -gx EDITOR nvim
+set -gx LG_CONFIG_FILE "/Users/bennyp/.config/lazygit/config.yml"
 
 set -x SHELL fish
 set -x EDITOR nvim

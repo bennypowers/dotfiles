@@ -9,6 +9,7 @@
 [core]
 	excludesfile = /Users/bennyp/.config/git/gitignore
 	editor=nvim
+	pager = delta
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path =
@@ -36,21 +37,9 @@
 [init]
 	defaultBranch = main
 
-# If you want to set up Kaleidoscope as the default diff tool,
-# then also set the following variables:
-# [mergetool "Kaleidoscope"]
-# 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
-# [difftool]
-# 	prompt = false
-# [diff]
-#	  tool = Kaleidoscope
-# [mergetool]
-# 	prompt = false
-# [merge]
-# 	tool = Kaleidoscope
-
 [merge]
   tool = vimdiff
+	conflictstyle = diff3
 [mergetool]
   prompt = true
 [mergetool "vimdiff"]
@@ -59,3 +48,18 @@
   prompt = false
 [diff]
   tool = vimdiff
+	colorMoved = default
+
+[include]
+	path = ~/.config/delta/themes.gitconfig
+
+[interactive]
+	diffFilter = delta --color-only --features=interactive
+
+[delta]
+	features = collared-trogon
+	syntax-theme = Dracula
+	navigate = true
+
+[delta "interactive"]
+	keep-plus-minus-markers = false

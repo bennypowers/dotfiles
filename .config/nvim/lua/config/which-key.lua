@@ -33,12 +33,12 @@ return function ()
     end
 
     -- no leader
-    wk.register {
+    wk.register({
         K = { vim.lsp.buf.hover, 'hover' },
         ['c-k'] = { vim.lsp.buf.signature_help, 'signature help' },
         ['M-,'] = { vim.diagnostic.goto_prev, 'previous diagnostic' },
         ['M-.'] = { vim.diagnostic.goto_next, 'next diagnostic' },
-    }
+    })
 
     -- <space>
     wk.register({
@@ -69,7 +69,7 @@ return function ()
             s = { scratch_with_command, 'scratch terminal with command' },
         },
 
-        ['\\'] = { '<cmd>Neotree filesystem show float<cr>', 'toggle file tree (float)' },
+        ['\\'] = { '<cmd>Neotree reveal filesystem float<cr>', 'toggle file tree (float)' },
         ['|'] =  { '<cmd>Neotree filesystem show left toggle=true<cr>', 'toggle file tree (sidebar)'},
 
         p = {'<cmd>Telescope find_files hidden=true<cr>', 'find files'},
@@ -129,11 +129,17 @@ return function ()
     -- g
     wk.register({
 
+        A = { ':Alpha<cr>', 'show dashboard' },
+
+        T = { ':TroubleToggle<cr>', 'toggle trouble' },
+
         D = { vim.lsp.buf.declaration, 'goto declaration' },
-        d = {function () require'goto-preview'.goto_preview_definition() end, 'goto definitions'},
+        d = {function() require'goto-preview'.goto_preview_definition() end, 'goto definitions'},
         i = {function() require'goto-preview'.goto_preview_implementation() end, 'goto implementations'},
         r = {function() require'goto-preview'.goto_preview_references() end, 'goto references'},
         P = {function() require'goto-preview'.close_all_win() end, 'close all preview windows'},
+
+        G = {_G.lazygit_term, 'lazygit'},
 
         u = 'lowercase',
         U = 'uppercase',

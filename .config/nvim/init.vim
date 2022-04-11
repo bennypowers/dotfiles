@@ -47,6 +47,7 @@ source ~/.config/nvim/config/scratch-capture.vim
 
 colorscheme duskfox
 
+let g:loaded_matchparen=1
 lua require'plugins'
 
 augroup packer_user_config
@@ -54,3 +55,22 @@ augroup packer_user_config
   autocmd BufWritePost plugins.lua,~/.config/nvim/lua/config/*,~/.config/nvim/lua/setup/* source <afile> | PackerCompile
 augroup end
 
+function! HighlightRepeats() range
+  let lineCounts = {}
+  let lineNum = a:firstline
+  while lineNum <= a:lastline
+    let lineText = getline(lineNum)
+    if lineText != ""
+      let lineCounts[lineText] = (has_key(lineCounts, lineText) ? lineCounts[lineText] : 0) + 1
+    endif
+    let lineNum = lineNum + 1
+  endwhile
+  exe 'syn clear Repeat'
+  for lineText in keys(lineCounts)
+    if lineCounts[lineText] >= 2
+      exe 'syn match Repeat "^' . escape(lineText, '".\^$*[]') . '$"'
+    endif
+  endfor
+endfunction
+
+command! -range=% HighlightRepeats <line1>,<line2>call HighlightRepeats()

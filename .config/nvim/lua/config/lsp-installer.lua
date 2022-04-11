@@ -137,9 +137,9 @@ return function()
         'html',
         'css', 'scss',
         'njk', 'nunjucks', 'jinja',
-        'ts', 'typescript',
+        -- 'ts', 'typescript',
         'md', 'markdown',
-        'js', 'javascript',
+        -- 'js', 'javascript',
       },
     },
 

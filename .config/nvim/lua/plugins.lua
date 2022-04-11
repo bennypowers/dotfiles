@@ -129,6 +129,8 @@ return require'packer'.startup({ function(use)
 
   -- ⌨️  Editing
 
+  use {'kana/vim-textobj-entire',
+        requires='kana/vim-textobj-user'}                        -- yae, cae, etc
   use 'arthurxavierx/vim-caser'                                  -- change case (camel, dash, etc)
   use 'tommcdo/vim-lion'                                         -- align anything
   use 'tpope/vim-surround'                                       -- surround objects with chars, change surround, remove, etc
@@ -207,6 +209,16 @@ return require'packer'.startup({ function(use)
         requires = 'nvim-lua/plenary.nvim',
         config = c'vgit',
         setup = s'vgit', }
+  use { 'pwntester/octo.nvim',
+        requires = {
+          'nvim-lua/plenary.nvim',
+          'nvim-telescope/telescope.nvim',
+          'kyazdani42/nvim-web-devicons',
+        },
+        config = function ()
+          require"octo".setup()
+        end
+      }
 
   -- 🕸️  Webdev
 
