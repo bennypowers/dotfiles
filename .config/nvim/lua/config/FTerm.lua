@@ -4,8 +4,8 @@ return function()
     local term = require'FTerm.terminal'
 
     Runner = term:new()
-
     FtermWrapper = Wrapper:new()
+    BuiltinTerminalWrapper = Wrapper:new()
 
     FtermWrapper:setup {
         create = function() Runner:open() end,
@@ -14,7 +14,6 @@ return function()
         kill   = function() Runner:close(true) end
     }
 
-    BuiltinTerminalWrapper = Wrapper:new()
     BuiltinTerminalWrapper:setup {
         create = function()
             vim.cmd[[
@@ -48,21 +47,6 @@ return function()
             vim.cmd("bd! "..self.bufnr)
         end,
     }
-
-
-    -- Try:
-
-    -- BuiltinTerminalWraper:open {cmd = "echo hi"}
-    -- BuiltinTerminalWraper:send_command {cmd = "echo hi again"}
-    -- BuiltinTerminalWraper:close()
-    -- BuiltinTerminalWraper:toggle()
-    -- BuiltinTerminalWraper:kill()
-    --
-
-    vim.cmd [[
-        command! NpmCI :lua require'FTerm'.scratch({ cmd = "npm ci" })<CR>
-        nnoremap <c-t> :lua require'FTerm'.scratch { cmd = "fish" }<CR>
-    ]]
 
     --- Toggle a floating terminal with lazygit
     function _G.lazygit_term()
