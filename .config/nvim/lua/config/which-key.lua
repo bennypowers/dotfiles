@@ -1,16 +1,43 @@
 return function ()
+    local Terminal = require'toggleterm.terminal'.Terminal
+
+    local function close_terminal_on_zero_exit(terminal, _, exit_code)
+        if exit_code == 0 then
+            terminal:close()
+        end
+    end
+
     local function input_wrapper(fn)
         return function()
             vim.ui.input({ prompt = '$' }, fn)
          end
     end
 
+    local lazygit = Terminal:new({
+        cmd = 'lazygit',
+        direction = 'float',
+        hidden = true,
+        on_exit = close_terminal_on_zero_exit,
+    })
+
+    local dotfileslazygit = Terminal:new({
+        cmd = 'lazygit --git-dir=$HOME/.cfg --work-tree=$HOME',
+        direction = 'float',
+        hidden = true,
+        on_exit = close_terminal_on_zero_exit,
+    })
+
     local scratch_with_command = input_wrapper(function(input)
-        require'FTerm'.scratch({ cmd = input })
+        Terminal:new({
+            cmd = input,
+            close_on_exit = true,
+            direction = 'float',
+            on_exit = close_terminal_on_zero_exit,
+        })
     end)
 
     local term_with_command = input_wrapper(function(input)
-        BuiltinTerminalWrapper:open({ cmd = input })
+        Terminal:new({ cmd = input, direction = 'vertical' })
     end)
 
     local can_legendary, legendary = pcall(require, 'legendary')
@@ -139,12 +166,12 @@ return function ()
         r = {function() require'goto-preview'.goto_preview_references() end, 'goto references'},
         P = {function() require'goto-preview'.close_all_win() end, 'close all preview windows'},
 
-        G = { function () --- Toggle a floating terminal with lazygit
-            return require'FTerm'.scratch {
-                ft = 'fterm_lazygit',
-                cmd = 'lazygit',
-                auto_close = true,
-                }
+        G = { function()
+            if vim.loop.cwd() == vim.call('expand', '~/.config') then
+                dotfileslazygit:toggle()
+            else
+                lazygit:toggle()
+            end
         end , 'lazygit'},
 
         u = 'lowercase',

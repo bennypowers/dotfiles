@@ -29,19 +29,13 @@ return require'packer'.startup({ function(use)
   use 'milisims/nvim-luaref'                      -- lua docs in vim help
 
   -- 🖥️ terminal emulator
-  use { 'numToStr/FTerm.nvim',
-        config = c'FTerm',
-        requires = 'pianocomposer321/consolation.nvim' }
+  use { 'akinsho/toggleterm.nvim', config = c'toggleterm' }
 
   -- 🎨 Themes
 
   -- use '~/.config/nvim/themes/framed'                     -- WIP custom color theme based on lush
   -- use 'rktjmp/lush.nvim'                                 -- custom color themes
-  -- use 'yonlu/omni.vim'                                   -- dark neon kinda theme
-  -- use 'mangeshrex/uwu.vim'                               -- a meme of a theme
-  use { 'EdenEast/nightfox.nvim',
-        config = c'nightfox',
-        tag = 'v1.0.0' } -- 🦊
+  use { 'EdenEast/nightfox.nvim', config = c'nightfox' }    -- 🦊
 
   -- 🔥 Browser Integration
   --    here be 🐉 🐲
@@ -203,11 +197,11 @@ return require'packer'.startup({ function(use)
 
   -- 📌 Git
 
-  use 'tpope/vim-fugitive'                  -- basically `git` shell command but `:Git`
-  use { 'tanvirtin/vgit.nvim',              -- visual git operations
-        requires = 'nvim-lua/plenary.nvim',
-        config = c'vgit',
-        setup = s'vgit', }
+  -- use 'tpope/vim-fugitive'                  -- basically `git` shell command but `:Git`
+  -- use { 'tanvirtin/vgit.nvim',              -- visual git operations
+  --       requires = 'nvim-lua/plenary.nvim',
+  --       config = c'vgit',
+  --       setup = s'vgit', }
   use { 'pwntester/octo.nvim',
         requires = {
           'nvim-lua/plenary.nvim',
