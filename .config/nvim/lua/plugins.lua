@@ -58,7 +58,6 @@ return require'packer'.startup({ function(use)
 
   -- 🌳 Syntax
 
-  -- use 'powerman/vim-plugin-AnsiEsc'
   use 'lepture/vim-jinja'                              -- regexp-based syntax for njk
   use 'nvim-treesitter/playground'                     -- tool for exploring treesitter ASTs
   use { 'sheerun/vim-polyglot', setup = s'polyglot' }  -- regexp-based syntax
@@ -82,6 +81,7 @@ return require'packer'.startup({ function(use)
   use 'ryanoasis/vim-devicons'                                       -- some icon s
   use 'folke/twilight.nvim'                                          -- focus mode editing
   use 'kosayoda/nvim-lightbulb'                                      -- 💡
+  use { 'rainbowhxch/beacon.nvim', config = c'beacon' }              -- flash cursor on move
   use { 'mvllow/modes.nvim', config = c'modes' }                     -- the colors!
   use { 'kyazdani42/nvim-web-devicons', config = c'web-devicons' }   -- yet more icons
   use { 'goolord/alpha-nvim', config = c'alpha' }                    -- startup screen
@@ -89,9 +89,7 @@ return require'packer'.startup({ function(use)
   use { 'rcarriga/nvim-notify', config = c'notify' }                 -- pretty notifications
   use { 'antoinemadec/FixCursorHold.nvim',
         setup = function() vim.g.cursorhold_updatetime = 100 end }   -- bug fix for neovim's CursorHold event
-  -- use 'RRethy/vim-illuminate'
-  -- use { 'yamatsum/nvim-cursorline',
-  --       setup = function () vim.g.cursorline_timeout=0 end }         -- highlight word under cursor
+  use 'RRethy/vim-illuminate'
   use { 'lukas-reineke/indent-blankline.nvim',
         config = c'indent', setup = s'indent' }                      -- indentation guide with context
   use { 'nvim-lualine/lualine.nvim',                                 -- pretty statusline
@@ -160,6 +158,7 @@ return require'packer'.startup({ function(use)
 
   -- 🤖 Language Server
 
+  use 'folke/lua-dev.nvim'                 -- nvim api docs, signatures, etc.
   use 'neovim/nvim-lspconfig'              -- basic facility to configure language servers
   use 'nvim-lua/lsp-status.nvim'           -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
   use 'onsails/lspkind-nvim'               -- fancy icons for lsp AST types and such
@@ -197,11 +196,6 @@ return require'packer'.startup({ function(use)
 
   -- 📌 Git
 
-  -- use 'tpope/vim-fugitive'                  -- basically `git` shell command but `:Git`
-  -- use { 'tanvirtin/vgit.nvim',              -- visual git operations
-  --       requires = 'nvim-lua/plenary.nvim',
-  --       config = c'vgit',
-  --       setup = s'vgit', }
   use { 'pwntester/octo.nvim',
         requires = {
           'nvim-lua/plenary.nvim',

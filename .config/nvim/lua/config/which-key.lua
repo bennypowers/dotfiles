@@ -27,6 +27,16 @@ return function ()
         on_exit = close_terminal_on_zero_exit,
     })
 
+    ---launch lazygit in a scratch terminal,
+    ---but if we're in `~/.config`, use the bare repo
+    local function lazilygit()
+        if vim.loop.cwd() == vim.call('expand', '~/.config') then
+            dotfileslazygit:toggle()
+        else
+            lazygit:toggle()
+        end
+    end
+
     local scratch_with_command = input_wrapper(function(input)
         Terminal:new({
             cmd = input,
@@ -91,7 +101,7 @@ return function ()
 
         t = {
             name = 'terminals',
-            t = { function() BuiltinTerminalWrapper:open() end, 'open shell' },
+            t = { function() Terminal:new({ direction = 'vertical' }) end, 'open shell' },
             f = { term_with_command, 'open terminal with command' },
             s = { scratch_with_command, 'scratch terminal with command' },
         },
@@ -131,25 +141,7 @@ return function ()
             r = {'<cmd>Telescope resume<cr>', 'resume finding'},
         },
 
-        g = {
-            name = 'git',
-            s = 'stage hunk',
-            r = 'unstage hunk',
-            p = 'preview hunks        (buffer)',
-
-            b = 'preview blame        (buffer)',
-            f = 'preview diff         (buffer)',
-            h = 'preview history      (buffer)',
-            u = 'reset buffer',
-            g = 'preview gutter blame (buffer)',
-
-            l = 'preview hunks        (project)',
-            d = 'preview diff         (project)',
-
-            q = 'hunks quickfix       (project)',
-
-            x = 'toggle diff preference',
-        }
+        g = { lazilygit, 'lazygit' }
 
     }, { prefix = '<leader>' })
 
@@ -166,13 +158,7 @@ return function ()
         r = {function() require'goto-preview'.goto_preview_references() end, 'goto references'},
         P = {function() require'goto-preview'.close_all_win() end, 'close all preview windows'},
 
-        G = { function()
-            if vim.loop.cwd() == vim.call('expand', '~/.config') then
-                dotfileslazygit:toggle()
-            else
-                lazygit:toggle()
-            end
-        end , 'lazygit'},
+        G = { lazilygit , 'lazygit'},
 
         u = 'lowercase',
         U = 'uppercase',
