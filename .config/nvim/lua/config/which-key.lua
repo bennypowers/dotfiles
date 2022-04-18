@@ -84,9 +84,9 @@ return function ()
             name = "buffers",
             j = { ':BufferLineCycleNext<cr>', 'next buffer' },
             k = { ':BufferLineCyclePrev<cr>', 'previous buffer' },
-            p = { ':BufferLinePick<cr>', 'pick buffer' },
-            d = { ':Bdelete<cr>', 'delete buffer' },
-            b = { ':Telescope buffers<cr>', 'search buffers' }
+            p = { ':BufferLinePick<cr>',      'pick buffer' },
+            d = { ':Bdelete<cr>',             'delete buffer' },
+            b = { ':Telescope buffers<cr>',   'search buffers' }
         },
 
         ['}'] = { ':BufferLineCycleNext<cr>', 'next buffer' },
@@ -106,7 +106,7 @@ return function ()
             s = { scratch_with_command, 'scratch terminal with command' },
         },
 
-        ['\\'] = { '<cmd>Neotree reveal filesystem float<cr>', 'toggle file tree (float)' },
+        ['\\'] = { '<cmd>Neotree reveal filesystem float<cr>',          'toggle file tree (float)' },
         ['|'] =  { '<cmd>Neotree filesystem show left toggle=true<cr>', 'toggle file tree (sidebar)'},
 
         p = {'<cmd>Telescope find_files hidden=true<cr>', 'find files'},
@@ -124,25 +124,33 @@ return function ()
 
         l = {
             name = 'lsp',
-            f = { vim.lsp.buf.formatting, 'format file' },
-            r = { vim.lsp.buf.rename, 'rename' },
-            k = { vim.lsp.buf.signature_help, 'signature_help' },
-            d = { vim.lsp.buf.declaration, 'goto declaration' },
-            D = { vim.lsp.buf.type_definition, 'goto type definition' },
+            f = { vim.lsp.buf.formatting,                                      'format file' },
+            r = { vim.lsp.buf.rename,                                          'rename' },
+            k = { vim.lsp.buf.signature_help,                                  'signature_help' },
+            d = { vim.lsp.buf.declaration,                                     'goto declaration' },
+            D = { vim.lsp.buf.type_definition,                                 'goto type definition' },
             e = { function() vim.diagnostic.open_float({ focus = false }) end, 'open diagnostics in floating window' },
         },
 
         f = {
             name = 'find',
             g = {'<cmd>Telescope live_grep<cr>', 'find in files (live grep)'},
-            b = {'<cmd>Telescope buffers<cr>', 'find buffers'},
+            b = {'<cmd>Telescope buffers<cr>',   'find buffers'},
             h = {'<cmd>Telescope help_tags<cr>', 'find in help'},
-            s = {'<cmd>Telescope symbols<cr>', 'find symbol'},
-            r = {'<cmd>Telescope resume<cr>', 'resume finding'},
+            s = {'<cmd>Telescope symbols<cr>',   'find symbol'},
+            r = {'<cmd>Telescope resume<cr>',    'resume finding'},
         },
 
-        g = { lazilygit, 'lazygit' }
+        g = { lazilygit, 'lazygit' },
 
+        P = {
+            name = 'Plugins',
+            i = {'<cmd>PackerInstall<cr>', 'install plugins'},
+            u = {'<cmd>PackerUpdate<cr>',  'update plugins'},
+            s = {'<cmd>PackerSync<cr>',    'update plugins (sync)'},
+            c = {'<cmd>PackerCompile<cr>', 'compile plugins'},
+            x = {'<cmd>PackerClean<cr>',   'compile plugins'},
+        }
     }, { prefix = '<leader>' })
 
     -- g

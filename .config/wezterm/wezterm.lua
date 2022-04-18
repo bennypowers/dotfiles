@@ -155,6 +155,10 @@ end)
 
 
 return {
+  -- יאללה אחי קדימה
+  bidi_enabled = true,
+  -- bidi_direction = 'AutoLeftToRight',
+
 	window_decorations = "RESIZE",
 	native_macos_fullscreen_mode = true,
 

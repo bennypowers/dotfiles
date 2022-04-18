@@ -95,6 +95,7 @@ return require'packer'.startup({ function(use)
   use { 'nvim-lualine/lualine.nvim',                                 -- pretty statusline
         config = c'lualine',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
+  use { 'mrjones2014/legendary.nvim' }
   use { 'folke/which-key.nvim',                                      -- which key was it, again?
         config = c'which-key',
         requires = 'mrjones2014/legendary.nvim' }
