@@ -23,19 +23,19 @@ local c = loader'config'
 local s = loader'setup'
 
 return require'packer'.startup({ function(use)
-  use 'wbthomason/packer.nvim'                    -- manage plugins
-  use 'lewis6991/impatient.nvim'                  -- faster startup?
-  use 'nathom/filetype.nvim'                      -- faster startup!
-  use 'milisims/nvim-luaref'                      -- lua docs in vim help
-
-  -- 🖥️ terminal emulator
-  use { 'akinsho/toggleterm.nvim', config = c'toggleterm' }
-
   -- 🎨 Themes
 
   -- use '~/.config/nvim/themes/framed'                     -- WIP custom color theme based on lush
   -- use 'rktjmp/lush.nvim'                                 -- custom color themes
   use { 'EdenEast/nightfox.nvim', config = c'nightfox' }    -- 🦊
+
+  use 'wbthomason/packer.nvim'                    -- manage plugins
+  use 'lewis6991/impatient.nvim'                  -- faster startup?
+  use 'nathom/filetype.nvim'                      -- faster startup!
+  use 'milisims/nvim-luaref'                      -- lua docs in vim help
+
+  -- 🖥️  terminal emulator
+  use { 'akinsho/toggleterm.nvim', config = c'toggleterm' }
 
   -- 🔥 Browser Integration
   --    here be 🐉 🐲
@@ -81,7 +81,16 @@ return require'packer'.startup({ function(use)
   use 'ryanoasis/vim-devicons'                                       -- some icon s
   use 'folke/twilight.nvim'                                          -- focus mode editing
   use 'kosayoda/nvim-lightbulb'                                      -- 💡
-  use { 'rainbowhxch/beacon.nvim', config = c'beacon' }              -- flash cursor on move
+  -- use { 'stonelasley/flare.nvim',                                    -- flash cursor on move
+  --       config = function() require('flare').setup {
+  --           file_ignore = { -- suppress highlighting for files of this type
+  --             "NvimTree",
+  --             "NeoTree",
+  --             "fugitive",
+  --             "TelescopePrompt",
+  --             "TelescopeResult",
+  --           },
+  --       } end }
   use { 'mvllow/modes.nvim', config = c'modes' }                     -- the colors!
   use { 'kyazdani42/nvim-web-devicons', config = c'web-devicons' }   -- yet more icons
   use { 'goolord/alpha-nvim', config = c'alpha' }                    -- startup screen
@@ -112,12 +121,12 @@ return require'packer'.startup({ function(use)
 
   -- Disabling because neo-tree doesn't play nice.
   -- alpha kinda-sorta helps with this in the mean time
-  --
-  -- use { 'Shatur/neovim-session-manager',
-  --       config = c'neovim-session-manager',
-  --       requires = {
-  --         'nvim-telescope/telescope.nvim',
-  --         'JoseConseco/telescope_sessions_picker.nvim' } }
+
+  use { 'Shatur/neovim-session-manager',
+        config = c'neovim-session-manager',
+        requires = {
+          'nvim-telescope/telescope.nvim',
+          'JoseConseco/telescope_sessions_picker.nvim' } }
 
   -- ⌨️  Editing
 
@@ -164,6 +173,10 @@ return require'packer'.startup({ function(use)
   use 'nvim-lua/lsp-status.nvim'           -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
   use 'onsails/lspkind-nvim'               -- fancy icons for lsp AST types and such
   use 'b0o/schemastore.nvim'               -- json schema support
+  use { 'j-hui/fidget.nvim',               -- LSP eye-candy
+        config = function ()
+          require'fidget'.setup()
+        end }
   use { 'williamboman/nvim-lsp-installer', -- automatically install language servers
         config = c'lsp-installer',
         setup = s'lsp-installer',
@@ -207,6 +220,8 @@ return require'packer'.startup({ function(use)
           require"octo".setup()
         end
       }
+  use { 'lewis6991/gitsigns.nvim',                                              -- git gutter
+    config = function() require'gitsigns'.setup() end }
 
   -- 🕸️  Webdev
 

@@ -10,7 +10,7 @@ return function ()
       lualine_a = {'mode'},
       lualine_b = {'branch', 'diff', 'diagnostics'},
       lualine_c = {'filename'},
-      lualine_x = { function() return require'lsp-status'.status() end, 'encoding', 'fileformat', 'filetype' },
+      lualine_x = {'encoding', 'fileformat', 'filetype'},
       lualine_y = {'progress'},
       lualine_z = {'location'},
     },

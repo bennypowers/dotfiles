@@ -3,7 +3,7 @@ local wezterm = require 'wezterm'
 local function f(name, params)
 	return wezterm.font_with_fallback({
 		name,
-		"Noto Color Emoji",
+		-- "Noto Color Emoji",
     "Fira Code",
 		"Hack",
 	}, params)

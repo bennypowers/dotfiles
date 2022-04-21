@@ -35,6 +35,28 @@ return function()
     enable_git_status = true,
     enable_diagnostics = true,
 
+    event_handlers = {
+      {
+        event = 'neo_tree_buffer_enter',
+        handler = function ()
+          require'cmp'.setup.buffer { enabled = false }
+          vim.cmd[[
+            setlocal nocursorcolumn
+            hi Cursor blend=100
+            setlocal guicursor+=a:Cursor/lCursor
+          ]]
+        end
+      },
+      {
+        event = "neo_tree_buffer_leave",
+        handler = function()
+          vim.cmd[[
+            hi Cursor blend=0
+          ]]
+        end
+      },
+    },
+
     default_component_configs = {
       indent = {
         indent_size = 2,

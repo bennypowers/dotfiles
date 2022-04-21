@@ -5,7 +5,7 @@ return function ()
   manager.setup {
     autoload_mode = config.AutoloadMode.CurrentDir,
     autosave_ignore_filetypes = {
-      -- 'Regexplainer',
+      'Regexplainer',
       'gitcommit',
       'neo-tree',
       'trouble',

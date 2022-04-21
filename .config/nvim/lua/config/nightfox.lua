@@ -23,29 +23,38 @@ return function()
         whichkey = true,
       },
       styles = {
-        comments = "italic",
-        keywords = "bold",
-        functions = "italic,bold"
+        comments = 'italic',
+        keywords = 'bold',
+        functions = 'italic,bold'
       },
     },
     palettes = {
       duskfox = {
-        bg1 = "#000000",
-        bg0 = "#010101",
-        bg3 = "#121820", -- 55% darkened from stock
-        sel0 = "#131b24", -- 55% darkened from stock
+        bg0  = '#1d1d2b',
+        bg1  = '#000000',
+        bg3  = '#121820', -- 55% darkened from stock
+      },
+    },
+    specs = {
+      all = {
+        inactive = 'bg0',
+      },
+      duskfox = {
+        inactive = '#090909',
       },
     },
     groups = {
-      TSPunctDelimiter = { fg = "palette.red" },
-      CursorLine = { bg = 'bg3' },
-      Comment = { style = "italic" },
-      MatchParen = { fg = "palette.yellow" },
+      TSPunctDelimiter =           { fg = 'palette.red' },
+      CursorLine =                 {             bg = 'bg3' },
+      Comment =                    {                         style = 'italic' },
+      MatchParen =                 { fg = 'palette.yellow' },
       IndentBlankLineContextChar = { fg = '#88ddff' },
-      GitSignsChange = { fg='#f16d0a' },
-      Folded = {  bg = 'bg1', },
-      LspCodeLens = {  bg = "bg1",  style = "italic" },
-    }
+      GitSignsChange =             { fg = '#f16d0a' },
+      Folded =                     {             bg = 'bg1', },
+      LspCodeLens =                {             bg = "bg1", style = 'italic' },
+      NormalNC =                   { fg = "fg1", bg = 'inactive' },
+      NeoTreeNormal =              {             bg = 'bg1' },
+   }
   }
   vim.cmd[[colorscheme duskfox]]
 end

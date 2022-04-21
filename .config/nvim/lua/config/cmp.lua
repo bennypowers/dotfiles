@@ -20,13 +20,20 @@ return function()
       ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
       ["<C-S-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
       ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-      ["<C-e>"] = cmp.mapping {
+      ["<C-e>"] = cmp.mapping({
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
-      },
-      ["<CR>"] = cmp.mapping.confirm {
-        select = true,
-      }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      }),
+      ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+      ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+      ['<CR>'] = function(fallback)
+        if cmp.visible() then
+          -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+          cmp.confirm { select = true }
+        else
+          fallback() -- If you are using vim-endwise, this fallback function will be behaive as the vim-endwise.
+        end
+      end,
     },
 
     sources = cmp.config.sources {
@@ -66,10 +73,4 @@ return function()
       ghost_text = true,
     },
   })
-
-  vim.cmd [[
-    augroup NoCmp
-      autocmd FileType neo-tree lua require'cmp'.setup.buffer { enabled = false }
-    augroup END
-  ]]
 end

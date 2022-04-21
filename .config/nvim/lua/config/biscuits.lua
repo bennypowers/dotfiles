@@ -1,4 +1,4 @@
- return function()
+return function()
   require'nvim-biscuits'.setup {
     show_on_start = true,
     default_config = {
