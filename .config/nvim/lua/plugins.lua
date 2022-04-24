@@ -1,5 +1,3 @@
-pcall(require, 'impatient')
-
 -- https://github.com/wbthomason/packer.nvim#bootstrapping
 local fn = vim.fn
 local packer_bootstrap = false
@@ -23,13 +21,15 @@ local c = loader'config'
 local s = loader'setup'
 
 return require'packer'.startup({ function(use)
+  use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
+  use 'wbthomason/packer.nvim'
+
   -- 🎨 Themes
 
   -- use '~/.config/nvim/themes/framed'                     -- WIP custom color theme based on lush
   -- use 'rktjmp/lush.nvim'                                 -- custom color themes
   use { 'EdenEast/nightfox.nvim', config = c'nightfox' }    -- 🦊
 
-  use 'wbthomason/packer.nvim'                    -- manage plugins
   use 'lewis6991/impatient.nvim'                  -- faster startup?
   use 'nathom/filetype.nvim'                      -- faster startup!
   use 'milisims/nvim-luaref'                      -- lua docs in vim help
@@ -49,58 +49,69 @@ return require'packer'.startup({ function(use)
         config = c'telescope',
         requires = {
           'nvim-lua/plenary.nvim',
-          'nvim-lua/popup.nvim' } }
-  use { 'nvim-telescope/telescope-frecency.nvim',     -- tries to sort files helpfully
-        config = function() require'telescope'.load_extension'frecency' end,
-        requires = 'tami5/sqlite.lua' }
-  use { 'nvim-telescope/telescope-symbols.nvim',      -- mostly for emoji
-        requires = 'nvim-telescope/telescope.nvim' }
+          'nvim-lua/popup.nvim',
+          'nvim-telescope/telescope-symbols.nvim',
+          { 'nvim-telescope/telescope-frecency.nvim',     -- tries to sort files helpfully
+                cmd = 'Telescope',
+                config = function() require'telescope'.load_extension'frecency' end,
+                requires = 'tami5/sqlite.lua' } } }
 
   -- 🌳 Syntax
 
-  use 'lepture/vim-jinja'                              -- regexp-based syntax for njk
-  use 'nvim-treesitter/playground'                     -- tool for exploring treesitter ASTs
-  use { 'sheerun/vim-polyglot', setup = s'polyglot' }  -- regexp-based syntax
+  use {'lepture/vim-jinja', ft = {'md','html','njk'} }             -- regexp-based syntax for njk
+  use 'nvim-treesitter/playground'                                 -- tool for exploring treesitter ASTs
+  use { 'tjdevries/tree-sitter-lua', ft = 'lua' }
+  use { 'sheerun/vim-polyglot', setup = s'polyglot', opt = true }  -- regexp-based syntax
   use { 'code-biscuits/nvim-biscuits',
         config = c'biscuits',
-        requires = 'nvim-treesitter/nvim-treesitter' } -- hints for block ends
+        requires = 'nvim-treesitter/nvim-treesitter' }             -- hints for block ends
   use { 'nvim-treesitter/nvim-treesitter',
         config = c'treesitter',
-        run = ':TSUpdate',                             -- AST wizardry 🧙
+        run = ':TSUpdate',                                         -- AST wizardry 🧙
         requires = {
-          'RRethy/nvim-treesitter-endwise',            -- append `end` in useful places
-          'windwp/nvim-ts-autotag',                    -- close HTML tags, but using treesitter
+          'RRethy/nvim-treesitter-endwise',                        -- append `end` in useful places
+          'windwp/nvim-ts-autotag',                                -- close HTML tags, but using treesitter
         } }
-  use { 'nvim-treesitter/nvim-treesitter-textobjects', -- select a comment
+  use { 'nvim-treesitter/nvim-treesitter-textobjects',             -- select a comment
         requires = 'nvim-treesitter/nvim-treesitter' }
 
   -- 🪟 UI
 
-  use 'https://gitlab.com/yorickpeterse/nvim-window.git'
+  use { 'https://gitlab.com/yorickpeterse/nvim-window.git',
+        module = 'nvim-window' }
   use 'famiu/bufdelete.nvim'                                         -- close buffers (tabs) with less headache
-  use 'ryanoasis/vim-devicons'                                       -- some icon s
-  use 'folke/twilight.nvim'                                          -- focus mode editing
+  use { 'folke/twilight.nvim',                                       -- focus mode editing
+        cmd = {
+          'Twilight',
+          'TwilightEnable',
+          'TwilightDisable',
+        } }
   use 'kosayoda/nvim-lightbulb'                                      -- 💡
-  -- use { 'stonelasley/flare.nvim',                                    -- flash cursor on move
-  --       config = function() require('flare').setup {
-  --           file_ignore = { -- suppress highlighting for files of this type
-  --             "NvimTree",
-  --             "NeoTree",
-  --             "fugitive",
-  --             "TelescopePrompt",
-  --             "TelescopeResult",
-  --           },
-  --       } end }
+  use { 'kyazdani42/nvim-web-devicons',                              -- yet more icons
+        config = c'web-devicons',
+        module = 'nvim-web-devicons' }
   use { 'mvllow/modes.nvim', config = c'modes' }                     -- the colors!
-  use { 'kyazdani42/nvim-web-devicons', config = c'web-devicons' }   -- yet more icons
-  use { 'goolord/alpha-nvim', config = c'alpha' }                    -- startup screen
+  use { 'goolord/alpha-nvim',                                        -- startup screen
+        config = c'alpha',
+        setup = function()
+          -- Automatically open alpha when the last buffer is deleted and only one window left
+          vim.api.nvim_create_autocmd({ 'BufDelete', 'VimEnter' }, {
+            callback = function ()
+              local empty = vim.fn.empty(vim.fn.filter(vim.fn.tabpagebuflist(), '!buflisted(v:val)')) == 0
+              local nowin = vim.fn.winnr('$') == 1
+              if empty and nowin then
+                require'alpha'.start(false)
+              end
+            end
+          })
+        end }
   use { 'akinsho/bufferline.nvim', config = c'bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"
   use { 'rcarriga/nvim-notify', config = c'notify' }                 -- pretty notifications
   use { 'antoinemadec/FixCursorHold.nvim',
         setup = function() vim.g.cursorhold_updatetime = 100 end }   -- bug fix for neovim's CursorHold event
   use 'RRethy/vim-illuminate'
-  use { 'lukas-reineke/indent-blankline.nvim',
-        config = c'indent', setup = s'indent' }                      -- indentation guide with context
+                                                                     -- use { 'lukas-reineke/indent-blankline.nvim',
+                                                                     --       config = c'indent', setup = s'indent' }                      -- indentation guide with context
   use { 'nvim-lualine/lualine.nvim',                                 -- pretty statusline
         config = c'lualine',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
@@ -139,87 +150,83 @@ return require'packer'.startup({ function(use)
   use 'windwp/nvim-spectre'                                      -- project find/replace
   use 'rafcamlet/nvim-luapad'                                    -- lua REPL/scratchpad
   use 'chentau/marks.nvim'                                       -- better vim marks
-  use { 'numToStr/Comment.nvim', config = c'comment' }           -- comment/uncomment text objects
+  use { 'echasnovski/mini.nvim', config = c'mini' }               -- lots of plugins
+  -- use { 'numToStr/Comment.nvim', config = c'comment' }           -- comment/uncomment text objects
+  -- use { 'windwp/nvim-autopairs', config = c'autopairs' }         -- automatically pair brackets etc
   use { 'mg979/vim-visual-multi', branch = 'master' }            -- multiple cursors, kinda like atom + vim-mode-plus
-  use { 'windwp/nvim-autopairs', config = c'autopairs' }         -- automatically pair brackets etc
   use { 'anuvyklack/pretty-fold.nvim', config = c'pretty-fold' } -- beautiful folds with previews
   use { 'monkoose/matchparen.nvim',                              -- highlight matching paren
-        config = function()
-          require'matchparen'.setup {
-            on_startup = true,
-            hl_group = 'MatchParen',
-          }
-        end }
+        config = function() require'matchparen'.setup {} end,
+        ft = {
+          'lua',
+          'js', 'javascript',
+          'ts', 'typescript',
+          'html', 'njk', 'ejs', 'jinja',
+          'fish', 'bash', 'sh',
+          'json',
+        } }
   use { 'AndrewRadev/splitjoin.vim',                             -- like vmp `g,` action
         setup = function()
-          vim.cmd [[
-            let g:splitjoin_split_mapping = ''
-            let g:splitjoin_join_mapping = ''
-            nmap gj :SplitjoinJoin<cr>
-            nmap g, :SplitjoinSplit<cr>
-          ]]
+          vim.g.splitjoin_split_mapping = ''
+          vim.g.splitjoin_join_mapping = ''
+          vim.api.nvim_set_keymap('n', 'gj', ':SplitjoinJoin<cr>', {})
+          vim.api.nvim_set_keymap('n', 'g,', ':SplitjoinSplit<cr>', {})
         end }
   use { '~/Developer/nvim-regexplainer', config = c'regexplainer',
         requires = {
-          'nvim-lua/plenary.nvim',
-          'MunifTanjim/nui.nvim',
-        } }
+          'nvim-treesitter/nvim-treesitter',
+          'MunifTanjim/nui.nvim' } }
 
 
   -- 🤖 Language Server
 
-  use 'folke/lua-dev.nvim'                 -- nvim api docs, signatures, etc.
-  use 'neovim/nvim-lspconfig'              -- basic facility to configure language servers
-  use 'nvim-lua/lsp-status.nvim'           -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
-  use 'onsails/lspkind-nvim'               -- fancy icons for lsp AST types and such
-  use 'b0o/schemastore.nvim'               -- json schema support
-  use { 'j-hui/fidget.nvim',               -- LSP eye-candy
+  use 'nvim-lua/lsp-status.nvim'             -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
+  use 'onsails/lspkind-nvim'                 -- fancy icons for lsp AST types and such
+  use { 'folke/lua-dev.nvim', ft = 'lua' }   -- nvim api docs, signatures, etc.
+  use { 'j-hui/fidget.nvim',                 -- LSP eye-candy
         config = function ()
           require'fidget'.setup()
         end }
-  use { 'williamboman/nvim-lsp-installer', -- automatically install language servers
-        config = c'lsp-installer',
-        setup = s'lsp-installer',
+  use { 'williamboman/nvim-lsp-installer',   -- automatically install language servers
+        config = c'lsp',
+        setup = s'lsp',
         requires = {
+          'neovim/nvim-lspconfig',           -- basic facility to configure language servers
           'hrsh7th/nvim-cmp',
+          'b0o/schemastore.nvim',            -- json schema support
           'neovim/nvim-lspconfig' } }
-  use { 'folke/lsp-trouble.nvim',          -- language-server diagnostics panel
+  use { 'folke/lsp-trouble.nvim',            -- language-server diagnostics panel
         config = c'trouble',
         requires = {
           'folke/trouble.nvim',
           'kyazdani42/nvim-web-devicons'
         } }
-  use { 'rmagatti/goto-preview',           -- gd, but in a floating window
+  use { 'rmagatti/goto-preview',             -- gd, but in a floating window
         config = function() require'goto-preview'.setup {} end }
 
   -- 📎 Completions and Snippets
 
-  use 'hrsh7th/cmp-nvim-lsp'                                                    -- language-server-based completions
-  use 'hrsh7th/cmp-nvim-lua'                                                    -- lua
-  use 'hrsh7th/cmp-calc'                                                        -- math
-  use 'hrsh7th/cmp-buffer'                                                      -- buffer contents completion
-  use 'hrsh7th/cmp-path'                                                        -- path completions
-  use 'hrsh7th/cmp-emoji'                                                       -- ok boomer
-  use 'hrsh7th/cmp-nvim-lsp-signature-help'                                     -- ffffunction
-  use 'David-Kunz/cmp-npm'                                                      -- npm package versions
-  use 'lukas-reineke/cmp-under-comparator'                                      -- _afterOthers
-  use { 'petertriho/cmp-git', requires = 'nvim-lua/plenary.nvim' }              -- autocomplete git issues
-  use { 'mtoohey31/cmp-fish', ft = "fish" }                                     -- 🐟
-  use { 'hrsh7th/nvim-cmp', config = c'cmp', requires = 'dcampos/nvim-snippy' } -- completion engine
-  use { 'hrsh7th/cmp-cmdline', config = c'cmp-cmdline' }                        -- cmdline completions
+  use { 'mtoohey31/cmp-fish', ft = "fish" }                                          -- 🐟
+  use { 'hrsh7th/nvim-cmp',
+        config = c'cmp',
+        requires = {
+          'petertriho/cmp-git',                                                      -- autocomplete git issues
+          'nvim-lua/plenary.nvim' ,
+          'hrsh7th/cmp-nvim-lsp',                                                    -- language-server-based completions
+          'hrsh7th/cmp-nvim-lua',                                                    -- lua
+          'hrsh7th/cmp-calc',                                                        -- math
+          'hrsh7th/cmp-buffer',                                                      -- buffer contents completion
+          'hrsh7th/cmp-path',                                                        -- path completions
+          'hrsh7th/cmp-emoji',                                                       -- ok boomer
+          'hrsh7th/cmp-cmdline',                                                     -- cmdline completions
+          'hrsh7th/cmp-nvim-lsp-signature-help',                                     -- ffffunction
+          'David-Kunz/cmp-npm',                                                      -- npm package versions
+          'lukas-reineke/cmp-under-comparator',                                      -- _afterOthers
+          'L3MON4D3/LuaSnip',
+          'saadparwaiz1/cmp_luasnip' } }                                                  -- completion engine
 
   -- 📌 Git
 
-  use { 'pwntester/octo.nvim',
-        requires = {
-          'nvim-lua/plenary.nvim',
-          'nvim-telescope/telescope.nvim',
-          'kyazdani42/nvim-web-devicons',
-        },
-        config = function ()
-          require"octo".setup()
-        end
-      }
   use { 'lewis6991/gitsigns.nvim',                                              -- git gutter
     config = function() require'gitsigns'.setup() end }
 
@@ -242,5 +249,9 @@ end,
     display = {
       open_fn = require'packer.util'.float
     },
+    profile = {
+      enable = true,
+      threshold = 1,
+    }
   }
 })

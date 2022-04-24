@@ -2,7 +2,7 @@ return function()
 
   local cmp = require'cmp'
   local lspkind = require'lspkind'
-  local snippy = require'snippy'
+  local luasnip = require'luasnip'
   local cmp_npm = require'cmp-npm'
 
   cmp_npm.setup()
@@ -11,7 +11,7 @@ return function()
     snippet = {
       -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        snippy.expand_snippet(args.body) -- For `snippy` users.
+        luasnip.lsp_expand(args.body)
       end,
     },
 
@@ -38,14 +38,12 @@ return function()
 
     sources = cmp.config.sources {
       { name = 'nvim_lsp' },
-      { name = 'cmp_git' },
       { name = 'nvim_lsp_signature_help' },
       { name = 'nvim_lua' },
       { name = 'npm', keyword_length = 4 },
       { name = 'calc' },
       { name = 'emoji' },
-      { name = 'snippy' },
-      { name = 'fish' },
+      { name = 'luasnip' },
     }, {
       { name = "buffer", keyword_length = 5 },
     },
@@ -73,4 +71,40 @@ return function()
       ghost_text = true,
     },
   })
+
+  cmp.setup.filetype('fish', {
+    sources = cmp.config.sources({
+      { name = 'fish' },
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  cmp.setup.filetype('gitcommit', {
+    sources = cmp.config.sources({
+      { name = 'cmp_git' },
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline("/", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = "buffer" },
+    },
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(":", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = "path" },
+    }, {
+      { name = "cmdline" },
+    }),
+  })
+
+  require'luasnip.loaders.from_snipmate'.lazy_load()
 end
