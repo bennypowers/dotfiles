@@ -125,7 +125,6 @@ return function()
     end
 
     local function header_color()
-      local start_time = os.time()
       local headers_basedir = vim.fn.expand('~/.config/nvim/headers/')
 
       local headers_dirnames = { headers_basedir .. 'small' }
@@ -168,10 +167,6 @@ return function()
         val = lines,
         opts = { position = "center", },
       }
-
-      local end_time = os.time()
-      local elapsed_time = os.difftime(end_time, start_time)
-      vim.notify('header_color() took ' .. elapsed_time)
 
       return output
     end
@@ -227,7 +222,6 @@ return function()
         },
         opts = {
             margin = 5,
-            autostart = false,
         },
     }
 end
