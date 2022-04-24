@@ -18,7 +18,6 @@ local function loader(type)
 end
 
 local c = loader'config'
-local s = loader'setup'
 
 return require'packer'.startup({ function(use)
   use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
@@ -58,22 +57,17 @@ return require'packer'.startup({ function(use)
 
   -- 🌳 Syntax
 
-  use {'lepture/vim-jinja', ft = {'md','html','njk'} }             -- regexp-based syntax for njk
-  use 'nvim-treesitter/playground'                                 -- tool for exploring treesitter ASTs
-  use { 'tjdevries/tree-sitter-lua', ft = 'lua' }
-  use { 'sheerun/vim-polyglot', setup = s'polyglot', opt = true }  -- regexp-based syntax
-  use { 'code-biscuits/nvim-biscuits',
-        config = c'biscuits',
-        requires = 'nvim-treesitter/nvim-treesitter' }             -- hints for block ends
   use { 'nvim-treesitter/nvim-treesitter',
         config = c'treesitter',
-        run = ':TSUpdate',                                         -- AST wizardry 🧙
+        run = ':TSUpdate',                                                -- AST wizardry 🧙
         requires = {
-          'RRethy/nvim-treesitter-endwise',                        -- append `end` in useful places
-          'windwp/nvim-ts-autotag',                                -- close HTML tags, but using treesitter
+          'RRethy/nvim-treesitter-endwise',                               -- append `end` in useful places
+          'windwp/nvim-ts-autotag',                                       -- close HTML tags, but using treesitter
+          'nvim-treesitter/nvim-treesitter-textobjects' -- select a comment
         } }
-  use { 'nvim-treesitter/nvim-treesitter-textobjects',             -- select a comment
-        requires = 'nvim-treesitter/nvim-treesitter' }
+  use { 'code-biscuits/nvim-biscuits', config = c'biscuits' }             -- hints for block ends
+  use {'lepture/vim-jinja', ft = {'md','html','njk'} }                    -- regexp-based syntax for njk
+  use 'nvim-treesitter/playground'                                        -- tool for exploring treesitter ASTs
 
   -- 🪟 UI
 
@@ -81,30 +75,26 @@ return require'packer'.startup({ function(use)
         module = 'nvim-window' }
   use 'famiu/bufdelete.nvim'                                         -- close buffers (tabs) with less headache
   use { 'folke/twilight.nvim',                                       -- focus mode editing
-        cmd = {
-          'Twilight',
-          'TwilightEnable',
-          'TwilightDisable',
-        } }
+        cmd = 'Twilight' }
   use 'kosayoda/nvim-lightbulb'                                      -- 💡
   use { 'kyazdani42/nvim-web-devicons',                              -- yet more icons
         config = c'web-devicons',
         module = 'nvim-web-devicons' }
   use { 'mvllow/modes.nvim', config = c'modes' }                     -- the colors!
   use { 'goolord/alpha-nvim',                                        -- startup screen
-        config = c'alpha',
-        setup = function()
-          -- Automatically open alpha when the last buffer is deleted and only one window left
-          vim.api.nvim_create_autocmd({ 'BufDelete', 'VimEnter' }, {
-            callback = function ()
-              local empty = vim.fn.empty(vim.fn.filter(vim.fn.tabpagebuflist(), '!buflisted(v:val)')) == 0
-              local nowin = vim.fn.winnr('$') == 1
-              if empty and nowin then
-                require'alpha'.start(false)
-              end
-            end
-          })
-        end }
+        config = c'alpha', }
+        -- setup = function()
+        --   -- Automatically open alpha when the last buffer is deleted and only one window left
+        --   vim.api.nvim_create_autocmd({ 'BufDelete', 'VimEnter' }, {
+        --     callback = function ()
+        --       local empty = vim.fn.empty(vim.fn.filter(vim.fn.tabpagebuflist(), '!buflisted(v:val)')) == 0
+        --       local nowin = vim.fn.winnr('$') == 1
+        --       if empty and nowin then
+        --         require'alpha'.start(false)
+        --       end
+        --     end
+        --   })
+        -- end }
   use { 'akinsho/bufferline.nvim', config = c'bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"
   use { 'rcarriga/nvim-notify', config = c'notify' }                 -- pretty notifications
   use { 'antoinemadec/FixCursorHold.nvim',
@@ -133,11 +123,11 @@ return require'packer'.startup({ function(use)
   -- Disabling because neo-tree doesn't play nice.
   -- alpha kinda-sorta helps with this in the mean time
 
-  use { 'Shatur/neovim-session-manager',
-        config = c'neovim-session-manager',
-        requires = {
-          'nvim-telescope/telescope.nvim',
-          'JoseConseco/telescope_sessions_picker.nvim' } }
+  -- use { 'Shatur/neovim-session-manager',
+  --       config = c'neovim-session-manager',
+  --       requires = {
+  --         'nvim-telescope/telescope.nvim',
+  --         'JoseConseco/telescope_sessions_picker.nvim' } }
 
   -- ⌨️  Editing
 
@@ -173,9 +163,7 @@ return require'packer'.startup({ function(use)
           vim.api.nvim_set_keymap('n', 'g,', ':SplitjoinSplit<cr>', {})
         end }
   use { '~/Developer/nvim-regexplainer', config = c'regexplainer',
-        requires = {
-          'nvim-treesitter/nvim-treesitter',
-          'MunifTanjim/nui.nvim' } }
+        requires = 'MunifTanjim/nui.nvim' }
 
 
   -- 🤖 Language Server
@@ -189,7 +177,6 @@ return require'packer'.startup({ function(use)
         end }
   use { 'williamboman/nvim-lsp-installer',   -- automatically install language servers
         config = c'lsp',
-        setup = s'lsp',
         requires = {
           'neovim/nvim-lspconfig',           -- basic facility to configure language servers
           'hrsh7th/nvim-cmp',
