@@ -22,6 +22,8 @@ local c = loader'config'
 return require'packer'.startup({ function(use)
   use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
   use 'wbthomason/packer.nvim'
+  use { 'antoinemadec/FixCursorHold.nvim',
+        setup = function() vim.g.cursorhold_updatetime = 100 end }   -- bug fix for neovim's CursorHold event
 
   -- 🎨 Themes
 
@@ -71,41 +73,20 @@ return require'packer'.startup({ function(use)
 
   -- 🪟 UI
 
-  use { 'https://gitlab.com/yorickpeterse/nvim-window.git',
-        module = 'nvim-window' }
   use 'famiu/bufdelete.nvim'                                         -- close buffers (tabs) with less headache
-  use { 'folke/twilight.nvim',                                       -- focus mode editing
-        cmd = 'Twilight' }
   use 'kosayoda/nvim-lightbulb'                                      -- 💡
+  use 'RRethy/vim-illuminate'
+  use { 'https://gitlab.com/yorickpeterse/nvim-window.git', module = 'nvim-window' }
   use { 'kyazdani42/nvim-web-devicons',                              -- yet more icons
         config = c'web-devicons',
         module = 'nvim-web-devicons' }
   use { 'mvllow/modes.nvim', config = c'modes' }                     -- the colors!
-  use { 'goolord/alpha-nvim',                                        -- startup screen
-        config = c'alpha', }
-        -- setup = function()
-        --   -- Automatically open alpha when the last buffer is deleted and only one window left
-        --   vim.api.nvim_create_autocmd({ 'BufDelete', 'VimEnter' }, {
-        --     callback = function ()
-        --       local empty = vim.fn.empty(vim.fn.filter(vim.fn.tabpagebuflist(), '!buflisted(v:val)')) == 0
-        --       local nowin = vim.fn.winnr('$') == 1
-        --       if empty and nowin then
-        --         require'alpha'.start(false)
-        --       end
-        --     end
-        --   })
-        -- end }
+  use { 'goolord/alpha-nvim', config = c'alpha' }                    -- startup screen
   use { 'akinsho/bufferline.nvim', config = c'bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"
   use { 'rcarriga/nvim-notify', config = c'notify' }                 -- pretty notifications
-  use { 'antoinemadec/FixCursorHold.nvim',
-        setup = function() vim.g.cursorhold_updatetime = 100 end }   -- bug fix for neovim's CursorHold event
-  use 'RRethy/vim-illuminate'
-                                                                     -- use { 'lukas-reineke/indent-blankline.nvim',
-                                                                     --       config = c'indent', setup = s'indent' }                      -- indentation guide with context
   use { 'nvim-lualine/lualine.nvim',                                 -- pretty statusline
         config = c'lualine',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
-  use { 'mrjones2014/legendary.nvim' }
   use { 'folke/which-key.nvim',                                      -- which key was it, again?
         config = c'which-key',
         requires = 'mrjones2014/legendary.nvim' }
@@ -131,22 +112,21 @@ return require'packer'.startup({ function(use)
 
   -- ⌨️  Editing
 
-  use {'kana/vim-textobj-entire',
-        requires='kana/vim-textobj-user'}                        -- yae, cae, etc
-  use 'arthurxavierx/vim-caser'                                  -- change case (camel, dash, etc)
-  use 'tommcdo/vim-lion'                                         -- align anything
-  use 'tpope/vim-surround'                                       -- surround objects with chars, change surround, remove, etc
-  use 'tpope/vim-repeat'                                         -- dot-repeat for various plugin actions
-  use 'windwp/nvim-spectre'                                      -- project find/replace
-  use 'rafcamlet/nvim-luapad'                                    -- lua REPL/scratchpad
-  use 'chentau/marks.nvim'                                       -- better vim marks
-  use { 'echasnovski/mini.nvim', config = c'mini' }               -- lots of plugins
-  -- use { 'numToStr/Comment.nvim', config = c'comment' }           -- comment/uncomment text objects
-  -- use { 'windwp/nvim-autopairs', config = c'autopairs' }         -- automatically pair brackets etc
-  use { 'mg979/vim-visual-multi', branch = 'master' }            -- multiple cursors, kinda like atom + vim-mode-plus
-  use { 'anuvyklack/pretty-fold.nvim', config = c'pretty-fold' } -- beautiful folds with previews
-  use { 'monkoose/matchparen.nvim',                              -- highlight matching paren
-        config = function() require'matchparen'.setup {on_startup=false} end,
+  use 'arthurxavierx/vim-caser'                                     -- change case (camel, dash, etc)
+  use 'tommcdo/vim-lion'                                            -- align anything
+  use 'tpope/vim-surround'                                          -- surround objects with chars, change surround, remove, etc
+  use 'tpope/vim-repeat'                                            -- dot-repeat for various plugin actions
+  use 'windwp/nvim-spectre'                                         -- project find/replace
+  use 'rafcamlet/nvim-luapad'                                       -- lua REPL/scratchpad
+  use 'chentau/marks.nvim'                                          -- better vim marks
+  use {'kana/vim-textobj-entire', requires='kana/vim-textobj-user'} -- yae, cae, etc
+  use { 'echasnovski/mini.nvim', config = c'mini' }                 -- lots of plugins
+  use { 'mg979/vim-visual-multi', branch = 'master' }               -- multiple cursors, kinda like atom + vim-mode-plus
+  use { 'anuvyklack/pretty-fold.nvim', config = c'pretty-fold' }    -- beautiful folds with previews
+  use { 'monkoose/matchparen.nvim',                                 -- highlight matching paren
+        config = function()
+          require'matchparen'.setup { on_startup = false }
+        end,
         ft = {
           'lua',
           'js', 'javascript',
@@ -155,15 +135,14 @@ return require'packer'.startup({ function(use)
           'fish', 'bash', 'sh',
           'json',
         } }
-  use { 'AndrewRadev/splitjoin.vim',                             -- like vmp `g,` action
+  use { 'AndrewRadev/splitjoin.vim',                                -- like vmp `g,` action
         setup = function()
           vim.g.splitjoin_split_mapping = ''
           vim.g.splitjoin_join_mapping = ''
           vim.api.nvim_set_keymap('n', 'gj', ':SplitjoinJoin<cr>', {})
           vim.api.nvim_set_keymap('n', 'g,', ':SplitjoinSplit<cr>', {})
         end }
-  use { '~/Developer/nvim-regexplainer', config = c'regexplainer',
-        requires = 'MunifTanjim/nui.nvim' }
+  use { '~/Developer/nvim-regexplainer', config = c'regexplainer', requires = 'MunifTanjim/nui.nvim' }
 
 
   -- 🤖 Language Server
@@ -193,24 +172,25 @@ return require'packer'.startup({ function(use)
 
   -- 📎 Completions and Snippets
 
-  use { 'mtoohey31/cmp-fish', ft = "fish" }                                          -- 🐟
   use { 'hrsh7th/nvim-cmp',
         config = c'cmp',
         requires = {
-          'petertriho/cmp-git',                                                      -- autocomplete git issues
           'nvim-lua/plenary.nvim' ,
-          'hrsh7th/cmp-nvim-lsp',                                                    -- language-server-based completions
-          'hrsh7th/cmp-nvim-lua',                                                    -- lua
-          'hrsh7th/cmp-calc',                                                        -- math
-          'hrsh7th/cmp-buffer',                                                      -- buffer contents completion
-          'hrsh7th/cmp-path',                                                        -- path completions
-          'hrsh7th/cmp-emoji',                                                       -- ok boomer
-          'hrsh7th/cmp-cmdline',                                                     -- cmdline completions
-          'hrsh7th/cmp-nvim-lsp-signature-help',                                     -- ffffunction
-          'David-Kunz/cmp-npm',                                                      -- npm package versions
-          'lukas-reineke/cmp-under-comparator',                                      -- _afterOthers
           'L3MON4D3/LuaSnip',
-          'saadparwaiz1/cmp_luasnip' } }                                                  -- completion engine
+          'saadparwaiz1/cmp_luasnip',             -- completion engine
+          'petertriho/cmp-git',                   -- autocomplete git issues
+          'hrsh7th/cmp-nvim-lsp',                 -- language-server-based completions
+          'hrsh7th/cmp-nvim-lua',                 -- lua
+          'hrsh7th/cmp-calc',                     -- math
+          'hrsh7th/cmp-buffer',                   -- buffer contents completion
+          'hrsh7th/cmp-path',                     -- path completions
+          'hrsh7th/cmp-emoji',                    -- ok boomer
+          'hrsh7th/cmp-cmdline',                  -- cmdline completions
+          'hrsh7th/cmp-nvim-lsp-signature-help',  -- ffffunction
+          'David-Kunz/cmp-npm',                   -- npm package versions
+          'lukas-reineke/cmp-under-comparator',   -- _afterOthers
+          { 'mtoohey31/cmp-fish', ft = "fish" }   -- 🐟
+    } }
 
   -- 📌 Git
 
@@ -223,7 +203,8 @@ return require'packer'.startup({ function(use)
   use 'NTBBloodbath/color-converter.nvim'                                -- convert colour values
   use 'crispgm/telescope-heading.nvim'                                   -- navigate to markdown headers
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' } -- markdown previews
-  use { 'rrethy/vim-hexokinase', run = 'make hexokinase' }               -- display colour values
+  use { 'RRethy/vim-hexokinase', -- display colour values
+    run = 'make hexokinase' }              
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
