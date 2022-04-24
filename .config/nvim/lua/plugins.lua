@@ -156,7 +156,7 @@ return require'packer'.startup({ function(use)
   use { 'mg979/vim-visual-multi', branch = 'master' }            -- multiple cursors, kinda like atom + vim-mode-plus
   use { 'anuvyklack/pretty-fold.nvim', config = c'pretty-fold' } -- beautiful folds with previews
   use { 'monkoose/matchparen.nvim',                              -- highlight matching paren
-        config = function() require'matchparen'.setup {} end,
+        config = function() require'matchparen'.setup {on_startup=false} end,
         ft = {
           'lua',
           'js', 'javascript',
