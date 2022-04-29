@@ -9,30 +9,30 @@ vim.g.termguicolors       = true
 vim.g.mapleader           = " "
 vim.env.BASH_ENV          = "~/.config/bashrc"
 
-vim.go.backspace      = 'indent,eol,start'
-vim.go.colorcolumn    = 100
-vim.go.completeopt    = 'menu,menuone,noselect'
-vim.go.cursorcolumn   = true
-vim.go.cursorline     = true
-vim.go.encoding       = 'UTF-8'
-vim.go.expandtab      = true
-vim.go.laststatus     = 3
-vim.go.linebreak      = true
-vim.go.list           = true
-vim.go.mouse          = 'a'
-vim.go.number         = true
-vim.go.pastetoggle    = '<F10>'
-vim.go.relativenumber = true
-vim.go.shiftwidth     = 2
-vim.go.softtabstop    = 2
-vim.go.tabstop        = 2
-vim.go.termguicolors  = true
-vim.go.virtualedit    = 'block,onemore'
-vim.go.wrap           = false
-vim.go.foldlevel      = 20
-vim.go.foldmethod     = 'expr'
-vim.go.foldexpr       = 'nvim_treesitter#foldexpr()'
-vim.go.shell          = 'bash'
+vim.o.backspace      = 'indent,eol,start'
+vim.o.colorcolumn    = 100
+vim.o.completeopt    = 'menu,menuone,noselect'
+vim.o.cursorcolumn   = true
+vim.o.cursorline     = true
+vim.o.encoding       = 'UTF-8'
+vim.o.expandtab      = true
+vim.o.laststatus     = 3
+vim.o.linebreak      = true
+vim.o.list           = true
+vim.o.mouse          = 'a'
+vim.o.number         = true
+vim.o.relativenumber = true
+vim.o.pastetoggle    = '<F10>'
+vim.o.shiftwidth     = 2
+vim.o.softtabstop    = 2
+vim.o.tabstop        = 2
+vim.o.termguicolors  = true
+vim.o.virtualedit    = 'block,onemore'
+vim.o.wrap           = false
+vim.o.foldlevel      = 20
+vim.o.foldmethod     = 'expr'
+vim.o.foldexpr       = 'nvim_treesitter#foldexpr()'
+vim.o.shell          = 'bash'
 
 local jid = vim.fn.jobstart({ "git", "rev-parse", "--git-dir" })
 local ret = vim.fn.jobwait({jid})[1]
@@ -51,17 +51,17 @@ require'plugins'
 
 vim.cmd[[colorscheme duskfox]]
 
-vim.api.nvim_create_augroup('nunjucks_ft', { clear = true })
-vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
-  group = 'nunjucks_ft',
-  pattern = '*.njk',
-  command = "set ft='jinja'",
-})
+-- vim.api.nvim_create_augroup('nunjucks_ft', { clear = true })
+-- vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
+--   group = 'nunjucks_ft',
+--   pattern = '*.njk',
+--   command = "set ft='jinja'",
+-- })
 
 vim.api.nvim_create_augroup('packer_user_config', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePost', {
   group = 'packer_user_config',
-  pattern = 'plugins.lua',
+  pattern = { 'plugins.lua', 'init.lua' },
   command = 'PackerCompile',
 })
 

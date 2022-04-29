@@ -88,13 +88,20 @@ return function()
 
       -- format on save
       if format_on_save then
-        vim.cmd([[
-          augroup LspFormatting
-              autocmd! * <buffer>
-              autocmd BufWritePre * sleep 200m
-              autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-          augroup END
-        ]])
+        vim.api.nvim_create_augroup('LspFormatting', { clear = true })
+        vim.api.nvim_create_autocmd('BufWritePre', {
+          pattern = '<buffer>',
+          group = 'LspFormatting',
+          callback = function(opts)
+            local ext = opts.match:match(".*[\\/](.*)"):match(".+%.(%w+)")
+            local extension_map = require'filetype.mappings.extensions'
+            local ft = extension_map[ext]
+            if ft == 'javascript' or ft == 'typescript' then
+              os.execute('sleep ' .. 0.2)
+            end
+            vim.lsp.buf.formatting_sync()
+          end
+        })
       end
     end
   end

@@ -1,1 +1,1 @@
-source ~/.config/nvim/config/vimrc.vim
+source ~/.config/nvim/config/init.lua

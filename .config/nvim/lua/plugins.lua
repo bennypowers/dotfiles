@@ -68,7 +68,7 @@ return require'packer'.startup({ function(use)
           'nvim-treesitter/nvim-treesitter-textobjects' -- select a comment
         } }
   use { 'code-biscuits/nvim-biscuits', config = c'biscuits' }             -- hints for block ends
-  use {'lepture/vim-jinja', ft = {'md','html','njk'} }                    -- regexp-based syntax for njk
+  -- use {'lepture/vim-jinja', ft = {'md','html','njk'} }                    -- regexp-based syntax for njk
   use 'nvim-treesitter/playground'                                        -- tool for exploring treesitter ASTs
 
   -- 🪟 UI
@@ -204,7 +204,7 @@ return require'packer'.startup({ function(use)
   use 'crispgm/telescope-heading.nvim'                                   -- navigate to markdown headers
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' } -- markdown previews
   use { 'RRethy/vim-hexokinase', -- display colour values
-    run = 'make hexokinase' }              
+    run = 'make hexokinase' }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
