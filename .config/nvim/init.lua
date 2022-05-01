@@ -49,8 +49,6 @@ end
 
 require'plugins'
 
-vim.cmd[[colorscheme duskfox]]
-
 -- vim.api.nvim_create_augroup('nunjucks_ft', { clear = true })
 -- vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
 --   group = 'nunjucks_ft',
@@ -65,6 +63,19 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   command = 'PackerCompile',
 })
 
+-- local function highlight_repeats()
+--   local line_counts = {}
+--   local line_num = vim.a.firstline
+--   while line_num <= vim.a.lastline do
+--     local line_text = vim.fn.getline(line_num)
+--     if #line_text > 0 then
+--       line_counts[line_text] = (line_counts[line_text] or 0) + 1
+--     end
+--     line_num = line_num + 1
+--   end
+-- end
+
+-- vim.cmd[[
 -- function! HighlightRepeats() range
 --   let lineCounts = {}
 --   let lineNum = a:firstline
@@ -82,6 +93,7 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 --     endif
 --   endfor
 -- endfunction
+-- ]]
 --
 -- command! -range=% HighlightRepeats <line1>,<line2>call HighlightRepeats()
 --

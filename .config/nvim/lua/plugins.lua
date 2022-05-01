@@ -6,37 +6,36 @@ if fn.empty(fn.glob(install_path)) > 0 then
   packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
--- load a config function for a plugin
--- the module should be located in `~/.config/nvim/lua/config/${name}.lua`
--- and should return a single function
--- @param type 'config' or 'setup'
-local function loader(type)
-  -- @param name the name of the lua module to load
-  return function(name)
-    return require(type..'.'..name)
-  end
-end
-
-local c = loader'config'
-
 return require'packer'.startup({ function(use)
   use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
   use 'wbthomason/packer.nvim'
-  use { 'antoinemadec/FixCursorHold.nvim',
-        setup = function() vim.g.cursorhold_updatetime = 100 end }   -- bug fix for neovim's CursorHold event
+
+  -- bug fix for neovim's cursorhold event
+  vim.g.cursorhold_updatetime = 100
+  use 'antoinemadec/FixCursorHold.nvim'
 
   -- 🎨 Themes
 
   -- use '~/.config/nvim/themes/framed'                     -- WIP custom color theme based on lush
   -- use 'rktjmp/lush.nvim'                                 -- custom color themes
-  use { 'EdenEast/nightfox.nvim', config = c'nightfox' }    -- 🦊
+  -- use { 'EdenEast/nightfox.nvim', config = require'config.nightfox' }    -- 🦊
+
+  use { 'folke/tokyonight.nvim',
+        config = function ()
+          vim.g.tokyonight_style = 'night'
+          vim.g.tokyonight_transparent = true
+          vim.cmd[[colorscheme tokyonight]]
+        end }
 
   use 'lewis6991/impatient.nvim'                  -- faster startup?
   use 'nathom/filetype.nvim'                      -- faster startup!
   use 'milisims/nvim-luaref'                      -- lua docs in vim help
 
   -- 🖥️  terminal emulator
-  use { 'akinsho/toggleterm.nvim', config = c'toggleterm' }
+  use { 'akinsho/toggleterm.nvim',
+        config = function()
+          require'toggleterm'.setup {}
+        end }
 
   -- 🔥 Browser Integration
   --    here be 🐉 🐲
@@ -47,27 +46,93 @@ return require'packer'.startup({ function(use)
 
   use 'stevearc/dressing.nvim'                        -- telescope as UI for various vim built-in things
   use { 'nvim-telescope/telescope.nvim',              -- generic fuzzy finder with popup window
-        config = c'telescope',
+        config = function()
+          local telescope = require'telescope'
+          local actions = require'telescope.actions'
+
+          telescope.setup {
+            defaults = {
+              prompt_prefix = "🔎 ",
+              vimgrep_arguments = {
+                'rg',
+                '--color=never',
+                '--no-heading',
+                '--with-filename',
+                '--line-number',
+                '--column',
+                '--smart-case',
+                '--ignore',
+                '--hidden'
+              },
+              file_ignore_patterns = {
+                ".git",
+                "node_modules"
+              },
+              mappings = {
+                i = {
+                  ["<C-k>"] = actions.move_selection_previous,
+                  ["<C-j>"] = actions.move_selection_next,
+                  ["<esc>"] = actions.close
+                }
+              }
+            },
+            pickers = {
+              lsp_code_actions = {
+                theme = "cursor"
+              },
+              lsp_workspace_diagnostics = {
+                theme = "dropdown"
+              }
+            },
+          }
+        end,
         requires = {
           'nvim-lua/plenary.nvim',
           'nvim-lua/popup.nvim',
-          'nvim-telescope/telescope-symbols.nvim',
-          { 'nvim-telescope/telescope-frecency.nvim',     -- tries to sort files helpfully
-                cmd = 'Telescope',
-                config = function() require'telescope'.load_extension'frecency' end,
-                requires = 'tami5/sqlite.lua' } } }
+          'nvim-telescope/telescope-symbols.nvim', }}
+
+  use { 'nvim-telescope/telescope-frecency.nvim',     -- tries to sort files helpfully
+        requires = 'tami5/sqlite.lua',
+        config = function()
+          require'telescope'.load_extension'frecency'
+        end }
 
   -- 🌳 Syntax
 
   use { 'nvim-treesitter/nvim-treesitter',
-        config = c'treesitter',
+        config = require'config.treesitter',
         run = ':TSUpdate',                                                -- AST wizardry 🧙
         requires = {
           'RRethy/nvim-treesitter-endwise',                               -- append `end` in useful places
           'windwp/nvim-ts-autotag',                                       -- close HTML tags, but using treesitter
           'nvim-treesitter/nvim-treesitter-textobjects' -- select a comment
         } }
-  use { 'code-biscuits/nvim-biscuits', config = c'biscuits' }             -- hints for block ends
+
+  -- hints for block ends
+  use { 'code-biscuits/nvim-biscuits',
+        config = function()
+          require'nvim-biscuits'.setup {
+            show_on_start = true,
+            default_config = {
+              max_length = 12,
+              min_distance = 5,
+              prefix_string = " 📎 "
+            },
+            language_config = {
+              html = {
+                prefix_string = " 🌐 "
+              },
+              javascript = {
+                prefix_string = " ✨ ",
+                max_length = 80
+              },
+              python = {
+                disabled = true
+              }
+            }
+          }
+        end }
+
   -- use {'lepture/vim-jinja', ft = {'md','html','njk'} }                    -- regexp-based syntax for njk
   use 'nvim-treesitter/playground'                                        -- tool for exploring treesitter ASTs
 
@@ -78,21 +143,95 @@ return require'packer'.startup({ function(use)
   use 'RRethy/vim-illuminate'
   use { 'https://gitlab.com/yorickpeterse/nvim-window.git', module = 'nvim-window' }
   use { 'kyazdani42/nvim-web-devicons',                              -- yet more icons
-        config = c'web-devicons',
-        module = 'nvim-web-devicons' }
-  use { 'mvllow/modes.nvim', config = c'modes' }                     -- the colors!
-  use { 'goolord/alpha-nvim', config = c'alpha' }                    -- startup screen
-  use { 'akinsho/bufferline.nvim', config = c'bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"
-  use { 'rcarriga/nvim-notify', config = c'notify' }                 -- pretty notifications
-  use { 'nvim-lualine/lualine.nvim',                                 -- pretty statusline
-        config = c'lualine',
-        requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
-  use { 'folke/which-key.nvim',                                      -- which key was it, again?
-        config = c'which-key',
-        requires = 'mrjones2014/legendary.nvim' }
-  use { 'nvim-neo-tree/neo-tree.nvim',                               -- tree browser
+        module = 'nvim-web-devicons',
+        config = function()
+          local icons = require'nvim-web-devicons'
+          icons.setup {
+            override = {
+              md = {
+                icon = "",
+                color = "#519aba",
+                cterm_color = "67",
+                name = "Markdown",
+              },
+              node_modules = {
+                icon = "",
+                color = "#90a959",
+                name = "NodeModules",
+              },
+              ts = {
+                icon = 'ﯤ',
+                color = "#519aba",
+                cterm_color = "67",
+                name = "Ts",
+              },
+            }
+          }
+          icons.set_icon {
+            ['.github'] = {
+              icon = '',
+              name = "GitHub",
+            },
+            ['tsconfig.json'] = {
+              icon = "",
+              color = "#519aba",
+              name = "TSConfigJson"
+            },
+          }
+        end }
+
+  use { 'mvllow/modes.nvim',
+        config = function() require'modes'.setup { } end }
+
+  -- use { 'goolord/alpha-nvim', config = require'config.alpha' }                    -- startup screen
+  use { 'bennypowers/alpha-nvim',
+        branch = 'patch-2',
+        config = require'config.alpha' }
+
+  use { 'akinsho/bufferline.nvim',
+        config = require'config.bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"
+
+  -- pretty notifications
+  use { 'rcarriga/nvim-notify',
+        config = function ()
+          local notify = require'notify'
+          notify.setup {
+            render = 'minimal'
+          }
+          vim.notify = notify
+        end }
+
+  -- pretty statusline
+  use { 'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+        config = function ()
+          require'lualine'.setup {
+            theme = 'tokyonight',
+            extentions = { },
+            options = {
+              disabled_filetypes = { 'neo-tree' },
+              globalstatus = true,
+            },
+            sections = {
+              lualine_a = {'mode'},
+              lualine_b = {'branch', 'diff', 'diagnostics'},
+              lualine_c = {'filename'},
+              lualine_x = {'encoding', 'fileformat', 'filetype'},
+              lualine_y = {'progress'},
+              lualine_z = {'location'},
+            },
+          }
+        end }
+
+  -- which key was it, again?
+  use { 'folke/which-key.nvim',
+        requires = 'mrjones2014/legendary.nvim',
+        config = require'config.which-key' }
+
+  -- tree browser
+  use { 'nvim-neo-tree/neo-tree.nvim',
         branch = 'v2.x',
-        config = c'neo-tree',
+        config = require'config.neo-tree',
         requires = {
           'nvim-lua/plenary.nvim',
           'kyazdani42/nvim-web-devicons',
@@ -105,7 +244,7 @@ return require'packer'.startup({ function(use)
   -- alpha kinda-sorta helps with this in the mean time
 
   -- use { 'Shatur/neovim-session-manager',
-  --       config = c'neovim-session-manager',
+  --       config = require'config.neovim-session-manager',
   --       requires = {
   --         'nvim-telescope/telescope.nvim',
   --         'JoseConseco/telescope_sessions_picker.nvim' } }
@@ -119,11 +258,35 @@ return require'packer'.startup({ function(use)
   use 'windwp/nvim-spectre'                                         -- project find/replace
   use 'rafcamlet/nvim-luapad'                                       -- lua REPL/scratchpad
   use 'chentau/marks.nvim'                                          -- better vim marks
-  use {'kana/vim-textobj-entire', requires='kana/vim-textobj-user'} -- yae, cae, etc
-  use { 'echasnovski/mini.nvim', config = c'mini' }                 -- lots of plugins
+  use { 'petertriho/nvim-scrollbar',-- yae, cae, etc
+        config = function() require'scrollbar'.setup() end }
+  use { 'kana/vim-textobj-entire',
+        requires='kana/vim-textobj-user' }
+
+  -- replaces varioud individual of plugins
+  use { 'echasnovski/mini.nvim', config = require'config.mini' }
   use { 'mg979/vim-visual-multi', branch = 'master' }               -- multiple cursors, kinda like atom + vim-mode-plus
-  use { 'anuvyklack/pretty-fold.nvim', config = c'pretty-fold' }    -- beautiful folds with previews
-  use { 'monkoose/matchparen.nvim',                                 -- highlight matching paren
+
+  -- beautiful folds with previews
+  use { 'anuvyklack/pretty-fold.nvim',
+        config = function ()
+            require'pretty-fold'.setup {
+              keep_indentation = false,
+              fill_char = '━',
+              sections = {
+                  left = {
+                     '━ ', function() return string.rep('>', vim.v.foldlevel) end, ' ━┫', 'content', '┣'
+                  },
+                  right = {
+                     '┫ ', 'number_of_folded_lines', ': ', 'percentage', ' ┣━━',
+                  }
+              }
+            }
+            require'pretty-fold.preview'.setup { key = 'l' }
+        end }
+
+  -- highlight matching paren
+  use { 'monkoose/matchparen.nvim',
         config = function()
           require'matchparen'.setup { on_startup = false }
         end,
@@ -135,14 +298,46 @@ return require'packer'.startup({ function(use)
           'fish', 'bash', 'sh',
           'json',
         } }
-  use { 'AndrewRadev/splitjoin.vim',                                -- like vmp `g,` action
-        setup = function()
+
+  -- like vmp `g,` action
+  use { 'AndrewRadev/splitjoin.vim',
+        config = function()
           vim.g.splitjoin_split_mapping = ''
           vim.g.splitjoin_join_mapping = ''
           vim.api.nvim_set_keymap('n', 'gj', ':SplitjoinJoin<cr>', {})
           vim.api.nvim_set_keymap('n', 'g,', ':SplitjoinSplit<cr>', {})
         end }
-  use { '~/Developer/nvim-regexplainer', config = c'regexplainer', requires = 'MunifTanjim/nui.nvim' }
+
+  use { '~/Developer/nvim-regexplainer',
+        requires = 'MunifTanjim/nui.nvim',
+        config = function()
+          require'regexplainer'.setup {
+            auto = true,
+            display = 'popup',
+            -- display = 'split',
+            debug = true,
+            mode = 'narrative',
+            -- mode = 'debug',
+            -- mode = 'graphical',
+            narrative = {
+              separator = function(component)
+                local sep = '\n';
+                if component.depth > 0 then
+                  for _ = 1, component.depth do
+                    sep = sep .. '> '
+                  end
+                end
+                return sep
+              end
+            },
+          }
+          -- test authoring mode
+          -- require'regexplainer'.setup {
+          --   display = 'split',
+          --   debug = true,
+          --   mode = 'narrative',
+          -- }
+        end }
 
 
   -- 🤖 Language Server
@@ -155,14 +350,27 @@ return require'packer'.startup({ function(use)
           require'fidget'.setup()
         end }
   use { 'williamboman/nvim-lsp-installer',   -- automatically install language servers
-        config = c'lsp',
+        config = require'config.lsp',
         requires = {
           'neovim/nvim-lspconfig',           -- basic facility to configure language servers
           'hrsh7th/nvim-cmp',
           'b0o/schemastore.nvim',            -- json schema support
           'neovim/nvim-lspconfig' } }
   use { 'folke/lsp-trouble.nvim',            -- language-server diagnostics panel
-        config = c'trouble',
+        config = function()
+          local trouble = require'trouble'
+          trouble.setup {
+            auto_open = false,
+            auto_close = true,
+            auto_preview = true,
+            use_diagnostic_signs = true,
+          }
+
+          vim.api.nvim_create_autocmd('BufNew', {
+            pattern = "Trouble",
+            command = "setlocal colorcolumn=0"
+          })
+        end,
         requires = {
           'folke/trouble.nvim',
           'kyazdani42/nvim-web-devicons'
@@ -173,7 +381,7 @@ return require'packer'.startup({ function(use)
   -- 📎 Completions and Snippets
 
   use { 'hrsh7th/nvim-cmp',
-        config = c'cmp',
+        config = require'config.cmp',
         requires = {
           'nvim-lua/plenary.nvim' ,
           'L3MON4D3/LuaSnip',
@@ -213,7 +421,7 @@ return require'packer'.startup({ function(use)
   end
 end,
   config =  {
-    max_jobs = 8,
+    max_jobs = 16,
     display = {
       open_fn = require'packer.util'.float
     },

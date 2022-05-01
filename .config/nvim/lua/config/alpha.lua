@@ -1,7 +1,7 @@
 math.randomseed(os.time(os.date("!*t")))
 
 return function()
-    local status_ok, alpha = pcall(require, "alpha")
+    local status_ok, alpha, m = pcall(require, "alpha")
     if not status_ok then return end
 
     local path_ok, path = pcall(require, "plenary.path")
