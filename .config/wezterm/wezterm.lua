@@ -177,7 +177,7 @@ return {
 		brightness = 0.5,
 	},
 
-	color_scheme = "duskfox",
+	color_scheme = "tokyonight_night",
 	colors = {
 		tab_bar = {
 			background = TAB_BAR_BG,
