@@ -272,6 +272,7 @@ return require'packer'.startup({ function(use)
 
   -- beautiful folds with previews
   use { 'anuvyklack/pretty-fold.nvim',
+         requires = 'anuvyklack/nvim-keymap-amend',
         config = function ()
             require'pretty-fold'.setup {
               keep_indentation = false,
