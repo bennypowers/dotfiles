@@ -108,6 +108,9 @@ return require'packer'.startup({ function(use)
           'nvim-treesitter/nvim-treesitter-textobjects' -- select a comment
         } }
 
+  use { 'stevearc/aerial.nvim',
+        config = function() require'aerial'.setup() end }
+
   -- hints for block ends
   use { 'code-biscuits/nvim-biscuits',
         config = function()
