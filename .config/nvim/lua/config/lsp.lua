@@ -40,8 +40,8 @@ return function()
   local function toggle_formatting(enable)
     return function(client)
       default_on_attach(client)
-      client.server_capabilities.documentFormatting = enable
-      client.server_capabilities.documentRangeFormatting = enable
+      client.server_capabilities.documentFormattingProvider = enable
+      client.server_capabilities.documentRangeFormattingProvider = enable
     end
   end
 

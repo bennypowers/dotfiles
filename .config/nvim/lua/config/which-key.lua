@@ -104,7 +104,7 @@ return function ()
             ['{']           = { ':BufferLineCyclePrev<cr>',                          'Previous buffer' },
             ['\\']          = { '<cmd>Neotree reveal filesystem float<cr>',          'Toggle file tree (float)' },
             ['|']           = { '<cmd>Neotree filesystem show left toggle=true<cr>', 'Toggle file tree (sidebar)'},
-            ['.']           = { '<cmd>Telescope lsp_code_actions<cr>',               'Code actions' },
+            ['.']           = { vim.lsp.buf.code_action,                             'Code actions' },
             p               = { '<cmd>Telescope find_files hidden=true<cr>',         'Find files' },
             g               = { Terminals.lazilygit,                                 'Git UI via lazygit' },
             R               = { vim.lsp.buf.rename,                                  'Rename refactor' },

@@ -136,7 +136,7 @@ return require'packer'.startup({ function(use)
           }
         end }
 
-  -- use {'lepture/vim-jinja', ft = {'md','html','njk'} }                    -- regexp-based syntax for njk
+  use 'lepture/vim-jinja'                    -- regexp-based syntax for njk
   use 'nvim-treesitter/playground'                                        -- tool for exploring treesitter ASTs
 
   -- 🪟 UI
@@ -192,6 +192,7 @@ return require'packer'.startup({ function(use)
         config = require'config.alpha' }
 
   use { 'akinsho/bufferline.nvim',
+        tag = "v2.*",
         config = require'config.bufferline' }          -- editor tabs. yeah ok I know they're not "tabs"
 
   -- pretty notifications
@@ -292,16 +293,8 @@ return require'packer'.startup({ function(use)
   -- highlight matching paren
   use { 'monkoose/matchparen.nvim',
         config = function()
-          require'matchparen'.setup { on_startup = false }
-        end,
-        ft = {
-          'lua',
-          'js', 'javascript',
-          'ts', 'typescript',
-          'html', 'njk', 'ejs', 'jinja',
-          'fish', 'bash', 'sh',
-          'json',
-        } }
+          require'matchparen'.setup { on_startup = true }
+        end }
 
   -- like vmp `g,` action
   use { 'AndrewRadev/splitjoin.vim',
@@ -407,7 +400,17 @@ return require'packer'.startup({ function(use)
   -- 📌 Git
 
   use { 'lewis6991/gitsigns.nvim',                                              -- git gutter
-    config = function() require'gitsigns'.setup() end }
+        config = function() require'gitsigns'.setup() end }
+  use { 'akinsho/git-conflict.nvim',
+        config = function() require'git-conflict'.setup {
+            default_mappings = true, -- disable buffer local mapping created by this plugin
+            disable_diagnostics = true, -- This will disable the diagnostics in a buffer whilst it is conflicted
+            highlights = { -- They must have background color, otherwise the default color will be used
+              incoming = 'DiffText',
+              current = 'DiffAdd',
+            }
+          }
+        end }
 
   -- 🕸️  Webdev
 

@@ -49,12 +49,12 @@ end
 
 require'plugins'
 
--- vim.api.nvim_create_augroup('nunjucks_ft', { clear = true })
--- vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
---   group = 'nunjucks_ft',
---   pattern = '*.njk',
---   command = "set ft='jinja'",
--- })
+vim.api.nvim_create_augroup('nunjucks_ft', { clear = true })
+vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
+  group = 'nunjucks_ft',
+  pattern = '*.njk',
+  command = "set ft=jinja",
+})
 
 vim.api.nvim_create_augroup('packer_user_config', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePost', {
