@@ -113,6 +113,7 @@ return require'packer'.startup({ function(use)
 
   -- hints for block ends
   use { 'code-biscuits/nvim-biscuits',
+        opt = true,
         config = function()
           require'nvim-biscuits'.setup {
             show_on_start = true,
@@ -142,7 +143,7 @@ return require'packer'.startup({ function(use)
   -- 🪟 UI
 
   use 'famiu/bufdelete.nvim'                                         -- close buffers (tabs) with less headache
-  use 'kosayoda/nvim-lightbulb'                                      -- 💡
+  use { 'kosayoda/nvim-lightbulb', opt = true }                      -- 💡
   use 'RRethy/vim-illuminate'
   use { 'https://gitlab.com/yorickpeterse/nvim-window.git', module = 'nvim-window' }
   use { 'kyazdani42/nvim-web-devicons',                              -- yet more icons
@@ -306,6 +307,7 @@ return require'packer'.startup({ function(use)
         end }
 
   use { '~/Developer/nvim-regexplainer',
+        opt = true,
         requires = 'MunifTanjim/nui.nvim',
         config = function()
           require'regexplainer'.setup {
@@ -414,7 +416,7 @@ return require'packer'.startup({ function(use)
 
   -- 🕸️  Webdev
 
-  use 'jonsmithers/vim-html-template-literals'                           -- lit-html
+  use { 'jonsmithers/vim-html-template-literals', opt = true }                           -- lit-html
   use 'NTBBloodbath/color-converter.nvim'                                -- convert colour values
   use 'crispgm/telescope-heading.nvim'                                   -- navigate to markdown headers
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' } -- markdown previews

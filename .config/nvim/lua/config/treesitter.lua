@@ -86,7 +86,7 @@ return function()
     },
     highlight = {
       custom_captures = {
-        ["(method_signature name:(property_identifier)"] = "BP_TSMethodSignature"
+        ["(method_signature name:(property_identifier)"] = "BP_TSMethodSignature",
       },
     },
   }

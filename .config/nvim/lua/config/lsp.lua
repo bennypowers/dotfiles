@@ -45,18 +45,6 @@ return function()
     end
   end
 
-  --- Setup your lua path
-  --- needed to get IDE features in lua files
-  --- I promised clason in the neovim gitter i wouldn't call it 'intellisense'
-  ---@return string[]
-  ---
-  local function get_sumneko_lua_runtime_path()
-    local runtime_path = vim.split(package.path, ';')
-    table.insert(runtime_path, "lua/?.lua")
-    table.insert(runtime_path, "lua/?/init.lua")
-    return runtime_path
-  end
-
   -- Install these, k?
   -- Specify server options and settings per server by adding an options table
   -- servers with `false` options table use the default on_attach function
@@ -143,28 +131,43 @@ return function()
     },
 
     -- lua
-    ['sumneko_lua'] = {
-      settings = {
-        Lua = {
-          runtime = {
-            version = 'LuaJIT',
-            path = get_sumneko_lua_runtime_path(),
-          },
-          diagnostics = {
-            globals = { 'utf8', 'vim' }, -- Get the language server to recognize the `vim` global
-          },
-          workspace = {
-            library = vim.api.nvim_get_runtime_file('', true), -- Make the server aware of Neovim runtime files
-            checkThirdParty = false,
-          },
-          completion = {
-            autoRequire = false,
-          },
-          hint = {
-            enable = true,
-          },
-          telemetry = {
-            enable = false, -- Do not send telemetry data containing a randomized but unique identifier
+    ['sumneko_lua'] = require 'lua-dev'.setup {
+      -- add any options here, or leave empty to use the default settings
+      -- lspconfig = {
+      --   cmd = {"lua-language-server"}
+      -- },
+      lspconfig = {
+        autoFixOnSave = true,
+        settings = {
+          Lua = {
+            -- next three replaced by pre-compiled docs in `folke/lua-dev.nvim`
+            -- runtime = {
+            --   version = 'LuaJIT',
+            --   path = get_sumneko_lua_runtime_path(),
+            -- },
+            -- diagnostics = {
+            --   globals = { 'utf8', 'vim' }, -- Get the language server to recognize the `vim` global
+            -- },
+            -- workspace = {
+            --   library = vim.api.nvim_get_runtime_file('', true), -- Make the server aware of Neovim runtime files
+            --   checkThirdParty = false,
+            -- },
+            format = {
+              enable = true,
+              defaultConfig = {
+                indent_style = "space",
+                indent_size = "2",
+              }
+            },
+            completion = {
+              autoRequire = false,
+            },
+            hint = {
+              enable = true,
+            },
+            telemetry = {
+              enable = false, -- Do not send telemetry data containing a randomized but unique identifier
+            },
           },
         },
       },
@@ -220,24 +223,4 @@ return function()
   --   group = 'HoverOnHold',
   --   callback = function() vim.lsp.buf.hover() end,
   -- })
-
-  local function can_autofix(client)
-    return client.config.settings.autoFixOnSave or false
-  end
-
-  local function format_on_save()
-    local clients = vim.lsp.get_active_clients()
-    local can_autofix_clients = vim.tbl_filter(can_autofix, clients)
-    if #can_autofix_clients > 0 then
-      vim.lsp.buf.formatting_seq_sync(nil, 2000)
-    end
-  end
-
-  vim.api.nvim_create_augroup('LspFormatting', { clear = true })
-  vim.api.nvim_create_autocmd('BufWritePre', {
-    pattern = '<buffer>',
-    group = 'LspFormatting',
-    callback = format_on_save
-  })
-
 end

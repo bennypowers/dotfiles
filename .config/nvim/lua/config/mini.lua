@@ -13,11 +13,11 @@ return function()
     end
   })
 
-  require'mini.indentscope'.setup {
-    symbol = '|',
-    draw = {
-      delay = 0,
-      animation = require'mini.indentscope'.gen_animation('none'),
-    }
-  }
+  -- require'mini.indentscope'.setup {
+  --   symbol = '|',
+  --   draw = {
+  --     delay = 0,
+  --     animation = require'mini.indentscope'.gen_animation('none'),
+  --   }
+  -- }
 end
