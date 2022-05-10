@@ -1,7 +1,7 @@
 return function()
-  local tree = require'neo-tree'
-  local highlights = require'neo-tree.ui.highlights'
-  local renderer = require'neo-tree.ui.renderer'
+  local tree = require 'neo-tree'
+  local highlights = require 'neo-tree.ui.highlights'
+  local renderer = require 'neo-tree.ui.renderer'
 
   -- ascend to the parent or close it
   local function float(state)
@@ -13,13 +13,13 @@ return function()
     end
   end
 
-   -- toggle a node open or descend to it's first child
+  -- toggle a node open or descend to it's first child
   local function dive(state)
     local node = state.tree:get_node()
     if node.type == 'directory' or node:has_children() then
       if not node:is_expanded() then
         if node.type == 'directory' then
-          require'neo-tree.sources.filesystem'.toggle_directory(state, node)
+          require 'neo-tree.sources.filesystem'.toggle_directory(state, node)
         else
           state.commands.toggle_node(state)
         end
@@ -38,11 +38,12 @@ return function()
     event_handlers = {
       {
         event = 'neo_tree_buffer_enter',
-        handler = function ()
-          require'cmp'.setup.buffer { enabled = false }
-          vim.cmd[[
-            setlocal nocursorcolumn
+        handler = function()
+          require 'cmp'.setup.buffer { enabled = false }
+          vim.cmd [[
             hi Cursor blend=100
+            setlocal signcolumn=no
+            setlocal nocursorcolumn
             setlocal guicursor+=a:Cursor/lCursor
           ]]
         end
@@ -50,7 +51,7 @@ return function()
       {
         event = "neo_tree_buffer_leave",
         handler = function()
-          vim.cmd[[
+          vim.cmd [[
             hi Cursor blend=0
           ]]
         end
@@ -137,15 +138,15 @@ return function()
     },
 
     nesting_rules = {
-       ts = { 'js', 'js.map', 'd.ts' },
-       scss = { 'css', 'min.css', 'css.map', 'min.css.map' },
-     },
+      ts = { 'js', 'js.map', 'd.ts' },
+      scss = { 'css', 'min.css', 'css.map', 'min.css.map' },
+    },
 
     filesystem = {
       follow_current_file = true, -- This will find and focus the file in the active buffer every time the current file is changed while the tree is open.
       hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree in whatever position is specified in window.position
       filtered_items = {
-        visible = false, -- when true, they will just be displayed differently than normal items
+        visible = true, -- when true, they will just be displayed differently than normal items
         hide_dotfiles = true,
         hide_gitignored = true,
         hide_by_name = {
@@ -161,11 +162,11 @@ return function()
 
       components = {
 
-        icon = function (config, node)
+        icon = function(config, node)
           local icon = config.default or ' '
           local padding = config.padding or ' '
           local highlight = config.highlight or highlights.FILE_ICON
-          local web_devicons = require'nvim-web-devicons'
+          local web_devicons = require 'nvim-web-devicons'
           if node.type == 'directory' then
             highlight = highlights.DIRECTORY_ICON
             if node.name == 'node_modules' or node.name == '.git' or node.name == '.github' then

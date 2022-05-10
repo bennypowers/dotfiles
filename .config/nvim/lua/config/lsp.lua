@@ -82,12 +82,11 @@ return function()
       on_attach = toggle_formatting(true),
       root_dir = lsp_util.find_git_ancestor,
       settings = {
-        autoFixOnSave = true,
-        -- codeActionsOnSave = {
-        --   enable = true,
-        --   mode = "all",
-        --   rules = { "!debugger", "!no-only-tests/*" },
-        -- },
+        codeActionsOnSave = {
+          enable = true,
+          mode = "all",
+          rules = { "!debugger", "!no-only-tests/*" },
+        },
       },
     },
 
@@ -123,8 +122,9 @@ return function()
         'wxss',
       },
       settings = {
-        autoFixOnSave = true,
         stylelintplus = {
+          autoFixOnSave = true,
+          autoFixOnFormat = true,
           cssInJs = false,
         },
       },
@@ -215,6 +215,11 @@ return function()
     lsp_config[name].setup(vim.tbl_extend('force', { on_attach = default_on_attach }, opts or {}))
   end
 
+  vim.api.nvim_create_augroup('eslint-fixall', { clear = true })
+  vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+    pattern = { '*.tsx', '*.ts', '*.jsx', '*.js', },
+    command = 'EslintFixAll',
+  })
   -- uncomment for automatic hover on cursor-hold
   -- see also https://github.com/neovim/neovim/issues/9534
   -- vim.api.nvim_create_augroup('HoverOnHold')

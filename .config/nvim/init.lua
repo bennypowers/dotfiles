@@ -49,21 +49,6 @@ end
 
 require 'plugins'
 
-vim.api.nvim_create_augroup('nunjucks_ft', { clear = true })
-vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-  group = 'nunjucks_ft',
-  pattern = '*.njk',
-  command = 'set ft=jinja',
-})
-
-vim.api.nvim_create_augroup('packer_user_config', { clear = true })
-vim.api.nvim_create_autocmd('BufWritePost', {
-  group = 'packer_user_config',
-  pattern = { 'plugins.lua', 'init.lua' },
-  command = 'PackerCompile',
-})
-
-
 -- START COPYPASTA https://github.com/neovim/neovim/commit/5b04e46d23b65413d934d812d61d8720b815eb1c
 local util = require 'vim.lsp.util'
 --- Formats a buffer using the attached (and optionally filtered) language
@@ -141,6 +126,34 @@ vim.lsp.buf.format = function(options)
   end
 end
 -- END COPYPASTA
+
+-- AUTOCMDs --
+
+
+vim.api.nvim_create_augroup('help_options', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
+  group = 'help_options',
+  pattern = '*',
+  callback = function()
+    if vim.bo.filetype == 'help' then
+      vim.wo.cursorcolumn = false
+    end
+  end
+})
+
+vim.api.nvim_create_augroup('nunjucks_ft', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+  group = 'nunjucks_ft',
+  pattern = '*.njk',
+  command = 'set ft=jinja',
+})
+
+vim.api.nvim_create_augroup('packer_user_config', { clear = true })
+vim.api.nvim_create_autocmd('BufWritePost', {
+  group = 'packer_user_config',
+  pattern = { 'plugins.lua', 'init.lua' },
+  command = 'PackerCompile',
+})
 
 
 vim.api.nvim_create_augroup('LspFormatting', { clear = true })

@@ -1,11 +1,46 @@
 return function()
 
-  local cmp = require'cmp'
-  local lspkind = require'lspkind'
-  local luasnip = require'luasnip'
-  local cmp_npm = require'cmp-npm'
+  local cmp = require 'cmp'
+  local lspkind = require 'lspkind'
+  local luasnip = require 'luasnip'
+  local can_npm, cmp_npm = pcall(require, 'cmp-npm')
 
-  cmp_npm.setup()
+  -- require 'luasnip.loaders.from_snipmate'.lazy_load()
+  require 'luasnip.loaders.from_lua'.lazy_load { paths = "~/.config/nvim/snippets" }
+
+  local types = require 'luasnip.util.types'
+  luasnip.config.setup {
+    history = true,
+    updateevents = 'TextChanged,TextChangedI',
+    enable_autosnippets = true,
+    ext_opts = {
+      [types.choiceNode] = {
+        active = {
+          virt_text = { { "●", "GruvboxOrange" } }
+        }
+      }
+    }
+  }
+
+  vim.keymap.set({ 'i', 's' }, '<c-j>', function()
+    if luasnip.expand_or_jumpable() then
+      luasnip.expand_or_jump()
+    end
+  end)
+
+  vim.keymap.set({ 'i', 's' }, '<c-k>', function()
+    if luasnip.jumpable(-1) then
+      luasnip.jump(-1)
+    end
+  end)
+
+  vim.keymap.set('i', '<c-l>', function()
+    if luasnip.choice_active() then
+      luasnip.change_choice(1)
+    end
+  end)
+
+  if can_npm then cmp_npm.setup() end
 
   cmp.setup({
     snippet = {
@@ -19,13 +54,13 @@ return function()
       ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
       ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
       ["<C-S-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-      ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+      ["<C-y>"] = cmp.mapping.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
       ["<C-e>"] = cmp.mapping({
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
       }),
-      ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
-      ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+      ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { 'i' }),
+      ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { 'i' }),
       ['<CR>'] = function(fallback)
         if cmp.visible() then
           -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
@@ -105,6 +140,4 @@ return function()
       { name = "cmdline" },
     }),
   })
-
-  require'luasnip.loaders.from_snipmate'.lazy_load()
 end
