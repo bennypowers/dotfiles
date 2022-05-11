@@ -32,7 +32,11 @@ return require 'packer'.startup({ function(use)
     config = function()
       vim.g.tokyonight_style = 'night'
       vim.g.tokyonight_transparent = true
-      vim.cmd [[colorscheme tokyonight]]
+      vim.g.tokyonight_lualine_bold = true
+      vim.cmd [[
+        colorscheme tokyonight
+        hi Normal guibg=transparent
+      ]]
     end }
 
   -- 🖥️  terminal emulator
@@ -69,7 +73,7 @@ return require 'packer'.startup({ function(use)
             '--hidden'
           },
           file_ignore_patterns = {
-            ".git",
+            ".git/",
             "node_modules"
           },
           mappings = {
@@ -281,8 +285,6 @@ return require 'packer'.startup({ function(use)
   use { 'lukas-reineke/indent-blankline.nvim',
     config = function()
       vim.opt.list = true
-      vim.opt.listchars:append("space:⋅")
-      vim.opt.listchars:append("tab:>")
       vim.opt.listchars:append("eol:↴")
       vim.g.indent_blankline_filetype_exclude = {
         'Regexplainer',
@@ -296,10 +298,11 @@ return require 'packer'.startup({ function(use)
         'unix',
       }
 
-      require("indent_blankline").setup {
+      require 'indent_blankline'.setup {
         space_char_blankline = " ",
         show_current_context = true,
-        show_current_context_start = true,
+        show_current_context_start = false,
+        show_end_of_line = true,
       }
     end }
 
