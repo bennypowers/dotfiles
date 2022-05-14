@@ -1,4 +1,9 @@
-pcall(require, 'impatient')
+local function load(mod)
+  package.loaded[mod] = nil
+  return require(mod)
+end
+
+pcall(load, 'impatient')
 
 -- disable some built-in plugins
 vim.g.loaded_netrw       = 1
@@ -9,30 +14,30 @@ vim.g.termguicolors = true
 vim.g.mapleader     = ' '
 vim.env.BASH_ENV    = '~/.config/bashrc'
 
-vim.o.backspace      = 'indent,eol,start'
-vim.o.colorcolumn    = 100
-vim.o.completeopt    = 'menu,menuone,noselect'
-vim.o.cursorcolumn   = true
-vim.o.cursorline     = true
-vim.o.encoding       = 'UTF-8'
-vim.o.expandtab      = true
-vim.o.laststatus     = 3
-vim.o.linebreak      = true
-vim.o.list           = true
-vim.o.mouse          = 'a'
-vim.o.number         = true
-vim.o.relativenumber = true
-vim.o.pastetoggle    = '<F10>'
-vim.o.shiftwidth     = 2
-vim.o.softtabstop    = 2
-vim.o.tabstop        = 2
-vim.o.termguicolors  = true
-vim.o.virtualedit    = 'block,onemore'
-vim.o.wrap           = false
-vim.o.foldlevel      = 20
-vim.o.foldmethod     = 'expr'
-vim.o.foldexpr       = 'nvim_treesitter#foldexpr()'
-vim.o.shell          = 'bash'
+vim.opt.backspace      = 'indent,eol,start'
+vim.opt.colorcolumn    = '100'
+vim.opt.completeopt    = 'menu,menuone,noselect'
+vim.opt.cursorcolumn   = true
+vim.opt.cursorline     = true
+vim.opt.encoding       = 'UTF-8'
+vim.opt.expandtab      = true
+vim.opt.laststatus     = 3
+vim.opt.linebreak      = true
+vim.opt.list           = true
+vim.opt.mouse          = 'a'
+vim.opt.number         = true
+vim.opt.relativenumber = true
+vim.opt.pastetoggle    = '<F10>'
+vim.opt.shiftwidth     = 2
+vim.opt.softtabstop    = 2
+vim.opt.tabstop        = 2
+vim.opt.termguicolors  = true
+vim.opt.virtualedit    = 'block,onemore'
+vim.opt.wrap           = false
+vim.opt.foldlevel      = 20
+vim.opt.foldmethod     = 'expr'
+vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
+vim.opt.shell          = 'bash'
 
 local jid = vim.fn.jobstart { 'git', 'rev-parse', '--git-dir' }
 local ret = vim.fn.jobwait { jid }[1]
@@ -47,7 +52,7 @@ elseif vim.fn.has 'gui_vimr' ~= 0 then
   vim.cmd [[source ~/.config/nvim/config/background.vim]]
 end
 
-require 'plugins'
+load 'plugins'
 
 -- START COPYPASTA https://github.com/neovim/neovim/commit/5b04e46d23b65413d934d812d61d8720b815eb1c
 local util = require 'vim.lsp.util'
@@ -173,6 +178,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     }
   end
 })
+
 
 -- local function highlight_repeats()
 --   local line_counts = {}
