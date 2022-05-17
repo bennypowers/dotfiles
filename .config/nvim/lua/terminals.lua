@@ -4,6 +4,7 @@ local function close_terminal_on_zero_exit(terminal, _, exit_code)
   if exit_code == 0 then
     terminal:close()
   end
+  require 'neo-tree.sources.manager'.refresh 'filesystem'
 end
 
 local function input_wrapper(fn)
@@ -17,34 +18,33 @@ local function input_wrapper(fn)
 end
 
 local function term_with_command(input)
-  Terminal:new {
+  return Terminal:new {
     cmd = input,
     direction = 'vertical',
-  }
+  }:open()
 end
 
 local function scratch_with_command(input)
-  Terminal:new {
+  return Terminal:new {
     cmd = input,
     close_on_exit = true,
     direction = 'float',
     on_exit = close_terminal_on_zero_exit,
-  }
+  }:open()
 end
 
-local lazygit = Terminal:new {
+local lazygit_term_options = {
   cmd = 'lazygit',
   direction = 'float',
   hidden = true,
   on_exit = close_terminal_on_zero_exit,
 }
 
-local dotfileslazygit = Terminal:new {
+local lazygit = Terminal:new(lazygit_term_options)
+
+local dotfileslazygit = Terminal:new(vim.tbl_extend('force', lazygit_term_options, {
   cmd = 'lazygit --git-dir=$HOME/.cfg --work-tree=$HOME',
-  direction = 'float',
-  hidden = true,
-  on_exit = close_terminal_on_zero_exit,
-}
+}))
 
 local M = {}
 
@@ -58,9 +58,9 @@ M.term_with_command = input_wrapper(term_with_command)
 
 ---Launch a terminal in a vertical split
 function M.term_vertical()
-  Terminal:new {
-    direction = 'vertical',
-  }
+  local term = Terminal:new { cmd = 'fish' }
+  term:open(80, 'vertical', true)
+  return term
 end
 
 ---Launch lazygit in a scratch terminal,

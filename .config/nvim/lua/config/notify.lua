@@ -1,5 +1,6 @@
 local notify = require 'notify'
 notify.setup {
-  render = 'minimal'
+  background_colour = '#000000',
+  -- render = 'minimal'
 }
 vim.notify = notify

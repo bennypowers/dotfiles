@@ -38,11 +38,11 @@ local function cycle_color()
 end
 
 local function goto_preview_definition()
-  require 'goto-preview'.goto_preview_definition()
+  require 'goto-preview'.goto_preview_definition {}
 end
 
 local function goto_preview_implementation()
-  require 'goto-preview'.goto_preview_implementation()
+  require 'goto-preview'.goto_preview_implementation {}
 end
 
 local function goto_preview_references()
@@ -53,43 +53,51 @@ local function close_all_win()
   require 'goto-preview'.close_all_win()
 end
 
+local function open_uri(uri)
+  if type(uri) ~= 'nil' then
+    uri = string.gsub(uri, '#', '\\#') --double escapes any # signs
+    uri = '"' .. uri .. '"'
+    vim.cmd('!open ' .. uri .. ' > /dev/null')
+    vim.cmd 'mode'
+    -- print(uri)
+    return true
+  else
+    return false
+  end
+end
+
 --- @author Rafat913
 --- https://www.reddit.com/r/neovim/comments/um3epn/comment/i8140hi/
 local function open_uri_under_cursor()
-  local function open_uri(uri)
-    if type(uri) ~= 'nil' then
-      uri = string.gsub(uri, '#', '\\#') --double escapes any # signs
-      uri = '"' .. uri .. '"'
-      vim.cmd('!open ' .. uri .. ' > /dev/null')
-      vim.cmd 'mode'
-      -- print(uri)
-      return true
-    else
-      return false
-    end
-  end
-
   local word_under_cursor = vim.fn.expand '<cWORD>'
 
-  vim.notify(word_under_cursor)
   -- any uri with a protocol segment
   local regex_protocol_uri = '%a*:%/%/[%a%d%#%[%]%-%%+:;!$@/?&=_.,~*()]*'
-  if (open_uri(string.match(word_under_cursor, regex_protocol_uri))) then return end
+  if open_uri(string.match(word_under_cursor, regex_protocol_uri)) then
+    return
+  end
 
   -- consider anything that looks like string/string a github link
   local regex_plugin_url = '[%a%d%-%.%_]*%/[%a%d%-%.%_]*'
-  if (open_uri('https://github.com/' .. string.match(word_under_cursor, regex_plugin_url))) then return end
+  local match = string.match(word_under_cursor, regex_plugin_url)
+  if match then
+    if open_uri('https://github.com/' .. match) then
+      return
+    end
+  end
+
+  -- otherwise, open a new line above
+  vim.api.nvim_feedkeys('O', 'n', false)
 end
 
 local function refresh_packer()
-  vim.notify 'refreshing packer'
   vim.cmd [[ PackerClean ]]
   vim.cmd [[ PackerCompile ]]
 end
 
 local function refresh_init()
   vim.notify 'refreshing init'
-  vim.cmd [[ source ~/.config/nvim/init.lua ]]
+  vim.cmd [[ luafile ~/.config/nvim/init.lua ]]
   refresh_packer()
 end
 
@@ -131,7 +139,6 @@ wk.register({
   ['<m-,>'] = { vim.diagnostic.goto_prev, 'Previous diagnostic' },
   ['<m-.>'] = { vim.diagnostic.goto_next, 'Next diagnostic' },
   ['<c-i>'] = { refresh_init, 'Reload config' },
-  ['<c-d>'] = { ':<c-u>call vm#commands#ctrln(v:count1)<cr>', 'Find occurrence of word under cursor' },
 
   ['<leader>'] = {
     name   = '+leader',
@@ -253,4 +260,3 @@ wk.register({
 wk.register({
   ['<a-m-space>'] = { ':Telescope symbols<cr>', 'Pick symbol via Telescope' },
 }, { mode = 'i' })
-

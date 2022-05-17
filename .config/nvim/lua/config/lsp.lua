@@ -11,21 +11,23 @@ local lsp_status    = require 'lsp-status'
 local lsp_util      = require 'lspconfig.util'
 local cmp_nvim_lsp  = require 'cmp_nvim_lsp'
 
+local default_capabilities = vim.tbl_extend('keep',
+  cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  lsp_status.capabilities
+)
+
+default_capabilities.textDocument.completion.completionItem.snippetSupport = true
+default_capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    'documentation',
+    'detail',
+    'additionalTextEdits',
+  }
+}
+
 -- Setup lspconfig with some default capabilities
 --
 local function default_on_attach(client)
-  local capabilities = vim.tbl_extend('keep',
-    cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-    lsp_status.capabilities
-  )
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
-  capabilities.textDocument.completion.completionItem.resolveSupport = {
-    properties = {
-      'documentation',
-      'detail',
-      'additionalTextEdits',
-    }
-  }
   local has_illuminate, illuminate = pcall(require, 'illuminate')
   if has_illuminate then illuminate.on_attach(client) end
   lsp_status.on_attach(client)
@@ -67,11 +69,12 @@ local servers = {
 
   ['emmet_ls'] = {
     root_dir = lsp_util.find_git_ancestor,
+    single_file_support = true,
     filetypes = {
       'html',
       'css', 'scss',
       'njk', 'nunjucks', 'jinja',
-      'md', 'markdown',
+      'markdown',
       -- 'ts', 'typescript',
       -- 'js', 'javascript',
     },
@@ -210,12 +213,16 @@ lsp_installer.setup {
 }
 
 -- Loop through the servers listed above.
+-- setup install
 -- installing each, then if install succeeded,
 -- setup the server with the options specified in server_opts,
 -- or just use the default options
 --
 for name, opts in pairs(servers) do
-  lsp_config[name].setup(vim.tbl_extend('force', { on_attach = default_on_attach }, opts or {}))
+  lsp_config[name].setup(vim.tbl_extend('force', {
+    capabilities = default_capabilities,
+    on_attach = default_on_attach,
+  }, opts or {}))
 end
 
 vim.api.nvim_create_augroup('eslint-fixall', { clear = true })

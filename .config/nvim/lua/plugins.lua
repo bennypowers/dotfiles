@@ -212,7 +212,7 @@ return require 'packer'.startup({ function(use)
       'hrsh7th/cmp-emoji', -- ok boomer
       'hrsh7th/cmp-cmdline', -- cmdline completions
       'hrsh7th/cmp-nvim-lsp-signature-help', -- ffffunction
-      -- 'David-Kunz/cmp-npm', -- npm package versions
+      'David-Kunz/cmp-npm', -- npm package versions
       'lukas-reineke/cmp-under-comparator', -- _afterOthers
       { 'mtoohey31/cmp-fish', ft = "fish" } -- 🐟
     } }
