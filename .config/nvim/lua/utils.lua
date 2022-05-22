@@ -59,9 +59,6 @@ end
 
 function M.bufdelete(bufnum)
   require 'bufdelete'.bufdelete(bufnum, true)
-  if #M.get_listed_buffers() == 1 and vim.api.nvim_buf_get_name(0) == '' then
-    vim.cmd [[:Alpha]]
-  end
 end
 
 local function open_uri(uri)
