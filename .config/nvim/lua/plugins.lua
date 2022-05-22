@@ -134,6 +134,7 @@ return require 'packer'.startup({ function(use)
 
   use 'arthurxavierx/vim-caser' -- change case (camel, dash, etc)
   use 'tommcdo/vim-lion' -- align anything
+  use 'gabrielpoca/replacer.nvim'
   use { 'windwp/nvim-spectre', opt = true } -- project find/replace
   use { 'rafcamlet/nvim-luapad', opt = true, command = 'LuaPad' } -- lua REPL/scratchpad
   use { 'chentau/marks.nvim', opt = true } -- better vim marks
@@ -231,7 +232,7 @@ return require 'packer'.startup({ function(use)
 
   use { 'jonsmithers/vim-html-template-literals', opt = true } -- lit-html
   use { 'NTBBloodbath/color-converter.nvim', opt = true } -- convert colour values
-  use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', ft = { 'md', 'markdown' } } -- markdown previews
+  use { 'iamcco/markdown-preview.nvim', run = function() vim.fn["mkdp#util#install"]() end, ft = { 'md', 'markdown' } } -- markdown previews
   use { 'RRethy/vim-hexokinase', -- display colour values
     opt = true,
     run = 'make hexokinase' }
