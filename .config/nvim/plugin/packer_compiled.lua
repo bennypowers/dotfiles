@@ -448,6 +448,11 @@ _G.packer_plugins = {
     path = "/Users/bennyp/.local/share/nvim/site/pack/packer/start/quickmath.nvim",
     url = "https://github.com/jbyuki/quickmath.nvim"
   },
+  ["replacer.nvim"] = {
+    loaded = true,
+    path = "/Users/bennyp/.local/share/nvim/site/pack/packer/start/replacer.nvim",
+    url = "https://github.com/gabrielpoca/replacer.nvim"
+  },
   ["schemastore.nvim"] = {
     loaded = true,
     path = "/Users/bennyp/.local/share/nvim/site/pack/packer/start/schemastore.nvim",
@@ -610,14 +615,10 @@ if not vim.g.packer_custom_loader_enabled then
   vim.g.packer_custom_loader_enabled = true
 end
 
--- Config for: neo-tree.nvim
-time([[Config for neo-tree.nvim]], true)
-require 'config.neo-tree'
-time([[Config for neo-tree.nvim]], false)
--- Config for: toggleterm.nvim
-time([[Config for toggleterm.nvim]], true)
-require 'config.toggleterm'
-time([[Config for toggleterm.nvim]], false)
+-- Config for: tokyonight.nvim
+time([[Config for tokyonight.nvim]], true)
+require 'config.tokyonight'
+time([[Config for tokyonight.nvim]], false)
 -- Config for: modes.nvim
 time([[Config for modes.nvim]], true)
 require 'config.modes'
@@ -626,90 +627,94 @@ time([[Config for modes.nvim]], false)
 time([[Config for nvim-notify]], true)
 require 'config.notify'
 time([[Config for nvim-notify]], false)
--- Config for: mini.nvim
-time([[Config for mini.nvim]], true)
-require 'config.mini'
-time([[Config for mini.nvim]], false)
--- Config for: bufferline.nvim
-time([[Config for bufferline.nvim]], true)
-require 'config.bufferline'
-time([[Config for bufferline.nvim]], false)
--- Config for: matchparen.nvim
-time([[Config for matchparen.nvim]], true)
-require 'config.matchparen'
-time([[Config for matchparen.nvim]], false)
--- Config for: alpha-nvim
-time([[Config for alpha-nvim]], true)
-require 'config.alpha'
-time([[Config for alpha-nvim]], false)
--- Config for: telescope.nvim
-time([[Config for telescope.nvim]], true)
-require 'config.telescope'
-time([[Config for telescope.nvim]], false)
--- Config for: gitsigns.nvim
-time([[Config for gitsigns.nvim]], true)
-require 'config.gitsigns'
-time([[Config for gitsigns.nvim]], false)
--- Config for: tokyonight.nvim
-time([[Config for tokyonight.nvim]], true)
-require 'config.tokyonight'
-time([[Config for tokyonight.nvim]], false)
--- Config for: which-key.nvim
-time([[Config for which-key.nvim]], true)
-require 'config.whichkey'
-time([[Config for which-key.nvim]], false)
--- Config for: git-conflict.nvim
-time([[Config for git-conflict.nvim]], true)
-require 'config.git-conflict-nvim'
-time([[Config for git-conflict.nvim]], false)
--- Config for: fidget.nvim
-time([[Config for fidget.nvim]], true)
-require 'config.fidget'
-time([[Config for fidget.nvim]], false)
--- Config for: goto-preview
-time([[Config for goto-preview]], true)
-require 'config.goto-preview'
-time([[Config for goto-preview]], false)
--- Config for: gh.nvim
-time([[Config for gh.nvim]], true)
-require 'config.gh-nvim'
-time([[Config for gh.nvim]], false)
--- Config for: nvim-cmp
-time([[Config for nvim-cmp]], true)
-require 'config.cmp'
-time([[Config for nvim-cmp]], false)
--- Config for: pretty-fold.nvim
-time([[Config for pretty-fold.nvim]], true)
-require 'config.prettyfold'
-time([[Config for pretty-fold.nvim]], false)
--- Config for: nvim-treesitter
-time([[Config for nvim-treesitter]], true)
-require 'config.treesitter'
-time([[Config for nvim-treesitter]], false)
--- Config for: lualine.nvim
-time([[Config for lualine.nvim]], true)
-require 'config.lualine'
-time([[Config for lualine.nvim]], false)
+-- Config for: toggleterm.nvim
+time([[Config for toggleterm.nvim]], true)
+require 'config.toggleterm'
+time([[Config for toggleterm.nvim]], false)
 -- Config for: nvim-lsp-installer
 time([[Config for nvim-lsp-installer]], true)
 require 'config.lsp'
 time([[Config for nvim-lsp-installer]], false)
--- Config for: lsp-trouble.nvim
-time([[Config for lsp-trouble.nvim]], true)
-require 'config.trouble'
-time([[Config for lsp-trouble.nvim]], false)
 -- Config for: indent-blankline.nvim
 time([[Config for indent-blankline.nvim]], true)
 require 'config.indent-blankline'
 time([[Config for indent-blankline.nvim]], false)
+-- Config for: matchparen.nvim
+time([[Config for matchparen.nvim]], true)
+require 'config.matchparen'
+time([[Config for matchparen.nvim]], false)
+-- Config for: telescope.nvim
+time([[Config for telescope.nvim]], true)
+require 'config.telescope'
+time([[Config for telescope.nvim]], false)
 -- Config for: nvim-biscuits
 time([[Config for nvim-biscuits]], true)
 require 'config.biscuits'
 time([[Config for nvim-biscuits]], false)
+-- Config for: gitsigns.nvim
+time([[Config for gitsigns.nvim]], true)
+require 'config.gitsigns'
+time([[Config for gitsigns.nvim]], false)
+-- Config for: git-conflict.nvim
+time([[Config for git-conflict.nvim]], true)
+require 'config.git-conflict-nvim'
+time([[Config for git-conflict.nvim]], false)
+-- Config for: bufferline.nvim
+time([[Config for bufferline.nvim]], true)
+require 'config.bufferline'
+time([[Config for bufferline.nvim]], false)
+-- Config for: pretty-fold.nvim
+time([[Config for pretty-fold.nvim]], true)
+require 'config.prettyfold'
+time([[Config for pretty-fold.nvim]], false)
+-- Config for: nvim-cmp
+time([[Config for nvim-cmp]], true)
+require 'config.cmp'
+time([[Config for nvim-cmp]], false)
+-- Config for: gh.nvim
+time([[Config for gh.nvim]], true)
+require 'config.gh-nvim'
+time([[Config for gh.nvim]], false)
+-- Config for: mini.nvim
+time([[Config for mini.nvim]], true)
+require 'config.mini'
+time([[Config for mini.nvim]], false)
+-- Config for: goto-preview
+time([[Config for goto-preview]], true)
+require 'config.goto-preview'
+time([[Config for goto-preview]], false)
+-- Config for: alpha-nvim
+time([[Config for alpha-nvim]], true)
+require 'config.alpha'
+time([[Config for alpha-nvim]], false)
+-- Config for: lualine.nvim
+time([[Config for lualine.nvim]], true)
+require 'config.lualine'
+time([[Config for lualine.nvim]], false)
+-- Config for: lsp-trouble.nvim
+time([[Config for lsp-trouble.nvim]], true)
+require 'config.trouble'
+time([[Config for lsp-trouble.nvim]], false)
+-- Config for: nvim-treesitter
+time([[Config for nvim-treesitter]], true)
+require 'config.treesitter'
+time([[Config for nvim-treesitter]], false)
+-- Config for: fidget.nvim
+time([[Config for fidget.nvim]], true)
+require 'config.fidget'
+time([[Config for fidget.nvim]], false)
 -- Config for: nvim-scrollbar
 time([[Config for nvim-scrollbar]], true)
 require 'config.scrollbar'
 time([[Config for nvim-scrollbar]], false)
+-- Config for: which-key.nvim
+time([[Config for which-key.nvim]], true)
+require 'config.whichkey'
+time([[Config for which-key.nvim]], false)
+-- Config for: neo-tree.nvim
+time([[Config for neo-tree.nvim]], true)
+require 'config.neo-tree'
+time([[Config for neo-tree.nvim]], false)
 -- Conditional loads
 time([[Conditional loading of neovim-session-manager]], true)
   require("packer.load")({"neovim-session-manager"}, {}, _G.packer_plugins)
@@ -731,15 +736,15 @@ vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'telescope-heading.nvim', 'markdown-preview.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType md ++once lua require("packer.load")({'markdown-preview.nvim', 'telescope-heading.nvim'}, { ft = "md" }, _G.packer_plugins)]]
+vim.cmd [[au FileType fish ++once lua require("packer.load")({'cmp-fish'}, { ft = "fish" }, _G.packer_plugins)]]
+vim.cmd [[au FileType javascript ++once lua require("packer.load")({'nvim-regexplainer'}, { ft = "javascript" }, _G.packer_plugins)]]
 vim.cmd [[au FileType typescript ++once lua require("packer.load")({'nvim-regexplainer'}, { ft = "typescript" }, _G.packer_plugins)]]
 vim.cmd [[au FileType html ++once lua require("packer.load")({'nvim-regexplainer', 'vim-jinja'}, { ft = "html" }, _G.packer_plugins)]]
 vim.cmd [[au FileType python ++once lua require("packer.load")({'nvim-regexplainer'}, { ft = "python" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'markdown-preview.nvim', 'telescope-heading.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
 vim.cmd [[au FileType jinja ++once lua require("packer.load")({'vim-jinja'}, { ft = "jinja" }, _G.packer_plugins)]]
 vim.cmd [[au FileType lua ++once lua require("packer.load")({'lua-dev.nvim'}, { ft = "lua" }, _G.packer_plugins)]]
-vim.cmd [[au FileType fish ++once lua require("packer.load")({'cmp-fish'}, { ft = "fish" }, _G.packer_plugins)]]
-vim.cmd [[au FileType md ++once lua require("packer.load")({'telescope-heading.nvim', 'markdown-preview.nvim'}, { ft = "md" }, _G.packer_plugins)]]
-vim.cmd [[au FileType javascript ++once lua require("packer.load")({'nvim-regexplainer'}, { ft = "javascript" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 vim.cmd [[augroup filetypedetect]]
