@@ -1,5 +1,5 @@
-local bufferline = require'bufferline'
-vim.cmd 'source ~/.config/nvim/config/bbye.vim'
+local bufferline = require 'bufferline'
+local U = require 'utils'
 
 -- local palette = require'nightfox.palette'.load'duskfox'
 -- local nightfox_highlights = {
@@ -68,15 +68,18 @@ bufferline.setup {
     diagnostics = 'nvim_lsp',
     show_buffer_icons = true,
     show_close_icon = true,
+    right_mouse_command = U.bufdelete,
+    close_command = U.bufdelete,
     custom_filter = function(bufnr)
       local filetype = vim.bo[bufnr].filetype
       local filename = vim.fn.bufname(bufnr)
       return (
-            filetype ~= 'neo-tree'
-        and filetype ~= 'Trouble'
-        and filename ~= 'neo-tree filesystem [1]'
-        and filename ~= '[No Name]'
-      )
+          filetype ~= 'neo-tree'
+              and filetype ~= 'Trouble'
+              and filename ~= 'neo-tree filesystem [1]'
+              and filename ~= '[No Name]'
+              and filename ~= ''
+          )
     end,
     offsets = {
       {

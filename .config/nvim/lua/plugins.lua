@@ -41,7 +41,7 @@ return require 'packer'.startup({ function(use)
   -- 🔥 Browser Integration
   --    here be 🐉 🐲
 
-  -- use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
+  use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
 
   -- 🔭 Telescope
 
@@ -125,6 +125,7 @@ return require 'packer'.startup({ function(use)
 
   use { 'Shatur/neovim-session-manager',
     config = c 'neovim-session-manager',
+    cond = function() return not vim.g.started_by_firenvim end,
     requires = {
       'nvim-telescope/telescope.nvim',
       'JoseConseco/telescope_sessions_picker.nvim' } }
@@ -139,8 +140,9 @@ return require 'packer'.startup({ function(use)
 
   -- yae, cae, etc
   use { 'kana/vim-textobj-entire',
-    opt = true,
     requires = 'kana/vim-textobj-user' }
+
+  use 'jbyuki/quickmath.nvim'
 
   -- replaces various individual of plugins
   use { 'echasnovski/mini.nvim', config = c 'mini' }
@@ -193,7 +195,7 @@ return require 'packer'.startup({ function(use)
       'folke/trouble.nvim',
       'kyazdani42/nvim-web-devicons',
     } }
-  use { 'rmagatti/goto-preview', keys = 'gd', config = c 'goto-preview' } -- gd, but in a floating window
+  use { 'rmagatti/goto-preview', config = c 'goto-preview' } -- gd, but in a floating window
 
   -- 📎 Completions and Snippets
 
@@ -221,17 +223,9 @@ return require 'packer'.startup({ function(use)
 
   -- git gutter
   use { 'lewis6991/gitsigns.nvim', config = c 'gitsigns' }
-  use { 'akinsho/git-conflict.nvim',
-    opt = true,
-    config = function() require 'git-conflict'.setup {
-        default_mappings = true, -- disable buffer local mapping created by this plugin
-        disable_diagnostics = true, -- This will disable the diagnostics in a buffer whilst it is conflicted
-        highlights = { -- They must have background color, otherwise the default color will be used
-          incoming = 'DiffText',
-          current = 'DiffAdd',
-        }
-      }
-    end }
+  -- resolve conflicts
+  use { 'akinsho/git-conflict.nvim', config = c 'git-conflict-nvim' }
+  use { 'ldelossa/gh.nvim', config = c 'gh-nvim', requires = { 'ldelossa/litee.nvim' } }
 
   -- 🕸️  Webdev
 
