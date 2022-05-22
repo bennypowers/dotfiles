@@ -13,7 +13,8 @@ telescope.setup {
       '--column',
       '--smart-case',
       '--ignore',
-      '--hidden'
+      '--hidden',
+      '--trim',
     },
     file_ignore_patterns = {
       ".git/",

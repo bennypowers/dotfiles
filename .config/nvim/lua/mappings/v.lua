@@ -1,8 +1,23 @@
-local U = require 'utils'
+local function get_selected_text()
+  vim.cmd('noau normal! "vy"')
+  local text = vim.fn.getreg('v')
+  vim.fn.setreg('v', {})
+  text = string.gsub(text, "\n", "")
+  if string.len(text) == 0 then
+    text = nil
+  end
+  return text
+end
+
+local function find_selection()
+  require 'telescope.builtin'.live_grep {
+    default_text = get_selected_text()
+  }
+end
 
 return {
+  fg           = { find_selection, 'Find selection in project' },
   ['<leader>'] = {
-    F         = { U.spectre_open_visual, 'Find/replace selection in project' },
     ['<c-d>'] = { '<Plug>(VM-Find-Subword-Under)<cr>', 'Find occurrence of subword under cursor' },
   }
 }
