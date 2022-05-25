@@ -13,6 +13,7 @@
 	ci = commit
 	cim = commit --message
 	co  = checkout
+  cp  = cherry-pick
 	count = "!f() { compareBranch=${1-master}; git rev-list --count HEAD ^$compareBranch; }; f"
 	f = !git ls-files | grep -i
 	fush = push --force

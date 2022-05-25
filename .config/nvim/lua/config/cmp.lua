@@ -3,9 +3,6 @@ local lspkind = require 'lspkind'
 local luasnip = require 'luasnip'
 local can_npm, cmp_npm = pcall(require, 'cmp-npm')
 
--- require 'luasnip.loaders.from_snipmate'.lazy_load()
-require 'luasnip.loaders.from_lua'.lazy_load { paths = "~/.config/nvim/snippets" }
-
 local types = require 'luasnip.util.types'
 luasnip.config.setup {
   history = true,
@@ -20,6 +17,9 @@ luasnip.config.setup {
     }
   }
 }
+
+require 'luasnip.loaders.from_snipmate'.lazy_load { paths = "~/.config/nvim/snippets" }
+require 'luasnip.loaders.from_lua'.lazy_load { paths = "~/.config/nvim/snippets" }
 
 vim.keymap.set({ 'i', 's' }, '<c-j>', function()
   if luasnip.expand_or_jumpable() then
@@ -73,8 +73,8 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
-  }, {
-    { name = 'luasnip' },
+    { name = 'luasnip', option = { use_show_condition = false } },
+    -- }, {
   }, {
     { name = 'fish' },
     { name = 'buffer', keyword_length = 3 },

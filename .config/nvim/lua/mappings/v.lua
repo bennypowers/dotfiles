@@ -16,7 +16,9 @@ local function find_selection()
 end
 
 return {
-  fg           = { find_selection, 'Find selection in project' },
+  F  = { find_selection, 'Find selection in project' },
+  fg = { find_selection, 'Find selection in project' },
+
   ['<leader>'] = {
     ['<c-d>'] = { '<Plug>(VM-Find-Subword-Under)<cr>', 'Find occurrence of subword under cursor' },
   }

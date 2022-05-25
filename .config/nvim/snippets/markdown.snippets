@@ -26,3 +26,13 @@ snippet pfereadme "PFE readme"
 		\`\`\`
 
 		## Usage
+
+snippet section "RHDS Section"
+	{% section headline="${1}" %}
+	${2}
+	{% endsection %}
+
+snippet example "RHDS Example"
+	{% example headline="${1}" %}
+	${2}
+	{% endexample %}

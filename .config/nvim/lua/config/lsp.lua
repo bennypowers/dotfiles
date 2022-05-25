@@ -1,9 +1,9 @@
 vim.g.diagnostic_enable_virtual_text = 1
 vim.g.diagnostic_virtual_text_prefix = ' '
-vim.fn.sign_define("DiagnosticSignError", { text = "🔥", texthl = "DiagnosticError" })
-vim.fn.sign_define("DiagnosticSignWarning", { text = "🚧", texthl = "DiagnosticWarning" })
-vim.fn.sign_define("DiagnosticSignInformation", { text = "👷", texthl = "DiagnosticInformation" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "🙋", texthl = "DiagnosticHint" })
+vim.fn.sign_define('DiagnosticSignError', { text = '🔥', texthl = 'DiagnosticError' })
+vim.fn.sign_define('DiagnosticSignWarning', { text = '🚧', texthl = 'DiagnosticWarning' })
+vim.fn.sign_define('DiagnosticSignInformation', { text = '👷', texthl = 'DiagnosticInformation' })
+vim.fn.sign_define('DiagnosticSignHint', { text = '🙋', texthl = 'DiagnosticHint' })
 
 local lsp_installer = require 'nvim-lsp-installer'
 local lsp_config    = require 'lspconfig'
@@ -52,10 +52,13 @@ end
 --
 local servers = {
   -- ['angularls'] = {},
+
   -- ['dockerls'] = {},
+
   -- ['denols'] = {
   --   on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
   -- },
+
   -- markdown. see https://github.com/unifiedjs/unified-language-server/issues/31
   -- ['remark_ls'] = {
   --   settings = {
@@ -84,6 +87,7 @@ local servers = {
     on_attach = toggle_formatting(true),
     root_dir = lsp_util.find_git_ancestor,
     settings = {
+      autoFixOnSave = true,
       codeActionsOnSave = {
         enable = true,
         mode = "all",
@@ -97,10 +101,31 @@ local servers = {
   -- haskell
   -- ['hls'] = {},
 
-  ['html'] = {},
+  ['html'] = {
+    settings = {
+      autoFixOnSave = false,
+      html = {
+        format = {
+          templating = true,
+          wrapLineLength = 200,
+          wrapAttributes = 'force-aligned',
+        },
+        editor = {
+          formatOnSave = false,
+          formatOnPaste = false,
+          formatOnType = false,
+        },
+        hover = {
+          documentation = true,
+          references = true,
+        },
+      },
+    },
+  },
 
   ['jsonls'] = {
     settings = {
+      autoFixOnSave = true,
       json = {
         schemas = require 'schemastore'.json.schemas(),
       },
@@ -124,6 +149,7 @@ local servers = {
       'wxss',
     },
     settings = {
+      autoFixOnSave = true,
       stylelintplus = {
         autoFixOnSave = true,
         autoFixOnFormat = true,
@@ -139,8 +165,8 @@ local servers = {
     --   cmd = {"lua-language-server"}
     -- },
     lspconfig = {
-      autoFixOnSave = true,
       settings = {
+        autoFixOnSave = true,
         Lua = {
           -- next three replaced by pre-compiled docs in `folke/lua-dev.nvim`
           -- runtime = {
@@ -219,10 +245,11 @@ lsp_installer.setup {
 -- or just use the default options
 --
 for name, opts in pairs(servers) do
-  lsp_config[name].setup(vim.tbl_extend('force', {
+  local server_config = vim.tbl_extend('force', {
     capabilities = default_capabilities,
     on_attach = default_on_attach,
-  }, opts or {}))
+  }, opts or {})
+  lsp_config[name].setup(server_config)
 end
 
 vim.api.nvim_create_augroup('eslint-fixall', { clear = true })
