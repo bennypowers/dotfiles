@@ -25,9 +25,6 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   callback = U.refresh_packer,
 })
 
-local function get_auto_save(c)
-  return (c and c.config and c.config.settings and c.config.settings.autoFixOnSave) or false
-end
 
 vim.api.nvim_create_augroup('LspFormatting', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePre', {
@@ -36,9 +33,9 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   callback = function()
     vim.lsp.buf.format {
       timeout_ms = 2000,
-      filter = function(clients)
-        return vim.tbl_filter(get_auto_save, clients)
-      end
+      filter = function(c)
+        return (c and c.config and c.config.settings and c.config.settings.autoFixOnSave) or false
+      end,
     }
   end
 })
