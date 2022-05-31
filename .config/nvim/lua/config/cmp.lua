@@ -20,6 +20,9 @@ luasnip.config.setup {
 
 require 'luasnip.loaders.from_snipmate'.lazy_load { paths = "~/.config/nvim/snippets" }
 require 'luasnip.loaders.from_lua'.lazy_load { paths = "~/.config/nvim/snippets" }
+require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
+  "~/Developer/redhat-ux/red-hat-design-tokens"
+} }
 
 vim.keymap.set({ 'i', 's' }, '<c-j>', function()
   if luasnip.expand_or_jumpable() then
