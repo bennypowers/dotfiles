@@ -136,7 +136,7 @@ local servers = {
   ['rust_analyzer'] = {},
 
   -- OpenAPI
-  ['spectral'] = {},
+  -- ['spectral'] = {},
 
   ['stylelint_lsp'] = {
     on_attach = toggle_formatting(true),
@@ -219,17 +219,17 @@ local servers = {
 }
 
 lsp_status.config {
-  kind_labels = vim.g.completion_customize_lsp_label,
   current_function = false,
-  -- status_symbol = '💬: ',
-  -- status_symbol = ' ',
-  status_symbol = '',
+  kind_labels = vim.g.completion_customize_lsp_label,
   indicator_errors = '🔥',
   indicator_warnings = ' 🚧',
   indicator_info = 'ℹ️ ',
   indicator_hint = '🙋 ',
   indicator_ok = ' ',
   spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
+  status_symbol = '',
+  -- status_symbol = '💬: ',
+  -- status_symbol = ' ',
 }
 
 lsp_status.register_progress()
@@ -238,11 +238,11 @@ lsp_installer.setup {
   ensure_installed = vim.tbl_keys(servers)
 }
 
--- Loop through the servers listed above.
--- setup install
--- installing each, then if install succeeded,
--- setup the server with the options specified in server_opts,
--- or just use the default options
+--- Loop through the servers listed above.
+--- setup install
+--- installing each, then if install succeeded,
+--- setup the server with the options specified in server_opts,
+--- or just use the default options
 --
 for name, opts in pairs(servers) do
   local server_config = vim.tbl_extend('force', {
@@ -252,11 +252,6 @@ for name, opts in pairs(servers) do
   lsp_config[name].setup(server_config)
 end
 
-vim.api.nvim_create_augroup('eslint-fixall', { clear = true })
-vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-  pattern = { '*.tsx', '*.ts', '*.jsx', '*.js', },
-  command = 'EslintFixAll',
-})
 -- uncomment for automatic hover on cursor-hold
 -- see also https://github.com/neovim/neovim/issues/9534
 -- vim.api.nvim_create_augroup('HoverOnHold')
