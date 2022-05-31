@@ -170,56 +170,64 @@ local function header_color()
   return output
 end
 
-local section_mru = {
-  type = "group",
-  val = {
-    {
-      type = "text",
-      val = "Recent files",
-      opts = {
-        hl = "SpecialComment",
-        shrink_margin = false,
-        position = "center",
-      },
-    },
-    { type = "padding", val = 1 },
-    {
-      type = "group",
-      val = function()
-        return { mru(1, cdir, 9) }
-      end,
-      opts = { shrink_margin = false },
-    },
-  }
-}
-
-local buttons = {
-  type = "group",
-  val = {
-    { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
-    { type = "padding", val = 1 },
-    dashboard.button("spc /", "  File Explorer", ":Neotree toggle filesystem<CR>"),
-    dashboard.button("spc p", "  Find file", ":Telescope find_files <CR>"),
-    dashboard.button("spc fg", "  Find text", ":Telescope live_grep <CR>"),
-    dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
-    dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
-    dashboard.button("u", "  Update plugins", ":PackerSync<CR>"),
-    dashboard.button("G", "  Git", "gG"),
-    dashboard.button("q", "  Quit", ":qa<CR>"),
-  },
-  position = "center",
-}
+local function padding(amt)
+  return { type = 'padding', val = amt }
+end
 
 alpha.setup {
-  layout = {
-    { type = "padding", val = 2 },
-    header_color(),
-    { type = "padding", val = 2 },
-    section_mru,
-    { type = "padding", val = 2 },
-    buttons,
-  },
+  layout = function()
+    return {
+      padding(2),
+
+      header_color(),
+
+      padding(2),
+
+      {
+        type = "group",
+        val = {
+          {
+            type = "text",
+            val = "Recent files",
+            opts = {
+              hl = "SpecialComment",
+              shrink_margin = false,
+              position = "center",
+            },
+          },
+          padding(1),
+          {
+            type = "group",
+            val = function()
+              return { mru(1, cdir, 9) }
+            end,
+            opts = { shrink_margin = false },
+          },
+        }
+      },
+
+      padding(2),
+
+      {
+        type = "group",
+        val = {
+          { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
+          padding(1),
+          dashboard.button("spc /", "  File Explorer", ":Neotree toggle filesystem<CR>"),
+          dashboard.button("spc p", "  Find file", ":Telescope find_files <CR>"),
+          dashboard.button("spc fg", "  Find text", ":Telescope live_grep <CR>"),
+          dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
+          dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
+          dashboard.button("u", "  Update plugins", ":PackerSync<CR>"),
+          dashboard.button("G", "  Git", "gG"),
+          dashboard.button("q", "  Quit", ":qa<CR>"),
+        },
+        position = "center",
+      },
+    }
+  end,
   opts = {
     margin = 5,
+    autostart = false,
   },
 }
