@@ -1,5 +1,6 @@
 require 'lualine'.setup {
-  theme = 'tokyonight',
+  -- theme = 'tokyonight',
+  theme = 'catppuccin',
   extentions = {},
   options = {
     disabled_filetypes = { 'neo-tree' },
