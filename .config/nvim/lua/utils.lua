@@ -42,19 +42,30 @@ function M.close_all_win()
   require 'goto-preview'.close_all_win()
 end
 
----@author kikito
----@see https://codereview.stackexchange.com/questions/268130/get-list-of-buffers-from-current-neovim-instance
 function M.get_listed_buffers()
-  local buffers = {}
-  local len = 0
-  for buffer = 1, vim.fn.bufnr('$') do
-    if vim.fn.buflisted(buffer) == 1 then
-      len = len + 1
-      buffers[len] = buffer
+  ---@author akinsho
+  ---@see bufferline.nvim
+  return vim.tbl_filter(function(bufnr)
+    if not bufnr or bufnr < 1 then
+      return false
+    end
+    local exists = vim.api.nvim_buf_is_valid(bufnr)
+    return vim.bo[bufnr].buflisted and exists
+  end, vim.api.nvim_list_bufs())
+end
+
+---Whether any non-empty buffers are open. Non-empty buffers are listed and have file contents.
+---@param exclude_bufnr? number bufnr to ignore
+---@return boolean
+function M.has_non_empty_buffers(exclude_bufnr)
+  for _, bufnr in ipairs(M.get_listed_buffers()) do
+    local name = vim.api.nvim_buf_get_name(bufnr)
+    local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+    if (exclude_bufnr and bufnr ~= exclude_bufnr) and (name ~= '') and (ft ~= 'Alpha') then
+      return true
     end
   end
-
-  return buffers
+  return false
 end
 
 function M.bufdelete(bufnum)
