@@ -14,19 +14,30 @@ local fmt = require 'luasnip.extras.fmt'.fmt
 local m = require 'luasnip.extras'.m
 local lambda = require 'luasnip.extras'.l
 
-local function fenced_code_block(lang, placeholder)
-  return s(lang, fmt([[
-{}```
+local fenced = [[
+```{}
 {}
 ```
-]] , {
+]]
+
+---@param lang string Fenced code block language tag
+---@param placeholder string Placeholder text
+local function fenced_code_block(lang, placeholder)
+  return s({
+    trig = lang,
+    name = lang:upper() .. ' fenced code block',
+  }, fmt(fenced, {
     t(lang),
     i(1, placeholder)
   }))
 end
 
 return {
-  fenced_code_block('html', '<p>HTML Code</p>'),
-  fenced_code_block('css', ':host {}'),
+  s({ trig = '```', name = 'fenced code block' }, fmt(fenced, { i(1, 'lang'), i(2, 'body') })),
+  fenced_code_block('html', '<p>Insert your HTML</p>'),
+  fenced_code_block('css', ':host { display: block; }'),
   fenced_code_block('bash', '#!/bin/bash'),
+  fenced_code_block('sh', 'npm i lit'),
+  fenced_code_block('js', 'console.log("hello world")');
+  fenced_code_block('ts', 'console.log("hello world")'),
 }
