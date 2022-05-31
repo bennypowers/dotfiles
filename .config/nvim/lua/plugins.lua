@@ -27,6 +27,7 @@ return require 'packer'.startup({ function(use)
   -- 🎨 Themes
 
   use { 'folke/tokyonight.nvim', config = c 'tokyonight' }
+  use { 'catppuccin/nvim', as = 'catppuccin', config = c 'catppuccin-nvim' }
   -- use '~/.config/nvim/themes/framed'                     -- WIP custom color theme based on lush
   -- use 'rktjmp/lush.nvim'                                 -- custom color themes
   -- use { 'EdenEast/nightfox.nvim', config = require'config.nightfox' }    -- 🦊
@@ -88,9 +89,8 @@ return require 'packer'.startup({ function(use)
   use { 'mvllow/modes.nvim', config = c 'modes' }
 
   -- use { 'goolord/alpha-nvim', config = require'config.alpha' }                    -- startup screen
-  use { 'bennypowers/alpha-nvim',
+  use { '~/Developer/alpha-nvim',
     command = 'Alpha',
-    branch = 'patch-2',
     config = c 'alpha' }
 
   use { 'akinsho/bufferline.nvim',
@@ -226,13 +226,31 @@ return require 'packer'.startup({ function(use)
   use { 'lewis6991/gitsigns.nvim', config = c 'gitsigns' }
   -- resolve conflicts
   use { 'akinsho/git-conflict.nvim', config = c 'git-conflict-nvim' }
-  use { 'ldelossa/gh.nvim', config = c 'gh-nvim', requires = { 'ldelossa/litee.nvim' } }
+  use { 'ldelossa/gh.nvim',
+    opt = true,
+    config = c 'gh-nvim',
+    requires = { 'ldelossa/litee.nvim' } }
+  use { 'pwntester/octo.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'kyazdani42/nvim-web-devicons',
+    },
+    config = function()
+      require 'octo'.setup()
+    end
+  }
 
   -- 🕸️  Webdev
 
   use { 'jonsmithers/vim-html-template-literals', opt = true } -- lit-html
   use { 'NTBBloodbath/color-converter.nvim', opt = true } -- convert colour values
-  use { 'iamcco/markdown-preview.nvim', run = function() vim.fn["mkdp#util#install"]() end, ft = { 'md', 'markdown' } } -- markdown previews
+  -- markdown previews
+  use { 'iamcco/markdown-preview.nvim',
+    run = function()
+      vim.fn["mkdp#util#install"]()
+    end,
+    ft = { 'md', 'markdown' } }
   use { 'RRethy/vim-hexokinase', -- display colour values
     opt = true,
     run = 'make hexokinase' }
