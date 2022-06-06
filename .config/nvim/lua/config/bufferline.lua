@@ -2,8 +2,6 @@ local bufferline = require 'bufferline'
 local U = require 'utils'
 
 bufferline.setup {
-
-  --highlights = nightfox_highlights,
   options = {
     numbers = 'none',
     diagnostics = 'nvim_lsp',

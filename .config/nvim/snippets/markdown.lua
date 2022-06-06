@@ -1,3 +1,5 @@
+---@diagnostic disable: unused-local
+
 local ls = require 'luasnip'
 local s = ls.snippet
 local sn = ls.snippet_node
@@ -14,11 +16,18 @@ local fmt = require 'luasnip.extras.fmt'.fmt
 local m = require 'luasnip.extras'.m
 local lambda = require 'luasnip.extras'.l
 
-local fenced = [[
+local fenced_code_block_tpl = [[
 ```{}
 {}
 ```
 ]]
+
+local fenced_code_block_options = {
+  show_condition = function()
+    return false
+    -- return #vim.trim(vim.api.nvim_get_current_line()) == 0
+  end,
+}
 
 ---@param lang string Fenced code block language tag
 ---@param placeholder string Placeholder text
@@ -26,14 +35,14 @@ local function fenced_code_block(lang, placeholder)
   return s({
     trig = lang,
     name = lang:upper() .. ' fenced code block',
-  }, fmt(fenced, {
-    t(lang),
-    i(1, placeholder)
-  }))
+  }, fmt(fenced_code_block_tpl, { t(lang), i(1, placeholder) }), fenced_code_block_options)
 end
 
 return {
-  s({ trig = '```', name = 'fenced code block' }, fmt(fenced, { i(1, 'lang'), i(2, 'body') })),
+  s({
+    trig = '```',
+    name = 'fenced code block',
+  }, fmt(fenced_code_block_tpl, { i(1, 'lang'), i(2, 'body') }), fenced_code_block_options),
   fenced_code_block('html', '<p>Insert your HTML</p>'),
   fenced_code_block('css', ':host { display: block; }'),
   fenced_code_block('bash', '#!/bin/bash'),
