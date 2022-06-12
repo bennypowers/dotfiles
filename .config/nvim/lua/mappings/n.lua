@@ -16,8 +16,8 @@ return {
     [';']  = { ':vnew<cr>', 'New Split' },
     ['}']  = { ':BufferLineCycleNext<cr>', 'Next buffer' },
     ['{']  = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
-    ['|']  = { '<cmd>Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
-    ['\\'] = { '<cmd>Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
+    ['|']  = { ':Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
+    ['\\'] = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
     ['.']  = { vim.lsp.buf.code_action, 'Code actions' },
 
     b = {
@@ -29,23 +29,17 @@ return {
       b    = { ':Telescope buffers<cr>', 'Search buffers' }
     },
 
-    c = {
-      name = 'colours',
-      c    = { U.cycle_color, 'Cycle colour format' },
-      h    = { ':lua require"color-converter".to_hsl()<cr>:s/%//g<cr>', 'Format color as hsl()' },
-    },
-
     D = 'Go to type definition',
 
     e = { U.open_diagnostics, 'Open diagnostics in floating window' },
 
     f = {
       name = 'find',
-      g    = { '<cmd>Telescope live_grep<cr>', 'Find in files (live grep)' },
-      b    = { '<cmd>Telescope buffers<cr>', 'Find buffers' },
-      h    = { '<cmd>Telescope help_tags<cr>', 'Find in help' },
-      s    = { '<cmd>Telescope symbols<cr>', 'Find symbol' },
-      r    = { '<cmd>Telescope resume<cr>', 'Resume finding' },
+      g    = { ':Telescope live_grep<cr>', 'Find in files (live grep)' },
+      b    = { ':Telescope buffers<cr>', 'Find buffers' },
+      h    = { ':Telescope help_tags<cr>', 'Find in help' },
+      s    = { ':Telescope symbols<cr>', 'Find symbol' },
+      r    = { ':Telescope resume<cr>', 'Resume finding' },
     },
 
     g = { T.lazilygit, 'Git UI via lazygit' },
@@ -66,13 +60,13 @@ return {
 
     P = {
       name = 'Plugins',
-      i    = { '<cmd>PackerInstall<cr>', 'Install plugins via Packer' },
-      u    = { '<cmd>PackerUpdate<cr>', 'Update plugins via Packer' },
-      s    = { '<cmd>PackerSync<cr>', 'Update plugins (sync) via Packer' },
+      i    = { ':PackerInstall<cr>', 'Install plugins via Packer' },
+      u    = { ':PackerUpdate<cr>', 'Update plugins via Packer' },
+      s    = { ':PackerSync<cr>', 'Update plugins (sync) via Packer' },
       c    = { U.refresh_packer, 'Compile plugins via Packer' },
-      x    = { '<cmd>PackerClean<cr>', 'Clean plugins via Packer' },
+      x    = { ':PackerClean<cr>', 'Clean plugins via Packer' },
     },
-    p = { '<cmd>Telescope find_files hidden=true<cr>', 'Find files' },
+    p = { ':Telescope find_files hidden=true<cr>', 'Find files' },
 
     q = 'Quit',
 
@@ -105,12 +99,8 @@ return {
 
     i = { U.goto_preview_implementation, 'Goto implementations' },
 
-    L = {
-      name = 'align right',
-    },
-    l = {
-      name = 'align left',
-    },
+    L = { name = 'align right', },
+    l = { name = 'align left', },
 
     n = {
       name = 'incremental',
@@ -121,26 +111,36 @@ return {
 
     r = { U.goto_preview_references, 'Goto references' },
 
-    s = {
-      name        = 'caser',
-      m           = 'mixed case',
-      p           = 'mixed case',
-      c           = 'camelCase',
-      _           = 'snake_case',
-      u           = 'UPPER_SNAKE',
-      U           = 'UPPER_SNAKE',
-      t           = 'Title Case',
-      s           = 'Sentence case',
-      ['<space>'] = 'space case',
-      ['-']       = 'dash-case',
-      k           = 'dash-case',
-    },
-
     T = { ':TroubleToggle<cr>', 'Toggle trouble' },
-
-    U = 'uppercase',
-    u = 'lowercase',
   },
 
-  O = { U.open_uri_under_cursor, 'Open URI under cursor' }
+  O = { U.open_uri_under_cursor, 'Open URI under cursor' },
+
+  r = {
+    name = 'rename/rotate',
+    c = {
+      name        = 'caser',
+      _           = { '<Plug>CaserSnakeCase<cr>', 'snake_case' },
+      ['-']       = { '<Plug>CaserKebabCase<cr>', 'dash-case' },
+      ['.']       = { '<Plug>CaserDotCase<cr>', 'dot.case' },
+      ['<space>'] = { '<Plug>CaserSpaceCase<cr>', 'space case' },
+      c           = { '<Plug>CaserCamelCase<cr>', 'camelCase' },
+      K           = { '<Plug>CaserTitleKebabCase<cr>', 'Upper-Dash-Case' },
+      p           = { '<Plug>CaserMixedCase<cr>', 'PascalCase' },
+      s           = { '<Plug>CaserSentenceCase<cr>', 'Sentence case' },
+      t           = { '<Plug>CaserTitleCase<cr>', 'Title Case' },
+      u           = { '<Plug>CaserUpperCase<cr>', 'UPPER_SNAKE_CASE' },
+      U           = { '<Plug>CaserUpperCase<cr>', 'UPPER_SNAKE_CASE' },
+    },
+
+    o = {
+      name = 'colours',
+      c    = { U.cycle_color, 'Cycle colour format' },
+      h    = { U.format_hsl, 'Format color as hsl()' },
+    },
+
+    n = { vim.lsp.buf.rename, 'Rename refactor' },
+
+  },
+
 }
