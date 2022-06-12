@@ -13,83 +13,144 @@ local function c(mod)
 end
 
 return require 'packer'.startup({ function(use)
+  --[[----------------------------------------------------------
+                      🏎️ Perf, Packages,and bufixes
+  --]] ----------------------------------------------------------
+
+  -- vim startup profiler. Use together with `PackerProfile`
   use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
+  -- plugin manager
   use 'wbthomason/packer.nvim'
+  -- faster startup?
+  use 'lewis6991/impatient.nvim'
+  -- faster startup!
+  use 'nathom/filetype.nvim'
 
   -- bug fix for neovim's cursorhold event
   vim.g.cursorhold_updatetime = 100
   use { 'antoinemadec/FixCursorHold.nvim' }
 
-  -- faster startup?
-  use 'lewis6991/impatient.nvim'
-  -- faster startup!
-  use 'nathom/filetype.nvim'
-  -- lua docs in vim help
-  use 'milisims/nvim-luaref'
-
-  -- 🎨 Themes
+  --[[----------------------------------------------------------
+                        🎨 Themes
+  --]] ----------------------------------------------------------
 
   use { 'catppuccin/nvim', as = 'catppuccin', config = c 'catppuccin-nvim' }
 
-  -- 🖥️  terminal emulator
-  use { 'akinsho/toggleterm.nvim', config = c 'toggleterm' }
+  --[[----------------------------------------------------------
+                        Essential Plugins
+  --]] ----------------------------------------------------------
 
-  -- 🔥 Browser Integration
-  --    here be 🐉 🐲
+  -- 🌳 Syntax
+  use { 'nvim-treesitter/nvim-treesitter',
+    config = c 'treesitter',
+    run = ':TSUpdate', }
 
-  use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
-
-  -- 🔭 Telescope
-
-  -- telescope as UI for various vim built-in things
-  use 'stevearc/dressing.nvim'
-
-  -- generic fuzzy finder with popup window
+  -- 🔭 Telescope - generic fuzzy finder with popup window
   use { 'nvim-telescope/telescope.nvim',
     config = c 'telescope',
     requires = {
       'nvim-lua/plenary.nvim',
       'nvim-lua/popup.nvim',
-      'nvim-telescope/telescope-symbols.nvim',
-      'nvim-telescope/telescope-frecency.nvim' } }
+      'nvim-telescope/telescope-symbols.nvim' } }
 
-  -- navigate to markdown headers
-  use { 'crispgm/telescope-heading.nvim', ft = { 'md', 'markdown' } }
+  -- telescope as UI for various vim built-in things
+  use 'stevearc/dressing.nvim'
+
+  -- editor tabs. yeah ok I know they're not "tabs"
+  use { 'akinsho/bufferline.nvim',
+    tag = "v2.*",
+    config = c 'bufferline' }
+
+  -- pretty statusline
+  use { 'nvim-lualine/lualine.nvim', config = c 'lualine' }
+
+  -- tree browser
+  use { 'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v2.x',
+    config = c 'neo-tree',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+      { 'kyazdani42/nvim-web-devicons',
+        module = 'nvim-web-devicons',
+        config = c 'web-devicons' } } }
+
+  -- 📎 Completions and Snippets
+  use { 'hrsh7th/nvim-cmp',
+    config = c 'cmp',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip', -- completion engine
+      'petertriho/cmp-git', -- autocomplete git issues
+      'hrsh7th/cmp-nvim-lsp', -- language-server-based completions
+      'hrsh7th/cmp-nvim-lua', -- lua
+      'hrsh7th/cmp-calc', -- math
+      'hrsh7th/cmp-buffer', -- buffer contents completion
+      'hrsh7th/cmp-path', -- path completions
+      'hrsh7th/cmp-emoji', -- ok boomer
+      'hrsh7th/cmp-cmdline', -- cmdline completions
+      'hrsh7th/cmp-nvim-lsp-signature-help', -- ffffunction
+      'ray-x/cmp-treesitter',
+      'David-Kunz/cmp-npm', -- npm package versions
+      'lukas-reineke/cmp-under-comparator', -- _afterOthers
+      { 'mtoohey31/cmp-fish', ft = "fish" } -- 🐟
+    } }
+
+  -- 🤖 Language Server
+  use { 'williamboman/nvim-lsp-installer', -- automatically install language servers
+    config = c 'lsp',
+    requires = {
+      'neovim/nvim-lspconfig', -- basic facility to configure language servers
+      'nvim-lua/lsp-status.nvim', -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
+      'hrsh7th/nvim-cmp',
+      'b0o/schemastore.nvim', -- json schema support
+      'neovim/nvim-lspconfig' } }
+
+  -- Live cheat sheet for key bindings
+  use { 'folke/which-key.nvim',
+    requires = 'mrjones2014/legendary.nvim',
+    config = c 'whichkey' }
+
+  -- fancy icons for lsp AST types and such
+  use 'onsails/lspkind-nvim'
+  -- LSP eye-candy
+  use { 'j-hui/fidget.nvim', config = c 'fidget' }
+  -- gd, but in a floating window
+  use { 'rmagatti/goto-preview', config = c 'goto-preview', keys = { 'gd' } }
+  -- language-server diagnostics panel
+  use { 'folke/lsp-trouble.nvim',
+    command = { 'Trouble', 'TroubleToggle' },
+    config = c 'trouble',
+    requires = {
+      'folke/trouble.nvim',
+      'kyazdani42/nvim-web-devicons' } }
 
   -- tries to sort files helpfully
   use { 'nvim-telescope/telescope-frecency.nvim', requires = 'tami5/sqlite.lua' }
 
-  -- 🌳 Syntax
-
-  use { 'nvim-treesitter/nvim-treesitter',
-    config = c 'treesitter',
-    run = ':TSUpdate', }
-
   -- tool for exploring treesitter ASTs
   use { 'nvim-treesitter/playground', command = 'TSPlaygroundToggle' }
+  use { 'nvim-treesitter/nvim-treesitter-context', config = c 'nvim-treesitter-context' }
   -- append `end` in useful places
   use { 'RRethy/nvim-treesitter-endwise' }
   -- close HTML tags, but using treesitter
   use { 'windwp/nvim-ts-autotag' }
   -- select a comment
   use { 'nvim-treesitter/nvim-treesitter-textobjects' }
-
   -- hints for block ends
   use { 'code-biscuits/nvim-biscuits', config = c 'biscuits' }
-
   -- regexp-based syntax for njk
   use { 'lepture/vim-jinja', ft = { 'jinja', 'html' } }
 
   -- 🪟 UI
 
+  -- navigate to markdown headers
+  use { 'crispgm/telescope-heading.nvim', ft = { 'md', 'markdown' } }
+
   -- close buffers (tabs) with less headache
   use 'famiu/bufdelete.nvim'
   use 'RRethy/vim-illuminate'
-
-  -- yet more icons
-  use { 'kyazdani42/nvim-web-devicons',
-    module = 'nvim-web-devicons',
-    config = c 'web-devicons' }
 
   use { 'https://gitlab.com/yorickpeterse/nvim-window.git',
     module = 'nvim-window' }
@@ -102,31 +163,8 @@ return require 'packer'.startup({ function(use)
     command = 'Alpha',
     config = c 'alpha' }
 
-  -- editor tabs. yeah ok I know they're not "tabs"
-  use { 'akinsho/bufferline.nvim',
-    tag = "v2.*",
-    config = c 'bufferline' }
-
   -- pretty notifications
   use { 'rcarriga/nvim-notify', config = c 'notify' }
-
-  -- pretty statusline
-  use { 'nvim-lualine/lualine.nvim', config = c 'lualine' }
-
-  -- which key was it, again?
-  use { 'folke/which-key.nvim',
-    requires = 'mrjones2014/legendary.nvim',
-    config = c 'whichkey' }
-
-  -- tree browser
-  use { 'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v2.x',
-    config = c 'neo-tree',
-    requires = {
-      'nvim-lua/plenary.nvim',
-      'kyazdani42/nvim-web-devicons',
-      'MunifTanjim/nui.nvim',
-    } }
 
   -- 📒 Sessions
 
@@ -143,16 +181,16 @@ return require 'packer'.startup({ function(use)
   -- ⌨️  Editing
 
   -- change case (camel, dash, etc)
-  use 'arthurxavierx/vim-caser'
+  use { 'arthurxavierx/vim-caser', setup = c 'caser' }
+
   -- align anything
   use 'tommcdo/vim-lion'
+
+  -- Telescope live_grep -> <Tab> to select files -> <C-q> to populate qflist -> <leader>h to find/replace in qf files
   use 'gabrielpoca/replacer.nvim'
-  -- lua REPL/scratchpad
-  use { 'rafcamlet/nvim-luapad', command = 'LuaPad' }
 
   -- yae, cae, etc
-  use { 'kana/vim-textobj-entire',
-    requires = 'kana/vim-textobj-user' }
+  use { 'kana/vim-textobj-entire', requires = 'kana/vim-textobj-user' }
 
   use 'jbyuki/quickmath.nvim'
 
@@ -172,71 +210,12 @@ return require 'packer'.startup({ function(use)
   use { 'monkoose/matchparen.nvim', config = c 'matchparen' }
 
   -- like vmp `g,` action
-  use { 'AndrewRadev/splitjoin.vim',
-    keys = { 'gj', 'g,' },
-    config = function()
-      vim.g.splitjoin_split_mapping = ''
-      vim.g.splitjoin_join_mapping = ''
-      vim.api.nvim_set_keymap('n', 'gj', ':SplitjoinJoin<cr>', {})
-      vim.api.nvim_set_keymap('n', 'g,', ':SplitjoinSplit<cr>', {})
-    end }
+  use { 'AndrewRadev/splitjoin.vim', keys = { 'gj', 'g,' }, config = c 'splitjoin' }
 
   use { '~/Developer/nvim-regexplainer',
     ft = { 'javascript', 'typescript', 'html', 'python' },
     requires = 'MunifTanjim/nui.nvim',
     config = c 'regexplainer' }
-
-
-  -- 🤖 Language Server
-
-  -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
-  use 'nvim-lua/lsp-status.nvim'
-  -- fancy icons for lsp AST types and such
-  use 'onsails/lspkind-nvim'
-  -- nvim api docs, signatures, etc.
-  use { 'folke/lua-dev.nvim', ft = 'lua' }
-  -- LSP eye-candy
-  use { 'j-hui/fidget.nvim', config = c 'fidget' }
-  -- automatically install language servers
-  use { 'williamboman/nvim-lsp-installer',
-    config = c 'lsp',
-    requires = {
-      'neovim/nvim-lspconfig', -- basic facility to configure language servers
-      'hrsh7th/nvim-cmp',
-      'b0o/schemastore.nvim', -- json schema support
-      'neovim/nvim-lspconfig' } }
-  -- language-server diagnostics panel
-  use { 'folke/lsp-trouble.nvim',
-    command = { 'Trouble', 'TroubleToggle' },
-    config = c 'trouble',
-    requires = {
-      'folke/trouble.nvim',
-      'kyazdani42/nvim-web-devicons',
-    } }
-  -- gd, but in a floating window
-  use { 'rmagatti/goto-preview', config = c 'goto-preview' }
-
-  -- 📎 Completions and Snippets
-
-  use { 'hrsh7th/nvim-cmp',
-    config = c 'cmp',
-    requires = {
-      'nvim-lua/plenary.nvim',
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip', -- completion engine
-      'petertriho/cmp-git', -- autocomplete git issues
-      'hrsh7th/cmp-nvim-lsp', -- language-server-based completions
-      'hrsh7th/cmp-nvim-lua', -- lua
-      'hrsh7th/cmp-calc', -- math
-      'hrsh7th/cmp-buffer', -- buffer contents completion
-      'hrsh7th/cmp-path', -- path completions
-      'hrsh7th/cmp-emoji', -- ok boomer
-      'hrsh7th/cmp-cmdline', -- cmdline completions
-      'hrsh7th/cmp-nvim-lsp-signature-help', -- ffffunction
-      'David-Kunz/cmp-npm', -- npm package versions
-      'lukas-reineke/cmp-under-comparator', -- _afterOthers
-      { 'mtoohey31/cmp-fish', ft = "fish" } -- 🐟
-    } }
 
   -- 📌 Git
 
@@ -268,6 +247,23 @@ return require 'packer'.startup({ function(use)
     cmd = { 'HexokinaseToggle', 'HexokinaseTurnOn' },
     setup = c 'hexokinase',
     run = 'make hexokinase' }
+
+  -- 🖥️  terminal emulator
+  use { 'akinsho/toggleterm.nvim', config = c 'toggleterm' }
+
+  -- 🔥 Browser Integration
+  --    here be 🐉 🐲
+
+  -- use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
+
+  -- 🌔 Lua Development
+
+  -- nvim api docs, signatures, etc.
+  use { 'folke/lua-dev.nvim', ft = 'lua' }
+  -- lua docs in vim help
+  use 'milisims/nvim-luaref'
+  -- lua REPL/scratchpad
+  use { 'rafcamlet/nvim-luapad', command = 'LuaPad' }
 
   -- The opt wasteland
 

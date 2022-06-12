@@ -67,24 +67,13 @@ autocmd('User', {
   end,
 })
 
----Is there an active neovim_session_manager session in the cwd?
---
-local function is_in_active_session()
-  local session_manager = require 'session_manager.utils'
-  local session_name = session_manager.get_last_session_filename()
-  local session_dir = session_manager.session_filename_to_dir(session_name)
-  local cwd = vim.fn.getcwd()
-  return session_dir == cwd
-end
-
 ---Launch alpha if vim starts with only empty buffers
 --
 autocmd('VimEnter', {
   group = augroup('alpha_on_startup', { clear = false }),
   pattern = '*',
   callback = function()
-    local is_buffer_active = U.has_non_empty_buffers()
-    if (not is_buffer_active) and (not is_in_active_session()) then
+    if not (U.has_non_empty_buffers() or U.is_in_active_session()) then
       vim.cmd [[ :Alpha ]]
     end
   end

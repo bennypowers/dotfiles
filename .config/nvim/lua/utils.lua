@@ -26,6 +26,11 @@ function M.cycle_color()
   require 'color-converter'.cycle()
 end
 
+function M.format_hsl()
+  require 'color-converter'.to_hsl()
+  vim.cmd [[:s/%//g<cr>]]
+end
+
 function M.goto_preview_definition()
   require 'goto-preview'.goto_preview_definition {}
 end
@@ -134,6 +139,33 @@ function M.refresh_init()
   vim.notify('Refreshing init', 'info', { render = require 'notify.render.minimal' })
   vim.cmd [[ :source ~/.config/nvim/init.lua ]]
   M.refresh_packer()
+end
+
+local function get_selected_text()
+  vim.cmd('noau normal! "vy"')
+  local text = vim.fn.getreg('v')
+  vim.fn.setreg('v', {})
+  text = string.gsub(text, "\n", "")
+  if string.len(text) == 0 then
+    text = nil
+  end
+  return text
+end
+
+function M.find_selection()
+  require 'telescope.builtin'.live_grep {
+    default_text = get_selected_text()
+  }
+end
+
+---Is there an active neovim_session_manager session in the cwd?
+--
+function M.is_in_active_session()
+  local session_manager = require 'session_manager.utils'
+  local session_name = session_manager.get_last_session_filename()
+  local session_dir = session_manager.session_filename_to_dir(session_name)
+  local cwd = vim.fn.getcwd()
+  return session_dir == cwd
 end
 
 return M

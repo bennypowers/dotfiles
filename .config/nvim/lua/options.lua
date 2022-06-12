@@ -31,7 +31,9 @@ vim.opt.foldlevel      = 20
 vim.opt.foldmethod     = 'expr'
 vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
 vim.opt.shell          = 'bash'
-vim.opt.shortmess      = 'I'
+
+vim.opt.shortmess:append('I') -- no welcome message
+vim.opt.shortmess:append('a') -- abbreviate built-in messages
 
 local jid = vim.fn.jobstart { 'git', 'rev-parse', '--git-dir' }
 local ret = vim.fn.jobwait { jid }[1]
