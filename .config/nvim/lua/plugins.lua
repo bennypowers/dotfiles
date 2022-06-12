@@ -105,7 +105,9 @@ return require 'packer'.startup({ function(use)
       'nvim-lua/lsp-status.nvim', -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
       'hrsh7th/nvim-cmp',
       'b0o/schemastore.nvim', -- json schema support
-      'neovim/nvim-lspconfig' } }
+      'neovim/nvim-lspconfig',
+      { 'folke/lua-dev.nvim', ft = 'lua' }, -- nvim api docs, signatures, etc.
+    } }
 
   -- Live cheat sheet for key bindings
   use { 'folke/which-key.nvim',
@@ -257,9 +259,6 @@ return require 'packer'.startup({ function(use)
   -- use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
 
   -- 🌔 Lua Development
-
-  -- nvim api docs, signatures, etc.
-  use { 'folke/lua-dev.nvim', ft = 'lua' }
   -- lua docs in vim help
   use 'milisims/nvim-luaref'
   -- lua REPL/scratchpad
