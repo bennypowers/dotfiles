@@ -79,13 +79,14 @@ cmp.setup({
     { name = 'luasnip', option = { use_show_condition = false } },
     -- }, {
   }, {
-    { name = 'fish' },
+    { name = 'treesitter' },
     { name = 'buffer', keyword_length = 3 },
-    { name = 'calc' },
-    { name = 'emoji' },
   }, {
     { name = 'nvim_lua' },
     { name = 'npm', keyword_length = 4 },
+    { name = 'fish' },
+    { name = 'calc' },
+    { name = 'emoji' },
   }),
 
   sorting = {

@@ -40,14 +40,26 @@ require 'nvim-treesitter.configs'.setup {
   highlight = { enable = true },
   incremental_selection = { enable = true },
   textobjects = {
-    enable = true,
-    lookahead = true,
-    keymaps = {
-      ["af"] = "@function.outer",
-      ["if"] = "@function.inner",
-      ["ac"] = "@class.outer",
-      ["ic"] = "@class.inner",
-    },
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["aa"] = "@attribute.outer",
+        ["ia"] = "@attribute.inner",
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+        ["ab"] = "@block.outer",
+        ["ib"] = "@block.inner",
+        ["a*"] = "@comment.outer",
+        ["i*"] = "@comment.inner",
+      },
+      peek_definition_code = {
+        ["<leader>df"] = "@function.outer",
+        ["<leader>dF"] = "@class.outer",
+      },
+    }
   },
   indent = { enable = true },
   endwise = { enable = true },
