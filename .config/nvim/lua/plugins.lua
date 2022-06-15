@@ -31,6 +31,17 @@ return require 'packer'.startup({ function(use)
   use { 'antoinemadec/FixCursorHold.nvim' }
 
   --[[----------------------------------------------------------
+  --                    📒 Sessions
+  --]] ----------------------------------------------------------
+
+  use { 'Shatur/neovim-session-manager',
+    config = c 'neovim-session-manager',
+    cond = function() return not vim.g.started_by_firenvim end,
+    requires = {
+      'nvim-telescope/telescope.nvim',
+      'JoseConseco/telescope_sessions_picker.nvim' } }
+
+  --[[----------------------------------------------------------
                         🎨 Themes
   --]] ----------------------------------------------------------
 
@@ -99,7 +110,7 @@ return require 'packer'.startup({ function(use)
 
   -- 🤖 Language Server
   use { 'williamboman/nvim-lsp-installer', -- automatically install language servers
-    config = c 'lsp',
+    config = c 'lsp-installer',
     requires = {
       'neovim/nvim-lspconfig', -- basic facility to configure language servers
       'nvim-lua/lsp-status.nvim', -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
@@ -167,18 +178,6 @@ return require 'packer'.startup({ function(use)
 
   -- pretty notifications
   use { 'rcarriga/nvim-notify', config = c 'notify' }
-
-  -- 📒 Sessions
-
-  -- Disabling because neo-tree doesn't play nice.
-  -- alpha kinda-sorta helps with this in the mean time
-
-  use { 'Shatur/neovim-session-manager',
-    config = c 'neovim-session-manager',
-    cond = function() return not vim.g.started_by_firenvim end,
-    requires = {
-      'nvim-telescope/telescope.nvim',
-      'JoseConseco/telescope_sessions_picker.nvim' } }
 
   -- ⌨️  Editing
 
