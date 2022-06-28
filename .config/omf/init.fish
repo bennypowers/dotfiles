@@ -10,14 +10,14 @@ set -g fish_user_paths "~/.yarn/bin" $fish_user_paths
 # aliases
 alias g="git"
 alias nr="npm run"
-alias run="nr"
-alias rn="nr"
-alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+alias run="npm run"
+alias rn="npm run"
 alias realvim="vim"
-alias oldvim="realvim"
-alias bramvim="realvim"
+alias oldvim="vim"
+alias bramvim="vim"
 alias vim="env TERM=wezterm nvim"
 alias vim-update="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
+alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
 # unicode
 set -x LANG en_US.UTF-8
@@ -34,7 +34,7 @@ set hilite (which highlight)
 
 set -gx VISUAL nvim
 set -gx EDITOR nvim
-set -gx LG_CONFIG_FILE "/Users/bennyp/.config/lazygit/config.yml"
+set -gx LG_CONFIG_FILE ~/.config/lazygit/config.yml
 
 set -x SHELL fish
 set -x EDITOR nvim
@@ -44,8 +44,9 @@ set -x LESSOPEN "| $hilite %s --out-format xterm256 --quiet --force "
 set -x LESS " -R"
 
 set -x PATH $PATH ~/.ghcup/bin
-set -x PATH $HOME"/.cabal/bin" $PATH
-set -x PATH $HOME/.local/bin $PATH []
+set -x PATH ~/.cabal/bin $PATH
+set -x PATH ~/.cargo/bin $PATH
+set -x PATH ~/.local/bin $PATH []
 set -x PATH /usr/local/opt/python/bin/ $PATH
 set -x PATH /usr/local/opt/gnu-sed/libexec/gnubin $PATH
 

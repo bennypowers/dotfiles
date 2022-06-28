@@ -1,5 +1,6 @@
 require 'nvim-biscuits'.setup {
   show_on_start = true,
+  on_events = { 'InsertLeave', 'CursorHoldI' },
   default_config = {
     max_length = 12,
     min_distance = 5,
@@ -9,12 +10,5 @@ require 'nvim-biscuits'.setup {
     html = {
       prefix_string = " 🌐 "
     },
-    javascript = {
-      prefix_string = " ✨ ",
-      max_length = 80
-    },
-    python = {
-      disabled = true
-    }
   }
 }

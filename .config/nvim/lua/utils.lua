@@ -66,7 +66,7 @@ function M.has_non_empty_buffers(exclude_bufnr)
   for _, bufnr in ipairs(M.get_listed_buffers()) do
     local name = vim.api.nvim_buf_get_name(bufnr)
     local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-    if (exclude_bufnr and bufnr ~= exclude_bufnr) and (name ~= '') and (ft ~= 'Alpha') then
+    if (exclude_bufnr and bufnr ~= exclude_bufnr) and (name ~= '') and (ft ~= 'dashboard') and (ft ~= 'Alpha') then
       return true
     end
   end
@@ -74,7 +74,8 @@ function M.has_non_empty_buffers(exclude_bufnr)
 end
 
 function M.bufdelete(bufnum)
-  require 'bufdelete'.bufdelete(bufnum, true)
+  -- require 'bufdelete'.bufdelete(bufnum, true)
+  require 'bufdel'.delete_buffer(bufnum, true)
 end
 
 local function open_uri(uri)
@@ -161,11 +162,13 @@ end
 ---Is there an active neovim_session_manager session in the cwd?
 --
 function M.is_in_active_session()
-  local session_manager = require 'session_manager.utils'
-  local session_name = session_manager.get_last_session_filename()
-  local session_dir = session_manager.session_filename_to_dir(session_name)
-  local cwd = vim.fn.getcwd()
-  return session_dir == cwd
+  print('vim.v.this_session', vim.v.this_session)
+  -- local session_manager = require 'session_manager.utils'
+  -- local session_name = session_manager.get_last_session_filename()
+  -- local session_dir = session_manager.session_filename_to_dir(session_name)
+  -- local cwd = vim.fn.getcwd()
+  -- return session_dir == cwd
+  -- return require'auto-session.utils'
 end
 
 return M

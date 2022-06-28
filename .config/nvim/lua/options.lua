@@ -31,6 +31,11 @@ vim.opt.foldlevel      = 20
 vim.opt.foldmethod     = 'expr'
 vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
 vim.opt.shell          = 'bash'
+vim.opt.cmdheight      = 0
+vim.opt.list           = true
+-- vim.opt.listchars:append("eol:↴")
+
+vim.opt.sessionoptions:append('blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal')
 
 vim.opt.shortmess:append('I') -- no welcome message
 vim.opt.shortmess:append('a') -- abbreviate built-in messages

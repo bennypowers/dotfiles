@@ -57,24 +57,26 @@ autocmd('BufWritePre', {
 
 ---Any time a buffer closes, when there are no more active buffers, Launch Alpha
 --
-autocmd('User', {
-  pattern = 'BDeletePre',
-  group = augroup('alpha_on_empty', { clear = true }),
-  callback = function(event)
-    if not U.has_non_empty_buffers(event.buf) then
-      vim.cmd [[ :Alpha ]]
-    end
-  end,
-})
+-- autocmd('User', {
+--   pattern = 'BDeletePre',
+--   group = augroup('alpha_on_empty', { clear = true }),
+--   callback = function(event)
+--     if not U.has_non_empty_buffers(event.buf) then
+--       vim.cmd [[ :Alpha ]]
+--     end
+--   end,
+-- })
 
 ---Launch alpha if vim starts with only empty buffers
 --
-autocmd('VimEnter', {
-  group = augroup('alpha_on_startup', { clear = false }),
-  pattern = '*',
-  callback = function()
-    if not (U.has_non_empty_buffers() or U.is_in_active_session()) then
-      vim.cmd [[ :Alpha ]]
-    end
-  end
-})
+-- autocmd('VimEnter', {
+--   group = augroup('alpha_on_startup', { clear = false }),
+--   pattern = '*',
+--   callback = function()
+--     local has_session = vim.v.this_session:len() > 0
+--     local has_empty = U.has_non_empty_buffers()
+--     if not (has_session and not has_empty) then
+--       vim.cmd [[:Alpha]]
+--     end
+--   end
+-- })

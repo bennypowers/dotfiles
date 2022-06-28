@@ -34,18 +34,16 @@ return require 'packer'.startup({ function(use)
   --                    📒 Sessions
   --]] ----------------------------------------------------------
 
-  use { 'Shatur/neovim-session-manager',
-    config = c 'neovim-session-manager',
-    cond = function() return not vim.g.started_by_firenvim end,
-    requires = {
-      'nvim-telescope/telescope.nvim',
-      'JoseConseco/telescope_sessions_picker.nvim' } }
+  use { 'rmagatti/auto-session',
+    config = c 'auto-session',
+    requires = 'rmagatti/session-lens' }
 
   --[[----------------------------------------------------------
                         🎨 Themes
   --]] ----------------------------------------------------------
 
-  use { 'catppuccin/nvim', as = 'catppuccin', config = c 'catppuccin-nvim' }
+  use { 'catppuccin/nvim', opt = true, as = 'catppuccin', config = c 'catppuccin-nvim' }
+  use { 'folke/tokyonight.nvim', config = c 'tokyonight' }
 
   --[[----------------------------------------------------------
                         Essential Plugins
@@ -117,7 +115,7 @@ return require 'packer'.startup({ function(use)
       'hrsh7th/nvim-cmp',
       'b0o/schemastore.nvim', -- json schema support
       'neovim/nvim-lspconfig',
-      { 'folke/lua-dev.nvim', ft = 'lua' }, -- nvim api docs, signatures, etc.
+      'folke/lua-dev.nvim', -- nvim api docs, signatures, etc.
     } }
 
   -- Live cheat sheet for key bindings
@@ -162,19 +160,18 @@ return require 'packer'.startup({ function(use)
   use { 'crispgm/telescope-heading.nvim', ft = { 'md', 'markdown' } }
 
   -- close buffers (tabs) with less headache
-  use 'famiu/bufdelete.nvim'
+  use 'ojroques/nvim-bufdel'
   use 'RRethy/vim-illuminate'
 
   use { 'https://gitlab.com/yorickpeterse/nvim-window.git',
     module = 'nvim-window' }
 
   use { 'petertriho/nvim-scrollbar', config = c 'scrollbar' }
-  use { 'mvllow/modes.nvim', config = c 'modes' }
+  use { 'mvllow/modes.nvim', opt = true, config = c 'modes' }
 
-  -- use { 'goolord/alpha-nvim',
-  use { '~/Developer/alpha-nvim',
-    command = 'Alpha',
-    config = c 'alpha' }
+  use { 'glepnir/dashboard-nvim', config = c 'dashboard-nvim' }
+  -- use { 'goolord/alpha-nvim', command = 'Alpha', config = c'alpha' }
+  -- use { '~/Developer/alpha-nvim', command = 'Alpha', config = c 'alpha' }
 
   -- pretty notifications
   use { 'rcarriga/nvim-notify', config = c 'notify' }
@@ -186,6 +183,11 @@ return require 'packer'.startup({ function(use)
 
   -- align anything
   use 'tommcdo/vim-lion'
+
+  use 'powerman/vim-plugin-AnsiEsc'
+
+  -- better to burn out than to fade away
+  use 'simrat39/rust-tools.nvim'
 
   -- Telescope live_grep -> <Tab> to select files -> <C-q> to populate qflist -> <leader>h to find/replace in qf files
   use 'gabrielpoca/replacer.nvim'
@@ -265,7 +267,6 @@ return require 'packer'.startup({ function(use)
 
   -- The opt wasteland
 
-  use { 'folke/tokyonight.nvim', opt = true, config = c 'tokyonight' }
   -- project find/replace
   use { 'windwp/nvim-spectre', opt = true }
   -- better vim marks

@@ -20,12 +20,15 @@ return {
     ['\\'] = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
     ['.']  = { vim.lsp.buf.code_action, 'Code actions' },
 
+    w = { ':BufDel<cr>', 'Delete buffer' },
+
     b = {
       name = 'buffers',
       j    = { ':BufferLineCycleNext<cr>', 'Next buffer' },
       k    = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
       p    = { ':BufferLinePick<cr>', 'Pick buffer' },
-      d    = { U.bufdelete, 'Delete buffer' },
+      -- d    = { U.bufdelete, 'Delete buffer' },
+      d    = { ':BufDel<cr>', 'Delete buffer' },
       b    = { ':Telescope buffers<cr>', 'Search buffers' }
     },
 
@@ -87,7 +90,7 @@ return {
 
     ['%'] = 'match surround backwards',
 
-    A = { ':Alpha<cr>', 'Show dashboard' },
+    A = { ':Dashboard<cr>', 'Show dashboard' },
 
     c = {
       name = 'comments',

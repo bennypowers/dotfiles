@@ -133,7 +133,11 @@ local servers = {
   },
 
   ['pyright'] = {},
-  ['rust_analyzer'] = {},
+  ['rust_analyzer'] = {
+    settings = {
+      autoFixOnSave = true,
+    }
+  },
 
   -- OpenAPI
   -- ['spectral'] = {},
