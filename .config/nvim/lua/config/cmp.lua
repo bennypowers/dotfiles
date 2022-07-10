@@ -15,13 +15,22 @@ luasnip.config.setup {
         virt_text = { { "●", "GruvboxOrange" } }
       }
     }
-  }
+  },
+
+  ft_func = require 'luasnip.extras.filetype_functions'.from_pos_or_filetype,
+  load_ft_func = require 'luasnip.extras.filetype_functions'.extend_load_ft {
+    markdown = { 'lua', 'json', 'html', 'yaml', 'css', 'typescript', 'javascript' },
+    html = { 'javascript', 'css', 'graphql', 'json' },
+    javascript = { 'html', 'css', 'graphql' },
+    typescript = { 'html', 'css', 'graphql' },
+  },
+
 }
 
 require 'luasnip.loaders.from_snipmate'.lazy_load { paths = "~/.config/nvim/snippets" }
 require 'luasnip.loaders.from_lua'.lazy_load { paths = "~/.config/nvim/snippets" }
 require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
-  "~/Developer/redhat-ux/red-hat-design-tokens"
+  "~/Developer/redhat-ux/red-hat-design-tokens/vscode"
 } }
 
 vim.keymap.set({ 'i', 's' }, '<c-j>', function()
@@ -138,3 +147,9 @@ cmp.setup.cmdline(":", {
     { name = "cmdline" },
   }),
 })
+
+-- If you want insert `(` after select function or method item
+local autopairs_loaded, cmp_autopairs = pcall(require, 'nvim-autopairs.completion.cmp')
+if autopairs_loaded then
+  cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+end

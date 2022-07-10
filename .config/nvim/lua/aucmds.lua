@@ -1,12 +1,12 @@
 local U = require 'utils'
 
-local augroup = vim.api.nvim_create_augroup
-local autocmd = vim.api.nvim_create_autocmd
+local ag = vim.api.nvim_create_augroup
+local au = vim.api.nvim_create_autocmd
 
 ---Disable cursor column in help buffers
 --
-autocmd({ 'BufEnter', 'BufWinEnter' }, {
-  group = augroup('help_options', { clear = true }),
+au({ 'BufEnter', 'BufWinEnter' }, {
+  group = ag('help_options', { clear = true }),
   pattern = '*',
   callback = function()
     if vim.bo.filetype == 'help' then
@@ -17,16 +17,16 @@ autocmd({ 'BufEnter', 'BufWinEnter' }, {
 
 ---Apply the 'jinja' file type to nunjucks files
 --
-autocmd({ 'BufNewFile', 'BufRead' }, {
-  group = augroup('nunjucks_ft', { clear = true }),
+au({ 'BufNewFile', 'BufRead' }, {
+  group = ag('nunjucks_ft', { clear = true }),
   pattern = '*.njk',
   command = 'set ft=jinja',
 })
 
 ---Clean and compile packer when `plugins.lua` or `init.lua` change
 --
-autocmd('BufWritePost', {
-  group = augroup('packer_user_config', { clear = true }),
+au('BufWritePost', {
+  group = ag('packer_user_config', { clear = true }),
   pattern = { 'plugins.lua', 'init.lua', 'lua/config/*.lua' },
   callback = U.refresh_packer,
 })
@@ -34,8 +34,8 @@ autocmd('BufWritePost', {
 
 ---Format on save, using only the clients with `autoFixOnSave` set
 --
-autocmd('BufWritePre', {
-  group = augroup('LspFormatting', { clear = true }),
+au('BufWritePre', {
+  group = ag('LspFormatting', { clear = true }),
   pattern = '*',
   callback = function()
     vim.lsp.buf.format {
@@ -49,11 +49,12 @@ autocmd('BufWritePre', {
 
 ---For reasons unclear to me, eslint ls doesn't autoFixOnSave, so execute `EslineFixAll` instead
 --
-autocmd('BufWritePre', {
-  group = augroup('eslint-fixall', { clear = true }),
+au('BufWritePre', {
+  group = ag('eslint-fixall', { clear = true }),
   pattern = { '*.tsx', '*.ts', '*.jsx', '*.js', },
   command = 'EslintFixAll',
 })
+
 
 ---Any time a buffer closes, when there are no more active buffers, Launch Alpha
 --
@@ -78,5 +79,21 @@ autocmd('BufWritePre', {
 --     if not (has_session and not has_empty) then
 --       vim.cmd [[:Alpha]]
 --     end
+--   end
+-- })
+
+
+vim.g.Illuminate_ftblacklist = { 'neo-tree' }
+
+-- au({ 'VimEnter', 'BufEnter' }, {
+--   group = ag('illuminate_augroup', { clear = true }),
+--   pattern = '*',
+--   callback = function()
+--     vim.cmd [[
+--       hi illuminatedWord cterm=underline gui=underline guibg=transparent
+--       hi! def link LspReferenceText DiagnosticUnderlineHint
+--       hi! def link LspReferenceWrite DiagnosticUnderlineHint
+--       hi! def link LspReferenceRead DiagnosticUnderlineHint
+--     ]]
 --   end
 -- })

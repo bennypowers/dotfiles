@@ -22,6 +22,7 @@ return {
 
     w = { ':BufDel<cr>', 'Delete buffer' },
 
+    B = { function() require 'nvim-biscuits'.toggle_biscuits() end, 'Toggle code biscuits' },
     b = {
       name = 'buffers',
       j    = { ':BufferLineCycleNext<cr>', 'Next buffer' },

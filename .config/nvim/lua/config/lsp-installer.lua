@@ -59,12 +59,12 @@ local servers = {
   --   on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
   -- },
 
-  -- markdown. see https://github.com/unifiedjs/unified-language-server/issues/31
-  -- ['remark_ls'] = {
-  --   settings = {
-  --     defaultProcessor = 'remark',
-  --   },
-  -- },
+  -- markdown
+  ['marksman'] = {
+    settings = {
+      autoFixOnSave = true,
+    },
+  },
 
   ['bashls'] = {},
   ['clangd'] = {},
@@ -78,8 +78,8 @@ local servers = {
       'css', 'scss',
       'njk', 'nunjucks', 'jinja',
       'markdown',
-      -- 'ts', 'typescript',
-      -- 'js', 'javascript',
+      'ts', 'typescript',
+      'js', 'javascript',
     },
   },
 
@@ -128,6 +128,7 @@ local servers = {
       autoFixOnSave = true,
       json = {
         schemas = require 'schemastore'.json.schemas(),
+        validate = { enable = true },
       },
     },
   },
