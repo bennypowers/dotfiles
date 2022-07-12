@@ -1,3 +1,21 @@
+local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
+parser_config.css = {
+  install_info = {
+    url = "https://github.com/bennypowers/tree-sitter-css",
+    branch = 'fix/parse/slotted',
+    files = { "src/parser.c", "src/scanner.c" },
+  },
+  maintainers = { "@TravonteD" },
+}
+parser_config.scss = {
+  install_info = {
+    url = "https://github.com/bennypowers/tree-sitter-scss",
+    branch = 'fix/parse/pseudo-element-args',
+    files = { "src/parser.c", "src/scanner.c" },
+  },
+  maintainers = { "@elianiva" },
+}
+
 require 'nvim-treesitter.configs'.setup {
   ensure_installed = {
     'bash',
@@ -37,8 +55,15 @@ require 'nvim-treesitter.configs'.setup {
     'vim',
     'yaml',
   },
-  highlight = { enable = true },
-  incremental_selection = { enable = true },
+  highlight = {
+    enable = true,
+    custom_captures = {
+      ["(method_signature name:(property_identifier)"] = "BP_TSMethodSignature",
+    },
+  },
+  incremental_selection = {
+    enable = true,
+  },
   textobjects = {
     select = {
       enable = true,
@@ -61,22 +86,26 @@ require 'nvim-treesitter.configs'.setup {
       },
     }
   },
-  indent = { enable = true },
-  endwise = { enable = true },
-  autotag = { enable = true, filetypes = {
-    'html',
-    'njk', 'jinja', 'nunjucks',
-    'js', 'javascript',
-    'jsx', 'javascriptreact',
-    'md', 'markdown',
-    'svelte',
-    'ts', 'typescript',
-    'tsx', 'typescriptreact',
-    'vue',
-  } },
-}
-
-require 'nvim-treesitter.configs'.setup {
+  indent = {
+    enable = true,
+  },
+  endwise = {
+    enable = true,
+  },
+  autotag = {
+    enable = true,
+    filetypes = {
+      'html',
+      'njk', 'jinja', 'nunjucks',
+      'js', 'javascript',
+      'jsx', 'javascriptreact',
+      'md', 'markdown',
+      'svelte',
+      'ts', 'typescript',
+      'tsx', 'typescriptreact',
+      'vue',
+    }
+  },
   playground = {
     enable = true,
     disable = {},
@@ -93,11 +122,6 @@ require 'nvim-treesitter.configs'.setup {
       update = 'R',
       goto_node = '<cr>',
       show_help = '?',
-    },
-  },
-  highlight = {
-    custom_captures = {
-      ["(method_signature name:(property_identifier)"] = "BP_TSMethodSignature",
     },
   },
 }
