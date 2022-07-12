@@ -11,3 +11,6 @@ load 'options'
 load 'commands'
 load 'plugins'
 load 'aucmds'
+
+-- vim.cmd [[ colorscheme tokyonight ]]
+vim.cmd [[ colorscheme catppuccin ]]

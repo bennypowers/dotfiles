@@ -125,7 +125,6 @@ local servers = {
 
   ['jsonls'] = {
     settings = {
-      autoFixOnSave = true,
       json = {
         schemas = require 'schemastore'.json.schemas(),
         validate = { enable = true },

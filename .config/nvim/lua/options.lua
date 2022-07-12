@@ -1,7 +1,8 @@
 -- disable some built-in plugins
-vim.g.loaded_netrw       = 1
-vim.g.loaded_matchparen  = 1
-vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrw           = 1
+vim.g.loaded_matchparen      = 1
+vim.g.loaded_netrwPlugin     = 1
+vim.g.Illuminate_ftblacklist = { 'neo-tree' }
 
 vim.g.termguicolors = true
 vim.g.mapleader     = ' '
@@ -31,18 +32,6 @@ vim.opt.shell          = 'bash'
 vim.opt.cmdheight      = 0
 vim.opt.list           = true
 vim.opt.foldlevel      = 20
-
----WORKAROUND
--- vim.opt.foldmethod     = 'expr'
--- vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
-vim.api.nvim_create_autocmd({ 'BufEnter', 'BufAdd', 'BufNew', 'BufNewFile', 'BufWinEnter' }, {
-  group = vim.api.nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
-  callback = function()
-    vim.opt.foldmethod = 'expr'
-    vim.opt.foldexpr   = 'nvim_treesitter#foldexpr()'
-  end
-})
----ENDWORKAROUND
 
 vim.opt.sessionoptions:append('blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal')
 

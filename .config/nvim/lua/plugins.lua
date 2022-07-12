@@ -45,8 +45,8 @@ return require 'packer'.startup({ function(use)
                         🎨 Themes
   --]] ----------------------------------------------------------
 
-  use { 'catppuccin/nvim', opt = true, as = 'catppuccin', config = c 'catppuccin-nvim' }
-  use { 'folke/tokyonight.nvim', config = c 'tokyonight' }
+  use { 'catppuccin/nvim', as = 'catppuccin' }
+  use 'folke/tokyonight.nvim'
 
   --[[----------------------------------------------------------
                         Essential Plugins

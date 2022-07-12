@@ -31,7 +31,6 @@ au('BufWritePost', {
   callback = U.refresh_packer,
 })
 
-
 ---Format on save, using only the clients with `autoFixOnSave` set
 --
 au('BufWritePre', {
@@ -55,35 +54,58 @@ au('BufWritePre', {
   command = 'EslintFixAll',
 })
 
+---WORKAROUND
+-- vim.opt.foldmethod     = 'expr'
+-- vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
+au({ 'BufEnter', 'BufAdd', 'BufNew', 'BufNewFile', 'BufWinEnter' }, {
+  group = ag('TS_FOLD_WORKAROUND', {}),
+  callback = function()
+    vim.opt.foldmethod = 'expr'
+    vim.opt.foldexpr   = 'nvim_treesitter#foldexpr()'
+  end
+})
+---ENDWORKAROUND
 
----Any time a buffer closes, when there are no more active buffers, Launch Alpha
+---Settings for catppuccin theme
 --
--- autocmd('User', {
---   pattern = 'BDeletePre',
---   group = augroup('alpha_on_empty', { clear = true }),
---   callback = function(event)
---     if not U.has_non_empty_buffers(event.buf) then
---       vim.cmd [[ :Alpha ]]
---     end
---   end,
--- })
+au('ColorSchemePre', {
+  pattern = 'catppuccin',
+  callback = function()
+    require 'catppuccin'.setup {
+      transparent_background = true,
+      integrations = {
+        lsp_trouble = true,
+        neotree = {
+          enabled = true,
+          show_root = true,
+          transparent_panel = true,
+        },
+        which_key = true,
+        indent_blankline = {
+          enabled = true,
+          colored_indent_levels = false,
+        },
+      }
+    }
+  end
+})
 
----Launch alpha if vim starts with only empty buffers
+---Settings for tokyonight theme
 --
--- autocmd('VimEnter', {
---   group = augroup('alpha_on_startup', { clear = false }),
---   pattern = '*',
---   callback = function()
---     local has_session = vim.v.this_session:len() > 0
---     local has_empty = U.has_non_empty_buffers()
---     if not (has_session and not has_empty) then
---       vim.cmd [[:Alpha]]
---     end
---   end
--- })
-
-
-vim.g.Illuminate_ftblacklist = { 'neo-tree' }
+au('ColorSchemePre', {
+  pattern = 'tokyonight',
+  callback = function()
+    local colors = require 'tokyonight.colors'.setup {}
+    local util = require 'tokyonight.util'
+    vim.g.tokyonight_style = 'night'
+    vim.g.tokyonight_transparent = true
+    vim.g.tokyonight_lualine_bold = true
+    vim.g.tokyonight_colors = {
+      bg_highlight = util.blend(colors.bg_highlight, '#000000', 0.5),
+    }
+    vim.cmd 'hi Normal guibg=transparent'
+  end
+})
 
 -- au({ 'VimEnter', 'BufEnter' }, {
 --   group = ag('illuminate_augroup', { clear = true }),
