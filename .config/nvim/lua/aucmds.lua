@@ -3,18 +3,6 @@ local U = require 'utils'
 local ag = vim.api.nvim_create_augroup
 local au = vim.api.nvim_create_autocmd
 
----Disable cursor column in help buffers
---
-au({ 'BufEnter', 'BufWinEnter' }, {
-  group = ag('help_options', { clear = true }),
-  pattern = '*',
-  callback = function()
-    if vim.bo.filetype == 'help' then
-      vim.wo.cursorcolumn = false
-    end
-  end
-})
-
 ---Apply the 'jinja' file type to nunjucks files
 --
 au({ 'BufNewFile', 'BufRead' }, {
