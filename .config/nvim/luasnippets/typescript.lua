@@ -55,7 +55,7 @@ local function treesitter_customelement_dynamicnode(args)
   if results.tag_name and results.class_name then
     return sn(nil, { t(results.tag_name), t ': ', t(results.class_name) })
   else
-    return sn(nil, { t "'", i(1, 'tag name'), t "': ", f(first_arg_dash_to_pascal, 1), })
+    return sn(nil, { t "'", i(1, 'tag-name'), t "': ", f(first_arg_dash_to_pascal, 1), })
   end
 end
 
