@@ -28,7 +28,7 @@ luasnip.config.setup {
 }
 
 require 'luasnip.loaders.from_snipmate'.lazy_load { paths = "~/.config/nvim/snippets" }
-require 'luasnip.loaders.from_lua'.lazy_load { paths = "~/.config/nvim/snippets" }
+require 'luasnip.loaders.from_lua'.lazy_load()
 require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
   "~/Developer/redhat-ux/red-hat-design-tokens/vscode"
 } }
@@ -83,10 +83,10 @@ cmp.setup({
   },
 
   sources = cmp.config.sources({
+    { name = 'luasnip', option = { use_show_condition = false } },
+  }, {
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
-    { name = 'luasnip', option = { use_show_condition = false } },
-    -- }, {
   }, {
     { name = 'treesitter' },
     { name = 'buffer', keyword_length = 3 },

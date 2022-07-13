@@ -77,9 +77,9 @@ local servers = {
       'html',
       'css', 'scss',
       'njk', 'nunjucks', 'jinja',
-      'markdown',
-      'ts', 'typescript',
-      'js', 'javascript',
+      -- 'markdown',
+      -- 'ts', 'typescript',
+      -- 'js', 'javascript',
     },
   },
 
@@ -133,6 +133,7 @@ local servers = {
   },
 
   ['pyright'] = {},
+
   ['rust_analyzer'] = {
     settings = {
       autoFixOnSave = true,
