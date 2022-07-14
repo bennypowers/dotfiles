@@ -81,6 +81,7 @@ au('ColorSchemePre', {
         },
       },
       custom_highlights = {
+        Folded = { fg = colors.subtext0, bg = 'NONE' },
         PmenuSel = { bg = "#282C34", fg = "NONE" },
         Pmenu = { fg = "#C5CDD9", bg = "#22252A" },
 

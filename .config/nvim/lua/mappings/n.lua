@@ -147,4 +147,7 @@ return {
 
   },
 
+  ['<m-j>'] = { ':BufferLineCycleNext<cr>', 'Next buffer' },
+  ['<m-k>'] = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
+
 }
