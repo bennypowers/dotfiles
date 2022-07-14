@@ -11,7 +11,11 @@ require 'auto-session'.setup {
   auto_save_enabled = true,
   auto_restore_enabled = true,
   auto_session_use_git_branch = true,
-  bypass_session_save_file_types = { "neo-tree" },
+  bypass_session_save_file_types = {
+    "neo-tree",
+    "tsplayground",
+    "query",
+  },
   pre_save_cmds = {
     close_neo_tree,
   },
