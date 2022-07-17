@@ -45,7 +45,7 @@ return require 'packer'.startup({ function(use)
                         🎨 Themes
   --]] ----------------------------------------------------------
 
-  use { 'catppuccin/nvim', as = 'catppuccin' }
+  use { 'catppuccin/nvim', as = 'catppuccin', config = c 'catppuccin-nvim', run = "CatppuccinCompile" }
   use 'folke/tokyonight.nvim'
 
   --[[----------------------------------------------------------
@@ -328,6 +328,7 @@ return require 'packer'.startup({ function(use)
   end
 end,
   config = {
+    auto_reload_compiled = true,
     max_jobs = 16,
     display = {
       open_fn = require 'packer.util'.float
