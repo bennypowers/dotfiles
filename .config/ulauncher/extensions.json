@@ -1,0 +1,51 @@
+{
+    "com.github.rootwork.ulauncher-symbol": {
+        "id": "com.github.rootwork.ulauncher-symbol",
+        "url": "https://github.com/rootwork/ulauncher-symbol",
+        "updated_at": "2022-07-15T14:57:28.182880",
+        "last_commit": "c5d7ab5c94c1b418cb1f8a9161be169a29c65658",
+        "last_commit_time": "2022-02-24T01:17:09"
+    },
+    "com.github.mikebarkmin.ulauncher-duckduckgo": {
+        "id": "com.github.mikebarkmin.ulauncher-duckduckgo",
+        "url": "https://github.com/mikebarkmin/ulauncher-duckduckgo",
+        "updated_at": "2022-07-15T14:58:08.881926",
+        "last_commit": "f2ea6a187082c600a59acc9cca6e288d96f66cc0",
+        "last_commit_time": "2021-08-07T18:51:44"
+    },
+    "com.github.epholys.ultz": {
+        "id": "com.github.epholys.ultz",
+        "url": "https://github.com/Epholys/ultz",
+        "updated_at": "2022-07-15T14:58:35.107145",
+        "last_commit": "9f0749d6ab1fcb99545dae75934b698e5ff975b6",
+        "last_commit_time": "2021-05-12T14:01:01"
+    },
+    "com.github.kbialek.ulauncher-bitwarden": {
+        "id": "com.github.kbialek.ulauncher-bitwarden",
+        "url": "https://github.com/kbialek/ulauncher-bitwarden",
+        "updated_at": "2022-07-15T14:59:06.025354",
+        "last_commit": "5701f18b7d4d14bb0c2da3ccfbaa618804b27d4a",
+        "last_commit_time": "2022-02-11T10:14:06"
+    },
+    "com.github.eckhoff42.ulauncher-favorite-directories": {
+        "id": "com.github.eckhoff42.ulauncher-favorite-directories",
+        "url": "https://github.com/Eckhoff42/Ulauncher-favorite-directories",
+        "updated_at": "2022-07-15T14:59:58.290092",
+        "last_commit": "2b26dacb955d0d6a17092dd8fd2671951594898a",
+        "last_commit_time": "2022-05-13T07:45:27"
+    },
+    "com.github.friday.ulauncher-clipboard": {
+        "id": "com.github.friday.ulauncher-clipboard",
+        "url": "https://github.com/friday/ulauncher-clipboard",
+        "updated_at": "2022-07-15T15:00:41.002627",
+        "last_commit": "9c8c0de1fd86504754300da8278fbc3db9b1a2b5",
+        "last_commit_time": "2022-01-18T05:32:06"
+    },
+    "com.github.aksdb.ulauncher-gitmoji": {
+        "id": "com.github.aksdb.ulauncher-gitmoji",
+        "url": "https://github.com/aksdb/ulauncher-gitmoji",
+        "updated_at": "2022-07-15T15:00:47.645705",
+        "last_commit": "acc3d208f82cd208432b522ff976e9e5fc0e230f",
+        "last_commit_time": "2022-01-21T07:58:14"
+    }
+}

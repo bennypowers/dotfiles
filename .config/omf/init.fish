@@ -1,9 +1,10 @@
-status --is-interactive; and source (rbenv init -|psub)
-
+set -g fish_user_paths $HOME/.rbenv/bin $fish_user_paths
 set -g fish_user_paths "/usr/local/opt/openssl@1.1/bin" $fish_user_paths
 set -g fish_user_paths "/usr/local/opt/gettext/bin" $fish_user_paths
 set -g fish_user_paths "/usr/local/opt/python/bin" $fish_user_paths
 set -g fish_user_paths "~/.yarn/bin" $fish_user_paths
+
+status --is-interactive; and source (rbenv init -|psub)
 
 # My Additions
 

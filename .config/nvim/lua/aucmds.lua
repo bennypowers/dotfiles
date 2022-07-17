@@ -53,6 +53,15 @@ au('BufWritePre', {
   command = 'EslintFixAll',
 })
 
+au('BufEnter', {
+  group = ag('waybar_config', {}),
+  pattern = 'config',
+  callback = function(event)
+    if event.match == vim.fn.expand('~/.config/waybar/config') then
+      vim.bo.filetype = 'json'
+    end
+  end
+})
 ---WORKAROUND
 -- vim.opt.foldmethod     = 'expr'
 -- vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
