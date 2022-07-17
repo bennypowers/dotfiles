@@ -9,9 +9,6 @@
     "clock"
   ],
 	"modules-right": [
-    "cpu",
-    "memory",
-    "backlight",
     "network",
     "pulseaudio",
     "river/tags",
