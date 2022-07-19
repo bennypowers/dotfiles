@@ -53,6 +53,10 @@ end)
 
 if can_npm then cmp_npm.setup() end
 
+require 'cmp-plugins'.setup {
+  files = { 'plugins.lua' }
+}
+
 cmp.setup({
   snippet = {
     -- REQUIRED - you must specify a snippet engine
@@ -83,14 +87,15 @@ cmp.setup({
   },
 
   sources = cmp.config.sources({
-    { name = 'luasnip', option = { use_show_condition = false } },
-  }, {
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
+  }, {
+    { name = 'luasnip', option = { use_show_condition = false } },
   }, {
     { name = 'treesitter' },
     { name = 'buffer', keyword_length = 3 },
   }, {
+    { name = 'plugins' },
     { name = 'nvim_lua' },
     { name = 'npm', keyword_length = 4 },
     { name = 'fish' },

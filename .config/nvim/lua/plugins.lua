@@ -108,8 +108,9 @@ return require 'packer'.startup({ function(use)
       'hrsh7th/cmp-nvim-lsp-signature-help', -- ffffunction
       'ray-x/cmp-treesitter',
       'David-Kunz/cmp-npm', -- npm package versions
+      'KadoBOT/cmp-plugins', -- plugin names
       'lukas-reineke/cmp-under-comparator', -- _afterOthers
-      { 'mtoohey31/cmp-fish', ft = "fish" } -- 🐟
+      'mtoohey31/cmp-fish' -- 🐟
     } }
 
   -- 🤖 Language Server
@@ -154,6 +155,8 @@ return require 'packer'.startup({ function(use)
 
   use { "kylechui/nvim-surround", config = c 'surround' }
 
+  use { 'nkakouros-original/numbers.nvim', config = c 'numbers-nvim' }
+
   --[[----------------------------------------------------------
   --                    Eye Candy
   --]] ----------------------------------------------------------
@@ -171,7 +174,7 @@ return require 'packer'.startup({ function(use)
     run = 'make hexokinase' }
 
   use { 'petertriho/nvim-scrollbar', config = c 'scrollbar' }
-  use { 'mvllow/modes.nvim', config = c 'modes' }
+  -- use { 'mvllow/modes.nvim', config = c 'modes' }
   -- use { 'glepnir/dashboard-nvim', config = c 'dashboard-nvim' }
   -- use { 'goolord/alpha-nvim', command = 'Alpha', config = c'alpha' }
   -- use { '~/Developer/alpha-nvim', command = 'Alpha', config = c 'alpha' }

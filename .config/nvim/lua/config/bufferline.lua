@@ -3,6 +3,7 @@ local U = require 'utils'
 
 bufferline.setup {
   options = {
+    separator_style = 'slant',
     numbers = 'none',
     diagnostics = 'nvim_lsp',
     show_buffer_icons = true,

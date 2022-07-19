@@ -9,7 +9,7 @@ end
 
 vim.g.catppuccin_flavour = 'mocha'
 require 'catppuccin'.setup {
-  transparent_background = true,
+  -- transparent_background = true,
   compile = {
     enabled = true,
   },
@@ -41,12 +41,12 @@ require 'catppuccin'.setup {
     neotree = {
       enabled = true,
       show_root = true,
-      transparent_panel = true,
+      -- transparent_panel = true,
     },
 
     indent_blankline = {
       enabled = true,
-      colored_indent_levels = false,
+      -- colored_indent_levels = false,
     },
 
     native_lsp = {
@@ -64,20 +64,15 @@ require 'catppuccin'.setup {
         information = { "underline" },
       },
     },
-    nvimtree = {
-      enabled = true,
-      show_root = true,
-      transparent_panel = false,
-    },
+
     dap = {
       enabled = false,
       enable_ui = false,
     },
   },
+
   custom_highlights = {
     Folded = { fg = colors.subtext0, bg = 'NONE' },
-    PmenuSel = { bg = "#282C34", fg = "NONE" },
-    Pmenu = { fg = "#C5CDD9", bg = "#22252A" },
 
     CmpItemAbbrDeprecated = { fg = colors.subtext0, bg = "NONE", style = { "strikethrough" } },
     CmpItemAbbrMatch = { fg = colors.sky, bg = "NONE", style = { "bold" } },
@@ -118,14 +113,14 @@ require 'catppuccin'.setup {
     CmpItemKindTypeParameter = { fg = colors.teal, bg = dark.teal },
 
     --transparent_background tweak
-    Comment = { fg = colors.overlay1 },
-    LineNr = { fg = colors.overlay1 },
-    CursorLine = { bg = colors.none },
-    CursorLineNr = { fg = colors.lavender },
-    DiagnosticVirtualTextError = { bg = colors.none },
-    DiagnosticVirtualTextWarn = { bg = colors.none },
-    DiagnosticVirtualTextInfo = { bg = colors.none },
-    DiagnosticVirtualTextHint = { bg = colors.none },
+    -- Comment = { fg = colors.overlay1 },
+    -- LineNr = { fg = colors.overlay1 },
+    -- CursorLine = { bg = colors.mantle },
+    -- CursorLineNr = { fg = colors.lavender, style = { "bold" } },
+    -- DiagnosticVirtualTextError = { bg = colors.none },
+    -- DiagnosticVirtualTextWarn = { bg = colors.none },
+    -- DiagnosticVirtualTextInfo = { bg = colors.none },
+    -- DiagnosticVirtualTextHint = { bg = colors.none },
 
     TelescopePromptPrefix = { bg = colors.crust },
     TelescopePromptNormal = { bg = colors.crust },

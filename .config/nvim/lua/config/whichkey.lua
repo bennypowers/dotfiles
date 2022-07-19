@@ -17,7 +17,7 @@ wk.setup {
     presets = {
       -- modes.nvim is incompatible
       -- https://github.com/mvllow/modes.nvim/blob/b1cea686c049b03cb01300b6a6367b81302d2a90/readme.md#known-issues
-      operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+      operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
       motions = true, -- adds help for motions
       text_objects = true, -- help for text objects triggered after entering an operator
       windows = true, -- default bindings on <c-w>

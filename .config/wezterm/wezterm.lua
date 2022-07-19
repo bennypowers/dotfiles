@@ -1,33 +1,22 @@
 local wezterm = require 'wezterm'
 
+local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
+local color_scheme = "Catppuccin Mocha"
+
+local scheme = wezterm.color.get_builtin_schemes()[color_scheme]
+
 local function f(name, params)
   return wezterm.font_with_fallback({
     name,
-    -- "Noto Color Emoji",
+    "Noto Color Emoji",
     "Fira Code",
     "Hack",
   }, params)
 end
 
-local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
-local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
-local LEFT_ARROW = utf8.char(0xe0b3);
-
-local Black       = "Black"
-local White       = "White"
--- local Grey        = "#0f1419"
-local Grey        = "#414868"
-local LightGrey   = "#191f26"
--- local BrightGreen = "#dcff00"
-local BrightGreen = "#9ecd6a"
-
-local TAB_BAR_BG    = Black
-local ACTIVE_TAB_BG = BrightGreen
-local ACTIVE_TAB_FG = Black
-local HOVER_TAB_BG  = Grey
-local HOVER_TAB_FG  = White
-local NORMAL_TAB_BG = LightGrey
-local NORMAL_TAB_FG = White
+scheme.tab_bar.active_tab.bg_color = scheme.brights[3]
+scheme.tab_bar.active_tab.fg_color = scheme.background
 
 wezterm.on('update-right-status', function(window, pane)
   -- Each element holds the text for a cell in a "powerline" style << fade
@@ -63,16 +52,17 @@ wezterm.on('update-right-status', function(window, pane)
   table.insert(cells, date);
 
   -- Color palette for the backgrounds of each cell
+  local pink = wezterm.color.parse(scheme.brights[6])
   local colors = {
-    "#3c1361",
-    "#52307c",
-    "#663a82",
-    "#7c5295",
-    "#b491c8",
+    pink:darken(0.1),
+    pink:darken(0.2),
+    pink:darken(0.3),
+    pink:darken(0.4),
+    pink:darken(0.5),
   };
 
   -- Foreground color for the text across the fade
-  local text_fg = "#c0c0c0";
+  local text_fg = scheme.background
 
   -- The elements to be formatted
   local elements = {
@@ -104,39 +94,38 @@ wezterm.on('update-right-status', function(window, pane)
   window:set_right_status(wezterm.format(elements));
 end);
 
-wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-  local background = NORMAL_TAB_BG
-  local foreground = NORMAL_TAB_FG
+wezterm.on('format-tab-title', function(tab, tabs, _, _, hover, _)
+  local background = scheme.tab_bar.inactive_tab.bg_color
+  local foreground = scheme.tab_bar.inactive_tab.fg_color
 
   local is_first = tab.tab_id == tabs[1].tab_id
   local is_last = tab.tab_id == tabs[#tabs].tab_id
 
   if tab.is_active then
-    background = ACTIVE_TAB_BG
-    foreground = ACTIVE_TAB_FG
+    background = scheme.tab_bar.active_tab.bg_color
+    foreground = scheme.tab_bar.active_tab.fg_color
   elseif hover then
-    background = HOVER_TAB_BG
-    foreground = HOVER_TAB_FG
+    background = scheme.tab_bar.new_tab_hover.bg_color
+    foreground = scheme.tab_bar.new_tab_hover.fg_color
   end
 
-  local leading_fg = NORMAL_TAB_FG
+  local leading_fg = scheme.tab_bar.inactive_tab.fg_color
   local leading_bg = background
 
   local trailing_fg = background
-  local trailing_bg = NORMAL_TAB_BG
+  local trailing_bg = scheme.tab_bar.inactive_tab.bg_color
 
   if is_first then
-    -- leading_fg = TAB_BAR_BG
     leading_fg = background
     leading_bg = background
   else
-    leading_fg = NORMAL_TAB_BG
+    leading_fg = scheme.tab_bar.inactive_tab.bg_color
   end
 
   if is_last then
-    trailing_bg = TAB_BAR_BG
+    trailing_bg = scheme.tab_bar.background
   else
-    trailing_bg = NORMAL_TAB_BG
+    trailing_bg = scheme.tab_bar.inactive_tab.bg_color
   end
 
   local title = tab.active_pane.title
@@ -154,7 +143,6 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
     { Text = SOLID_RIGHT_ARROW },
   }
 end)
-
 
 return {
   -- יאללה אחי קדימה
@@ -179,27 +167,31 @@ return {
     brightness = 0.5,
   },
 
-  color_scheme = "tokyonight_night",
-  colors = {
-    tab_bar = {
-      background = TAB_BAR_BG,
-    },
-  },
+  color_scheme = color_scheme,
 
   tab_bar_style = {
     new_tab = wezterm.format {
-      { Background = { Color = HOVER_TAB_BG } }, { Foreground = { Color = TAB_BAR_BG } }, { Text = SOLID_RIGHT_ARROW },
-      { Background = { Color = HOVER_TAB_BG } }, { Foreground = { Color = HOVER_TAB_FG } },
+      { Background = { Color = scheme.tab_bar.new_tab.bg_color } },
+      { Foreground = { Color = scheme.tab_bar.background } },
+      { Text = SOLID_RIGHT_ARROW },
+      { Background = { Color = scheme.tab_bar.new_tab.bg_color } },
+      { Foreground = { Color = scheme.tab_bar.new_tab.fg_color } },
       { Text = " + " },
-      { Background = { Color = TAB_BAR_BG } }, { Foreground = { Color = HOVER_TAB_BG } }, { Text = SOLID_RIGHT_ARROW },
+      { Background = { Color = scheme.tab_bar.background } },
+      { Foreground = { Color = scheme.tab_bar.new_tab.bg_color } }, { Text = SOLID_RIGHT_ARROW },
     },
     new_tab_hover = wezterm.format {
       { Attribute = { Italic = false } },
       { Attribute = { Intensity = "Bold" } },
-      { Background = { Color = NORMAL_TAB_BG } }, { Foreground = { Color = TAB_BAR_BG } }, { Text = SOLID_RIGHT_ARROW },
-      { Background = { Color = NORMAL_TAB_BG } }, { Foreground = { Color = NORMAL_TAB_FG } },
+      { Background = { Color = scheme.tab_bar.inactive_tab.bg_color } },
+      { Foreground = { Color = scheme.tab_bar.background } },
+      { Text = SOLID_RIGHT_ARROW },
+      { Background = { Color = scheme.tab_bar.inactive_tab.bg_color } },
+      { Foreground = { Color = scheme.tab_bar.inactive_tab.fg_color } },
       { Text = " + " },
-      { Background = { Color = TAB_BAR_BG } }, { Foreground = { Color = NORMAL_TAB_BG } }, { Text = SOLID_RIGHT_ARROW },
+      { Background = { Color = scheme.tab_bar.background } },
+      { Foreground = { Color = scheme.tab_bar.inactive_tab.bg_color } },
+      { Text = SOLID_RIGHT_ARROW },
     },
   },
 

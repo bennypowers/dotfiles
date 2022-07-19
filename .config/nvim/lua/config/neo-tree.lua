@@ -40,9 +40,10 @@ tree.setup {
       event = 'neo_tree_buffer_enter',
       handler = function()
         require 'cmp'.setup.buffer { enabled = false }
-        vim.wo.signcolumn = 'no'
-        vim.wo.cursorcolumn = false
-        vim.opt.guicursor:append('a:Cursor/lCursor')
+        vim.opt_local.signcolumn = 'no'
+        vim.opt_local.cursorline = true
+        vim.opt_local.cursorcolumn = false
+        vim.opt_local.guicursor:append('a:Cursor/lCursor')
         vim.cmd [[
           hi Cursor blend=100
         ]]
