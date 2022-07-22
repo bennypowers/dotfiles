@@ -243,6 +243,9 @@ return require 'packer'.startup({ function(use)
   -- like vmp `g,` action
   use { 'AndrewRadev/splitjoin.vim', keys = { 'gj', 'g,' }, config = c 'splitjoin' }
 
+  -- gs to toggle bool
+  use 'AndrewRadev/switch.vim'
+
   use { '~/Developer/nvim-regexplainer',
     ft = { 'javascript', 'typescript', 'html', 'python', 'jinja' },
     requires = 'MunifTanjim/nui.nvim',

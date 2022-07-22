@@ -4,6 +4,7 @@ set -g fish_user_paths "/usr/local/opt/gettext/bin" $fish_user_paths
 set -g fish_user_paths "/usr/local/opt/python/bin" $fish_user_paths
 set -g fish_user_paths "~/.yarn/bin" $fish_user_paths
 
+set -g theme_color_scheme terminal2-dark
 status --is-interactive; and source (rbenv init -|psub)
 
 # My Additions

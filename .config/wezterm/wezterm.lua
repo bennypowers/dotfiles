@@ -233,4 +233,12 @@ return {
       font = f("Operator Mono SSm Lig"),
     },
   },
+
+  enable_scroll_bar = true,
+  window_padding = {
+    top = 0,
+    right = '1cell',
+    bottom = 0,
+    left = 0,
+  }
 }
