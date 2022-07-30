@@ -1,5 +1,3 @@
-local U = require 'utils'
-
 local ag = vim.api.nvim_create_augroup
 local au = vim.api.nvim_create_autocmd
 
@@ -8,7 +6,7 @@ local au = vim.api.nvim_create_autocmd
 au({ 'BufNewFile', 'BufRead' }, {
   group = ag('nunjucks_ft', { clear = true }),
   pattern = '*.njk',
-  command = 'set ft=jinja',
+  command = 'set ft=html',
 })
 
 ---Clean and compile packer when `plugins.lua` or `init.lua` change
@@ -16,13 +14,16 @@ au({ 'BufNewFile', 'BufRead' }, {
 au('BufWritePost', {
   group = ag('packer_user_config', { clear = true }),
   pattern = { 'plugins.lua', 'init.lua', 'lua/config/*.lua', 'aucmds.lua', 'catppuccin-nvim.lua' },
-  callback = U.refresh_packer,
+  command = 'PackerCompile',
 })
 
 -- Create an autocmd User PackerCompileDone to update it every time packer is compiled
 au('User', {
   pattern = "PackerCompileDone",
   callback = function()
+    vim.notify('Compile done', 'info', { title = 'Packer' })
+    vim.cmd [[ PackerClean ]]
+    vim.cmd [[ :source ~/.config/nvim/plugin/packer_compiled.lua ]]
     vim.cmd "CatppuccinCompile"
     vim.defer_fn(function()
       vim.cmd "colorscheme catppuccin"

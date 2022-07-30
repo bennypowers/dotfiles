@@ -115,31 +115,10 @@ function M.open_uri_under_cursor()
   vim.api.nvim_feedkeys('O', 'n', false)
 end
 
----Reload and compile the packer config
-function M.refresh_packer()
-  vim.notify('Refreshing Packer', 'info', { render = require 'notify.render.minimal' })
-  vim.cmd [[ :source ~/.config/nvim/lua/plugins.lua ]]
-  vim.cmd [[ PackerClean ]]
-  vim.cmd [[ PackerCompile ]]
-  vim.cmd [[ PackerClean ]]
-  vim.cmd [[ :source ~/.config/nvim/plugin/packer_compiled.lua ]]
-end
-
--- don't use this
-function M.refresh_require_cache()
-  local basic_packages = { "_G", "bit", "coroutine", "debug", "ffi", "io", "jit", "jit.opt", "luv", "math", "mpack", "os", "package", "plugins", "string", "table", }
-  for k in pairs(package.loaded) do
-    if not string.find(k, '^vim%.') and not vim.tbl_contains(basic_packages, k) then
-      package.loaded[k] = nil
-    end
-  end
-end
-
 function M.refresh_init()
-  -- refresh_require_cache()
-  vim.notify('Refreshing init', 'info', { render = require 'notify.render.minimal' })
   vim.cmd [[ :source ~/.config/nvim/init.lua ]]
-  M.refresh_packer()
+  vim.notify('Init reloaded', 'info', { render = require 'notify.render.minimal' })
+  vim.cmd [[ :PackerCompile ]]
 end
 
 local function get_selected_text()
@@ -157,18 +136,6 @@ function M.find_selection()
   require 'telescope.builtin'.live_grep {
     default_text = get_selected_text()
   }
-end
-
----Is there an active neovim_session_manager session in the cwd?
---
-function M.is_in_active_session()
-  print('vim.v.this_session', vim.v.this_session)
-  -- local session_manager = require 'session_manager.utils'
-  -- local session_name = session_manager.get_last_session_filename()
-  -- local session_dir = session_manager.session_filename_to_dir(session_name)
-  -- local cwd = vim.fn.getcwd()
-  -- return session_dir == cwd
-  -- return require'auto-session.utils'
 end
 
 return M

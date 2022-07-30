@@ -67,7 +67,7 @@ return {
       i    = { ':PackerInstall<cr>', 'Install plugins via Packer' },
       u    = { ':PackerUpdate<cr>', 'Update plugins via Packer' },
       s    = { ':PackerSync<cr>', 'Update plugins (sync) via Packer' },
-      c    = { U.refresh_packer, 'Compile plugins via Packer' },
+      c    = { ':PackerCompile<cr>', 'Compile plugins via Packer' },
       x    = { ':PackerClean<cr>', 'Clean plugins via Packer' },
     },
     p = { ':Telescope find_files hidden=true<cr>', 'Find files' },

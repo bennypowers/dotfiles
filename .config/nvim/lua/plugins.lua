@@ -192,6 +192,8 @@ return require 'packer'.startup({ function(use)
   -- navigate to markdown headers
   use { 'crispgm/telescope-heading.nvim', ft = { 'md', 'markdown' } }
 
+  use { 'https://git.sr.ht/~whynothugo/lsp_lines.nvim', config = c 'lsp-lines' }
+
   -- close buffers (tabs) with less headache
   use 'ojroques/nvim-bufdel'
 
@@ -235,7 +237,11 @@ return require 'packer'.startup({ function(use)
   use { 'lukas-reineke/indent-blankline.nvim', config = c 'indent-blankline' }
 
   -- pretty folds with previews
-  use { 'anuvyklack/pretty-fold.nvim', requires = 'anuvyklack/nvim-keymap-amend', config = c 'prettyfold' }
+  use { 'anuvyklack/pretty-fold.nvim',
+    config = c 'prettyfold',
+    requires = {
+      'anuvyklack/nvim-keymap-amend',
+      'anuvyklack/fold-preview.nvim' } }
 
   -- highlight matching paren
   use { 'monkoose/matchparen.nvim', config = c 'matchparen' }
@@ -295,7 +301,8 @@ return require 'packer'.startup({ function(use)
   --]] ----------------------------------------------------------
 
   -- regexp-based syntax for njk
-  use { 'lepture/vim-jinja', ft = { 'jinja', 'html' } }
+  -- use { 'lepture/vim-jinja', ft = { 'jinja', 'html' } }
+  -- use 'lepture/vim-jinja'
 
   use { 'RRethy/vim-illuminate', config = c 'illuminate' }
 
