@@ -29,7 +29,7 @@ luasnip.config.setup {
 
 require 'luasnip.loaders.from_lua'.lazy_load()
 require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
-  "~/Developer/redhat-ux/red-hat-design-tokens/"
+  "~/Developer/redhat-ux/red-hat-design-tokens/vscode/"
 } }
 require 'luasnip.loaders.from_snipmate'.lazy_load { paths = {
   "~/.config/nvim/snippets",
