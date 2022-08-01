@@ -46,6 +46,8 @@ local function toggle_formatting(enable)
   end
 end
 
+local on_didchange = vim.lsp.handlers['workspace/didChangeConfiguration']
+
 -- Install these, k?
 -- Specify server options and settings per server by adding an options table
 -- servers with `false` options table use the default on_attach function
@@ -210,12 +212,34 @@ local servers = {
     },
   },
 
-  -- typescript
+  -- typescript language server options
   ['tsserver'] = {
     on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
     root_dir = lsp_util.find_git_ancestor,
     settings = {
       format = false,
+      typescript = {
+        inlayHints = {
+          includeInlayParameterNameHints = 'all',
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayEnumMemberValueHints = true,
+        }
+      },
+      javascript = {
+        inlayHints = {
+          includeInlayParameterNameHints = 'all',
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayEnumMemberValueHints = true,
+        }
+      }
     },
   },
 

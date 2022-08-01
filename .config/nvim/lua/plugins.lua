@@ -114,6 +114,7 @@ return require 'packer'.startup({ function(use)
     } }
 
   -- 🤖 Language Server
+  use { 'lvimuser/lsp-inlayhints.nvim', config = c 'inlayhints' }
   use { 'williamboman/nvim-lsp-installer', -- automatically install language servers
     config = c 'lsp-installer',
     requires = {
