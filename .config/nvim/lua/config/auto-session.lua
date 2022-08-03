@@ -1,9 +1,21 @@
+local TREE_STATE = '__AS_NT_FS_Open'
+
+local function has_tree()
+  local manager = require 'neo-tree.sources.manager'
+  local states = manager.get_state 'filesystem'
+  vim.api.nvim_set_var(TREE_STATE, #states > 0)
+end
+
 local function close_neo_tree()
-  require 'neo-tree.sources.manager'.close_all()
+  local manager = require 'neo-tree.sources.manager'
+  has_tree()
+  manager.close_all()
 end
 
 local function open_neo_tree()
-  require 'neo-tree.sources.manager'.show('filesystem')
+  if vim.api.nvim_get_var(TREE_STATE) then
+    require 'neo-tree.sources.manager'.show('filesystem')
+  end
 end
 
 require 'auto-session'.setup {

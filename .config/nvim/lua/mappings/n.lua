@@ -1,6 +1,16 @@
 local U = require 'utils'
 local T = require 'config.toggleterm'
 
+local TELESCOPE_GROUP = {
+  name = 'find',
+  F    = { ':Telescope oldfiles<cr>', 'Find old files' },
+  g    = { ':Telescope live_grep<cr>', 'Find in files (live grep)' },
+  b    = { ':Telescope buffers<cr>', 'Find buffers' },
+  h    = { ':Telescope help_tags<cr>', 'Find in help' },
+  s    = { ':Telescope symbols<cr>', 'Find symbol' },
+  r    = { ':Telescope resume<cr>', 'Resume finding' },
+}
+
 return {
   K = { vim.lsp.buf.hover, 'Hover' },
 
@@ -9,6 +19,7 @@ return {
   ['<m-.>'] = { vim.diagnostic.goto_next, 'Next diagnostic' },
   ['<m-i>'] = { U.refresh_init, 'Reload config' },
 
+  F = TELESCOPE_GROUP,
 
   ['<leader>'] = {
     name = '+leader',
@@ -37,14 +48,7 @@ return {
 
     e = { U.open_diagnostics, 'Open diagnostics in floating window' },
 
-    f = {
-      name = 'find',
-      g    = { ':Telescope live_grep<cr>', 'Find in files (live grep)' },
-      b    = { ':Telescope buffers<cr>', 'Find buffers' },
-      h    = { ':Telescope help_tags<cr>', 'Find in help' },
-      s    = { ':Telescope symbols<cr>', 'Find symbol' },
-      r    = { ':Telescope resume<cr>', 'Resume finding' },
-    },
+    f = TELESCOPE_GROUP,
 
     g = { T.lazilygit, 'Git UI via lazygit' },
 

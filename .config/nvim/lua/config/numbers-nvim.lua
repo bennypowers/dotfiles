@@ -5,5 +5,7 @@ require 'numbers'.setup {
     'toggleterm',
     'DressingInput',
     'telescope',
+    'Telescope',
+    'TelescopePrompt',
   }
 }

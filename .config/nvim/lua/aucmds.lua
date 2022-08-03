@@ -24,10 +24,6 @@ au('User', {
     vim.notify('Compile done', 'info', { title = 'Packer' })
     vim.cmd [[ PackerClean ]]
     vim.cmd [[ :source ~/.config/nvim/plugin/packer_compiled.lua ]]
-    vim.cmd "CatppuccinCompile"
-    vim.defer_fn(function()
-      vim.cmd "colorscheme catppuccin"
-    end, 50) -- Debounced for live reloading
   end,
 })
 

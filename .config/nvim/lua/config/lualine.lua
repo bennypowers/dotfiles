@@ -1,6 +1,10 @@
+local theme =
+vim.g.colors_name == 'tokyonight' and 'tokyonight'
+    or vim.g.colors_name == 'catppuccin' and 'catppuccin'
+    or 'auto'
+
 require 'lualine'.setup {
-  -- theme = 'tokyonight',
-  theme = 'catppuccin',
+  theme = theme,
   extentions = {},
   options = {
     disabled_filetypes = { 'neo-tree' },

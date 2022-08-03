@@ -8,131 +8,142 @@ for k, v in pairs(colors) do
 end
 
 vim.g.catppuccin_flavour = 'mocha'
-require 'catppuccin'.setup {
-  -- transparent_background = true,
-  compile = {
-    enabled = true,
-  },
-  integrations = {
-    coc_nvim = false,
-    lsp_trouble = false,
-    cmp = true,
-    lsp_saga = false,
-    gitgutter = false,
-    gitsigns = true,
-    telescope = true,
-    treesitter = true,
-    which_key = true,
-    dashboard = true,
-    neogit = false,
-    vim_sneak = false,
-    fern = false,
-    barbar = false,
-    bufferline = true,
-    markdown = true,
-    lightspeed = false,
-    ts_rainbow = false,
-    hop = false,
-    notify = true,
-    telekasten = true,
-    symbols_outline = true,
-    mini = false,
-
-    neotree = {
+if vim.g.colors_name == 'catppuccin' then
+  require 'catppuccin'.setup {
+    -- transparent_background = true,
+    compile = {
       enabled = true,
-      show_root = true,
-      -- transparent_panel = true,
     },
+    integrations = {
+      coc_nvim = false,
+      lsp_trouble = false,
+      cmp = true,
+      lsp_saga = false,
+      gitgutter = false,
+      gitsigns = true,
+      telescope = true,
+      treesitter = true,
+      which_key = true,
+      dashboard = true,
+      neogit = false,
+      vim_sneak = false,
+      fern = false,
+      barbar = false,
+      bufferline = true,
+      markdown = true,
+      lightspeed = false,
+      ts_rainbow = false,
+      hop = false,
+      notify = true,
+      telekasten = true,
+      symbols_outline = true,
+      mini = false,
 
-    indent_blankline = {
-      enabled = true,
-      -- colored_indent_levels = false,
-    },
-
-    native_lsp = {
-      enabled = true,
-      virtual_text = {
-        errors = { "italic" },
-        hints = { "italic" },
-        warnings = { "italic" },
-        information = { "italic" },
+      neotree = {
+        enabled = true,
+        show_root = true,
+        -- transparent_panel = true,
       },
-      underlines = {
-        errors = { "underline" },
-        hints = { "underline" },
-        warnings = { "underline" },
-        information = { "underline" },
+
+      indent_blankline = {
+        enabled = true,
+        -- colored_indent_levels = false,
+      },
+
+      native_lsp = {
+        enabled = true,
+        virtual_text = {
+          errors = { "italic" },
+          hints = { "italic" },
+          warnings = { "italic" },
+          information = { "italic" },
+        },
+        underlines = {
+          errors = { "underline" },
+          hints = { "underline" },
+          warnings = { "underline" },
+          information = { "underline" },
+        },
+      },
+
+      dap = {
+        enabled = false,
+        enable_ui = false,
       },
     },
 
-    dap = {
-      enabled = false,
-      enable_ui = false,
-    },
-  },
+    custom_highlights = {
+      Folded = { fg = colors.subtext0, bg = 'NONE' },
 
-  custom_highlights = {
-    Folded = { fg = colors.subtext0, bg = 'NONE' },
+      CmpItemAbbrDeprecated = { fg = colors.subtext0, bg = "NONE", style = { "strikethrough" } },
+      CmpItemAbbrMatch = { fg = colors.sky, bg = "NONE", style = { "bold" } },
+      CmpItemAbbrMatchFuzzy = { fg = colors.sky, bg = "NONE", style = { "bold" } },
+      CmpItemMenu = { fg = colors.mauve, bg = "NONE", style = { "italic" } },
 
-    CmpItemAbbrDeprecated = { fg = colors.subtext0, bg = "NONE", style = { "strikethrough" } },
-    CmpItemAbbrMatch = { fg = colors.sky, bg = "NONE", style = { "bold" } },
-    CmpItemAbbrMatchFuzzy = { fg = colors.sky, bg = "NONE", style = { "bold" } },
-    CmpItemMenu = { fg = colors.mauve, bg = "NONE", style = { "italic" } },
+      CmpItemKindField = { fg = colors.maroon, bg = dark.maroon },
+      CmpItemKindProperty = { fg = colors.maroon, bg = dark.maroon },
+      CmpItemKindEvent = { fg = colors.maroon, bg = dark.maroon },
 
-    CmpItemKindField = { fg = colors.maroon, bg = dark.maroon },
-    CmpItemKindProperty = { fg = colors.maroon, bg = dark.maroon },
-    CmpItemKindEvent = { fg = colors.maroon, bg = dark.maroon },
+      CmpItemKindText = { fg = colors.green, bg = dark.green },
+      CmpItemKindEnum = { fg = colors.green, bg = dark.green },
+      CmpItemKindKeyword = { fg = colors.green, bg = dark.green },
 
-    CmpItemKindText = { fg = colors.green, bg = dark.green },
-    CmpItemKindEnum = { fg = colors.green, bg = dark.green },
-    CmpItemKindKeyword = { fg = colors.green, bg = dark.green },
+      CmpItemKindConstant = { fg = colors.yellow, bg = dark.yellow },
+      CmpItemKindConstructor = { fg = colors.yellow, bg = dark.yellow },
+      CmpItemKindReference = { fg = colors.yellow, bg = dark.yellow },
 
-    CmpItemKindConstant = { fg = colors.yellow, bg = dark.yellow },
-    CmpItemKindConstructor = { fg = colors.yellow, bg = dark.yellow },
-    CmpItemKindReference = { fg = colors.yellow, bg = dark.yellow },
+      CmpItemKindFunction = { fg = colors.mauve, bg = dark.mauve },
+      CmpItemKindStruct = { fg = colors.mauve, bg = dark.mauve },
+      CmpItemKindClass = { fg = colors.mauve, bg = dark.mauve },
+      CmpItemKindModule = { fg = colors.mauve, bg = dark.mauve },
+      CmpItemKindOperator = { fg = colors.mauve, bg = dark.mauve },
 
-    CmpItemKindFunction = { fg = colors.mauve, bg = dark.mauve },
-    CmpItemKindStruct = { fg = colors.mauve, bg = dark.mauve },
-    CmpItemKindClass = { fg = colors.mauve, bg = dark.mauve },
-    CmpItemKindModule = { fg = colors.mauve, bg = dark.mauve },
-    CmpItemKindOperator = { fg = colors.mauve, bg = dark.mauve },
+      CmpItemKindVariable = { fg = colors.text, bg = colors.overlay0 },
+      CmpItemKindFile = { fg = colors.text, bg = colors.overlay0 },
 
-    CmpItemKindVariable = { fg = colors.text, bg = colors.overlay0 },
-    CmpItemKindFile = { fg = colors.text, bg = colors.overlay0 },
+      CmpItemKindUnit = { fg = colors.peach, bg = dark.peach },
+      CmpItemKindSnippet = { fg = colors.peach, bg = dark.peach },
+      CmpItemKindFolder = { fg = colors.peach, bg = dark.peach },
 
-    CmpItemKindUnit = { fg = colors.peach, bg = dark.peach },
-    CmpItemKindSnippet = { fg = colors.peach, bg = dark.peach },
-    CmpItemKindFolder = { fg = colors.peach, bg = dark.peach },
+      CmpItemKindMethod = { fg = colors.lavender, bg = colors.mauve },
+      CmpItemKindValue = { fg = colors.lavender, bg = colors.mauve },
+      CmpItemKindEnumMember = { fg = colors.lavender, bg = colors.mauve },
 
-    CmpItemKindMethod = { fg = colors.lavender, bg = colors.mauve },
-    CmpItemKindValue = { fg = colors.lavender, bg = colors.mauve },
-    CmpItemKindEnumMember = { fg = colors.lavender, bg = colors.mauve },
+      CmpItemKindInterface = { fg = colors.teal, bg = dark.teal },
+      CmpItemKindColor = { fg = colors.teal, bg = dark.teal },
+      CmpItemKindTypeParameter = { fg = colors.teal, bg = dark.teal },
 
-    CmpItemKindInterface = { fg = colors.teal, bg = dark.teal },
-    CmpItemKindColor = { fg = colors.teal, bg = dark.teal },
-    CmpItemKindTypeParameter = { fg = colors.teal, bg = dark.teal },
+      --transparent_background tweak
+      -- Comment = { fg = colors.overlay1 },
+      -- LineNr = { fg = colors.overlay1 },
+      -- CursorLine = { bg = colors.mantle },
+      -- CursorLineNr = { fg = colors.lavender, style = { "bold" } },
+      -- DiagnosticVirtualTextError = { bg = colors.none },
+      -- DiagnosticVirtualTextWarn = { bg = colors.none },
+      -- DiagnosticVirtualTextInfo = { bg = colors.none },
+      -- DiagnosticVirtualTextHint = { bg = colors.none },
 
-    --transparent_background tweak
-    -- Comment = { fg = colors.overlay1 },
-    -- LineNr = { fg = colors.overlay1 },
-    -- CursorLine = { bg = colors.mantle },
-    -- CursorLineNr = { fg = colors.lavender, style = { "bold" } },
-    -- DiagnosticVirtualTextError = { bg = colors.none },
-    -- DiagnosticVirtualTextWarn = { bg = colors.none },
-    -- DiagnosticVirtualTextInfo = { bg = colors.none },
-    -- DiagnosticVirtualTextHint = { bg = colors.none },
-
-    TelescopePromptPrefix = { bg = colors.crust },
-    TelescopePromptNormal = { bg = colors.crust },
-    TelescopeResultsNormal = { bg = colors.mantle },
-    TelescopePreviewNormal = { bg = colors.crust },
-    TelescopePromptBorder = { bg = colors.crust, fg = colors.crust },
-    TelescopeResultsBorder = { bg = colors.mantle, fg = colors.crust },
-    TelescopePreviewBorder = { bg = colors.crust, fg = colors.crust },
-    TelescopePromptTitle = { fg = colors.crust },
-    TelescopeResultsTitle = { fg = colors.text },
-    TelescopePreviewTitle = { fg = colors.crust },
+      TelescopePromptPrefix = { bg = colors.crust },
+      TelescopePromptNormal = { bg = colors.crust },
+      TelescopeResultsNormal = { bg = colors.mantle },
+      TelescopePreviewNormal = { bg = colors.crust },
+      TelescopePromptBorder = { bg = colors.crust, fg = colors.crust },
+      TelescopeResultsBorder = { bg = colors.mantle, fg = colors.crust },
+      TelescopePreviewBorder = { bg = colors.crust, fg = colors.crust },
+      TelescopePromptTitle = { fg = colors.crust },
+      TelescopeResultsTitle = { fg = colors.text },
+      TelescopePreviewTitle = { fg = colors.crust },
+    }
   }
-}
 
-vim.cmd 'colorscheme catppuccin'
+  -- Create an autocmd User PackerCompileDone to update it every time packer is compiled
+  vim.api.nvim_create_autocmd('User', {
+    pattern = "PackerCompileDone",
+    callback = function()
+      vim.cmd "CatppuccinCompile"
+      vim.defer_fn(function()
+        vim.cmd "colorscheme catppuccin"
+      end, 50) -- Debounced for live reloading
+    end,
+  })
+end

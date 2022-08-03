@@ -2,9 +2,80 @@ local wezterm = require 'wezterm'
 
 local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
 local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
-local color_scheme = "Catppuccin Mocha"
+-- local color_scheme = "Catppuccin Mocha"
+local color_scheme = 'GitHub Dark'
 
-local scheme = wezterm.color.get_builtin_schemes()[color_scheme]
+local color_schemes = {
+  ['GitHub Dark'] = {
+    foreground = "#b3b1ad",
+    background = "#0d1117",
+    cursor_bg = "#73b7f2",
+    cursor_border = "#73b7f2",
+    cursor_fg = "#0d1117",
+    selection_bg = "#163356",
+    selection_fg = "#b3b1ad",
+
+    -- compose_cursor = "#f2cdcd",
+    -- scrollbar_thumb = "#585b70",
+    -- split = "#6c7086",
+    -- visual_bell = "#313244",
+
+    ansi = {
+      "#484f58",
+      "#ff7b72",
+      "#3fb950",
+      "#d29922",
+      "#58a6ff",
+      "#bc8cff",
+      "#39c5cf",
+      "#b1bac4"
+    },
+    brights = {
+      "#6e7681",
+      "#ffa198",
+      "#56d364",
+      "#e3b341",
+      "#79c0ff",
+      "#d2a8ff",
+      "#56d4dd",
+      "#f0f6fc"
+    },
+    indexed = {
+      ['16'] = "#d18616",
+      ['17'] = "#ffa198",
+    },
+
+    tab_bar = {
+      background = "#11111b",
+      inactive_tab_edge = "#575757",
+      inactive_tab_edge_hover = "#363636",
+      active_tab = {
+        bg_color = "#58a6ff",
+        fg_color = "#090c10",
+      },
+      inactive_tab = {
+        bg_color = "#4d5566",
+        fg_color = "#090c10",
+      },
+      inactive_tab_hover = {
+        bg_color = "#181825",
+        fg_color = "#cdd6f4",
+      },
+      new_tab = {
+        bg_color = "#1e1e2e",
+        fg_color = "#cdd6f4",
+      },
+      new_tab_hover = {
+        bg_color = "#181825",
+        fg_color = "#cdd6f4",
+      },
+    },
+  }
+}
+
+-- local scheme = wezterm.color.get_builtin_schemes()[color_scheme]
+
+local scheme = color_schemes['GitHub Dark']
 
 local function f(name, params)
   return wezterm.font_with_fallback({
@@ -168,6 +239,7 @@ return {
   },
 
   color_scheme = color_scheme,
+  window_background_opacity = 0.75,
 
   tab_bar_style = {
     new_tab = wezterm.format {
