@@ -14,9 +14,9 @@ local function c(mod)
 end
 
 return require 'packer'.startup({ function(use)
-  --[[----------------------------------------------------------
-                      🏎️ Perf, Packages,and bufixes
-  --]] ----------------------------------------------------------
+  --[==[-------------------------------------------------------]-=]
+                    🏎️ Perf, Packages,and bufixes
+  --[=-[-------------------------------------------------------]==]
 
   -- vim startup profiler. Use together with `PackerProfile`
   use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
@@ -308,16 +308,8 @@ return require 'packer'.startup({ function(use)
 
   use { 'RRethy/vim-illuminate', config = c 'illuminate' }
 
-  -- project find/replace
-  use { 'windwp/nvim-spectre', opt = true }
-
   -- better vim marks
   use { 'chentau/marks.nvim', opt = true }
-
-  use { 'ldelossa/gh.nvim',
-    opt = true,
-    config = c 'gh-nvim',
-    requires = { 'ldelossa/litee.nvim' } }
 
   use { 'pwntester/octo.nvim',
     opt = true,

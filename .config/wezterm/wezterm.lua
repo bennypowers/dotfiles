@@ -239,7 +239,7 @@ return {
   },
 
   color_scheme = color_scheme,
-  window_background_opacity = 0.75,
+  window_background_opacity = 0.85,
 
   tab_bar_style = {
     new_tab = wezterm.format {

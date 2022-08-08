@@ -1,14 +1,6 @@
 local ag = vim.api.nvim_create_augroup
 local au = vim.api.nvim_create_autocmd
 
----Apply the 'jinja' file type to nunjucks files
---
-au({ 'BufNewFile', 'BufRead' }, {
-  group = ag('nunjucks_ft', { clear = true }),
-  pattern = '*.njk',
-  command = 'set ft=html',
-})
-
 ---Clean and compile packer when `plugins.lua` or `init.lua` change
 --
 au('BufWritePost', {

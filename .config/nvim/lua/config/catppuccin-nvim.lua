@@ -7,8 +7,8 @@ for k, v in pairs(colors) do
   end
 end
 
-vim.g.catppuccin_flavour = 'mocha'
 if vim.g.colors_name == 'catppuccin' then
+  vim.g.catppuccin_flavour = 'mocha'
   require 'catppuccin'.setup {
     -- transparent_background = true,
     compile = {

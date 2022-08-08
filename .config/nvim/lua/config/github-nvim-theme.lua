@@ -30,7 +30,7 @@ if vim.g.colors_name:gmatch [[%^github]] then
         TelescopeResultsNormal = { bg = telescope_results_bg },
         TelescopeResultsTitle = { bg = telescope_results_bg, fg = c.fg },
 
-        LineNr = { fg = c.syntax.comment, blend = 0.5 },
+        LineNr = { fg = util.darken(c.syntax.comment, 0.5), blend = 0.5 },
         CursorLineNr = { style = "bold" },
         CursorColumn = { bg = c.bg_highlight, blend = 0.5 },
         ColorColumn = { bg = c.bg_highlight, blend = 0.5 },

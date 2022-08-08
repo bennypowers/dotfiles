@@ -174,3 +174,42 @@ local autopairs_loaded, cmp_autopairs = pcall(require, 'nvim-autopairs.completio
 if autopairs_loaded then
   cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 end
+
+
+---https://github.com/hrsh7th/nvim-cmp/pull/1067/files
+local JS_CONFIG = {
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp', filter = function(entry, _)
+      local kinds = require 'cmp.types'.lsp.CompletionItemKind
+      if (kinds[entry:get_kind()] == 'Snippet'
+          and entry.source:get_debug_name() == 'nvim_lsp:emmet_ls') then
+        local parser = vim.treesitter.get_parser(0, 'typescript')
+        local query = vim.treesitter.query.get_query('typescript', 'lit_html')
+        local tree = parser:parse()[1]
+
+        local row = unpack(vim.api.nvim_win_get_cursor(0))
+        local caps = {}
+        for id, node, meta in query:iter_captures(tree:root(), 0, row - 1, row) do
+          local name = query.captures[id]
+          table.insert(caps, name)
+        end
+        if vim.tbl_contains(caps, 'lit_html') then
+          return true
+        end
+      else
+        return false
+      end
+    end },
+    { name = 'nvim_lsp_signature_help' },
+  }, {
+    { name = 'luasnip', option = { use_show_condition = false } },
+  }, {
+    { name = 'treesitter' },
+    { name = 'buffer', keyword_length = 3 },
+  }, {
+    { name = 'calc' },
+    { name = 'emoji' },
+  })
+}
+cmp.setup.filetype('javascript', JS_CONFIG)
+cmp.setup.filetype('typescript', JS_CONFIG)

@@ -38,6 +38,11 @@ vim.opt.sessionoptions:append('blank,buffers,curdir,folds,help,tabpages,winsize,
 vim.opt.shortmess:append('I') -- no welcome message
 vim.opt.shortmess:append('a') -- abbreviate built-in messages
 
+vim.filetype.add { extension = {
+  njk = 'html',
+  sketchpalette = 'json',
+} }
+
 local jid = vim.fn.jobstart { 'git', 'rev-parse', '--git-dir' }
 local ret = vim.fn.jobwait { jid }[1]
 if ret > 0 then

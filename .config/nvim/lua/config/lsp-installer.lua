@@ -80,8 +80,8 @@ local servers = {
       'css', 'scss',
       'njk', 'nunjucks', 'jinja',
       -- 'markdown',
-      -- 'ts', 'typescript',
-      -- 'js', 'javascript',
+      'ts', 'typescript',
+      'js', 'javascript',
     },
   },
 

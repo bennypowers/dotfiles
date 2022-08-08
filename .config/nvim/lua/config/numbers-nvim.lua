@@ -2,9 +2,9 @@ require 'numbers'.setup {
   excluded_filetypes = {
     'neo-tree',
     'terminal',
+    'packer',
     'toggleterm',
     'DressingInput',
-    'telescope',
     'Telescope',
     'TelescopePrompt',
   }
