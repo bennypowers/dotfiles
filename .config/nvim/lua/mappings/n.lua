@@ -11,6 +11,16 @@ local TELESCOPE_GROUP = {
   r    = { ':Telescope resume<cr>', 'Resume finding' },
 }
 
+local BUFFERS_GROUP = {
+  name = 'buffers',
+  j    = { ':BufferLineCycleNext<cr>', 'Next buffer' },
+  k    = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
+  p    = { ':BufferLinePick<cr>', 'Pick buffer' },
+  -- d    = { U.bufdelete, 'Delete buffer' },
+  d    = { ':BufDel<cr>', 'Delete buffer' },
+  b    = { ':Telescope buffers<cr>', 'Search buffers' }
+}
+
 return {
   K = { vim.lsp.buf.hover, 'Hover' },
 
@@ -20,6 +30,8 @@ return {
   ['<m-i>'] = { U.refresh_init, 'Reload config' },
 
   F = TELESCOPE_GROUP,
+
+  B = BUFFERS_GROUP,
 
   ['<leader>'] = {
     name = '+leader',
@@ -34,15 +46,7 @@ return {
     w = { ':BufDel<cr>', 'Delete buffer' },
 
     B = { function() require 'nvim-biscuits'.toggle_biscuits() end, 'Toggle code biscuits' },
-    b = {
-      name = 'buffers',
-      j    = { ':BufferLineCycleNext<cr>', 'Next buffer' },
-      k    = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
-      p    = { ':BufferLinePick<cr>', 'Pick buffer' },
-      -- d    = { U.bufdelete, 'Delete buffer' },
-      d    = { ':BufDel<cr>', 'Delete buffer' },
-      b    = { ':Telescope buffers<cr>', 'Search buffers' }
-    },
+    b = BUFFERS_GROUP,
 
     D = 'Go to type definition',
 

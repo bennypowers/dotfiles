@@ -86,7 +86,7 @@ set -gx VISUAL nvim
 set -gx EDITOR nvim
 set -gx LG_CONFIG_FILE ~/.config/lazygit/config.yml
 
-set -x SHELL fish
+set -x SHELL /usr/bin/fish
 set -x EDITOR nvim
 set -x GIT_EDITOR nvim
 

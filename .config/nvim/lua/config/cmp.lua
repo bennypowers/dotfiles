@@ -193,11 +193,9 @@ local JS_CONFIG = {
           local name = query.captures[id]
           table.insert(caps, name)
         end
-        if vim.tbl_contains(caps, 'lit_html') then
-          return true
-        end
+        return vim.tbl_contains(caps, 'lit_html')
       else
-        return false
+        return true
       end
     end },
     { name = 'nvim_lsp_signature_help' },
