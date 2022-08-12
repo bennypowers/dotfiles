@@ -22,6 +22,9 @@ local BUFFERS_GROUP = {
 }
 
 return {
+  [';'] = {
+    p = { function() require 'winpick'.select() end, 'Pick window' }
+  },
   K = { vim.lsp.buf.hover, 'Hover' },
 
   ['<C-k>'] = { vim.lsp.buf.signature_help, 'Signature help' },

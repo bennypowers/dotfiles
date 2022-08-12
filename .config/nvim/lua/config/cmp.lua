@@ -175,29 +175,37 @@ if autopairs_loaded then
   cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 end
 
-
 ---https://github.com/hrsh7th/nvim-cmp/pull/1067/files
+local lit_html_query = vim.treesitter.query.get_query('typescript', 'lit_html')
+local function is_lit_html_template()
+  local parser = vim.treesitter.get_parser(0, 'typescript', {})
+  local tree = parser:parse()[1]
+
+  local row = unpack(vim.api.nvim_win_get_cursor(0))
+  local caps = {}
+  for id in lit_html_query:iter_captures(tree:root(), 0, row - 1, row) do
+    table.insert(caps, lit_html_query.captures[id])
+  end
+  return vim.tbl_contains(caps, 'lit_html')
+end
+
+local kinds = require 'cmp.types'.lsp.CompletionItemKind
+local function is_emmet_snippet(entry)
+  return kinds[entry:get_kind()] == 'Snippet'
+      and entry.source:get_debug_name() == 'nvim_lsp:emmet_ls'
+end
+
+local function emmet_in_lit_only(entry, _)
+  if (is_emmet_snippet(entry)) then
+    return is_lit_html_template()
+  else
+    return true
+  end
+end
+
 local JS_CONFIG = {
   sources = cmp.config.sources({
-    { name = 'nvim_lsp', filter = function(entry, _)
-      local kinds = require 'cmp.types'.lsp.CompletionItemKind
-      if (kinds[entry:get_kind()] == 'Snippet'
-          and entry.source:get_debug_name() == 'nvim_lsp:emmet_ls') then
-        local parser = vim.treesitter.get_parser(0, 'typescript')
-        local query = vim.treesitter.query.get_query('typescript', 'lit_html')
-        local tree = parser:parse()[1]
-
-        local row = unpack(vim.api.nvim_win_get_cursor(0))
-        local caps = {}
-        for id, node, meta in query:iter_captures(tree:root(), 0, row - 1, row) do
-          local name = query.captures[id]
-          table.insert(caps, name)
-        end
-        return vim.tbl_contains(caps, 'lit_html')
-      else
-        return true
-      end
-    end },
+    { name = 'nvim_lsp', entry_filter = emmet_in_lit_only },
     { name = 'nvim_lsp_signature_help' },
   }, {
     { name = 'luasnip', option = { use_show_condition = false } },

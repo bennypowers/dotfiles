@@ -199,8 +199,7 @@ return require 'packer'.startup({ function(use)
   -- close buffers (tabs) with less headache
   use 'ojroques/nvim-bufdel'
 
-  use { 'https://gitlab.com/yorickpeterse/nvim-window.git',
-    module = 'nvim-window' }
+  use { 'gbrlsnchs/winpick.nvim', config = c 'nvim-winpick' }
 
   -- pretty notifications
   use { 'rcarriga/nvim-notify', config = c 'notify' }
