@@ -47,6 +47,7 @@ return require 'packer'.startup({ function(use)
 
   use { 'catppuccin/nvim', as = 'catppuccin', config = c 'catppuccin-nvim', run = "CatppuccinCompile" }
   use { 'projekt0n/github-nvim-theme', config = c 'github-nvim-theme' }
+  use 'B4mbus/oxocarbon-lua.nvim'
   use 'folke/tokyonight.nvim'
 
   --[[----------------------------------------------------------
