@@ -42,8 +42,8 @@ return {
     [';']  = { ':vnew<cr>', 'New Split' },
     ['}']  = { ':BufferLineCycleNext<cr>', 'Next buffer' },
     ['{']  = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
-    ['|']  = { ':Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
-    ['\\'] = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
+    ['\\']  = { ':Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
+    ['|'] = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
     ['.']  = { vim.lsp.buf.code_action, 'Code actions' },
 
     w = { ':BufDel<cr>', 'Delete buffer' },
