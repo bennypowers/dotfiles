@@ -117,9 +117,10 @@ return require 'packer'.startup({ function(use)
 
   -- 🤖 Language Server
   use { 'lvimuser/lsp-inlayhints.nvim', config = c 'inlayhints' }
-  use { 'williamboman/nvim-lsp-installer', -- automatically install language servers
-    config = c 'lsp-installer',
+  use { 'williamboman/mason.nvim', -- automatically install language servers
+    config = c 'mason-nvim',
     requires = {
+      'williamboman/mason-lspconfig.nvim',
       'neovim/nvim-lspconfig', -- basic facility to configure language servers
       'nvim-lua/lsp-status.nvim', -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
       'hrsh7th/nvim-cmp',
@@ -131,6 +132,9 @@ return require 'packer'.startup({ function(use)
   --[[----------------------------------------------------------
   --                    Editor Ergonomics
   --]] ----------------------------------------------------------
+
+  -- autoconvert '' or "" to ``
+  use 'axelvc/template-string.nvim'
 
   -- Live cheat sheet for key bindings
   use { 'folke/which-key.nvim',
@@ -306,7 +310,7 @@ return require 'packer'.startup({ function(use)
   -- use { 'lepture/vim-jinja', ft = { 'jinja', 'html' } }
   -- use 'lepture/vim-jinja'
 
-  use { 'RRethy/vim-illuminate', config = c 'illuminate' }
+  use 'RRethy/vim-illuminate'
 
   -- better vim marks
   use { 'chentau/marks.nvim', opt = true }

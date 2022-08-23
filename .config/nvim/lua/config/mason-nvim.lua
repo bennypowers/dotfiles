@@ -5,11 +5,12 @@ vim.fn.sign_define('DiagnosticSignWarning', { text = '🚧', texthl = 'Diagnosti
 vim.fn.sign_define('DiagnosticSignInformation', { text = '👷', texthl = 'DiagnosticInformation' })
 vim.fn.sign_define('DiagnosticSignHint', { text = '🙋', texthl = 'DiagnosticHint' })
 
-local lsp_installer = require 'nvim-lsp-installer'
-local lsp_config    = require 'lspconfig'
-local lsp_status    = require 'lsp-status'
-local lsp_util      = require 'lspconfig.util'
-local cmp_nvim_lsp  = require 'cmp_nvim_lsp'
+local mason           = require 'mason'
+local mason_lspconfig = require 'mason-lspconfig'
+local lsp_config      = require 'lspconfig'
+local lsp_status      = require 'lsp-status'
+local lsp_util        = require 'lspconfig.util'
+local cmp_nvim_lsp    = require 'cmp_nvim_lsp'
 
 local default_capabilities = vim.tbl_extend('keep',
   cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
@@ -28,8 +29,6 @@ default_capabilities.textDocument.completion.completionItem.resolveSupport = {
 -- Setup lspconfig with some default capabilities
 --
 local function default_on_attach(client)
-  local has_illuminate, illuminate = pcall(require, 'illuminate')
-  if has_illuminate then illuminate.on_attach(client) end
   lsp_status.on_attach(client)
 end
 
@@ -62,17 +61,17 @@ local servers = {
   -- },
 
   -- markdown
-  ['marksman'] = {
+  marksman = {
     settings = {
       autoFixOnSave = true,
     },
   },
 
-  ['bashls'] = {},
-  ['clangd'] = {},
-  ['cssls'] = {},
+  bashls = {},
+  clangd = {},
+  cssls = {},
 
-  ['emmet_ls'] = {
+  emmet_ls = {
     root_dir = lsp_util.find_git_ancestor,
     single_file_support = true,
     filetypes = {
@@ -85,7 +84,7 @@ local servers = {
     },
   },
 
-  ['eslint'] = {
+  eslint = {
     on_attach = toggle_formatting(true),
     root_dir = lsp_util.find_git_ancestor,
     settings = {
@@ -98,12 +97,12 @@ local servers = {
     },
   },
 
-  ['graphql'] = {},
+  graphql = {},
 
   -- haskell
   -- ['hls'] = {},
 
-  ['html'] = {
+  html = {
     settings = {
       autoFixOnSave = false,
       html = {
@@ -125,7 +124,7 @@ local servers = {
     },
   },
 
-  ['jsonls'] = {
+  jsonls = {
     settings = {
       json = {
         schemas = require 'schemastore'.json.schemas(),
@@ -134,9 +133,9 @@ local servers = {
     },
   },
 
-  ['pyright'] = {},
+  pyright = {},
 
-  ['rust_analyzer'] = {
+  rust_analyzer = {
     settings = {
       autoFixOnSave = true,
     }
@@ -145,7 +144,7 @@ local servers = {
   -- OpenAPI
   -- ['spectral'] = {},
 
-  ['stylelint_lsp'] = {
+  stylelint_lsp = {
     on_attach = toggle_formatting(true),
     filetypes = {
       'css',
@@ -166,7 +165,7 @@ local servers = {
   },
 
   -- lua
-  ['sumneko_lua'] = require 'lua-dev'.setup {
+  sumneko_lua = require 'lua-dev'.setup {
     -- add any options here, or leave empty to use the default settings
     -- lspconfig = {
     --   cmd = {"lua-language-server"}
@@ -213,7 +212,7 @@ local servers = {
   },
 
   -- typescript language server options
-  ['tsserver'] = {
+  tsserver = {
     on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
     root_dir = lsp_util.find_git_ancestor,
     settings = {
@@ -243,8 +242,10 @@ local servers = {
     },
   },
 
-  ['vimls'] = {},
-  ['yamlls'] = {},
+  vala_ls = {},
+
+  vimls = {},
+  yamlls = {},
 }
 
 lsp_status.config {
@@ -263,7 +264,8 @@ lsp_status.config {
 
 lsp_status.register_progress()
 
-lsp_installer.setup {
+mason.setup()
+mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers)
 }
 
