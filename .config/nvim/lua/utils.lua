@@ -78,11 +78,14 @@ function M.bufdelete(bufnum)
   require 'bufdel'.delete_buffer(bufnum, true)
 end
 
+local open_cmd = vim.fn.has('macunix') == '0' and 'open' or 'xdg-open'
+
 local function open_uri(uri)
   if type(uri) ~= 'nil' then
+    vim.notify(open_cmd)
     uri = string.gsub(uri, '#', '\\#') --double escapes any # signs
     uri = '"' .. uri .. '"'
-    vim.cmd('!open ' .. uri .. ' > /dev/null')
+    vim.cmd('!' .. open_cmd .. ' ' .. uri .. ' > /dev/null')
     vim.cmd 'mode'
     -- print(uri)
     return true

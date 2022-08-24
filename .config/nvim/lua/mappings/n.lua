@@ -42,8 +42,8 @@ return {
     [';']  = { ':vnew<cr>', 'New Split' },
     ['}']  = { ':BufferLineCycleNext<cr>', 'Next buffer' },
     ['{']  = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
-    ['\\']  = { ':Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
-    ['|'] = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
+    ['\\'] = { ':Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
+    ['|']  = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
     ['.']  = { vim.lsp.buf.code_action, 'Code actions' },
 
     w = { ':BufDel<cr>', 'Delete buffer' },
@@ -110,7 +110,8 @@ return {
     },
 
     D = { vim.lsp.buf.declaration, 'Goto declaration' },
-    d = { U.goto_preview_definition, 'Goto definitions' },
+    -- d = { U.goto_preview_definition, 'Goto definitions' },
+    d = { vim.lsp.buf.definition, 'Goto definitions' },
 
     i = { U.goto_preview_implementation, 'Goto implementations' },
 

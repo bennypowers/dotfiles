@@ -65,7 +65,8 @@ return require 'packer'.startup({ function(use)
     requires = {
       'nvim-lua/plenary.nvim',
       'nvim-lua/popup.nvim',
-      'nvim-telescope/telescope-symbols.nvim' } }
+      'nvim-telescope/telescope-symbols.nvim'
+    } }
 
   -- tries to sort files helpfully
   use { 'nvim-telescope/telescope-frecency.nvim', requires = 'tami5/sqlite.lua' }
@@ -90,7 +91,8 @@ return require 'packer'.startup({ function(use)
       'MunifTanjim/nui.nvim',
       { 'kyazdani42/nvim-web-devicons',
         module = 'nvim-web-devicons',
-        config = c 'web-devicons' } } }
+        config = c 'web-devicons' }
+    } }
 
   -- 📎 Completions and Snippets
   use { 'hrsh7th/nvim-cmp',
@@ -143,8 +145,9 @@ return require 'packer'.startup({ function(use)
 
   -- gd, but in a floating window
   use { 'rmagatti/goto-preview',
+    opt = true,
     config = c 'goto-preview',
-    event = 'VimEnter',
+    -- event = 'VimEnter',
     requires = 'nvim-telescope/telescope.nvim' }
 
   use { 'nvim-treesitter/nvim-treesitter-context', config = c 'nvim-treesitter-context' }
@@ -192,7 +195,8 @@ return require 'packer'.startup({ function(use)
     config = c 'trouble',
     requires = {
       'folke/trouble.nvim',
-      'kyazdani42/nvim-web-devicons' } }
+      'kyazdani42/nvim-web-devicons'
+    } }
 
   -- 🪟 UI
 
@@ -247,7 +251,8 @@ return require 'packer'.startup({ function(use)
     config = c 'prettyfold',
     requires = {
       'anuvyklack/nvim-keymap-amend',
-      'anuvyklack/fold-preview.nvim' } }
+      'anuvyklack/fold-preview.nvim'
+    } }
 
   -- highlight matching paren
   use { 'monkoose/matchparen.nvim', config = c 'matchparen' }
