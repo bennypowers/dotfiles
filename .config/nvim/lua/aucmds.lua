@@ -19,29 +19,6 @@ au('User', {
   end,
 })
 
----Format on save, using only the clients with `autoFixOnSave` set
---
-au('BufWritePre', {
-  group = ag('LspFormatting', { clear = true }),
-  pattern = '*',
-  callback = function()
-    vim.lsp.buf.format {
-      timeout_ms = 2000,
-      filter = function(c)
-        return (c and c.config and c.config.settings and c.config.settings.autoFixOnSave) or false
-      end,
-    }
-  end
-})
-
----For reasons unclear to me, eslint ls doesn't autoFixOnSave, so execute `EslineFixAll` instead
---
-au('BufWritePre', {
-  group = ag('eslint-fixall', { clear = true }),
-  pattern = { '*.tsx', '*.ts', '*.jsx', '*.js', },
-  command = 'EslintFixAll',
-})
-
 au('BufEnter', {
   group = ag('waybar_config', {}),
   pattern = 'config',

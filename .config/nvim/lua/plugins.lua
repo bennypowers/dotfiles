@@ -123,6 +123,7 @@ return require 'packer'.startup({ function(use)
     config = c 'mason-nvim',
     requires = {
       'williamboman/mason-lspconfig.nvim',
+      'lukas-reineke/lsp-format.nvim',
       'neovim/nvim-lspconfig', -- basic facility to configure language servers
       'nvim-lua/lsp-status.nvim', -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
       'hrsh7th/nvim-cmp',

@@ -65,7 +65,7 @@ return {
 
     l = {
       name = 'lsp',
-      f    = { vim.lsp.buf.formatting, 'Format file' },
+      f    = { function() vim.lsp.buf.format { async = true } end, 'Format file' },
       r    = { vim.lsp.buf.rename, 'Rename' },
       k    = { vim.lsp.buf.signature_help, 'Signature help' },
       d    = { vim.lsp.buf.declaration, 'Goto declaration' },

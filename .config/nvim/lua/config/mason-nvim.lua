@@ -9,8 +9,11 @@ local mason           = require 'mason'
 local mason_lspconfig = require 'mason-lspconfig'
 local lsp_config      = require 'lspconfig'
 local lsp_status      = require 'lsp-status'
+local lsp_format      = require 'lsp-format'
 local lsp_util        = require 'lspconfig.util'
 local cmp_nvim_lsp    = require 'cmp_nvim_lsp'
+
+lsp_format.setup()
 
 local default_capabilities = vim.tbl_extend('keep',
   cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
@@ -39,9 +42,10 @@ end
 ---
 local function toggle_formatting(enable)
   return function(client)
+    if (enable) then
+      lsp_format.on_attach(client)
+    end
     default_on_attach(client)
-    client.server_capabilities.documentFormattingProvider = enable
-    client.server_capabilities.documentRangeFormattingProvider = enable
   end
 end
 
@@ -85,10 +89,20 @@ local servers = {
   },
 
   eslint = {
-    on_attach = toggle_formatting(true),
     root_dir = lsp_util.find_git_ancestor,
+    on_attach = function (client)
+      ---For reasons unclear to me, eslint ls doesn't autoFixOnSave,
+      ---so execute `EslintFixAll` instead
+      --
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        group = vim.api.nvim_create_augroup('carry_lsp-water', {}),
+        pattern = { '*.tsx', '*.ts', '*.jsx', '*.js', },
+        command = 'EslintFixAll',
+      })
+
+      default_on_attach(client)
+    end,
     settings = {
-      autoFixOnSave = true,
       codeActionsOnSave = {
         enable = true,
         mode = "all",
@@ -103,8 +117,8 @@ local servers = {
   -- ['hls'] = {},
 
   html = {
+    filetypes = { 'html', 'njk', 'md' },
     settings = {
-      autoFixOnSave = false,
       html = {
         format = {
           templating = true,
@@ -113,7 +127,7 @@ local servers = {
         },
         editor = {
           formatOnSave = false,
-          formatOnPaste = false,
+          formatOnPaste = true,
           formatOnType = false,
         },
         hover = {
@@ -125,8 +139,10 @@ local servers = {
   },
 
   jsonls = {
+    on_attach = toggle_formatting(true),
     settings = {
       json = {
+        format = { enable = true },
         schemas = require 'schemastore'.json.schemas(),
         validate = { enable = true },
       },
@@ -135,27 +151,15 @@ local servers = {
 
   pyright = {},
 
-  rust_analyzer = {
-    settings = {
-      autoFixOnSave = true,
-    }
-  },
+  rust_analyzer = {},
 
   -- OpenAPI
   -- ['spectral'] = {},
 
   stylelint_lsp = {
     on_attach = toggle_formatting(true),
-    filetypes = {
-      'css',
-      'les',
-      'scss',
-      'sugarss',
-      'vue',
-      'wxss',
-    },
+    filetypes = { 'css', 'scss' },
     settings = {
-      autoFixOnSave = true,
       stylelintplus = {
         autoFixOnSave = true,
         autoFixOnFormat = true,
