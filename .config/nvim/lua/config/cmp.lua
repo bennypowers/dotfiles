@@ -29,10 +29,10 @@ luasnip.config.setup {
 
 require 'luasnip.loaders.from_lua'.lazy_load()
 require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
-  "~/Developer/redhat-ux/red-hat-design-tokens/vscode/"
+  '~/Developer/redhat-ux/red-hat-design-tokens/'
 } }
 require 'luasnip.loaders.from_snipmate'.lazy_load { paths = {
-  "~/.config/nvim/snippets",
+  '~/.config/nvim/snippets',
 } }
 
 vim.keymap.set({ 'i', 's' }, '<c-j>', function()
@@ -130,7 +130,7 @@ cmp.setup({
     -- fields = { "kind", "abbr", "menu" },
     fields = { "kind", "abbr" },
     format = function(entry, vim_item)
-      local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+      local kind = lspkind.cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
       local strings = vim.split(kind.kind, "%s", { trimempty = true })
       kind.kind = " " .. strings[1] .. " "
       -- kind.menu = "    (" .. strings[2] .. ")"

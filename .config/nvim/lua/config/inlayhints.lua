@@ -27,10 +27,12 @@ require 'lsp-inlayhints'.setup {
     -- padding from the right if right_align is true
     right_align_padding = 7,
     -- highlight group
-    highlight = "LspInlayHint",
+    -- highlight = "LspInlayHint", -- default
+    highlight = "Comment",
   },
 }
 
+-- vim.cmd.hi('link', 'LspInlayHint', 'Comment')
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('LspAttach_inlayhints', {}),
   callback = function(args)

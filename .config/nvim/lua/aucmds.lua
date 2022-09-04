@@ -28,18 +28,18 @@ au('BufEnter', {
     end
   end
 })
+
 ---WORKAROUND
 -- vim.opt.foldmethod     = 'expr'
 -- vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
-au({ 'BufEnter', 'BufAdd', 'BufNew', 'BufNewFile', 'BufWinEnter' }, {
-  group = ag('TS_FOLD_WORKAROUND', {}),
-  callback = function()
-    vim.opt.foldmethod = 'expr'
-    vim.opt.foldexpr   = 'nvim_treesitter#foldexpr()'
-  end
-})
+-- au({ 'BufEnter', 'BufAdd', 'BufNew', 'BufNewFile', 'BufWinEnter' }, {
+--   group = ag('TS_FOLD_WORKAROUND', {}),
+--   callback = function()
+--     vim.opt.foldmethod = 'expr'
+--     vim.opt.foldexpr   = 'nvim_treesitter#foldexpr()'
+--   end
+-- })
 ---ENDWORKAROUND
-
 
 ---Settings for tokyonight theme
 --
@@ -54,19 +54,7 @@ au('ColorSchemePre', {
     vim.g.tokyonight_colors = {
       bg_highlight = util.blend(colors.bg_highlight, '#000000', 0.5),
     }
-    vim.cmd 'hi Normal guibg=transparent'
+    vim.cmd.hi('Normal', {guibg='transparent'})
   end
 })
 
--- au({ 'VimEnter', 'BufEnter' }, {
---   group = ag('illuminate_augroup', { clear = true }),
---   pattern = '*',
---   callback = function()
---     vim.cmd [[
---       hi illuminatedWord cterm=underline gui=underline guibg=transparent
---       hi! def link LspReferenceText DiagnosticUnderlineHint
---       hi! def link LspReferenceWrite DiagnosticUnderlineHint
---       hi! def link LspReferenceRead DiagnosticUnderlineHint
---     ]]
---   end
--- })

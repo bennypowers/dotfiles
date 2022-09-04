@@ -49,8 +49,6 @@ local function toggle_formatting(enable)
   end
 end
 
-local on_didchange = vim.lsp.handlers['workspace/didChangeConfiguration']
-
 -- Install these, k?
 -- Specify server options and settings per server by adding an options table
 -- servers with `false` options table use the default on_attach function

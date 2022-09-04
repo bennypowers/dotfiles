@@ -15,5 +15,5 @@ vim.g.Hexokinase_ftOptOutPatterns = {
 
 vim.g.Hexokinase_palettes = {
   -- replace with relevant path on your drive
-  vim.fn.expand('~/Developer/redhat-ux/red-hat-design-tokens/build/editor/hexokinase.json')
+  vim.fn.expand('~/Developer/redhat-ux/red-hat-design-tokens/editor/hexokinase.json')
 }

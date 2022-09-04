@@ -31,7 +31,7 @@ vim.opt.wrap           = false
 vim.opt.shell          = 'bash'
 vim.opt.cmdheight      = 0
 vim.opt.list           = true
-vim.opt.foldlevel      = 20
+-- vim.opt.foldlevel      = 20
 
 vim.opt.sessionoptions:append('blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal')
 

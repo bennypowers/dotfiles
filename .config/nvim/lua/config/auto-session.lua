@@ -13,12 +13,16 @@ local function close_neo_tree()
 end
 
 local function open_neo_tree()
-  if vim.api.nvim_get_var(TREE_STATE) then
+  local success, state = pcall(vim.api.nvim_get_var, TREE_STATE)
+  if success and state then
+    local Lib = require'auto-session-library'
+    Lib.logger.debug 'found open filesystem neo-tree'
     require 'neo-tree.sources.manager'.show('filesystem')
   end
 end
 
 require 'auto-session'.setup {
+  log_level = 'error',
   auto_session_create_enabled = false,
   auto_save_enabled = true,
   auto_restore_enabled = true,

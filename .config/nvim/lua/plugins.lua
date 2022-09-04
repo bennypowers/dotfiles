@@ -45,10 +45,11 @@ return require 'packer'.startup({ function(use)
                         🎨 Themes
   --]] ----------------------------------------------------------
 
-  use { 'catppuccin/nvim', as = 'catppuccin', config = c 'catppuccin-nvim', run = "CatppuccinCompile" }
-  use { 'projekt0n/github-nvim-theme', config = c 'github-nvim-theme' }
   use 'B4mbus/oxocarbon-lua.nvim'
   use 'folke/tokyonight.nvim'
+  use { 'catppuccin/nvim', as = 'catppuccin', config = c 'catppuccin-nvim', run = "CatppuccinCompile" }
+  use { 'projekt0n/github-nvim-theme', config = c 'github-nvim-theme' }
+  use { 'daschw/leaf.nvim', config = c'leaf-nvim' }
 
   --[[----------------------------------------------------------
                         Essential Plugins
@@ -248,12 +249,16 @@ return require 'packer'.startup({ function(use)
   use { 'lukas-reineke/indent-blankline.nvim', config = c 'indent-blankline' }
 
   -- pretty folds with previews
-  use { 'anuvyklack/pretty-fold.nvim',
-    config = c 'prettyfold',
-    requires = {
-      'anuvyklack/nvim-keymap-amend',
-      'anuvyklack/fold-preview.nvim'
-    } }
+  -- use { 'anuvyklack/pretty-fold.nvim',
+  --   config = c 'prettyfold',
+  --   requires = {
+  --     'anuvyklack/nvim-keymap-amend',
+  --     'anuvyklack/fold-preview.nvim'
+  --   } }
+
+  use { 'kevinhwang91/nvim-ufo',
+    requires = 'kevinhwang91/promise-async',
+    config = c'nvim-ufo', }
 
   -- highlight matching paren
   use { 'monkoose/matchparen.nvim', config = c 'matchparen' }
