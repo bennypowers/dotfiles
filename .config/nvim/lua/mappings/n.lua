@@ -76,8 +76,8 @@ return {
     P = {
       name = 'Plugins',
       i    = { ':PackerInstall<cr>', 'Install plugins via Packer' },
-      u    = { ':PackerUpdate<cr>', 'Update plugins via Packer' },
-      s    = { ':PackerSync<cr>', 'Update plugins (sync) via Packer' },
+      u    = { ':PackerUpdate --preview<cr>', 'Update plugins via Packer' },
+      s    = { ':PackerSync --preview<cr>', 'Update plugins (sync) via Packer' },
       c    = { ':PackerCompile<cr>', 'Compile plugins via Packer' },
       x    = { ':PackerClean<cr>', 'Clean plugins via Packer' },
     },

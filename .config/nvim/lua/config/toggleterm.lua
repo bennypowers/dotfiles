@@ -1,4 +1,5 @@
-require 'toggleterm'.setup {}
+require 'toggleterm'.setup {
+}
 
 local Terminal = require 'toggleterm.terminal'.Terminal
 
@@ -42,6 +43,16 @@ local lazygit_term_options = {
   direction = 'float',
   hidden = true,
   on_exit = close_terminal_on_zero_exit,
+  shade_terminals = false,
+  highlights = {
+    NormalFloat = {
+      guibg = "#212121",
+    },
+  },
+  float_opts = {
+    -- winblend = 3,
+    border = 'shadow',
+  },
 }
 
 local lazygit = Terminal:new(lazygit_term_options)

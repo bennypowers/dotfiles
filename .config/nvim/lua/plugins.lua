@@ -234,8 +234,6 @@ return require 'packer'.startup({ function(use)
   -- yae, cae, etc
   use { 'kana/vim-textobj-entire', requires = 'kana/vim-textobj-user' }
 
-  use 'jbyuki/quickmath.nvim'
-
   -- replaces various individual of plugins
   use { 'echasnovski/mini.nvim', config = c 'mini' }
 
