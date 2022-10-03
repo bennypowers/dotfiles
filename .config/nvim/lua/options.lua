@@ -31,12 +31,13 @@ vim.opt.wrap           = false
 vim.opt.shell          = 'bash'
 vim.opt.cmdheight      = 0
 vim.opt.list           = true
+vim.opt.spell          = true
 -- vim.opt.foldlevel      = 20
 
-vim.opt.sessionoptions:append('blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal')
+vim.opt.sessionoptions:append'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal'
 
-vim.opt.shortmess:append('I') -- no welcome message
-vim.opt.shortmess:append('a') -- abbreviate built-in messages
+vim.opt.shortmess:append'I' -- no welcome message
+vim.opt.shortmess:append'a' -- abbreviate built-in messages
 
 vim.filetype.add { extension = {
   njk = 'html',

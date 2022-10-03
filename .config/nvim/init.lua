@@ -18,3 +18,4 @@ vim.cmd.colorscheme 'leaf'
 -- vim.cmd.colorscheme 'github_dark_default'
 -- vim.g.oxocarbon_lua_transparent = true
 -- vim.cmd.colorscheme 'oxocarbon-lua'
+
