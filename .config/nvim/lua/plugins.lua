@@ -24,14 +24,6 @@ return require 'packer'.startup({ function(use)
   use 'wbthomason/packer.nvim'
   -- faster startup?
   use 'lewis6991/impatient.nvim'
-  -- faster startup!
-  use { 'nathom/filetype.nvim', cond = function()
-    return vim.fn.has 'nvim-0.8.0' == 0
-  end }
-
-  -- bug fix for neovim's cursorhold event
-  vim.g.cursorhold_updatetime = 100
-  use { 'antoinemadec/FixCursorHold.nvim' }
 
   --[[----------------------------------------------------------
   --                    📒 Sessions
@@ -50,6 +42,7 @@ return require 'packer'.startup({ function(use)
   use { 'catppuccin/nvim', as = 'catppuccin', config = c 'catppuccin-nvim', run = "CatppuccinCompile" }
   use { 'projekt0n/github-nvim-theme', config = c 'github-nvim-theme' }
   use { 'daschw/leaf.nvim', config = c'leaf-nvim' }
+  use { 'kartikp10/noctis.nvim', requires = { 'rktjmp/lush.nvim' } }
 
   --[[----------------------------------------------------------
                         Essential Plugins

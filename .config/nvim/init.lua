@@ -5,14 +5,13 @@ local function load(mod)
   return require(mod)
 end
 
--- Polyfill `vim.lsp.buf.format` from neovim 0.8
-if vim.fn.has 'nvim-0.8.0' == 0 then load 'format' end
 load 'options'
 load 'commands'
 load 'plugins'
 load 'aucmds'
 
-vim.cmd.colorscheme 'leaf'
+vim.cmd.colorscheme 'noctis'
+-- vim.cmd.colorscheme 'leaf'
 -- vim.cmd.colorscheme 'tokyonight'
 -- vim.cmd.colorscheme 'catppuccin'
 -- vim.cmd.colorscheme 'github_dark_default'

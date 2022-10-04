@@ -2,7 +2,6 @@ local is_gh_theme = vim.g.colors_name:match [[%^github]]
 if is_gh_theme then
   local au = vim.api.nvim_create_autocmd
   local ag = vim.api.nvim_create_augroup
-  print('do gh')
   require 'github-theme'.setup {
     theme_style = 'dark_default',
     transparent = true,
