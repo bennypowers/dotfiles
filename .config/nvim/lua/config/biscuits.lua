@@ -1,4 +1,5 @@
-require 'nvim-biscuits'.setup {
+local biscuits = require 'nvim-biscuits'
+biscuits.setup {
   show_on_start = true,
   on_events = { 'InsertLeave', 'CursorHoldI' },
   default_config = {
@@ -10,5 +11,7 @@ require 'nvim-biscuits'.setup {
     html = {
       prefix_string = " 🌐 "
     },
-  }
+  },
 }
+
+biscuits.toggle_biscuits()
