@@ -16,7 +16,7 @@ local cmp_nvim_lsp    = require 'cmp_nvim_lsp'
 lsp_format.setup()
 
 local default_capabilities = vim.tbl_extend('keep',
-  cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities()),
   lsp_status.capabilities
 )
 
@@ -49,6 +49,8 @@ local function toggle_formatting(enable)
   end
 end
 
+require 'neodev'.setup {}
+
 -- Install these, k?
 -- Specify server options and settings per server by adding an options table
 -- servers with `false` options table use the default on_attach function
@@ -78,6 +80,7 @@ local servers = {
     single_file_support = true,
     filetypes = {
       'html',
+      'svg',
       'css', 'scss',
       'njk', 'nunjucks', 'jinja',
       -- 'markdown',
@@ -115,7 +118,7 @@ local servers = {
   -- ['hls'] = {},
 
   html = {
-    filetypes = { 'html', 'njk', 'md' },
+    filetypes = { 'html', 'njk', 'md', 'svg' },
     settings = {
       html = {
         format = {
@@ -167,7 +170,7 @@ local servers = {
   },
 
   -- lua
-  sumneko_lua = require 'lua-dev'.setup {
+  sumneko_lua = {
     -- add any options here, or leave empty to use the default settings
     -- lspconfig = {
     --   cmd = {"lua-language-server"}
@@ -176,18 +179,6 @@ local servers = {
       settings = {
         autoFixOnSave = true,
         Lua = {
-          -- next three replaced by pre-compiled docs in `folke/lua-dev.nvim`
-          -- runtime = {
-          --   version = 'LuaJIT',
-          --   path = get_sumneko_lua_runtime_path(),
-          -- },
-          -- diagnostics = {
-          --   globals = { 'utf8', 'vim' }, -- Get the language server to recognize the `vim` global
-          -- },
-          -- workspace = {
-          --   library = vim.api.nvim_get_runtime_file('', true), -- Make the server aware of Neovim runtime files
-          --   checkThirdParty = false,
-          -- },
           format = {
             enable = true,
             defaultConfig = {
@@ -201,6 +192,7 @@ local servers = {
           },
           completion = {
             autoRequire = false,
+            callSnippet = "Replace",
           },
           hint = {
             enable = true,

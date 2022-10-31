@@ -123,7 +123,7 @@ return require 'packer'.startup({ function(use)
       'hrsh7th/nvim-cmp',
       'b0o/schemastore.nvim', -- json schema support
       'neovim/nvim-lspconfig',
-      'folke/lua-dev.nvim', -- nvim api docs, signatures, etc.
+      'folke/neodev.nvim', -- nvim api docs, signatures, etc.
     } }
 
   --[[----------------------------------------------------------
@@ -135,7 +135,8 @@ return require 'packer'.startup({ function(use)
 
   -- Live cheat sheet for key bindings
   use { 'folke/which-key.nvim',
-    requires = 'mrjones2014/legendary.nvim',
+    -- https://github.com/mrjones2014/legendary.nvim/issues/181
+    -- requires = 'mrjones2014/legendary.nvim',
     config = c 'whichkey' }
 
   -- gd, but in a floating window
@@ -149,7 +150,8 @@ return require 'packer'.startup({ function(use)
   -- append `end` in useful places
   use { 'RRethy/nvim-treesitter-endwise' }
   -- close HTML tags, but using treesitter
-  use { 'windwp/nvim-ts-autotag' }
+  -- use { 'windwp/nvim-ts-autotag' }
+  use { 'bennypowers/nvim-ts-autotag', branch = 'template-tags' }
 
   use { 'windwp/nvim-autopairs', config = c 'autopairs' }
 
