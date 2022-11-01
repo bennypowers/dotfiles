@@ -130,13 +130,9 @@ return require 'packer'.startup({ function(use)
   --                    Editor Ergonomics
   --]] ----------------------------------------------------------
 
-  -- autoconvert '' or "" to ``
-  use 'axelvc/template-string.nvim'
-
   -- Live cheat sheet for key bindings
   use { 'folke/which-key.nvim',
-    -- https://github.com/mrjones2014/legendary.nvim/issues/181
-    -- requires = 'mrjones2014/legendary.nvim',
+    requires = 'mrjones2014/legendary.nvim',
     config = c 'whichkey' }
 
   -- gd, but in a floating window
@@ -147,8 +143,10 @@ return require 'packer'.startup({ function(use)
     requires = 'nvim-telescope/telescope.nvim' }
 
   use { 'nvim-treesitter/nvim-treesitter-context', config = c 'nvim-treesitter-context' }
+
   -- append `end` in useful places
   use { 'RRethy/nvim-treesitter-endwise' }
+
   -- close HTML tags, but using treesitter
   -- use { 'windwp/nvim-ts-autotag' }
   use { 'bennypowers/nvim-ts-autotag', branch = 'template-tags' }
@@ -157,12 +155,17 @@ return require 'packer'.startup({ function(use)
 
   -- select a comment
   use { 'nvim-treesitter/nvim-treesitter-textobjects' }
+
   -- hints for block ends
   use { 'code-biscuits/nvim-biscuits', config = c 'biscuits' }
 
-  use { "kylechui/nvim-surround", config = c 'surround' }
+  -- ysiw
+  use { 'kylechui/nvim-surround', config = c 'surround' }
 
   use { 'nkakouros-original/numbers.nvim', config = c 'numbers-nvim' }
+
+  -- autoconvert '' or "" to ``
+  use 'axelvc/template-string.nvim'
 
   --[[----------------------------------------------------------
   --                    Eye Candy
@@ -186,6 +189,11 @@ return require 'packer'.startup({ function(use)
   -- use { 'goolord/alpha-nvim', command = 'Alpha', config = c'alpha' }
   -- use { '~/Developer/alpha-nvim', command = 'Alpha', config = c 'alpha' }
 
+  -- Take screenshots from nvim
+  use { 'narutoxy/silicon.lua',
+        requires = 'nvim-lua/plenary.nvim',
+        config = c'silicon-lua' }
+
   -- language-server diagnostics panel
   use { 'folke/lsp-trouble.nvim',
     command = { 'Trouble', 'TroubleToggle' },
@@ -195,7 +203,9 @@ return require 'packer'.startup({ function(use)
       'kyazdani42/nvim-web-devicons'
     } }
 
-  -- 🪟 UI
+  --[[----------------------------------------------------------
+  --                    🪟 UI
+  --]] ----------------------------------------------------------
 
   -- navigate to markdown headers
   use { 'crispgm/telescope-heading.nvim', ft = { 'md', 'markdown' } }
@@ -210,7 +220,9 @@ return require 'packer'.startup({ function(use)
   -- pretty notifications
   use { 'rcarriga/nvim-notify', config = c 'notify' }
 
-  -- ⌨️  Editing
+  --[[----------------------------------------------------------
+  --                    ⌨️  Editing
+  --]] ----------------------------------------------------------
 
   -- change case (camel, dash, etc)
   use { 'arthurxavierx/vim-caser', setup = c 'caser' }
@@ -220,8 +232,20 @@ return require 'packer'.startup({ function(use)
 
   use 'powerman/vim-plugin-AnsiEsc'
 
+  --[[----------------------------------------------------------
+  --                    Languages
+  --]] ----------------------------------------------------------
+
   -- better to burn out than to fade away
   use 'simrat39/rust-tools.nvim'
+
+  use { 'MrcJkb/haskell-tools.nvim',
+     -- tag = 'x.y.z' -- [^1]
+        requires = {
+          'neovim/nvim-lspconfig',
+          'nvim-lua/plenary.nvim',
+          'nvim-telescope/telescope.nvim', -- optional
+        } }
 
   -- Telescope live_grep -> <Tab> to select files -> <C-q> to populate qflist -> <leader>h to find/replace in qf files
   use 'gabrielpoca/replacer.nvim'
@@ -297,6 +321,9 @@ return require 'packer'.startup({ function(use)
 
   -- tool for exploring treesitter ASTs
   use { 'nvim-treesitter/playground', command = 'TSPlaygroundToggle' }
+
+  -- help writing treesitter queries
+  use 'ziontee113/query-secretary'
 
   -- 🌔 Lua Development
 

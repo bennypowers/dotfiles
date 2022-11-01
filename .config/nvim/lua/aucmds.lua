@@ -1,21 +1,33 @@
 local ag = vim.api.nvim_create_augroup
 local au = vim.api.nvim_create_autocmd
 
----Clean and compile packer when `plugins.lua` or `init.lua` change
+---Reload and compile packer plugins when config changes
 --
 au('BufWritePost', {
   group = ag('packer_user_config', { clear = true }),
-  pattern = { 'plugins.lua', 'init.lua', 'lua/config/*.lua', 'aucmds.lua', 'catppuccin-nvim.lua' },
-  command = 'PackerCompile',
+  pattern = {
+    'plugins.lua',
+    'init.lua',
+    'lua/config/*.lua',
+    'aucmds.lua',
+    'catppuccin-nvim.lua',
+  },
+  callback = function(event)
+    if event.match:match'plugins%.lua$' then
+      vim.cmd.luafile(event.match)
+    end
+    require'packer'.compile()
+  end
 })
 
--- Create an autocmd User PackerCompileDone to update it every time packer is compiled
+---Clean and reload packer plugins when compile finishes
+--
 au('User', {
-  pattern = "PackerCompileDone",
+  pattern = 'PackerCompileDone',
   callback = function()
-    vim.notify('Compile done', 'info', { title = 'Packer' })
-    vim.cmd [[ PackerClean ]]
-    vim.cmd [[ :source ~/.config/nvim/plugin/packer_compiled.lua ]]
+    vim.notify('Compile done', vim.log.levels.INFO, { title = 'Packer' })
+    require'packer'.clean()
+    vim.cmd.source'~/.config/nvim/plugin/packer_compiled.lua'
   end,
 })
 

@@ -138,11 +138,11 @@ if vim.g.colors_name == 'catppuccin' then
 
   -- Create an autocmd User PackerCompileDone to update it every time packer is compiled
   vim.api.nvim_create_autocmd('User', {
-    pattern = "PackerCompileDone",
+    pattern = 'PackerCompileDone',
     callback = function()
-      vim.cmd "CatppuccinCompile"
+      vim.cmd 'CatppuccinCompile'
       vim.defer_fn(function()
-        vim.cmd "colorscheme catppuccin"
+        vim.cmd 'colorscheme catppuccin'
       end, 50) -- Debounced for live reloading
     end,
   })

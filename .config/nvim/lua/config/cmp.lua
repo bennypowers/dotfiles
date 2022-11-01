@@ -6,7 +6,7 @@ local can_npm, cmp_npm = pcall(require, 'cmp-npm')
 local types = require 'luasnip.util.types'
 luasnip.config.setup {
   history = true,
-  native_menu = true,
+  native_menu = false,
   updateevents = 'TextChanged,TextChangedI',
   enable_autosnippets = true,
   ext_opts = {

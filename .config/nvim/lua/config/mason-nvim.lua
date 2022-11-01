@@ -114,9 +114,6 @@ local servers = {
 
   graphql = {},
 
-  -- haskell
-  -- ['hls'] = {},
-
   html = {
     filetypes = { 'html', 'njk', 'md', 'svg' },
     settings = {
