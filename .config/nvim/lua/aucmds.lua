@@ -1,5 +1,5 @@
-local ag = vim.api.nvim_create_augroup
-local au = vim.api.nvim_create_autocmd
+ag = vim.api.nvim_create_augroup
+au = vim.api.nvim_create_autocmd
 
 ---Reload and compile packer plugins when config changes
 --
@@ -70,3 +70,12 @@ au('ColorScheme', {
   end
 })
 
+---Highlight yanked text
+--
+au('TextYankPost', {
+  group = ag('yank_highlight', {}),
+  pattern = '*',
+  callback = function()
+    vim.highlight.on_yank { higroup='IncSearch', timeout=300 }
+  end,
+})

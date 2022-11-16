@@ -9,6 +9,7 @@ local TELESCOPE_GROUP = {
   h    = { ':Telescope help_tags<cr>', 'Find in help' },
   s    = { ':Telescope symbols<cr>', 'Find symbol' },
   r    = { ':Telescope resume<cr>', 'Resume finding' },
+  n    = { ':Telescope notify<cr>', 'Find in Notifications' },
 }
 
 local BUFFERS_GROUP = {
@@ -25,6 +26,7 @@ return {
   [';'] = {
     p = { function() require 'winpick'.select() end, 'Pick window' }
   },
+
   K = { vim.lsp.buf.hover, 'Hover' },
 
   ['<C-k>'] = { vim.lsp.buf.signature_help, 'Signature help' },
@@ -87,7 +89,11 @@ return {
 
     R = { vim.lsp.buf.rename, 'Rename refactor' },
 
-    s = 'Save file',
+    --- Screenshots
+    s = {
+      s = { function() require'silicon'.visualise_api { debug = true } end, 'Save a Screenshot' },
+      b = { function() require'silicon'.visualise_api { debug = true, show_buf = true } end, 'Save a Screenshot with Buffer' },
+    },
 
     t = {
       name = 'terminals',

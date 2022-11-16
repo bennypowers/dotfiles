@@ -151,6 +151,8 @@ return require 'packer'.startup({ function(use)
   -- use { 'windwp/nvim-ts-autotag' }
   use { 'bennypowers/nvim-ts-autotag', branch = 'template-tags' }
 
+  -- use 'masukomi/html_encode_decode'
+
   use { 'windwp/nvim-autopairs', config = c 'autopairs' }
 
   -- select a comment
