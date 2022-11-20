@@ -23,6 +23,7 @@
 	rc = rebase --continue
 	ri = rebase --interactive
 	s	= status
+  nb = switch -c
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
