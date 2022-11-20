@@ -142,7 +142,7 @@ if vim.g.colors_name == 'catppuccin' then
     callback = function()
       vim.cmd 'CatppuccinCompile'
       vim.defer_fn(function()
-        vim.cmd 'colorscheme catppuccin'
+        vim.cmd 'colorscheme catppuccin-mocha'
       end, 50) -- Debounced for live reloading
     end,
   })

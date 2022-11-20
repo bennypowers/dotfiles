@@ -233,7 +233,7 @@ local servers = {
     },
   },
 
-  vala_ls = {},
+  -- vala_ls = {},
 
   vimls = {},
   yamlls = {},

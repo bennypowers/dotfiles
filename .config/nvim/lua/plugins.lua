@@ -63,7 +63,10 @@ return require 'packer'.startup({ function(use)
     } }
 
   -- tries to sort files helpfully
-  use { 'nvim-telescope/telescope-frecency.nvim', requires = 'tami5/sqlite.lua' }
+  use { 'nvim-telescope/telescope-frecency.nvim',
+    requires = 'tami5/sqlite.lua',
+    opt = true,
+    config = c 'frecency' }
 
   -- telescope as UI for various vim built-in things
   use 'stevearc/dressing.nvim'
@@ -83,7 +86,7 @@ return require 'packer'.startup({ function(use)
     requires = {
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
-      { 'kyazdani42/nvim-web-devicons',
+      { 'nvim-tree/nvim-web-devicons',
         module = 'nvim-web-devicons',
         config = c 'web-devicons' }
     } }
@@ -192,9 +195,9 @@ return require 'packer'.startup({ function(use)
   -- use { '~/Developer/alpha-nvim', command = 'Alpha', config = c 'alpha' }
 
   -- Take screenshots from nvim
-  use { 'narutoxy/silicon.lua',
-        requires = 'nvim-lua/plenary.nvim',
-        config = c'silicon-lua' }
+  -- use { 'narutoxy/silicon.lua',
+  --       requires = 'nvim-lua/plenary.nvim',
+  --       config = c'silicon-lua' }
 
   -- language-server diagnostics panel
   use { 'folke/lsp-trouble.nvim',
@@ -202,7 +205,7 @@ return require 'packer'.startup({ function(use)
     config = c 'trouble',
     requires = {
       'folke/trouble.nvim',
-      'kyazdani42/nvim-web-devicons'
+      'nvim-tree/nvim-web-devicons'
     } }
 
   --[[----------------------------------------------------------
@@ -353,7 +356,7 @@ return require 'packer'.startup({ function(use)
     requires = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
-      'kyazdani42/nvim-web-devicons',
+      'nvim-tree/nvim-web-devicons',
     },
     config = function()
       require 'octo'.setup()

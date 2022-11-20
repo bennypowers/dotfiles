@@ -180,7 +180,12 @@ tree.setup {
             icon = config.folder_closed or '+'
           end
         elseif node.type == 'file' then
-          local _icon, _highlight = web_devicons.get_icon(node.name, node.ext)
+          ---@type string
+          local name = node.name
+          local ext = node.ext
+          print(name, ext)
+          if ext == 'json' and name:match[[^tsconfig]] then name = 'tsconfig.json' end
+          local _icon, _highlight = web_devicons.get_icon(name, ext)
           icon = _icon or icon
           highlight = _highlight or highlight
         end

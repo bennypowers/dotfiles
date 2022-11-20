@@ -13,7 +13,7 @@ icons.setup {
       name = "NodeModules",
     },
     ts = {
-      icon = 'ﯤ',
+      icon = '',
       color = "#519aba",
       cterm_color = "67",
       name = "Ts",
@@ -22,12 +22,13 @@ icons.setup {
 }
 icons.set_icon {
   ['.github'] = {
-    icon = '',
+    icon = '',
     name = "GitHub",
   },
   ['tsconfig.json'] = {
-    icon = "",
-    color = "#519aba",
+    icon = "",
+    -- color = "#284d5d", -- darker colour for light bg
+    color = "#688c9c", -- lighter colour for dark bg
     name = "TSConfigJson"
   },
 }
