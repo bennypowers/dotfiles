@@ -1,5 +1,5 @@
 {
-    "version": "1.4.2",
+    "version": "1.5.0",
     "autoload": {
         "Logitech MX Ergo Multi-Device Trackball ": "new preset 2"
     },
