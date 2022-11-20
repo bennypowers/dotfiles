@@ -41,6 +41,11 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
   set -x color_nix                      cyan black --bold
 end
 
+
+function fish_greeting
+  colorscript random 2> /dev/null
+end
+
 # My Additions
 
 # aliases
@@ -100,3 +105,5 @@ bind --preset \ce edit_command_buffer
 bind --preset \cv edit_command_buffer
 bind \ce edit_command_buffer
 bind \cv edit_command_buffer
+
+
