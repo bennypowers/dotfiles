@@ -119,7 +119,7 @@ return {
     -- d = { U.goto_preview_definition, 'Goto definitions' },
     d = { vim.lsp.buf.definition, 'Goto definitions' },
 
-    i = { U.goto_preview_implementation, 'Goto implementations' },
+    i = { vim.lsp.buf.implementation, 'Goto implementations' },
 
     L = { name = 'align right', },
     l = { name = 'align left', },
@@ -131,7 +131,7 @@ return {
 
     P = { U.close_all_win, 'Close all preview windows' },
 
-    r = { U.goto_preview_references, 'Goto references' },
+    r = { vim.lsp.buf.references, 'Goto references' },
 
     T = { ':TroubleToggle<cr>', 'Toggle trouble' },
   },
