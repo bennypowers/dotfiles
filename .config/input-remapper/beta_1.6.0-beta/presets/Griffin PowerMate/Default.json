@@ -1,0 +1,33 @@
+{
+    "1,256,1": {
+        "target_uinput": "keyboard",
+        "output_symbol": "KEY_MUTE",
+        "mapping_type": "key_macro"
+    },
+    "2,7,1": {
+        "target_uinput": "keyboard",
+        "output_symbol": "KEY_VOLUMEUP",
+        "mapping_type": "key_macro",
+        "deadzone": 0.11,
+        "gain": 1.1,
+        "release_timeout": 0.009999999999999997
+    },
+    "2,7,-1": {
+        "target_uinput": "keyboard",
+        "output_symbol": "KEY_VOLUMEDOWN",
+        "mapping_type": "key_macro",
+        "release_timeout": 0.009999999999999997
+    },
+    "1,256,1+2,7,1": {
+        "target_uinput": "keyboard",
+        "output_symbol": "KEY_BRIGHTNESSUP",
+        "mapping_type": "key_macro",
+        "release_timeout": 0.009999999999999997
+    },
+    "1,256,1+2,7,-1": {
+        "target_uinput": "keyboard",
+        "output_symbol": "KEY_BRIGHTNESSDOWN",
+        "mapping_type": "key_macro",
+        "release_timeout": 0.009999999999999997
+    }
+}

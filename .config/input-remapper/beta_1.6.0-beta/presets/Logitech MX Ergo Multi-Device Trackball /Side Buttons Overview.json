@@ -1,0 +1,12 @@
+{
+    "1,276,1": {
+        "target_uinput": "keyboard",
+        "output_symbol": "Super_L+A",
+        "mapping_type": "key_macro"
+    },
+    "1,275,1": {
+        "target_uinput": "keyboard",
+        "output_symbol": "Super_L",
+        "mapping_type": "key_macro"
+    }
+}

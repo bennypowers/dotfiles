@@ -1,0 +1,8 @@
+{
+    "mapping": {
+        "1,256,1": [
+            "KEY_MUTE",
+            "keyboard"
+        ]
+    }
+}
