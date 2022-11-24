@@ -77,6 +77,7 @@ set hilite (which highlight)
 set -gx VISUAL nvim
 set -gx EDITOR nvim
 set -gx LG_CONFIG_FILE ~/.config/lazygit/config.yml
+set -gx QMK_HOME ~/Projects/qmk_firmware
 
 set -x SHELL /usr/bin/fish
 set -x EDITOR nvim
