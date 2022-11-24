@@ -195,9 +195,9 @@ return require 'packer'.startup({ function(use)
   -- use { '~/Developer/alpha-nvim', command = 'Alpha', config = c 'alpha' }
 
   -- Take screenshots from nvim
-  -- use { 'narutoxy/silicon.lua',
-  --       requires = 'nvim-lua/plenary.nvim',
-  --       config = c'silicon-lua' }
+  use { 'narutoxy/silicon.lua',
+        requires = 'nvim-lua/plenary.nvim',
+        config = c'silicon-lua' }
 
   -- language-server diagnostics panel
   use { 'folke/lsp-trouble.nvim',

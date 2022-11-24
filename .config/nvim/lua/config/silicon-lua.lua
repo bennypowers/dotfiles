@@ -12,12 +12,14 @@ require'silicon'.setup {
 
 local silicon_utils = require'silicon.utils'
 
-vim.api.nvim_create_augroup('SiliconRefresh', { clear = true })
-vim.api.nvim_create_autocmd('ColorScheme', {
+ag('SiliconRefresh', { clear = true })
+au('ColorScheme', {
   group = 'SiliconRefresh',
 	desc = 'Reload silicon themes cache on colorscheme switch',
 	callback = function()
 		silicon_utils.build_tmTheme()
-		silicon_utils.reload_silicon_cache({async = true})
+    silicon_utils.reload_silicon_cache({
+      async = true,
+    })
 	end,
 })

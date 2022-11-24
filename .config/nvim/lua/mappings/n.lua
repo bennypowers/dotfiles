@@ -29,6 +29,7 @@ return {
 
   K = { vim.lsp.buf.hover, 'Hover' },
 
+  ['<c-l>'] = { '<cmd>ClearNotifications<cr>', 'Clear Notifications' },
   ['<C-k>'] = { vim.lsp.buf.signature_help, 'Signature help' },
   ['<m-,>'] = { vim.diagnostic.goto_prev, 'Previous diagnostic' },
   ['<m-.>'] = { vim.diagnostic.goto_next, 'Next diagnostic' },

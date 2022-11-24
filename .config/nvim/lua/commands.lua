@@ -30,7 +30,16 @@ local function highlight_repeats(args)
   end
 end
 
-vim.api.nvim_create_user_command('HighlightRepeats', highlight_repeats, {
+command = vim.api.nvim_create_user_command
+
+command('ClearNotifications', function()
+  require'notify'.dismiss { silent = true }
+  vim.cmd[[nohlsearch|diffupdate|normal! <C-L><CR>]]
+end, {
+  bang = true,
+})
+
+command('HighlightRepeats', highlight_repeats, {
   bang = true,
   range = '%'
 })
