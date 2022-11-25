@@ -1,0 +1,105 @@
+geary-conversation-list,
+.geary-conversation-list,
+.geary-conversation-frame,
+geary-conversation-viewer,
+.geary-overlay:dir(rtl),
+
+#geary-message-headers,
+#compact_from,
+
+
+/* FolderPopover */
+
+/* ConversationListBox */
+
+.conversation-listbox,
+.conversation-listbox > row,
+.conversation-listbox *.geary-matched *.geary-match,
+.conversation-listbox > row.geary-loading,
+.conversation-listbox.content > row:first-child:not(.geary-loading),
+.conversation-listbox.content > row:last-child,
+.conversation-listbox.content > row:last-child,
+.conversation-listbox.content > row.geary-expanded-previous-sibling,
+.conversation-listbox.content > row.geary-expanded,
+.geary-expanded:not(:first-child), .geary-expanded + row,
+.geary-expanded,
+.geary-expanded-previous-sibling,
+.geary-expanded webkitwebview,
+
+/* ConversationEmail */
+
+.geary-unread grid.geary-message-summary,
+.geary-expanded > .geary_email grid.geary-message-summary,
+.geary-expanded + row > .geary_email grid.geary-message-summary,
+
+/* ConversationMessage */
+
+.geary-message infobar box,
+.geary-message infobar box button,
+.geary-message infobar box button:hover,
+.geary-message infobar box button:checked,
+
+grid.geary-message-summary,
+
+.geary-headers label
+.geary-headers label.geary-header:dir(rtl),
+.geary-headers flowboxchild,
+.geary-headers flowboxchild label,
+
+.geary-headers flowboxchild.geary-spoofed image:dir(rtl),
+
+.geary-headers label.geary-from,
+.geary-header-value > flowboxchild label.dim-label:dir(rtl),
+
+/* ContactPopover */
+
+.geary-contact-popover .dim-label,
+
+.geary-contact-popover .geary-deceptive,
+
+/* Composer */
+
+geary-composer-box > border,
+
+geary-composer-editor > frame > border,
+
+geary-composer-embed headerbar,
+
+geary-composer-widget-header-row,
+
+geary-composer-widget-header-row label,
+
+geary-composer-widget .geary-attachments-box > box > box,
+
+geary-composer-widget .geary-attachments-box > box > box > label,
+
+geary-composer-widget-header-row label,
+
+
+/* GtkListboxRows with padded labels */
+
+row.geary-labelled-row,
+
+row.geary-labelled-row > grid > *,
+
+row.geary-labelled-row > grid > *:first-child:dir(ltr),
+row.geary-labelled-row > grid > *:last-child:dir(rtl),
+
+row.geary-labelled-row > grid > *:last-child:dir(ltr),
+row.geary-labelled-row > grid > *:first-child:dir(rtl),
+
+/* Images should have some padding to offset them from adjacent
+widgets, but care ust be taken since images are also used as children
+of other widgets like entries, comboboxes and switches, and these
+shouldn't be be touched. */
+row.geary-labelled-row widget > image,
+row.geary-labelled-row grid > image,
+
+row.geary-labelled-row > grid > combobox,
+row.geary-labelled-row > grid > entry,
+row.geary-labelled-row:not(.geary-add-row) > grid > image,
+row.geary-labelled-row > grid > switch,
+
+*:dir(rtl) {
+  font-family: "Noto Sans Hebrew", Cantarell, helvetica, arial, sans-serif !important;
+}
