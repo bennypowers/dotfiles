@@ -10,6 +10,7 @@ local TELESCOPE_GROUP = {
   s    = { ':Telescope symbols<cr>', 'Find symbol' },
   r    = { ':Telescope resume<cr>', 'Resume finding' },
   n    = { ':Telescope notify<cr>', 'Find in Notifications' },
+  p    = { ':Telescope pickers<cr>', 'Choose Pickers' },
 }
 
 local BUFFERS_GROUP = {
@@ -27,13 +28,17 @@ return {
     p = { function() require 'winpick'.select() end, 'Pick window' }
   },
 
-  K = { vim.lsp.buf.hover, 'Hover' },
-
   ['<c-l>'] = { '<cmd>ClearNotifications<cr>', 'Clear Notifications' },
   ['<C-k>'] = { vim.lsp.buf.signature_help, 'Signature help' },
   ['<m-,>'] = { vim.diagnostic.goto_prev, 'Previous diagnostic' },
   ['<m-.>'] = { vim.diagnostic.goto_next, 'Next diagnostic' },
   ['<m-i>'] = { U.refresh_init, 'Reload config' },
+  ['<m-j>'] = { ':BufferLineCycleNext<cr>', 'Next buffer' },
+  ['<m-k>'] = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
+
+  E = { U.open_diagnostics, 'Open diagnostics in floating window' },
+
+  K = { vim.lsp.buf.hover, 'Hover' },
 
   F = TELESCOPE_GROUP,
 
@@ -45,14 +50,17 @@ return {
     [';']  = { ':vnew<cr>', 'New Split' },
     ['}']  = { ':BufferLineCycleNext<cr>', 'Next buffer' },
     ['{']  = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
-    ['\\'] = { ':Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
-    ['|']  = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
+    ['|'] = { ':Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
+    ['\\']  = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
     ['.']  = { vim.lsp.buf.code_action, 'Code actions' },
 
     w = { ':BufDel<cr>', 'Delete buffer' },
 
-    B = { function() require 'nvim-biscuits'.toggle_biscuits() end, 'Toggle code biscuits' },
     b = BUFFERS_GROUP,
+
+    c = {
+      b = { function() require 'nvim-biscuits'.toggle_biscuits() end, 'Toggle code biscuits' },
+    },
 
     D = 'Go to type definition',
 
@@ -165,8 +173,5 @@ return {
     n = { vim.lsp.buf.rename, 'Rename refactor' },
 
   },
-
-  ['<m-j>'] = { ':BufferLineCycleNext<cr>', 'Next buffer' },
-  ['<m-k>'] = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
 
 }

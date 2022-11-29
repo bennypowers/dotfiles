@@ -4,6 +4,9 @@ local actions = require 'telescope.actions'
 telescope.setup {
   defaults = {
     prompt_prefix = "🔎 ",
+    cache_picker = {
+      num_pickers = -1,
+    },
     vimgrep_arguments = {
       'rg',
       '--color=never',

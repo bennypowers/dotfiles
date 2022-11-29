@@ -1,6 +1,7 @@
 local biscuits = require 'nvim-biscuits'
 biscuits.setup {
   show_on_start = true,
+  cursor_line_only = true,
   on_events = { 'InsertLeave', 'CursorHoldI' },
   default_config = {
     max_length = 12,

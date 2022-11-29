@@ -6,6 +6,14 @@ return {
 
   ['<leader>'] = {
     ['<c-d>'] = { '<Plug>(VM-Find-Subword-Under)<cr>', 'Find occurrence of subword under cursor' },
+
+    s = {
+      name = 'screenshots',
+      s = { function() require'silicon'.visualise_api { } end, 'Save a Screenshot' },
+      v = { function() require'silicon'.visualise_api { visible = true } end, 'Save a Screenshot of visible area' },
+      b = { function() require'silicon'.visualise_api { show_buf = true } end, 'Save a Screenshot of entire Buffer' },
+    },
+
     r = {
       name = 'rename/rotate',
       c = {

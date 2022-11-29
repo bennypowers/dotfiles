@@ -1,5 +1,10 @@
 require'silicon'.setup {
   windowControls = false,
+  gobble = true,
+  padHoriz = 30,
+  padVert = 20,
+  shadowBlurRadius = 5,
+  bgColor = '#3330';
   output = string.format(
     vim.fn.expand"~/Pictures/Screenshots/SILICON_%s-%s-%s_%s-%s.png",
     os.date("%Y"),

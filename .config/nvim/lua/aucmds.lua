@@ -54,6 +54,8 @@ au('ColorSchemePre', {
       vim.g.tokyonight_colors = {
         bg_highlight = util.blend(colors.bg_highlight, '#000000', 0.5),
       }
+    elseif event.match == 'oxocarbon-lua' then
+      vim.g.oxocarbon_lua_transparent = true
     end
   end
 })
