@@ -1,7 +1,7 @@
 geary-conversation-list,
+geary-conversation-viewer,
 .geary-conversation-list,
 .geary-conversation-frame,
-geary-conversation-viewer,
 .geary-overlay:dir(rtl),
 
 #geary-message-headers,
@@ -79,13 +79,8 @@ geary-composer-widget-header-row label,
 /* GtkListboxRows with padded labels */
 
 row.geary-labelled-row,
-
 row.geary-labelled-row > grid > *,
-
-row.geary-labelled-row > grid > *:first-child:dir(ltr),
 row.geary-labelled-row > grid > *:last-child:dir(rtl),
-
-row.geary-labelled-row > grid > *:last-child:dir(ltr),
 row.geary-labelled-row > grid > *:first-child:dir(rtl),
 
 /* Images should have some padding to offset them from adjacent
