@@ -75,6 +75,9 @@ if vim.g.colors_name == 'catppuccin' then
     custom_highlights = {
       Folded = { fg = colors.subtext0, bg = 'NONE' },
 
+      Pmenu = { bg = colors.surface0 },
+      PmenuSel = { bg = colors.surface1 },
+
       CmpItemAbbrDeprecated = { fg = colors.subtext0, bg = "NONE", style = { "strikethrough" } },
       CmpItemAbbrMatch = { fg = colors.sky, bg = "NONE", style = { "bold" } },
       CmpItemAbbrMatchFuzzy = { fg = colors.sky, bg = "NONE", style = { "bold" } },

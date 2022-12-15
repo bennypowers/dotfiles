@@ -73,7 +73,8 @@ local servers = {
 
   bashls = {},
   clangd = {},
-  cssls = {},
+  cssls = {
+  },
 
   emmet_ls = {
     root_dir = lsp_util.find_git_ancestor,
@@ -203,35 +204,7 @@ local servers = {
   },
 
   -- typescript language server options
-  tsserver = {
-    on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
-    root_dir = lsp_util.find_git_ancestor,
-    settings = {
-      format = false,
-      typescript = {
-        inlayHints = {
-          includeInlayParameterNameHints = 'all',
-          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayVariableTypeHints = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayEnumMemberValueHints = true,
-        }
-      },
-      javascript = {
-        inlayHints = {
-          includeInlayParameterNameHints = 'all',
-          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayVariableTypeHints = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayEnumMemberValueHints = true,
-        }
-      }
-    },
-  },
+  -- see typescript.nvim setup
 
   -- vala_ls = {},
 
@@ -273,6 +246,8 @@ for name, opts in pairs(servers) do
   }, opts or {})
   lsp_config[name].setup(server_config)
 end
+
+require'inc_rename'.setup()
 
 -- uncomment for automatic hover on cursor-hold
 -- see also https://github.com/neovim/neovim/issues/9534

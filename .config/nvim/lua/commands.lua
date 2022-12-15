@@ -33,8 +33,13 @@ end
 command = vim.api.nvim_create_user_command
 
 command('ClearNotifications', function()
-  require'notify'.dismiss { silent = true }
-  vim.cmd[[nohlsearch|diffupdate|normal! <C-L><CR>]]
+  local has_notify, notify = pcall(require, 'notify')
+  if has_notify then
+    notify.dismiss { silent = true }
+    vim.cmd[[nohlsearch|diffupdate|normal! <C-L><CR>]]
+  else
+    vim.cmd[[:NotifierClear]]
+  end
 end, {
   bang = true,
 })

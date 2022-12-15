@@ -127,6 +127,8 @@ return require 'packer'.startup({ function(use)
       'b0o/schemastore.nvim', -- json schema support
       'neovim/nvim-lspconfig',
       'folke/neodev.nvim', -- nvim api docs, signatures, etc.
+      { 'jose-elias-alvarez/typescript.nvim', config = c'typescript' },
+      'smjonas/inc-rename.nvim',
     } }
 
   --[[----------------------------------------------------------
@@ -223,7 +225,13 @@ return require 'packer'.startup({ function(use)
   use { 'gbrlsnchs/winpick.nvim', config = c 'nvim-winpick' }
 
   -- pretty notifications
-  use { 'rcarriga/nvim-notify', config = c 'notify' }
+  use { 'rcarriga/nvim-notify', opt = true, config = c 'notify' }
+  use { 'vigoux/notifier.nvim', config = function()
+    require'notifier'.setup {
+      -- components = { 'nvim', 'lsp' } -- replace fidget
+      components = { 'nvim' }
+    }
+  end }
 
   --[[----------------------------------------------------------
   --                    ⌨️  Editing

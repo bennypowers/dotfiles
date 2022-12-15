@@ -96,7 +96,33 @@ return {
 
     q = 'Quit',
 
-    R = { vim.lsp.buf.rename, 'Rename refactor' },
+    r = {
+      name = 're...',
+
+      c = {
+        name        = 'caser',
+        _           = { '<Plug>CaserSnakeCase<cr>', 'snake_case' },
+        ['-']       = { '<Plug>CaserKebabCase<cr>', 'dash-case' },
+        ['.']       = { '<Plug>CaserDotCase<cr>', 'dot.case' },
+        ['<space>'] = { '<Plug>CaserSpaceCase<cr>', 'space case' },
+        c           = { '<Plug>CaserCamelCase<cr>', 'camelCase' },
+        K           = { '<Plug>CaserTitleKebabCase<cr>', 'Upper-Dash-Case' },
+        p           = { '<Plug>CaserMixedCase<cr>', 'PascalCase' },
+        s           = { '<Plug>CaserSentenceCase<cr>', 'Sentence case' },
+        t           = { '<Plug>CaserTitleCase<cr>', 'Title Case' },
+        u           = { '<Plug>CaserUpperCase<cr>', 'UPPER_SNAKE_CASE' },
+        U           = { '<Plug>CaserUpperCase<cr>', 'UPPER_SNAKE_CASE' },
+      },
+
+      n = { ':IncRename ', 'Rename (Incrementally)' },
+
+      o = {
+        name = 'colours',
+        c    = { U.cycle_color, 'Cycle colour format' },
+        h    = { U.format_hsl, 'Format color as hsl()' },
+      },
+
+    },
 
     --- Screenshots
     s = {
@@ -146,32 +172,5 @@ return {
   },
 
   O = { U.open_uri_under_cursor, 'Open URI under cursor' },
-
-  r = {
-    name = 'rename/rotate',
-    c = {
-      name        = 'caser',
-      _           = { '<Plug>CaserSnakeCase<cr>', 'snake_case' },
-      ['-']       = { '<Plug>CaserKebabCase<cr>', 'dash-case' },
-      ['.']       = { '<Plug>CaserDotCase<cr>', 'dot.case' },
-      ['<space>'] = { '<Plug>CaserSpaceCase<cr>', 'space case' },
-      c           = { '<Plug>CaserCamelCase<cr>', 'camelCase' },
-      K           = { '<Plug>CaserTitleKebabCase<cr>', 'Upper-Dash-Case' },
-      p           = { '<Plug>CaserMixedCase<cr>', 'PascalCase' },
-      s           = { '<Plug>CaserSentenceCase<cr>', 'Sentence case' },
-      t           = { '<Plug>CaserTitleCase<cr>', 'Title Case' },
-      u           = { '<Plug>CaserUpperCase<cr>', 'UPPER_SNAKE_CASE' },
-      U           = { '<Plug>CaserUpperCase<cr>', 'UPPER_SNAKE_CASE' },
-    },
-
-    o = {
-      name = 'colours',
-      c    = { U.cycle_color, 'Cycle colour format' },
-      h    = { U.format_hsl, 'Format color as hsl()' },
-    },
-
-    n = { vim.lsp.buf.rename, 'Rename refactor' },
-
-  },
 
 }
