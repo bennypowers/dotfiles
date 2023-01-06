@@ -86,12 +86,14 @@ set -x GIT_EDITOR nvim
 set -x LESSOPEN "| $hilite %s --out-format xterm256 --quiet --force "
 set -x LESS " -R"
 
+set -x DENO_INSTALL ~/.deno
 set -x PATH $PATH ~/.ghcup/bin
 set -x PATH ~/.cabal/bin $PATH
 set -x PATH ~/.cargo/bin $PATH
 set -x PATH ~/.local/bin $PATH []
 set -x PATH /usr/local/opt/python/bin/ $PATH
 set -x PATH /usr/local/opt/gnu-sed/libexec/gnubin $PATH
+set -x PATH $DENO_INSTALL/bin $PATH
 
 set -x NODE_ENV
 set -x NODE_OPTIONS --max_old_space_size=4096
