@@ -1,5 +1,5 @@
 local U = require 'utils'
-local T = require 'config.toggleterm'
+local T = require 'commands.terminals'
 
 local TELESCOPE_GROUP = {
   name = 'find',
@@ -29,6 +29,7 @@ return {
   },
 
   ['<c-l>'] = { '<cmd>ClearNotifications<cr>', 'Clear Notifications' },
+  ['<C-g>'] = { T.lazilygit, 'Toggle Lazygit' },
   ['<C-k>'] = { vim.lsp.buf.signature_help, 'Signature help' },
   ['<m-,>'] = { vim.diagnostic.goto_prev, 'Previous diagnostic' },
   ['<m-.>'] = { vim.diagnostic.goto_next, 'Next diagnostic' },

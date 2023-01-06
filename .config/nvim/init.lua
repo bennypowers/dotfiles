@@ -1,14 +1,16 @@
-require 'impatient'
-
-local function load(mod)
-  package.loaded[mod] = nil
-  return require(mod)
+-- bootstrap plugins
+local lazypath = vim.fn.stdpath'data'..'/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system{
+    'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', '--branch=stable', -- latest stable release
+    lazypath,
+  }
 end
+vim.opt.rtp:prepend(lazypath)
 
-load 'options'
-load 'commands'
-load 'plugins'
-load 'aucmds'
+require 'options'
+require 'commands'
+require 'aucmds'
 
 vim.cmd.colorscheme
   'catppuccin-mocha'
@@ -17,4 +19,10 @@ vim.cmd.colorscheme
   -- 'tokyonight'
   -- 'github_dark_default'
   -- 'oxocarbon-lua'
+
+require'lazy'.setup('plugins', {
+  defaults = {
+    -- lazy = true
+  }
+})
 

@@ -3,33 +3,33 @@ au = vim.api.nvim_create_autocmd
 
 ---Reload and compile packer plugins when config changes
 --
-au('BufWritePost', {
-  group = ag('packer_user_config', { clear = true }),
-  pattern = {
-    'plugins.lua',
-    'init.lua',
-    'lua/config/*.lua',
-    'aucmds.lua',
-    'catppuccin-nvim.lua',
-  },
-  callback = function(event)
-    if event.match:match'plugins%.lua$' then
-      vim.cmd.luafile(event.match)
-    end
-    require'packer'.compile()
-  end
-})
+-- au('BufWritePost', {
+--   group = ag('packer_user_config', { clear = true }),
+--   pattern = {
+--     'plugins.lua',
+--     'init.lua',
+--     'lua/config/*.lua',
+--     'aucmds.lua',
+--     'catppuccin-nvim.lua',
+--   },
+--   callback = function(event)
+--     if event.match:match'plugins%.lua$' then
+--       vim.cmd.luafile(event.match)
+--     end
+--     require'packer'.compile()
+--   end
+-- })
 
 ---Clean and reload packer plugins when compile finishes
 --
-au('User', {
-  pattern = 'PackerCompileDone',
-  callback = function()
-    vim.notify('Compile done', vim.log.levels.INFO, { title = 'Packer' })
-    require'packer'.clean()
-    vim.cmd.source'~/.config/nvim/plugin/packer_compiled.lua'
-  end,
-})
+-- au('User', {
+--   pattern = 'PackerCompileDone',
+--   callback = function()
+--     vim.notify('Compile done', vim.log.levels.INFO, { title = 'Packer' })
+--     require'packer'.clean()
+--     vim.cmd.source'~/.config/nvim/plugin/packer_compiled.lua'
+--   end,
+-- })
 
 au('BufEnter', {
   group = ag('waybar_config', {}),
@@ -81,3 +81,4 @@ au('TextYankPost', {
     vim.highlight.on_yank { higroup='IncSearch', timeout=300 }
   end,
 })
+
