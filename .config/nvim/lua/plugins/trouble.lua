@@ -4,7 +4,7 @@ local DEPS = {
 }
 
 -- language-server diagnostics panel
-return { 'folke/lsp-trouble.nvim', command = { 'Trouble', 'TroubleToggle' }, dependencies = DEPS, config = function() 
+return { 'folke/lsp-trouble.nvim', lazy = true, command = { 'Trouble', 'TroubleToggle' }, dependencies = DEPS, config = function()
 
 local trouble = require 'trouble'
 trouble.setup {

@@ -11,6 +11,7 @@ vim.opt.rtp:prepend(lazypath)
 require 'options'
 require 'commands'
 require 'aucmds'
+require'lazy'.setup'plugins'
 
 vim.cmd.colorscheme
   'catppuccin-mocha'
@@ -19,10 +20,4 @@ vim.cmd.colorscheme
   -- 'tokyonight'
   -- 'github_dark_default'
   -- 'oxocarbon-lua'
-
-require'lazy'.setup('plugins', {
-  defaults = {
-    -- lazy = true
-  }
-})
 
