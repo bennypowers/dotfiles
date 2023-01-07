@@ -5,7 +5,11 @@ local DEPS = {
 }
 
 -- 🔭 Telescope - generic fuzzy finder with popup window
-return { 'nvim-telescope/telescope.nvim', name = 'telescope', dependencies = DEPS, config = function()
+return { 'nvim-telescope/telescope.nvim',
+name = 'telescope',
+lazy = true,
+dependencies = DEPS, config = function()
+
 local telescope = require 'telescope'
 local actions = require 'telescope.actions'
 
@@ -49,6 +53,5 @@ telescope.setup {
   },
 }
 
-  end
-}
+end }
 

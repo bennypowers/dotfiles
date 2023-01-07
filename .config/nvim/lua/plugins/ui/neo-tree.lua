@@ -1,12 +1,17 @@
+local DEPS = {
+  'nvim-lua/plenary.nvim',
+  'MunifTanjim/nui.nvim',
+  'web-devicons',
+}
+
 -- tree browser
 return { 'nvim-neo-tree/neo-tree.nvim',
-  version = 'v2.x',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'MunifTanjim/nui.nvim',
-    'web-devicons',
-  },
-  config = function()
+lazy = true,
+version = 'v2.x',
+dependencies = DEPS,
+cmd = 'Neotree',
+config = function()
+
 local tree = require 'neo-tree'
 local highlights = require 'neo-tree.ui.highlights'
 local renderer = require 'neo-tree.ui.renderer'
@@ -230,5 +235,6 @@ tree.setup {
     }
   }
 }
-  end }
+
+end }
 

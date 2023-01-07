@@ -1,24 +1,25 @@
+local DEPS = {
+  'nvim-lua/plenary.nvim',
+  'L3MON4D3/LuaSnip',
+  'saadparwaiz1/cmp_luasnip', -- completion engine
+  'petertriho/cmp-git', -- autocomplete git issues
+  'hrsh7th/cmp-nvim-lsp', -- language-server-based completions
+  'hrsh7th/cmp-nvim-lua', -- lua
+  'hrsh7th/cmp-calc', -- math
+  'hrsh7th/cmp-buffer', -- buffer contents completion
+  'hrsh7th/cmp-path', -- path completions
+  'hrsh7th/cmp-emoji', -- ok boomer
+  'hrsh7th/cmp-cmdline', -- cmdline completions
+  'hrsh7th/cmp-nvim-lsp-signature-help', -- ffffunction
+  'ray-x/cmp-treesitter',
+  'David-Kunz/cmp-npm', -- npm package versions
+  'KadoBOT/cmp-plugins', -- plugin names
+  'lukas-reineke/cmp-under-comparator', -- _afterOthers
+  'mtoohey31/cmp-fish' -- 🐟
+}
+
 -- 📎 Completions and Snippets
-return { 'hrsh7th/nvim-cmp', dependencies = {
-    'nvim-lua/plenary.nvim',
-    'L3MON4D3/LuaSnip',
-    'saadparwaiz1/cmp_luasnip', -- completion engine
-    'petertriho/cmp-git', -- autocomplete git issues
-    'hrsh7th/cmp-nvim-lsp', -- language-server-based completions
-    'hrsh7th/cmp-nvim-lua', -- lua
-    'hrsh7th/cmp-calc', -- math
-    'hrsh7th/cmp-buffer', -- buffer contents completion
-    'hrsh7th/cmp-path', -- path completions
-    'hrsh7th/cmp-emoji', -- ok boomer
-    'hrsh7th/cmp-cmdline', -- cmdline completions
-    'hrsh7th/cmp-nvim-lsp-signature-help', -- ffffunction
-    'ray-x/cmp-treesitter',
-    'David-Kunz/cmp-npm', -- npm package versions
-    'KadoBOT/cmp-plugins', -- plugin names
-    'lukas-reineke/cmp-under-comparator', -- _afterOthers
-    'mtoohey31/cmp-fish' -- 🐟
-  },
-  config = function ()
+return { 'hrsh7th/nvim-cmp', lazy = true, dependencies = DEPS, config = function ()
 
 local cmp = require 'cmp'
 local lspkind = require 'lspkind'

@@ -1,7 +1,10 @@
 -- replaces various individual of plugins
-return { 'echasnovski/mini.nvim', config = function()
+return { 'echasnovski/mini.nvim', lazy = true, config = function()
 
 require 'mini.comment'.setup {}
+
+require 'mini.trailspace'.setup {}
+
 -- require 'mini.pairs'.setup {}
 
 -- require 'mini.surround'.setup {
@@ -27,17 +30,6 @@ require 'mini.comment'.setup {}
 -- -- Make special mapping for "add surrounding for line"
 -- vim.api.nvim_set_keymap('n', 'yss', 'ys_', { noremap = false })
 
-require 'mini.trailspace'.setup {}
-
-vim.api.nvim_create_augroup('MiniTrailspaceOnSave', { clear = true })
-vim.api.nvim_create_autocmd('BufWritePre', {
-  group = 'MiniTrailspaceOnSave',
-  pattern = { '*.lua' },
-  callback = function()
-    require 'mini.trailspace'.trim()
-  end
-})
-
 -- require'mini.indentscope'.setup {
 --   symbol = '|',
 --   draw = {
@@ -45,6 +37,14 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 --     animation = require'mini.indentscope'.gen_animation('none'),
 --   }
 -- }
+
+au('BufWritePre', {
+  group = ag('MiniTrailspaceOnSave'),
+  pattern = { '*.lua' },
+  callback = function()
+    require 'mini.trailspace'.trim()
+  end
+})
 
 end }
 

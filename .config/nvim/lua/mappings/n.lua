@@ -18,7 +18,6 @@ local BUFFERS_GROUP = {
   j    = { ':BufferLineCycleNext<cr>', 'Next buffer' },
   k    = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
   p    = { ':BufferLinePick<cr>', 'Pick buffer' },
-  -- d    = { U.bufdelete, 'Delete buffer' },
   d    = { ':BufDel<cr>', 'Delete buffer' },
   b    = { ':Telescope buffers<cr>', 'Search buffers' }
 }
@@ -75,6 +74,7 @@ return {
 
     k = { U.legendary_open, 'Command Palette' },
 
+    L = { ':Lazy<cr>', 'Plugin manager' },
     l = {
       name = 'lsp',
       f    = { function() vim.lsp.buf.format { async = true } end, 'Format file' },
@@ -85,14 +85,6 @@ return {
       e    = { U.open_diagnostics, 'Open diagnostics in floating window' },
     },
 
-    P = {
-      name = 'Plugins',
-      i    = { ':PackerInstall<cr>', 'Install plugins via Packer' },
-      u    = { ':PackerUpdate --preview<cr>', 'Update plugins via Packer' },
-      s    = { ':PackerSync --preview<cr>', 'Update plugins (sync) via Packer' },
-      c    = { ':PackerCompile<cr>', 'Compile plugins via Packer' },
-      x    = { ':PackerClean<cr>', 'Clean plugins via Packer' },
-    },
     p = { ':Telescope find_files hidden=true<cr>', 'Find files' },
 
     q = 'Quit',

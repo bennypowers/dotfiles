@@ -1,17 +1,19 @@
--- 🤖 Language Servers
-return { 'williamboman/mason.nvim', -- automatically install language servers
-  dependencies = {
-    'williamboman/mason-lspconfig.nvim',
-    'lukas-reineke/lsp-format.nvim',
-    'neovim/nvim-lspconfig', -- basic facility to configure language servers
-    'nvim-lua/lsp-status.nvim', -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
-    'hrsh7th/nvim-cmp',
-    'b0o/schemastore.nvim', -- json schema support
-    'neovim/nvim-lspconfig',
-    'folke/neodev.nvim', -- nvim api docs, signatures, etc.
-    'typescript',
-    'smjonas/inc-rename.nvim',
-  }, config = function() 
+local DEPS = {
+  'williamboman/mason-lspconfig.nvim',
+  'lukas-reineke/lsp-format.nvim',
+  'neovim/nvim-lspconfig', -- basic facility to configure language servers
+  'nvim-lua/lsp-status.nvim', -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
+  'hrsh7th/nvim-cmp',
+  'b0o/schemastore.nvim', -- json schema support
+  'neovim/nvim-lspconfig',
+  'folke/neodev.nvim', -- nvim api docs, signatures, etc.
+  'typescript',
+  'smjonas/inc-rename.nvim',
+}
+
+-- 🤖 Language Servers, automatically installed
+return { 'williamboman/mason.nvim', dependencies = DEPS, config = function() 
+
 vim.g.diagnostic_enable_virtual_text = 1
 vim.g.diagnostic_virtual_text_prefix = ' '
 vim.fn.sign_define('DiagnosticSignError', { text = '🔥', texthl = 'DiagnosticError' })
@@ -271,5 +273,6 @@ require'inc_rename'.setup()
 --   group = 'HoverOnHold',
 --   callback = function() vim.lsp.buf.hover() end,
 -- })
+
 end }
 

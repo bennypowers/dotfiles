@@ -1,5 +1,5 @@
 -- Take screenshots from nvim
-return { 'narutoxy/silicon.lua', dependencies = { 'nvim-lua/plenary.nvim' }, config = function() 
+return { 'narutoxy/silicon.lua', lazy = true, dependencies = { 'nvim-lua/plenary.nvim' }, config = function() 
 
 require'silicon'.setup {
   windowControls = false,
