@@ -67,17 +67,11 @@ M.scratch_with_command = input_wrapper(scratch_with_command)
 ---@type fun(input:string):nil
 M.term_with_command = input_wrapper(term_with_command)
 
----Launch a terminal in a vertical split
-function M.term_vertical()
-  local term = Terminal:new { cmd = 'fish' }
-  term:open(80, 'vertical', true)
-  return term
-end
-
 ---Launch lazygit in a scratch terminal,
 ---but if we're in `~/.config`, use the bare repo
 function M.lazilygit()
-  if vim.loop.cwd() == vim.call('expand', '~/.config') then
+  local cwd = vim.loop.cwd()
+  if cwd and vim.startswith(cwd, vim.fn.expand'~/.config') then
     dotfileslazygit:toggle()
   else
     lazygit:toggle()

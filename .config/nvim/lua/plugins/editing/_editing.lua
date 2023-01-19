@@ -6,14 +6,11 @@ return {
   -- multiple cursors, kinda like atom + vim-mode-plus
   { 'mg979/vim-visual-multi', branch = 'master', keys = { '<c-n>' } },
 
-  -- gs to toggle bool
-  'AndrewRadev/switch.vim',
-
   -- better vim marks
   { 'chentau/marks.nvim', enabled = false },
 
   -- align anything
-  'tommcdo/vim-lion',
+  { 'tommcdo/vim-lion', lazy = true, keys = { 'gl', 'gL', } },
 
   -- autoconvert '' or "" to ``
   'axelvc/template-string.nvim',

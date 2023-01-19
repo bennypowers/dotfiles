@@ -12,4 +12,7 @@
    right: (string (string_fragment) @html
                   (#offset! @html 0 1 0 -1)))
 
+((comment) @_comment
+  (#eq? @_comment "/* html */")
+  (template_string) @html)
 

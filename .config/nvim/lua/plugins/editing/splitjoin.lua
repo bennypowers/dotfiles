@@ -1,5 +1,5 @@
 -- like vmp `g,` action
-return { 'AndrewRadev/splitjoin.vim', keys = { 'gj', 'g,' }, init = function()
+return { 'AndrewRadev/splitjoin.vim', keys = { 'gj', 'g,' }, cmd = {'SplitjoinJoin', 'SplitjoinSplit'}, init = function()
 
 vim.g.splitjoin_split_mapping = ''
 vim.g.splitjoin_join_mapping = ''

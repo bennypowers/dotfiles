@@ -1,5 +1,5 @@
 -- replaces various individual of plugins
-return { 'echasnovski/mini.nvim', lazy = true, config = function()
+return { 'echasnovski/mini.nvim', keys = 'gc', config = function()
 
 require 'mini.comment'.setup {}
 
@@ -39,7 +39,7 @@ require 'mini.trailspace'.setup {}
 -- }
 
 au('BufWritePre', {
-  group = ag('MiniTrailspaceOnSave'),
+  group = ag('MiniTrailspaceOnSave', {}),
   pattern = { '*.lua' },
   callback = function()
     require 'mini.trailspace'.trim()

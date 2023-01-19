@@ -16,14 +16,17 @@ local TELESCOPE_GROUP = {
 local BUFFERS_GROUP = {
   name = 'buffers',
   j    = { ':BufferLineCycleNext<cr>', 'Next buffer' },
+  J    = { ':BufferLineCycleNext<cr>', 'Next buffer' },
   k    = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
+  K    = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
   p    = { ':BufferLinePick<cr>', 'Pick buffer' },
   d    = { ':BufDel<cr>', 'Delete buffer' },
+  D    = { ':BufDel<cr>', 'Delete buffer' },
   b    = { ':Telescope buffers<cr>', 'Search buffers' }
 }
 
 return {
-  [';'] = {
+  ['<c-w>'] = {
     p = { function() require 'winpick'.select() end, 'Pick window' }
   },
 
@@ -55,8 +58,6 @@ return {
     ['.']  = { vim.lsp.buf.code_action, 'Code actions' },
 
     w = { ':BufDel<cr>', 'Delete buffer' },
-
-    b = BUFFERS_GROUP,
 
     c = {
       b = { function() require 'nvim-biscuits'.toggle_biscuits() end, 'Toggle code biscuits' },
@@ -125,7 +126,8 @@ return {
 
     t = {
       name = 'terminals',
-      t    = { T.term_vertical, 'Open terminal in vertical split' },
+      t    = { ':ToggleTerm size=20 dir=git_dir direction=vertical<cr>', 'Open terminal in vertical split' },
+      p    = { ':ToggleTerm size=20 dir=git_dir<cr>', 'Open terminal in horizontal split' },
       f    = { T.term_with_command, 'Open terminal with command' },
       s    = { T.scratch_with_command, 'Open Scratch terminal with command' },
     },

@@ -1,6 +1,5 @@
 -- Live cheat sheet for key bindings
 return { 'folke/which-key.nvim', dependencies = { 'legendary' }, config = function()
-vim.cmd [[nmap ; <C-w>]]
 
 local wk = require 'which-key'
 local U = require 'utils'

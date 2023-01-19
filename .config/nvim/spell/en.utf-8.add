@@ -7,3 +7,9 @@ observedAttributes
 connectedCallback
 attributeChangedCallback
 ElementInternals
+lazygit
+config
+eleventyConfig
+css
+svg
+a11y

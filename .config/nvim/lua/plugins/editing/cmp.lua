@@ -1,8 +1,5 @@
 local DEPS = {
   'nvim-lua/plenary.nvim',
-  'L3MON4D3/LuaSnip',
-  'saadparwaiz1/cmp_luasnip', -- completion engine
-  'petertriho/cmp-git', -- autocomplete git issues
   'hrsh7th/cmp-nvim-lsp', -- language-server-based completions
   'hrsh7th/cmp-nvim-lua', -- lua
   'hrsh7th/cmp-calc', -- math
@@ -11,11 +8,14 @@ local DEPS = {
   'hrsh7th/cmp-emoji', -- ok boomer
   'hrsh7th/cmp-cmdline', -- cmdline completions
   'hrsh7th/cmp-nvim-lsp-signature-help', -- ffffunction
+  'petertriho/cmp-git', -- autocomplete git issues
   'ray-x/cmp-treesitter',
   'David-Kunz/cmp-npm', -- npm package versions
   'KadoBOT/cmp-plugins', -- plugin names
   'lukas-reineke/cmp-under-comparator', -- _afterOthers
-  'mtoohey31/cmp-fish' -- 🐟
+  'mtoohey31/cmp-fish', -- 🐟
+  {'L3MON4D3/LuaSnip', version = '1', priority = 200 },
+  {'saadparwaiz1/cmp_luasnip', priority = 100}, -- completion engine
 }
 
 -- 📎 Completions and Snippets
@@ -24,12 +24,12 @@ return { 'hrsh7th/nvim-cmp', lazy = true, dependencies = DEPS, config = function
 local cmp = require 'cmp'
 local lspkind = require 'lspkind'
 local luasnip = require 'luasnip'
+local types = require 'luasnip.util.types'
 local can_npm, cmp_npm = pcall(require, 'cmp-npm')
 
-local types = require 'luasnip.util.types'
 luasnip.config.setup {
   history = true,
-  native_menu = false,
+  native_menu = true,
   updateevents = 'TextChanged,TextChangedI',
   enable_autosnippets = true,
   ext_opts = {
@@ -49,14 +49,6 @@ luasnip.config.setup {
   },
 
 }
-
-require 'luasnip.loaders.from_lua'.lazy_load()
-require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
-  '~/Developer/redhat-ux/red-hat-design-tokens/editor/vscode'
-} }
-require 'luasnip.loaders.from_snipmate'.lazy_load { paths = {
-  '~/.config/nvim/snippets',
-} }
 
 vim.keymap.set({ 'i', 's' }, '<c-j>', function()
   if luasnip.expand_or_jumpable() then
@@ -112,10 +104,10 @@ cmp.setup({
   },
 
   sources = cmp.config.sources({
+    { name = 'luasnip', option = { use_show_condition = false } },
+  }, {
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
-  }, {
-    { name = 'luasnip', option = { use_show_condition = false } },
   }, {
     { name = 'treesitter' },
     { name = 'buffer', keyword_length = 3 },
@@ -150,8 +142,8 @@ cmp.setup({
   },
 
   formatting = {
-    -- fields = { "kind", "abbr", "menu" },
-    fields = { "kind", "abbr" },
+    fields = { "kind", "abbr", "menu" },
+    -- fields = { "kind", "abbr" },
     format = function(entry, vim_item)
       local kind = lspkind.cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
       local strings = vim.split(kind.kind, "%s", { trimempty = true })
@@ -228,10 +220,10 @@ end
 
 local JS_CONFIG = {
   sources = cmp.config.sources({
+    { name = 'luasnip', option = { use_show_condition = false } },
+  }, {
     { name = 'nvim_lsp', entry_filter = emmet_in_lit_only },
     { name = 'nvim_lsp_signature_help' },
-  }, {
-    { name = 'luasnip', option = { use_show_condition = false } },
   }, {
     { name = 'treesitter' },
     { name = 'buffer', keyword_length = 3 },
@@ -240,7 +232,17 @@ local JS_CONFIG = {
     { name = 'emoji' },
   })
 }
+
 cmp.setup.filetype('javascript', JS_CONFIG)
 cmp.setup.filetype('typescript', JS_CONFIG)
-  end }
+
+require 'luasnip.loaders.from_lua'.lazy_load()
+require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
+  '~/Developer/redhat-ux/red-hat-design-tokens/editor/vscode',
+} }
+require 'luasnip.loaders.from_snipmate'.lazy_load { paths = {
+  '~/.config/nvim/snippets',
+} }
+
+end }
 
