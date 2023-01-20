@@ -1,3 +1,3 @@
-return { 'LudoPinelli/comment-box.nvim', config = function ()
+return { 'LudoPinelli/comment-box.nvim', lazy = true, config = function ()
   require'comment-box'.setup()
 end }
