@@ -8,6 +8,8 @@ return { 'bennypowers/nvim-bufmode',
       t = 'Neotree float buffers',
       d = 'BufDel',
       P = 'BufferLineTogglePin',
+      e = 'BufferLineCycleNext',
+      E = 'BufferLineMoveNext',
     }
   }
 }
