@@ -19,6 +19,7 @@ vim.opt.laststatus     = 3
 vim.opt.linebreak      = true
 vim.opt.list           = true
 vim.opt.mouse          = 'a'
+vim.opt.mousemoveevent = true
 vim.opt.number         = true
 vim.opt.relativenumber = true
 vim.opt.pastetoggle    = '<F10>'
@@ -44,36 +45,15 @@ vim.filetype.add { extension = {
   sketchpalette = 'json',
 } }
 
-local jid = vim.fn.jobstart { 'git', 'rev-parse', '--git-dir' }
-local ret = vim.fn.jobwait { jid }[1]
-if ret > 0 then
-  vim.env.GIT_DIR = vim.fn.expand '~/.cfg'
-  vim.env.GIT_WORK_TREE = vim.fn.expand '~'
-end
-
 if vim.g.started_by_firenvim then
   vim.g.auto_session_enabled = false
   vim.opt.laststatus = 0
   vim.opt.showtabline = 0
   vim.opt.guifont = 'FiraCode_Nerd_Font'
-  vim.api.nvim_create_autocmd('BufEnter', {
-    group = vim.api.nvim_create_augroup('firenvim_md', { clear = true }),
+  au('BufEnter', {
+    group = ag('firenvim_md', {}),
     pattern = 'github.com_*.txt',
     command = 'set filetype=markdown'
   })
 end
 
--- Markdown fenced code blocks
-vim.g.vim_markdown_fenced_languages = {
-  'css', 'scss', 'html',
-  'python', 'py=python',
-  'sh', 'bash=sh',
-  'fish',
-
-  'typescript', 'ts=typescript', 'diff-ts=typescript',
-  'javascript', 'js=javascript', 'diff-js=javascript',
-  'json=javascript',
-
-  'graphql', 'gql=graphql',
-  'vim'
-}

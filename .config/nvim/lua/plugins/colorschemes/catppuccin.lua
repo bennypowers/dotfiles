@@ -1,4 +1,6 @@
-return { 'catppuccin/nvim', lazy = true, priority = 1000, build = ":CatppuccinCompile", config = function ()
+return { 'catppuccin/nvim',
+  build = ":CatppuccinCompile",
+  config = function ()
 
 local colors = require 'catppuccin.palettes'.get_palette()
 local darken = require 'catppuccin.utils.colors'.darken

@@ -50,6 +50,10 @@ tree.setup {
   enable_diagnostics = true,
   use_libuv_filewatcher = true,
 
+  source_selector = {
+    winbar = true
+  },
+
   event_handlers = {
     {
       event = 'neo_tree_buffer_enter',

@@ -13,18 +13,6 @@ local TELESCOPE_GROUP = {
   p    = { ':Telescope pickers<cr>', 'Choose Pickers' },
 }
 
-local BUFFERS_GROUP = {
-  name = 'buffers',
-  j    = { ':BufferLineCycleNext<cr>', 'Next buffer' },
-  J    = { ':BufferLineCycleNext<cr>', 'Next buffer' },
-  k    = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
-  K    = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
-  p    = { ':BufferLinePick<cr>', 'Pick buffer' },
-  d    = { ':BufDel<cr>', 'Delete buffer' },
-  D    = { ':BufDel<cr>', 'Delete buffer' },
-  b    = { ':Telescope buffers<cr>', 'Search buffers' }
-}
-
 return {
   ['<c-w>'] = {
     p = { function() require 'winpick'.select() end, 'Pick window' }
@@ -36,8 +24,6 @@ return {
   ['<m-,>'] = { vim.diagnostic.goto_prev, 'Previous diagnostic' },
   ['<m-.>'] = { vim.diagnostic.goto_next, 'Next diagnostic' },
   ['<m-i>'] = { U.refresh_init, 'Reload config' },
-  ['<m-j>'] = { ':BufferLineCycleNext<cr>', 'Next buffer' },
-  ['<m-k>'] = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
 
   E = { U.open_diagnostics, 'Open diagnostics in floating window' },
 
@@ -45,19 +31,16 @@ return {
 
   F = TELESCOPE_GROUP,
 
-  B = BUFFERS_GROUP,
+  -- B = BUFFERS_GROUP,
+  B = {':BufmodeEnter<cr>', 'Enter Buffer Mode'},
 
   ['<leader>'] = {
     name = '+leader',
 
     [';']  = { ':vnew<cr>', 'New Split' },
-    ['}']  = { ':BufferLineCycleNext<cr>', 'Next buffer' },
-    ['{']  = { ':BufferLineCyclePrev<cr>', 'Previous buffer' },
     ['|'] = { ':Neotree reveal filesystem float toggle=true<cr>', 'Toggle file tree (float)' },
     ['\\']  = { ':Neotree reveal filesystem show left toggle focus<cr>', 'Toggle file tree (sidebar)' },
     ['.']  = { vim.lsp.buf.code_action, 'Code actions' },
-
-    w = { ':BufDel<cr>', 'Delete buffer' },
 
     c = {
       b = { function() require 'nvim-biscuits'.toggle_biscuits() end, 'Toggle code biscuits' },
@@ -138,6 +121,8 @@ return {
 
     ['%'] = 'match surround backwards',
 
+    b = {':BufmodeEnter<cr>', 'Enter Buffer Mode'},
+
     A = { ':Dashboard<cr>', 'Show dashboard' },
 
     c = {
@@ -164,6 +149,14 @@ return {
     r = { vim.lsp.buf.references, 'Goto references' },
 
     T = { ':TroubleToggle<cr>', 'Toggle trouble' },
+
+    ['.'] = {
+      name = 'git conflicts',
+      ['.'] = { ':GitConflictNextConflict<cr>', 'Next Git Conflict' },
+      [','] = { ':GitConflictPrevConflict<cr>', 'Previous Git Conflict' },
+      o = { ':GitConflictChooseOurs<cr>', 'Choose Ours' },
+      t = { ':GitConflictChooseTheirs<cr>', 'Choose Theirs' },
+    }
   },
 
   O = { U.open_uri_under_cursor, 'Open URI under cursor' },

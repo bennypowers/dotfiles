@@ -11,7 +11,13 @@ vim.opt.rtp:prepend(lazypath)
 require 'options'
 require 'commands'
 require 'aucmds'
-require 'lazy'.setup 'plugins'
+require 'lazy'.setup('plugins', {
+  dev = {
+    path = '~/Developer',
+    patterns = {'bennypowers'},
+    fallback = true,
+  }
+})
 
 vim.cmd.nmap('<c-;>', '<c-w>');
 vim.cmd.colorscheme

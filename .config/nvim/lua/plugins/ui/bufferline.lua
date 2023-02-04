@@ -1,12 +1,18 @@
 -- editor tabs. yeah ok I know they're not "tabs"
-return { 'akinsho/bufferline.nvim', version = "v2.*", config = function ()
+return { 'akinsho/bufferline.nvim',
+  version = "v2.*",
+  lazy = true,
+  event = 'ColorScheme',
+  dependencies = {'catppuccin/nvim'},
+  config = function ()
 
 local bufferline = require 'bufferline'
 local U = require 'utils'
 
 bufferline.setup {
+  highlights = require'catppuccin.groups.integrations.bufferline'.get(),
   options = {
-    -- separator_style = 'slant',
+    separator_style = 'slant',
     numbers = 'none',
     diagnostics = 'nvim_lsp',
     show_buffer_icons = true,
@@ -20,15 +26,21 @@ bufferline.setup {
            and filetype ~= 'Trouble'
            and filename ~= 'neo-tree filesystem [1]'
            and filename ~= '[No Name]'
-           and filename ~= ''
-      )
+           and filename ~= '' )
     end,
+    hover = {
+      enabled = true,
+      delay = 200,
+      reveal = {'close'},
+    },
     offsets = {
       {
         filetype = "neo-tree",
         text_align = "center",
-        highlight = 'Directory',
-        text = 'Files',
+        highlight = 'BufferlineFill',
+        text = function()
+          return vim.fn.getcwd()
+        end,
       },
     },
   },
