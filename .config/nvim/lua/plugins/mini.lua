@@ -1,5 +1,5 @@
 -- replaces various individual of plugins
-return { 'echasnovski/mini.nvim', keys = 'gc', config = function()
+return { 'echasnovski/mini.nvim', config = function()
 
 require 'mini.comment'.setup {}
 
