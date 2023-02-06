@@ -1,5 +1,3 @@
-command = vim.api.nvim_create_user_command
-
 command('ClearNotifications', function()
   local has_notify, notify = pcall(require, 'notify')
   if has_notify then

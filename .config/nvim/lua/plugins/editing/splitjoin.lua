@@ -1,9 +1,12 @@
--- like vmp `g,` action
-return { 'AndrewRadev/splitjoin.vim', keys = { 'gj', 'g,' }, cmd = {'SplitjoinJoin', 'SplitjoinSplit'}, init = function()
-
 vim.g.splitjoin_split_mapping = ''
 vim.g.splitjoin_join_mapping = ''
-vim.api.nvim_set_keymap('n', 'gj', ':SplitjoinJoin<cr>', {})
-vim.api.nvim_set_keymap('n', 'g,', ':SplitjoinSplit<cr>', {})
 
-end }
+-- like vmp `g,` action
+return { 'AndrewRadev/splitjoin.vim',
+  lazy = true,
+  keys = {
+    { 'gj', ':SplitjoinJoin<cr>', desc = 'Join the object under cursor' },
+    { 'g,', ':SplitjoinSplit<cr>', desc = 'Split the object under cursor' },
+  },
+  cmd = { 'SplitjoinJoin', 'SplitjoinSplit' },
+}

@@ -1,6 +1,3 @@
-ag = vim.api.nvim_create_augroup
-au = vim.api.nvim_create_autocmd
-
 au('BufEnter', {
   group = ag('waybar_config', {}),
   pattern = 'config',

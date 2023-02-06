@@ -1,3 +1,9 @@
+-- bootstrap plugins
+local lazypath = vim.fn.stdpath'data'..'/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system { 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', '--branch=stable', lazypath }
+end
+
 -- disable some built-in plugins
 vim.g.loaded_netrw           = 1
 vim.g.loaded_matchparen      = 1
@@ -8,6 +14,7 @@ vim.g.termguicolors = true
 vim.g.mapleader     = ' '
 vim.env.BASH_ENV    = '~/.config/bashrc'
 
+vim.opt.rtp:prepend(lazypath)
 vim.opt.backspace      = 'indent,eol,start'
 vim.opt.colorcolumn    = '100'
 vim.opt.completeopt    = 'menu,menuone,noselect'

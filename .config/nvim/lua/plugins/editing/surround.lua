@@ -1,13 +1,11 @@
 -- ysiw
-return { 'kylechui/nvim-surround', config = function()
-
-require 'nvim-surround'.setup {
-  surrounds = {
-    ["<"] = { add = { "<", ">" } },
-    [">"] = { add = { "< ", " >" } },
-    ["["] = { add = { "[", "]" } },
-    ["]"] = { add = { "[ ", " ]" } },
+return { 'kylechui/nvim-surround',
+  opts = {
+    surrounds = {
+      ["<"] = { add = { "<", ">" } },
+      [">"] = { add = { "< ", " >" } },
+      ["["] = { add = { "[", "]" } },
+      ["]"] = { add = { "[ ", " ]" } },
+    }
   }
 }
-
-end }
