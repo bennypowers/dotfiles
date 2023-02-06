@@ -10,6 +10,9 @@ local function nmap(lhs, rhs, desc) map(lhs, rhs, desc, { mode = 'n' }) end
 local function vmap(lhs, rhs, desc) map(lhs, rhs, desc, { mode = 'v' }) end
 local function imap(lhs, rhs, desc) map(lhs, rhs, desc, { mode = 'i' }) end
 
+local function format_async () vim.lsp.buf.format { async = true } end
+local function open_diagnostics() vim.diagnostic.open_float { focus = false } end
+
 local U = require 'utils'
 
 nmap('<leader>L',  ':Lazy<cr>',                   'Plugin manager')
@@ -19,15 +22,10 @@ nmap('<A-h>',      '<C-w>h',                      'Move cursor to window left')
 nmap('<A-j>',      '<C-w>j',                      'Move cursor to window below')
 nmap('<A-k>',      '<C-w>k',                      'Move cursor to window above')
 nmap('<A-l>',      '<C-w>l',                      'Move cursor to window right')
-nmap('<A-p>',      U.winpick,                     'Pick window')
 
-nmap('<m-i>',      U.refresh_init,                'Reload config')
-nmap('E',          U.open_diagnostics,            'Open diagnostics in floating window')
-nmap('<leader>e',  U.open_diagnostics,            'Open diagnostics in floating window')
-nmap('<leader>le', U.open_diagnostics,            'Open diagnostics in floating window')
+nmap('<leader>e',  open_diagnostics,            'Open diagnostics in floating window')
 nmap('O',          U.open_uri_under_cursor,       'Open URI under cursor')
-nmap('<leader>lf', U.format_file,                 'Format file')
-nmap('gP',         U.close_all_win,               'Close all preview windows')
+nmap('<leader>lf', format_async,                  'Format file')
 
 nmap('K',          vim.lsp.buf.hover,             'Hover')
 nmap('<leader>.',  vim.lsp.buf.code_action,       'Code actions')
@@ -50,10 +48,7 @@ map('<A-h>',       '<c-\\><c-N><c-w>h',           'Move cursor to window left' ,
 map('<A-j>',       '<c-\\><c-N><c-w>j',           'Move cursor to window below' , { mode = { 'i', 't' } })
 map('<A-k>',       '<c-\\><c-N><c-w>k',           'Move cursor to window above' , { mode = { 'i', 't' } })
 map('<A-l>',       '<c-\\><c-N><c-w>l',           'Move cursor to window right' , { mode = { 'i', 't' } })
-map('<A-p>',       U.winpick,                     'Pick window',                  { mode = { 'i', 't' } })
 
-vmap('F',          U.find_selection,              'Find selection in project')
-vmap('fg',         U.find_selection,              'Find selection in project')
 vmap('rn',         vim.lsp.buf.rename,            'Rename refactor')
 
 imap('<c-l>',      '<cmd>ClearNotifications<cr>', 'Clear Notifications')

@@ -1,8 +1,5 @@
 return {
 
-  -- close buffers (tabs) with less headache
-  'ojroques/nvim-bufdel',
-
   -- better vim marks
   { 'chentau/marks.nvim', enabled = false },
 

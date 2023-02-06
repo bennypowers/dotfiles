@@ -1,3 +1,18 @@
+local function find_selection()
+  vim.cmd 'noau normal! "vy"'
+  ---@type string|nil
+  local text = vim.fn.getreg('v')
+  vim.fn.setreg('v', {})
+  text = string.gsub(text or '', '\n', '')
+  if string.len(text) == 0 then
+    text = nil
+  end
+
+  require 'telescope.builtin'.live_grep {
+    default_text = text
+  }
+end
+
 -- 🔭 Telescope - generic fuzzy finder with popup window
 return { 'nvim-telescope/telescope.nvim',
   name = 'telescope',
@@ -13,7 +28,10 @@ return { 'nvim-telescope/telescope.nvim',
     {'<leader>fr', ':Telescope resume<cr>',                 desc = 'Resume finding'},
     {'<leader>fn', ':Telescope notify<cr>',                 desc = 'Find in Notifications'},
     {'<leader>fp', ':Telescope pickers<cr>',                desc = 'Choose Pickers'},
-    {'<c-e>', '<cmd>Telescope symbols<cr>',  mode = 'i',    desc = 'Pick symbol via Telescope'},
+    {'<c-e>',      '<cmd>Telescope symbols<cr>',            mode = 'i',    desc = 'Pick symbol via Telescope'},
+    {'F',          find_selection,                          mode = 'v',    desc = 'Find selection in project' },
+    {'fg',         find_selection,                          mode = 'v',    desc = 'Find selection in project' },
+
   },
   dependencies = {
     'nvim-lua/plenary.nvim',
