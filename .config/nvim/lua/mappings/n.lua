@@ -14,6 +14,12 @@ nmap('O',          U.open_uri_under_cursor,       'Open URI under cursor')
 nmap('<leader>lf', U.format_file,                 'Format file')
 nmap('gP',         U.close_all_win,               'Close all preview windows')
 
+nmap('<A-h>', '<C-w>h',  'Move cursor to window left')
+nmap('<A-j>', '<C-w>j',  'Move cursor to window below')
+nmap('<A-k>', '<C-w>k',  'Move cursor to window above')
+nmap('<A-l>', '<C-w>l',  'Move cursor to window right')
+nmap('<A-p>', U.winpick, 'Pick window')
+
 nmap('K',          vim.lsp.buf.hover,             'Hover')
 nmap('<leader>.',  vim.lsp.buf.code_action,       'Code actions')
 nmap('<c-k>',      vim.lsp.buf.signature_help,    'Signature help')

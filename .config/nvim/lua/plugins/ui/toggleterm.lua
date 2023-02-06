@@ -1,31 +1,21 @@
-local function input_wrapper(fn)
-  return function()
-    vim.ui.input({ prompt = '$' }, function(x)
-      if x then
-        fn(x)
-      end
-    end)
-  end
-end
-
-local dotfileslazygit
-local lazygit
-local Terminal
-
----Close a terminal whose command exits cleanly.
----For good measure, refresh the neo-tree filesystem view either way
-local function close_terminal_on_zero_exit(terminal, _, exit_code)
-  if exit_code == 0 then
-    terminal:close()
-  end
-  require 'neo-tree.sources.manager'.refresh 'filesystem'
-end
+local term_lazydotfiles
+local term_lazygit
+local term_pinned
 
 local lazygit_term_options = {
   cmd = 'lazygit',
   direction = 'float',
   hidden = true,
-  on_exit = close_terminal_on_zero_exit,
+  -- Close a terminal whose command exits cleanly.
+  -- For good measure, refresh the neo-tree filesystem view either way
+  on_exit = function(terminal, _, exit_code)
+    if exit_code == 0 then
+      terminal:close()
+    end
+    pcall(function()
+      require 'neo-tree.sources.manager'.refresh 'filesystem'
+    end)
+  end,
   shade_terminals = false,
   highlights = {
     NormalFloat = {
@@ -38,45 +28,26 @@ local lazygit_term_options = {
   },
 }
 
----Launch a scratch terminal with a given command
----@type fun(input:string):nil
-local scratch_with_command = input_wrapper(function (input)
-  return Terminal:new {
-    cmd = input,
-    close_on_exit = true,
-    direction = 'float',
-    on_exit = close_terminal_on_zero_exit,
-  }:open()
-end)
-
----Launch a terminal in a vertical split with a given command
----@type fun(input:string):nil
-local term_with_command = input_wrapper(function(input)
-  return Terminal:new {
-    cmd = input,
-    direction = 'vertical',
-  }:open()
-end)
-
 ---Launch lazygit in a scratch terminal,
 ---but if we're in `~/.config`, use the bare repo
-local function lazilygit()
+local function toggle_term_lazygit()
   local cwd = vim.loop.cwd()
   if cwd and vim.startswith(cwd, vim.fn.expand'~/.config') then
-    dotfileslazygit:toggle()
+    term_lazydotfiles:toggle()
   else
-    lazygit:toggle()
+    term_lazygit:toggle()
   end
+end
+
+local function toggle_term_pinned()
+  term_pinned:toggle()
 end
 
 -- 🖥️  terminal emulator
 return { 'akinsho/toggleterm.nvim',
   keys = {
-    { '<leader>tt', ':ToggleTerm size=20 dir=git_dir direction=vertical<cr>', desc = 'Open terminal in vertical split' },
-    { '<leader>tp', ':ToggleTerm size=20 dir=git_dir<cr>',                    desc = 'Open terminal in horizontal split' },
-    { '<leader>tf', term_with_command,                                        desc = 'Open terminal with command' },
-    { '<leader>ts', scratch_with_command,                                     desc = 'Open Scratch terminal with command' },
-    { '<leader>g',  lazilygit,                                                desc = 'Git UI via lazygit' },
+    { '<leader>tp', toggle_term_pinned,  desc = 'Open terminal in horizontal split' },
+    { '<leader>g',  toggle_term_lazygit, desc = 'Git UI via lazygit' },
   },
   config = function()
 
@@ -84,11 +55,22 @@ return { 'akinsho/toggleterm.nvim',
       shell = 'fish'
     }
 
-    Terminal = require 'toggleterm.terminal'.Terminal
-    lazygit = Terminal:new(lazygit_term_options)
-    dotfileslazygit = Terminal:new(vim.tbl_extend('force', lazygit_term_options, {
+    local Terminal = require 'toggleterm.terminal'.Terminal
+
+    term_lazygit = Terminal:new(lazygit_term_options)
+
+    term_lazydotfiles = Terminal:new(vim.tbl_extend('force', lazygit_term_options, {
       cmd = 'lazygit --git-dir=$HOME/.cfg --work-tree=$HOME',
     }))
+
+    term_pinned = Terminal:new {
+      direction = 'horizontal',
+      size = 20,
+      dir = 'git_dir',
+      on_create = function()
+        pcall(function() vim.cmd':PinBuftype' end)
+      end
+    }
 
   end
 }

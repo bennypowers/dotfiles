@@ -6,11 +6,8 @@ require'mappings.t'
 local U = require 'utils'
 
 -- movement between windows
-for _,mode in ipairs({ 'n', 'i', 't', 'v' }) do
-  vim.keymap.set(mode, '<m-h>', '<C-w>h',  {desc='Move cursor to window left'})
-  vim.keymap.set(mode, '<m-j>', '<C-w>j',  {desc='Move cursor to window below'})
-  vim.keymap.set(mode, '<m-k>', '<C-w>k',  {desc='Move cursor to window above'})
-  vim.keymap.set(mode, '<m-l>', '<C-w>l',  {desc='Move cursor to window right'})
-  vim.keymap.set(mode, '<m-p>', U.winpick, {desc='Pick window'})
-end
-
+vim.keymap.set({ 'i', 't' }, '<A-h>', '<c-\\><c-N><c-w>h',  { desc='Move cursor to window left' })
+vim.keymap.set({ 'i', 't' }, '<A-j>', '<c-\\><c-N><c-w>j',  { desc='Move cursor to window below' })
+vim.keymap.set({ 'i', 't' }, '<A-k>', '<c-\\><c-N><c-w>k',  { desc='Move cursor to window above' })
+vim.keymap.set({ 'i', 't' }, '<A-l>', '<c-\\><c-N><c-w>l',  { desc='Move cursor to window right' })
+vim.keymap.set({ 'i', 't' }, '<A-p>', U.winpick,            { desc='Pick window'})

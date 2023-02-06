@@ -88,6 +88,7 @@
   "silicon.lua": { "branch": "main", "commit": "8db5682c9c13d6de584551c4b2b9982709f05610" },
   "splitjoin.vim": { "branch": "main", "commit": "956d67c88512b91c2938da3a9e0aeeea2b82cd0b" },
   "startuptime.vim": { "branch": "master", "commit": "dfa57f522d6f61793fe5fea65bca7484751b8ca2" },
+  "stickybuf.nvim": { "branch": "master", "commit": "cde97217a7e81ea4488e0c32b8ae6c9d181156c8" },
   "telescope": { "branch": "master", "commit": "203bf5609137600d73e8ed82703d6b0e320a5f36" },
   "telescope-heading.nvim": { "branch": "main", "commit": "b1969c1b1b3de52c45b4c440e0784c33b5814954" },
   "telescope-symbols.nvim": { "branch": "master", "commit": "f7d7c84873c95c7bd5682783dd66f84170231704" },

@@ -9,11 +9,14 @@ return { 'bennypowers/nvim-bufmode',
   opts = {
     bufferline = true,
     keymaps = {
+      ['<cr>'] = '<esc>',
       f = 'Telescope buffers',
       t = 'Neotree float buffers',
       d = 'BufDel',
       P = 'BufferLineTogglePin',
       e = 'BufferLineCycleNext',
+      j = 'BufferLineCycleNext',
+      k = 'BufferLineCyclePrev',
       E = 'BufferLineMoveNext',
     }
   }
