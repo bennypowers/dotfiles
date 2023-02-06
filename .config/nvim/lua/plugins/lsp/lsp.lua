@@ -8,11 +8,10 @@ local DEPS = {
   'neovim/nvim-lspconfig',
   'folke/neodev.nvim', -- nvim api docs, signatures, etc.
   'typescript',
-  'smjonas/inc-rename.nvim',
 }
 
 -- 🤖 Language Servers, automatically installed
-return { 'williamboman/mason.nvim', dependencies = DEPS, config = function() 
+return { 'williamboman/mason.nvim', dependencies = DEPS, config = function()
 
 vim.g.diagnostic_enable_virtual_text = 1
 vim.g.diagnostic_virtual_text_prefix = ' '

@@ -18,19 +18,6 @@ function M.spectre_open_visual()
   require 'spectre'.open_visual { select_word = true }
 end
 
-function M.legendary_open()
-  require 'legendary'.find()
-end
-
-function M.cycle_color()
-  require 'color-converter'.cycle()
-end
-
-function M.format_hsl()
-  require 'color-converter'.to_hsl()
-  vim.cmd [[:s/%//g<cr>]]
-end
-
 function M.goto_preview_definition()
   require 'goto-preview'.goto_preview_definition {}
 end
@@ -135,10 +122,18 @@ local function get_selected_text()
   return text
 end
 
+function M.winpick()
+  require 'winpick'.select()
+end
+
 function M.find_selection()
   require 'telescope.builtin'.live_grep {
     default_text = get_selected_text()
   }
+end
+
+function M.format_file()
+  vim.lsp.buf.format { async = true }
 end
 
 return M

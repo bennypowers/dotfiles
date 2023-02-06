@@ -95,5 +95,6 @@
         "/home/bennyp/.local/share/nvim/site/pack/packer/start/which-key.nvim",
         "/home/bennyp/.local/share/nvim/site/pack/packer/start/winpick.nvim",
         "${3rd}/luassert/library"
-    ]
+    ],
+    "workspace.checkThirdParty": false
 }

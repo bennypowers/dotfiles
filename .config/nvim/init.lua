@@ -11,6 +11,7 @@ vim.opt.rtp:prepend(lazypath)
 require 'options'
 require 'commands'
 require 'aucmds'
+require 'mappings'
 require 'lazy'.setup('plugins', {
   dev = {
     path = '~/Developer',
@@ -19,7 +20,6 @@ require 'lazy'.setup('plugins', {
   }
 })
 
-vim.cmd.nmap('<c-;>', '<c-w>');
 vim.cmd.colorscheme
   'catppuccin-mocha'
   -- 'noctis'

@@ -1,57 +1,68 @@
-local DEPS = {
-  'nvim-lua/plenary.nvim',
-  'nvim-lua/popup.nvim',
-  'nvim-telescope/telescope-symbols.nvim'
-}
-
 -- 🔭 Telescope - generic fuzzy finder with popup window
 return { 'nvim-telescope/telescope.nvim',
-name = 'telescope',
-lazy = true,
-dependencies = DEPS, config = function()
-
-local telescope = require 'telescope'
-local actions = require 'telescope.actions'
-
-telescope.setup {
-  defaults = {
-    prompt_prefix = "🔎 ",
-    cache_picker = {
-      num_pickers = -1,
-    },
-    vimgrep_arguments = {
-      'rg',
-      '--color=never',
-      '--no-heading',
-      '--with-filename',
-      '--line-number',
-      '--column',
-      '--smart-case',
-      '--ignore',
-      '--hidden',
-      '--trim',
-    },
-    file_ignore_patterns = {
-      ".git/",
-      "node_modules"
-    },
-    mappings = {
-      i = {
-        ["<C-k>"] = actions.move_selection_previous,
-        ["<C-j>"] = actions.move_selection_next,
-        ["<esc>"] = actions.close
-      }
-    }
+  name = 'telescope',
+  lazy = true,
+  command = {'Telescope'},
+  keys = {
+    {'<leader>p',  ':Telescope find_files hidden=true<cr>', desc = 'Find files'},
+    {'<leader>fF', ':Telescope oldfiles<cr>',               desc = 'Find old files'},
+    {'<leader>fg', ':Telescope live_grep<cr>',              desc = 'Find in files (live grep)'},
+    {'<leader>fb', ':Telescope buffers<cr>',                desc = 'Find buffers'},
+    {'<leader>fh', ':Telescope help_tags<cr>',              desc = 'Find in help'},
+    {'<leader>fs', ':Telescope symbols<cr>',                desc = 'Find symbol'},
+    {'<leader>fr', ':Telescope resume<cr>',                 desc = 'Resume finding'},
+    {'<leader>fn', ':Telescope notify<cr>',                 desc = 'Find in Notifications'},
+    {'<leader>fp', ':Telescope pickers<cr>',                desc = 'Choose Pickers'},
+    {'<c-e>', '<cmd>Telescope symbols<cr>',  mode = 'i',    desc = 'Pick symbol via Telescope'},
   },
-  pickers = {
-    lsp_code_actions = {
-      theme = "cursor"
-    },
-    lsp_workspace_diagnostics = {
-      theme = "dropdown"
-    }
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+    'nvim-lua/popup.nvim',
+    'nvim-telescope/telescope-symbols.nvim'
   },
+  config = function()
+    local telescope = require 'telescope'
+    local actions = require 'telescope.actions'
+
+    telescope.setup {
+      defaults = {
+        prompt_prefix = "🔎 ",
+        cache_picker = {
+          num_pickers = -1,
+        },
+        vimgrep_arguments = {
+          'rg',
+          '--color=never',
+          '--no-heading',
+          '--with-filename',
+          '--line-number',
+          '--column',
+          '--smart-case',
+          '--ignore',
+          '--hidden',
+          '--trim',
+        },
+        file_ignore_patterns = {
+          '.git/',
+          'node_modules'
+        },
+        mappings = {
+          i = {
+            ['<C-k>'] = actions.move_selection_previous,
+            ['<C-j>'] = actions.move_selection_next,
+            ['<esc>'] = actions.close
+          }
+        }
+      },
+      pickers = {
+        lsp_code_actions = {
+          theme = 'cursor'
+        },
+        lsp_workspace_diagnostics = {
+          theme = 'dropdown'
+        }
+      },
+    }
+  end,
 }
-
-end }
 
