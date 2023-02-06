@@ -1,4 +1,18 @@
-local function highlight_repeats(args)
+command = vim.api.nvim_create_user_command
+
+command('ClearNotifications', function()
+  local has_notify, notify = pcall(require, 'notify')
+  if has_notify then
+    notify.dismiss { silent = true }
+  else
+    vim.cmd[[:NotifierClear]]
+  end
+  vim.cmd[[nohlsearch|diffupdate|normal! <C-L><CR>]]
+end, {
+  bang = true,
+})
+
+command('HighlightRepeats', function(args)
   local line_counts = {}
   local first = args.line1
   local last = args.line2
@@ -28,23 +42,7 @@ local function highlight_repeats(args)
       vim.fn.execute(command)
     end
   end
-end
-
-command = vim.api.nvim_create_user_command
-
-command('ClearNotifications', function()
-  local has_notify, notify = pcall(require, 'notify')
-  if has_notify then
-    notify.dismiss { silent = true }
-  else
-    vim.cmd[[:NotifierClear]]
-  end
-  vim.cmd[[nohlsearch|diffupdate|normal! <C-L><CR>]]
 end, {
-  bang = true,
-})
-
-command('HighlightRepeats', highlight_repeats, {
   bang = true,
   range = '%'
 })
@@ -96,28 +94,29 @@ command('HighlightRepeats', highlight_repeats, {
 -- onoremap <silent> ]j    :call NextIndent(0, 1, 0, 1)<CR>
 -- onoremap <silent> [h    :call NextIndent(1, 0, 1, 1)<CR>
 -- onoremap <silent> ]j    :call NextIndent(1, 1, 1, 1)<CR>
-vim.cmd [[
-function! HTMLEncode()
-perl << EOF
- use HTML::Entities;
- @pos = $curwin->Cursor();
- $line = $curbuf->Get($pos[0]);
- $encvalue = encode_entities($line);
- $curbuf->Set($pos[0],$encvalue)
-EOF
-endfunction
 
-function! HTMLDecode()
-perl << EOF
- use HTML::Entities;
- @pos = $curwin->Cursor();
- $line = $curbuf->Get($pos[0]);
- $encvalue = decode_entities($line);
- $curbuf->Set($pos[0],$encvalue)
-EOF
-endfunction
-
-nnoremap <Leader>h :call HTMLEncode()<CR>
-nnoremap <Leader>H :call HTMLDecode()<CR>
-]]
+-- vim.cmd [[
+-- function! HTMLEncode()
+-- perl << EOF
+--  use HTML::Entities;
+--  @pos = $curwin->Cursor();
+--  $line = $curbuf->Get($pos[0]);
+--  $encvalue = encode_entities($line);
+--  $curbuf->Set($pos[0],$encvalue)
+-- EOF
+-- endfunction
+--
+-- function! HTMLDecode()
+-- perl << EOF
+--  use HTML::Entities;
+--  @pos = $curwin->Cursor();
+--  $line = $curbuf->Get($pos[0]);
+--  $encvalue = decode_entities($line);
+--  $curbuf->Set($pos[0],$encvalue)
+-- EOF
+-- endfunction
+--
+-- nnoremap <Leader>h :call HTMLEncode()<CR>
+-- nnoremap <Leader>H :call HTMLDecode()<CR>
+-- ]]
 
