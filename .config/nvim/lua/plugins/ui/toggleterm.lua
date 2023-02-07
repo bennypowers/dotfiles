@@ -46,8 +46,8 @@ end
 -- 🖥️  terminal emulator
 return { 'akinsho/toggleterm.nvim',
   keys = {
-    { '<leader>tp', toggle_term_pinned,  desc = 'Open terminal in horizontal split' },
-    { '<leader>g',  toggle_term_lazygit, desc = 'Git UI via lazygit' },
+    { '<leader>t', toggle_term_pinned,  desc = 'Open terminal in horizontal split' },
+    { '<leader>g', toggle_term_lazygit, desc = 'Git UI via lazygit' },
   },
   config = function()
 

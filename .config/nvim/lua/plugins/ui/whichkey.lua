@@ -36,7 +36,6 @@ return { 'folke/which-key.nvim',
           c = { name = '+caser' },
         },
         s = { name = '+screenshots' },
-        t = { name = '+terminals' },
         f = { name = '+telescope' },
       },
       g = {
