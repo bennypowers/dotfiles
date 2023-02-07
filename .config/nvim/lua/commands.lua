@@ -23,7 +23,7 @@ command('HighlightRepeats', function(args)
   while line_num <= last do
     local line_text = vim.fn.getline(line_num)
     if #line_text > 0 then
-      line_counts[line_text] = (line_counts[line_text] or 0) + 1
+      line_counts[line_text] = (line_counts[line_text] or 1) + 1
     end
     line_num = line_num + 1
   end

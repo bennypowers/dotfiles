@@ -1,6 +1,6 @@
-return { 'vigoux/notifier.nvim', config = function()
-  require'notifier'.setup {
+return { 'vigoux/notifier.nvim',
+  opts = {
     -- components = { 'nvim', 'lsp' } -- replace fidget
     components = { 'nvim' }
-  }
-end }
+  },
+}

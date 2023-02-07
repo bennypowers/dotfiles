@@ -1,6 +1,3 @@
-vim.g.splitjoin_split_mapping = ''
-vim.g.splitjoin_join_mapping = ''
-
 -- like vmp `g,` action
 return { 'AndrewRadev/splitjoin.vim',
   lazy = true,
@@ -9,4 +6,8 @@ return { 'AndrewRadev/splitjoin.vim',
     { 'g,', ':SplitjoinSplit<cr>', desc = 'Split the object under cursor' },
   },
   cmd = { 'SplitjoinJoin', 'SplitjoinSplit' },
+  init = function()
+    vim.g.splitjoin_split_mapping = ''
+    vim.g.splitjoin_join_mapping = ''
+  end
 }

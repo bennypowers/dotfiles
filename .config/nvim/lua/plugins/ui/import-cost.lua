@@ -1,7 +1,8 @@
-return { 'barrett-ruth/import-cost.nvim', lazy = true, build = 'sh install.sh npm', config = function ()
-
-require'import-cost'.setup()
-
-end }
+return { 'barrett-ruth/import-cost.nvim',
+  lazy = true,
+  ft = { 'javascript', 'typescript', 'html' },
+  build = 'sh install.sh npm',
+  opts = {},
+}
 
 

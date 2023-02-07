@@ -1,1 +1,4 @@
-return { 'stevearc/aerial.nvim', lazy = true, opts = {} }
+return { 'stevearc/aerial.nvim',
+  lazy = true,
+  opts = {}
+}

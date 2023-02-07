@@ -41,7 +41,19 @@ return { 'akinsho/bufferline.nvim',
         },
       },
     }
-  end
-
+    command('BufferlineCloseOthers', function(args)
+      if args.bang then
+        vim.cmd[[
+          :BufferLineCloseLeft!
+          :BufferLineCloseRight!
+        ]]
+      else
+        vim.cmd[[
+          :BufferLineCloseLeft
+          :BufferLineCloseRight
+        ]]
+      end
+    end, { desc = 'Close unfocused listed buffers' })
+  end,
 }
 

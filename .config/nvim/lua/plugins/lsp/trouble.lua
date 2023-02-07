@@ -1,8 +1,3 @@
-au('BufNew', {
-  pattern = "Trouble",
-  command = "setlocal colorcolumn=0"
-})
-
 -- language-server diagnostics panel
 return { 'folke/lsp-trouble.nvim',
   lazy = true,
@@ -19,6 +14,12 @@ return { 'folke/lsp-trouble.nvim',
     auto_close = true,
     auto_preview = true,
     use_diagnostic_signs = true,
-  }
+  },
+  init = function()
+    au('BufNew', {
+      pattern = "Trouble",
+      command = "setlocal colorcolumn=0"
+    })
+  end
 }
 
