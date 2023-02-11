@@ -1,4 +1,4 @@
 return { 'tummetott/reticle.nvim',
   opts = { },
-  events = { 'WinNew', 'WinLeave' }
+  event = { 'WinNew', 'WinLeave' }
 }

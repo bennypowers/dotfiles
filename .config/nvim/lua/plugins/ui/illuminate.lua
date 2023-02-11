@@ -1,10 +1,16 @@
 return { 'RRethy/vim-illuminate',
   lazy = true,
-  events = { 'CursorMoved', 'InsertLeave' },
+  enabled = true,
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+  },
+  event = { 'CursorMoved', 'InsertLeave' },
   opts = {
     filetypes_denylist = {
       'neotree',
       'neo-tree',
+      'Telescope',
+      'telescope',
     }
   }
 }

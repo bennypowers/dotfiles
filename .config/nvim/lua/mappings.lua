@@ -10,7 +10,7 @@ local function nmap(lhs, rhs, desc) map(lhs, rhs, desc, { mode = 'n' }) end
 local function vmap(lhs, rhs, desc) map(lhs, rhs, desc, { mode = 'v' }) end
 local function imap(lhs, rhs, desc) map(lhs, rhs, desc, { mode = 'i' }) end
 
-local function format_async () vim.lsp.buf.format { async = true } end
+local function format_async() vim.lsp.buf.format { async = true } end
 local function open_diagnostics() vim.diagnostic.open_float { focus = false } end
 
 local U = require 'utils'

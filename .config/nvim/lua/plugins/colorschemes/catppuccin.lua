@@ -1,80 +1,81 @@
 return { 'catppuccin/nvim',
+  version = '1',
   build = ":CatppuccinCompile",
-  config = function ()
-    local colors = require 'catppuccin.palettes'.get_palette()
-    local darken = require 'catppuccin.utils.colors'.darken
-    local dark = {}
-    for k, v in pairs(colors) do
-      if k ~= 'none' then
-        dark[k] = darken(v, 0.5)
-      end
-    end
+  opts =  {
+    flavour = 'mocha',
+    -- transparent_background = true,
+    compile = {
+      enabled = true,
+    },
+    integrations = {
+      coc_nvim = false,
+      lsp_trouble = true,
+      cmp = true,
+      lsp_saga = false,
+      gitgutter = false,
+      gitsigns = true,
+      telescope = true,
+      treesitter = true,
+      which_key = true,
+      dashboard = true,
+      neogit = false,
+      vim_sneak = false,
+      fern = false,
+      barbar = false,
+      bufferline = true,
+      markdown = true,
+      lightspeed = false,
+      ts_rainbow = false,
+      hop = false,
+      notify = true,
+      telekasten = false,
+      symbols_outline = true,
+      mini = true,
 
-    require 'catppuccin'.setup {
-      flavor = 'mocha',
-      -- transparent_background = true,
-      compile = {
+      neotree = {
         enabled = true,
+        show_root = true,
+        -- transparent_panel = true,
       },
-      integrations = {
-        coc_nvim = false,
-        lsp_trouble = true,
-        cmp = true,
-        lsp_saga = false,
-        gitgutter = false,
-        gitsigns = true,
-        telescope = true,
-        treesitter = true,
-        which_key = true,
-        dashboard = true,
-        neogit = false,
-        vim_sneak = false,
-        fern = false,
-        barbar = false,
-        bufferline = true,
-        markdown = true,
-        lightspeed = false,
-        ts_rainbow = false,
-        hop = false,
-        notify = true,
-        telekasten = false,
-        symbols_outline = true,
-        mini = true,
 
-        neotree = {
-          enabled = true,
-          show_root = true,
-          -- transparent_panel = true,
+      indent_blankline = {
+        enabled = true,
+        colored_indent_levels = false,
+      },
+
+      native_lsp = {
+        enabled = true,
+        virtual_text = {
+          errors = { "italic" },
+          hints = { "italic" },
+          warnings = { "italic" },
+          information = { "italic" },
         },
-
-        indent_blankline = {
-          enabled = true,
-          colored_indent_levels = false,
-        },
-
-        native_lsp = {
-          enabled = true,
-          virtual_text = {
-            errors = { "italic" },
-            hints = { "italic" },
-            warnings = { "italic" },
-            information = { "italic" },
-          },
-          underlines = {
-            errors = { "underline" },
-            hints = { "underline" },
-            warnings = { "underline" },
-            information = { "underline" },
-          },
-        },
-
-        dap = {
-          enabled = false,
-          enable_ui = false,
+        underlines = {
+          errors = { "underline" },
+          hints = { "underline" },
+          warnings = { "underline" },
+          information = { "underline" },
         },
       },
 
-      custom_highlights = {
+      dap = {
+        enabled = false,
+        enable_ui = false,
+      },
+    },
+
+    custom_highlights = function ()
+      local colors = require 'catppuccin.palettes'.get_palette()
+      local darken = require 'catppuccin.utils.colors'.darken
+      local dark = {}
+      for k, v in pairs(colors) do
+        if k ~= 'none' then
+          dark[k] = darken(v, 0.5)
+        end
+      end
+
+      return {
         Folded = { fg = colors.subtext0, bg = 'NONE' },
 
         Pmenu = { bg = colors.surface0 },
@@ -139,7 +140,6 @@ return { 'catppuccin/nvim',
         TelescopeResultsTitle = { fg = colors.text },
         TelescopePreviewTitle = { fg = colors.crust },
       }
-    }
-
-  end
+    end
+  },
 }

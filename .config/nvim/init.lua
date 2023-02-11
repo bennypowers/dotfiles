@@ -17,7 +17,7 @@ require 'lazy'.setup('plugins', {
 })
 
 vim.cmd.colorscheme
-  'catppuccin-mocha'
+  'catppuccin'
   -- 'noctis'
   -- 'leaf'
   -- 'tokyonight'

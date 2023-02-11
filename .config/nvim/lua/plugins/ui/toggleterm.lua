@@ -49,6 +49,10 @@ return { 'akinsho/toggleterm.nvim',
     { '<c-t>', toggle_term_pinned,  desc = 'Toggle terminal in horizontal split', mode = { 'n', 'i', 't' } },
     { '<leader>t', toggle_term_pinned,  desc = 'Toggle terminal in horizontal split' },
     { '<leader>g', toggle_term_lazygit, desc = 'Git UI via lazygit' },
+    { '<c-g>', toggle_term_lazygit, desc = 'Git UI via lazygit', mode = { 'n', 't' } },
+  },
+  dependencies = {
+    { 'stevearc/stickybuf.nvim', enabled = false, opts = {} }
   },
   config = function()
 
@@ -69,7 +73,7 @@ return { 'akinsho/toggleterm.nvim',
       size = 20,
       dir = 'git_dir',
       on_create = function()
-        pcall(function() vim.cmd':PinBuftype' end)
+        pcall(function() require'stickybuf'.pin_buftype() end)
       end
     }
 
