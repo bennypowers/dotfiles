@@ -57,7 +57,7 @@
   "notifier.nvim": { "branch": "master", "commit": "afc9bf7ef8c31cfc716a2b849c34943a9788508b" },
   "nui.nvim": { "branch": "main", "commit": "d147222a1300901656f3ebd5b95f91732785a329" },
   "numbers.nvim": { "branch": "master", "commit": "d1f95879a4cdf339f59e6a2dc6aef26912cf554c" },
-  "nvim": { "branch": "main", "commit": "238d1e98c2656e2efce3dc64771542150d306a39" },
+  "nvim": { "branch": "main", "commit": "a5f3ed5d3b1d9ea21183718a8a89a6653bd6ea48" },
   "nvim-autopairs": { "branch": "master", "commit": "45ae3122a4c7744db41298b41f9f5a3f092123e6" },
   "nvim-biscuits": { "branch": "main", "commit": "25a880605fa4533b7075c54a0fdb5f0a25bc4f84" },
   "nvim-bufdel": { "branch": "main", "commit": "a60b3531e5bd56f8602acb4ba7f5b2eeb782d54b" },

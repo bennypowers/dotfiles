@@ -21,36 +21,13 @@ return { 'hrsh7th/nvim-cmp',
   },
 
   lazy = true,
-  keys = {
 
-    { '<c-j>', function()
-      local luasnip = require 'luasnip'
-      if luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      end
-    end, desc = 'Expand snippet or jump to next slot', mode = { 'i', 's' } },
-
-    { '<c-k>', function()
-      local luasnip = require 'luasnip'
-      if luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      end
-    end, desc = 'Jump to previous slot', mode = { 'i', 's' } },
-
-    { '<c-l>', function()
-      local luasnip = require 'luasnip'
-      if luasnip.choice_active() then
-        luasnip.change_choice(1)
-      end
-    end, desc = 'Change snippet choice', mode = { 'i', 's' } },
-
-  },
+  event = { 'InsertEnter' },
 
   config = function()
     local cmp = require 'cmp'
     local lspkind = require 'lspkind'
     local luasnip = require 'luasnip'
-    local can_npm, cmp_npm = pcall(require, 'cmp-npm')
 
     luasnip.config.setup {
       history = true,
@@ -74,13 +51,7 @@ return { 'hrsh7th/nvim-cmp',
 
     }
 
-    if can_npm then cmp_npm.setup() end
-
-    require 'cmp-plugins'.setup {
-      files = { 'plugins.lua' }
-    }
-
-    cmp.setup({
+    cmp.setup {
       snippet = {
         expand = function(args)
           luasnip.lsp_expand(args.body)
@@ -88,42 +59,47 @@ return { 'hrsh7th/nvim-cmp',
       },
 
       mapping = {
-        ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-        ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-        ['<C-S-Space>'] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-        ['<C-y>'] = cmp.mapping.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-        ['<C-e>'] = cmp.mapping({
+        ['<c-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+        ['<c-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+        ['<c-s-space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+        ['<c-y>'] = cmp.mapping.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+        ['<c-e>'] = cmp.mapping({
           i = cmp.mapping.abort(),
           c = cmp.mapping.close(),
         }),
-        ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { 'i' }),
-        ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { 'i' }),
-        ['<CR>'] = function(fallback)
+
+        ['<c-j>'] = cmp.mapping(function()
+          --  desc = 'Expand snippet or jump to next slot'
+          if luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+          end
+        end, { 'i', 's' }),
+
+        ['<c-k>'] = cmp.mapping(function()
+          -- desc = 'Jump to previous slot'
+          if luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          end
+        end, { 'i', 's' }),
+
+        ['<c-l>'] = cmp.mapping(function()
+          -- desc = 'Change snippet choice'
+          if luasnip.choice_active() then
+            luasnip.change_choice(1)
+          end
+        end, { 'i', 's' }),
+
+        ['<down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { 'i' }),
+        ['<up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { 'i' }),
+        ['<cr>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
             cmp.confirm { select = true }
           else
             fallback() -- If you are using vim-endwise, this fallback function will be behaive as the vim-endwise.
           end
-        end,
+        end, { 'i', 's' }),
       },
-
-      sources = cmp.config.sources({
-        { name = 'luasnip', option = { use_show_condition = false } },
-      }, {
-        { name = 'nvim_lsp' },
-        { name = 'nvim_lsp_signature_help' },
-      }, {
-        { name = 'treesitter' },
-        { name = 'buffer', keyword_length = 3 },
-      }, {
-        { name = 'plugins' },
-        { name = 'nvim_lua' },
-        { name = 'npm', keyword_length = 4 },
-        { name = 'fish' },
-        { name = 'calc' },
-        { name = 'emoji' },
-      }),
 
       sorting = {
         comparators = {
@@ -154,6 +130,14 @@ return { 'hrsh7th/nvim-cmp',
           local strings = vim.split(kind.kind, '%s', { trimempty = true })
           kind.kind = ' ' .. strings[1] .. ' '
           -- kind.menu = "    (" .. strings[2] .. ")"
+          kind.menu = ({
+            buffer = '🧹',
+            nvim_lsp = '🔮',
+            luasnip = '✂️',
+            nvim_lua = '🌙',
+            path = '怒',
+            treesitter = '🌴',
+          })[entry.source.name]
           return kind
         end,
       },
@@ -161,22 +145,28 @@ return { 'hrsh7th/nvim-cmp',
       experimental = {
         ghost_text = true,
       },
-    })
 
-    cmp.setup.filetype('gitcommit', {
       sources = cmp.config.sources({
-        { name = 'cmp_git' },
-      }, {
-        { name = 'buffer' },
-      })
-    })
+          { name = 'luasnip' },
+        }, {
+          { name = 'nvim_lsp' },
+          { name = 'nvim_lsp_signature_help' },
+        }, {
+          { name = 'treesitter' },
+          { name = 'buffer', keyword_length = 3 },
+        }, {
+          { name = 'path' },
+          { name = 'calc' },
+          { name = 'emoji' },
+      }),
+    }
 
     -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline('/', {
+    cmp.setup.cmdline({ '/', '?' }, {
       mapping = cmp.mapping.preset.cmdline(),
-      sources = {
+      sources = cmp.config.sources({
         { name = 'buffer' },
-      },
+      }),
     })
 
     -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
@@ -187,6 +177,48 @@ return { 'hrsh7th/nvim-cmp',
       }, {
         { name = 'cmdline' },
       }),
+    })
+
+    cmp.setup.filetype('gitcommit', {
+      sources = cmp.config.sources({
+        { name = 'git' },
+      }, {
+        { name = 'buffer' },
+      })
+    })
+
+    cmp.setup.filetype('lua', {
+      sources = cmp.config.sources({
+        { name = 'plugins' },
+        { name = 'nvim_lua' },
+      }, {
+        { name = 'buffer' },
+      }, {
+        { name = 'calc' },
+        { name = 'emoji' },
+      })
+    })
+
+    cmp.setup.filetype('fish', {
+      sources = cmp.config.sources({
+        { name = 'fish' },
+      }, {
+        { name = 'buffer' },
+      }, {
+        { name = 'calc' },
+        { name = 'emoji' },
+      })
+    })
+
+    cmp.setup.filetype('json', {
+      sources = cmp.config.sources({
+        { name = 'npm', keyword_length = 2 },
+      }, {
+        { name = 'buffer' },
+      }, {
+        { name = 'calc' },
+        { name = 'emoji' },
+      })
     })
 
     -- If you want insert `(` after select function or method item
@@ -225,12 +257,12 @@ return { 'hrsh7th/nvim-cmp',
 
     local JS_CONFIG = {
       sources = cmp.config.sources({
-        { name = 'luasnip', option = { use_show_condition = false } },
-      }, {
+        { name = 'luasnip' },
         { name = 'nvim_lsp', entry_filter = emmet_in_lit_only },
         { name = 'nvim_lsp_signature_help' },
       }, {
         { name = 'treesitter' },
+        { name = 'path' },
         { name = 'buffer', keyword_length = 3 },
       }, {
         { name = 'calc' },
@@ -241,10 +273,23 @@ return { 'hrsh7th/nvim-cmp',
     cmp.setup.filetype('javascript', JS_CONFIG)
     cmp.setup.filetype('typescript', JS_CONFIG)
 
+    require 'cmp_git'.setup {
+      remotes = { 'upstream', 'origin', 'fork' },
+      enableRemoteUrlRewrites = true,
+    }
+
+    require 'cmp-npm'.setup {}
+
+    require 'cmp-plugins'.setup {
+      files = { 'lua/plugins.*\\.lua' }
+    }
+
     require 'luasnip.loaders.from_lua'.lazy_load()
+
     require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
       '~/Developer/redhat-ux/red-hat-design-tokens/editor/vscode',
     } }
+
     require 'luasnip.loaders.from_snipmate'.lazy_load { paths = {
       '~/.config/nvim/snippets',
     } }
