@@ -2,15 +2,15 @@
 return { 'williamboman/mason.nvim',
   dependencies = {
     'williamboman/mason-lspconfig.nvim',
-    'lukas-reineke/lsp-format.nvim',
     'neovim/nvim-lspconfig', -- basic facility to configure language servers
     'nvim-lua/lsp-status.nvim', -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
+    'lukas-reineke/lsp-format.nvim',
     'hrsh7th/nvim-cmp',
     'b0o/schemastore.nvim', -- json schema support
-    'neovim/nvim-lspconfig',
-    'folke/neodev.nvim', -- nvim api docs, signatures, etc.
     'typescript',
+    {'folke/neodev.nvim', opts = {} }, -- nvim api docs, signatures, etc.
   },
+
   init = function()
     vim.g.diagnostic_enable_virtual_text = 1
     vim.g.diagnostic_virtual_text_prefix = ' '
@@ -19,6 +19,7 @@ return { 'williamboman/mason.nvim',
     vim.fn.sign_define('DiagnosticSignInformation', { text = '👷', texthl = 'DiagnosticInformation' })
     vim.fn.sign_define('DiagnosticSignHint', { text = '🙋', texthl = 'DiagnosticHint' })
   end,
+
   config = function()
     local mason           = require 'mason'
     local mason_lspconfig = require 'mason-lspconfig'
@@ -50,34 +51,36 @@ return { 'williamboman/mason.nvim',
       lsp_status.on_attach(client)
     end
 
-    --- Neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
-    --- the resolved capabilities of the eslint server ourselves!
-    ---
-    ---@param  enable boolean whether to enable formating
-    ---
-    local function toggle_formatting(enable)
-      return function(client)
-        if (enable) then
-          lsp_format.on_attach(client)
-        end
-        default_on_attach(client)
-      end
-    end
+    lsp_status.config {
+      current_function = false,
+      kind_labels = vim.g.completion_customize_lsp_label,
+      indicator_errors = '🔥',
+      indicator_warnings = ' 🚧',
+      indicator_info = 'ℹ️ ',
+      indicator_hint = '🙋 ',
+      indicator_ok = ' ',
+      spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
+      status_symbol = '',
+      -- status_symbol = '💬: ',
+      -- status_symbol = ' ',
+    }
 
-    require 'neodev'.setup {}
+    lsp_status.register_progress()
+
+    mason.setup()
+
+    mason_lspconfig.setup {
+      automatic_installation = true,
+    }
 
     -- Install these, k?
     -- Specify server options and settings per server by adding an options table
     -- servers with `false` options table use the default on_attach function
     --
-    local servers = {
+    for name, opts in pairs {
       -- ['angularls'] = {},
-
       -- ['dockerls'] = {},
-
-      -- ['denols'] = {
-      --   on_attach = toggle_formatting(false), -- Disable formatting so that eslint can take over.
-      -- },
+      -- ['denols'] = {},
 
       -- markdown
       marksman = {
@@ -87,7 +90,9 @@ return { 'williamboman/mason.nvim',
       },
 
       bashls = {},
+
       clangd = {},
+
       cssls = {},
 
       emmet_ls = {
@@ -110,9 +115,9 @@ return { 'williamboman/mason.nvim',
           ---For reasons unclear to me, eslint ls doesn't autoFixOnSave,
           ---so execute `EslintFixAll` instead
           --
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            group = vim.api.nvim_create_augroup('carry_lsp-water', {}),
-            pattern = { '*.tsx', '*.ts', '*.jsx', '*.js', },
+          au('BufWritePre', {
+            group = ag('carry_lsp-water', {}),
+            pattern = { '*.tsx', '*.ts', '*.jsx', '*.js', '*.cjs' },
             command = 'EslintFixAll',
           })
 
@@ -152,7 +157,10 @@ return { 'williamboman/mason.nvim',
       },
 
       jsonls = {
-        on_attach = toggle_formatting(true),
+        on_attach = function(client)
+          lsp_format.on_attach(client)
+          default_on_attach(client)
+        end,
         settings = {
           json = {
             format = { enable = true },
@@ -170,7 +178,10 @@ return { 'williamboman/mason.nvim',
       -- ['spectral'] = {},
 
       stylelint_lsp = {
-        on_attach = toggle_formatting(true),
+        on_attach = function(client)
+          lsp_format.on_attach(client)
+          default_on_attach(client)
+        end,
         filetypes = { 'css', 'scss' },
         settings = {
           stylelintplus = {
@@ -182,11 +193,7 @@ return { 'williamboman/mason.nvim',
       },
 
       -- lua
-      sumneko_lua = {
-        -- add any options here, or leave empty to use the default settings
-        -- lspconfig = {
-        --   cmd = {"lua-language-server"}
-        -- },
+      lua_ls = {
         lspconfig = {
           settings = {
             autoFixOnSave = true,
@@ -217,49 +224,16 @@ return { 'williamboman/mason.nvim',
         },
       },
 
-      -- typescript language server options
-      -- see typescript.nvim setup
-
       -- vala_ls = {},
 
       vimls = {},
+
       yamlls = {},
-    }
-
-    lsp_status.config {
-      current_function = false,
-      kind_labels = vim.g.completion_customize_lsp_label,
-      indicator_errors = '🔥',
-      indicator_warnings = ' 🚧',
-      indicator_info = 'ℹ️ ',
-      indicator_hint = '🙋 ',
-      indicator_ok = ' ',
-      spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
-      status_symbol = '',
-      -- status_symbol = '💬: ',
-      -- status_symbol = ' ',
-    }
-
-    lsp_status.register_progress()
-
-    mason.setup()
-
-    mason_lspconfig.setup {
-      ensure_installed = vim.tbl_keys(servers)
-    }
-
-    --- Loop through the servers listed above.
-    --- setup install
-    --- installing each, then if install succeeded,
-    --- setup the server with the options specified in server_opts,
-    --- or just use the default options
-    --
-    for name, opts in pairs(servers) do
-      local server_config = vim.tbl_extend('force', {
+    } do
+      lsp_config[name].setup(vim.tbl_extend('force', {
         capabilities = default_capabilities,
         on_attach = default_on_attach,
-      }, opts or {})
-      lsp_config[name].setup(server_config)
+      }, opts or {}))
     end
 
     require 'inc_rename'.setup()

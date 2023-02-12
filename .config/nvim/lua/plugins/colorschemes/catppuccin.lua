@@ -1,5 +1,6 @@
 return { 'catppuccin/nvim',
   version = '1',
+  name = 'catppuccin',
   build = ":CatppuccinCompile",
   opts =  {
     flavour = 'mocha',
