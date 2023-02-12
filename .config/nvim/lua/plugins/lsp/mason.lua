@@ -8,7 +8,7 @@ return { 'williamboman/mason.nvim',
     'hrsh7th/nvim-cmp',
     'b0o/schemastore.nvim', -- json schema support
     'typescript',
-    {'folke/neodev.nvim', opts = {} }, -- nvim api docs, signatures, etc.
+    { 'folke/neodev.nvim', opts = {} }, -- nvim api docs, signatures, etc.
   },
 
   init = function()
@@ -21,17 +21,20 @@ return { 'williamboman/mason.nvim',
   end,
 
   config = function()
-    local mason           = require 'mason'
+    local mason = require 'mason'
     local mason_lspconfig = require 'mason-lspconfig'
-    local lsp_config      = require 'lspconfig'
-    local lsp_status      = require 'lsp-status'
-    local lsp_format      = require 'lsp-format'
-    local lsp_util        = require 'lspconfig.util'
-    local cmp_nvim_lsp    = require 'cmp_nvim_lsp'
+    local lsp_config = require 'lspconfig'
+    local lsp_status = require 'lsp-status'
+    local lsp_format = require 'lsp-format'
+    local lsp_util = require 'lspconfig.util'
+    local cmp_nvim_lsp = require 'cmp_nvim_lsp'
 
-    lsp_format.setup()
+    -- Setup lspconfig with some default capabilities
+    --
+    local function default_on_attach(client) lsp_status.on_attach(client) end
 
-    local default_capabilities = vim.tbl_extend('keep',
+    local default_capabilities = vim.tbl_extend(
+      'keep',
       cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities()),
       lsp_status.capabilities
     )
@@ -42,14 +45,10 @@ return { 'williamboman/mason.nvim',
         'documentation',
         'detail',
         'additionalTextEdits',
-      }
+      },
     }
 
-    -- Setup lspconfig with some default capabilities
-    --
-    local function default_on_attach(client)
-      lsp_status.on_attach(client)
-    end
+    lsp_format.setup()
 
     lsp_status.config {
       current_function = false,
@@ -101,33 +100,26 @@ return { 'williamboman/mason.nvim',
         filetypes = {
           'html',
           'svg',
-          'css', 'scss',
-          'njk', 'nunjucks', 'jinja',
+          'css',
+          'scss',
+          'njk',
+          'nunjucks',
+          'jinja',
           -- 'markdown',
-          'ts', 'typescript',
-          'js', 'javascript',
+          'ts',
+          'typescript',
+          'js',
+          'javascript',
         },
       },
 
       eslint = {
         root_dir = lsp_util.find_git_ancestor,
-        on_attach = function (client)
-          ---For reasons unclear to me, eslint ls doesn't autoFixOnSave,
-          ---so execute `EslintFixAll` instead
-          --
-          au('BufWritePre', {
-            group = ag('carry_lsp-water', {}),
-            pattern = { '*.tsx', '*.ts', '*.jsx', '*.js', '*.cjs' },
-            command = 'EslintFixAll',
-          })
-
-          default_on_attach(client)
-        end,
         settings = {
           codeActionsOnSave = {
             enable = true,
-            mode = "all",
-            rules = { "!debugger", "!no-only-tests/*" },
+            mode = 'all',
+            rules = { '!debugger', '!no-only-tests/*' },
           },
         },
       },
@@ -164,7 +156,7 @@ return { 'williamboman/mason.nvim',
         settings = {
           json = {
             format = { enable = true },
-            schemas = require 'schemastore'.json.schemas(),
+            schemas = require('schemastore').json.schemas(),
             validate = { enable = true },
           },
         },
@@ -201,17 +193,17 @@ return { 'williamboman/mason.nvim',
               format = {
                 enable = true,
                 defaultConfig = {
-                  indent_style = "space",
-                  indent_size = "2",
+                  indent_style = 'space',
+                  indent_size = '2',
                   quote_style = 'single',
                   align_call_args = true,
                   align_function_define_params = true,
                   continuous_assign_statement_align_to_equal_sign = true,
-                }
+                },
               },
               completion = {
                 autoRequire = false,
-                callSnippet = "Replace",
+                callSnippet = 'Replace',
               },
               hint = {
                 enable = true,
@@ -236,8 +228,6 @@ return { 'williamboman/mason.nvim',
       }, opts or {}))
     end
 
-    require 'inc_rename'.setup()
-
+    require('inc_rename').setup()
   end,
 }
-
