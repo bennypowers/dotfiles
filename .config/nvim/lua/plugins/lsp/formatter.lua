@@ -3,8 +3,9 @@ return { 'mhartington/formatter.nvim',
     require('formatter').setup {
       filetype = {
         -- lua = require'formatter.filetypes.lua'.stylua,
-        javascript = function() vim.cmd [[:EslintFixAll]] end,
-        typescript = function() vim.cmd [[:EslintFixAll]] end,
+        javascript = require'formatter.filetypes.javascript'.eslint_d,
+        typescript = require'formatter.filetypes.typescript'.eslint_d,
+        json = require'formatter.filetypes.json'.fixjson,
       },
     }
     au('BufWritePost', {

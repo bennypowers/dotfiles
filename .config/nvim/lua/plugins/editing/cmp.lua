@@ -22,7 +22,7 @@ return { 'hrsh7th/nvim-cmp',
 
   lazy = true,
 
-  event = { 'InsertEnter' },
+  event = { 'InsertEnter', 'CmdlineEnter' },
 
   config = function()
     local cmp = require 'cmp'

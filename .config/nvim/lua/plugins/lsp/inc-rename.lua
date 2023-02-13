@@ -3,8 +3,10 @@ local function make_bind ()
 end
 
 return { 'smjonas/inc-rename.nvim',
+  dependencies = 'neovim/nvim-lspconfig',
   keys = {
     { '<leader>rn', ':IncRename ', desc = 'Rename (Incrementally)' },
     { '<leader>rN', make_bind, desc = 'Rename (Incrementally) with word', expr = true },
   },
+  opts = {},
 }
