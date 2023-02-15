@@ -1,7 +1,7 @@
 -- language-server diagnostics panel
 return { 'folke/lsp-trouble.nvim',
   lazy = true,
-  command = { 'Trouble', 'TroubleToggle' },
+  cmd = { 'Trouble', 'TroubleToggle' },
   dependencies = {
     'folke/trouble.nvim',
     'web-devicons'

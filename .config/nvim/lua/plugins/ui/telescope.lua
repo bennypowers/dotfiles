@@ -17,7 +17,7 @@ end
 return { 'nvim-telescope/telescope.nvim',
   name = 'telescope',
   lazy = true,
-  command = {'Telescope'},
+  cmd = {'Telescope'},
   keys = {
     {'<leader>p',  ':Telescope find_files hidden=true<cr>', desc = 'Find files'},
     {'<leader>fF', ':Telescope oldfiles<cr>',               desc = 'Find old files'},
