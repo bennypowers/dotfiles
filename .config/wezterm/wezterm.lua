@@ -2,7 +2,8 @@ local wezterm = require 'wezterm'
 
 local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
 local SOLID_RIGHT_ARROW = utf8.char(0xe0b0)
--- local color_scheme = "Catppuccin Mocha"
+
+local color_scheme = "Catppuccin Mocha"
 local color_scheme = 'GitHub Dark'
 
 local color_schemes = {
@@ -75,12 +76,13 @@ local color_schemes = {
 
 -- local scheme = wezterm.color.get_builtin_schemes()[color_scheme]
 
-local scheme = color_schemes['GitHub Dark']
+local scheme = color_schemes[color_scheme]
 
 local function f(name, params)
   return wezterm.font_with_fallback({
     name,
     "Noto Color Emoji",
+    "FiraCode Nerd Font",
     "Fira Code",
     "Hack",
   }, params)
@@ -239,6 +241,7 @@ return {
   },
 
   color_scheme = color_scheme,
+
   window_background_opacity = 0.85,
 
   tab_bar_style = {
@@ -281,28 +284,35 @@ return {
     { key = "}", mods = "SHIFT|ALT", action = wezterm.action { MoveTabRelative = 1 } },
   },
 
-  font = f("Fira Code"),
+  --[[
+    wezterm.font("CaskaydiaCove Nerd Font Mono", {
+      weight="Regular|ExtraLight|DemiLight|Light|DemiBold|Bold",
+      style="Normal|Italic"
+    })
+  --]]
+
+  font = f("CaskaydiaCove Nerd Font", { weight = "Regular" }),
   font_size = 18,
   font_rules = {
     { -- BOLD
       intensity = "Bold",
-      font = f("Fira Code", { weight = "Bold" }),
+      font = f("CaskaydiaCove Nerd Font", { weight = "Bold" }),
     },
 
     { -- ITALIC
       italic = true,
-      font = f("Operator Mono SSm Lig", { italic = true }),
+      font = f("CaskaydiaCove Nerd Font", { italic = true }),
     },
 
     { -- BOLD ITALIC
       italic = true,
       intensity = "Bold",
-      font = f("Operator Mono SSm Lig", { weight = "Bold", italic = true }),
+      font = f("CaskaydiaCove Nerd Font", { weight = "Bold", italic = true }),
     },
 
     { -- LIGHT
       intensity = "Half",
-      font = f("Operator Mono SSm Lig"),
+      font = f("CaskaydiaCove Nerd Font", { weight = "ExtraLight" }),
     },
   },
 
