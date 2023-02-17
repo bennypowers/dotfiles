@@ -1,7 +1,8 @@
 -- 🤖 Language Servers, automatically installed
-return { 'williamboman/mason.nvim',
+return { 'williamboman/mason-lspconfig.nvim',
   dependencies = {
-    'williamboman/mason-lspconfig.nvim',
+    'williamboman/mason.nvim',
+    'neovim/nvim-lspconfig',
   },
 
   config = function()

@@ -7,7 +7,7 @@ return {
     lsp_format.on_attach(client)
     lsp_status.on_attach(client)
   end,
-  filetypes = { 'css', 'scss' },
+  filetypes = { 'css', 'scss', },
   settings = {
     stylelintplus = {
       autoFixOnSave = true,

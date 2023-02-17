@@ -1,7 +1,6 @@
 -- basic facility to configure language servers
 return { 'neovim/nvim-lspconfig',
   dependencies = {
-    'williamboman/mason.nvim',
     'hrsh7th/nvim-cmp',
     'b0o/schemastore.nvim', -- json schema support
     'typescript',
@@ -55,6 +54,7 @@ return { 'neovim/nvim-lspconfig',
 
       yamlls = {},
     }
+
     -- Read server configs from lua/plugins/lsp/lspconfig/*.lua
     for _, filename in ipairs(vim.fn.readdir(vim.fn.expand('~/.config/nvim/lua/plugins/lsp/lspconfig/'))) do
       local lspname = filename:gsub('%.lua$', '')
