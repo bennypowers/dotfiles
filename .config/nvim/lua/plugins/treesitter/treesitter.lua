@@ -2,6 +2,9 @@
 return { 'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate',
   config = function()
+    local parser_install_dir = vim.fn.expand'~/.local/share/treesitter';
+    vim.opt.runtimepath:append(parser_install_dir)
+
     local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
 
     parser_config.css = {
@@ -23,6 +26,7 @@ return { 'nvim-treesitter/nvim-treesitter',
     }
 
     require 'nvim-treesitter.configs'.setup {
+      parser_install_dir = parser_install_dir,
       ensure_installed = {
         'bash',
         'c',
