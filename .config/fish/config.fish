@@ -99,6 +99,7 @@ bind \cv edit_command_buffer
 
 
 # aliases
+alias wezterm="flatpak run org.wezfurlong.wezterm"
 alias g="git"
 alias nr="npm run"
 alias run="npm run"
