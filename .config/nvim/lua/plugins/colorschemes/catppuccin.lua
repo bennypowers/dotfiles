@@ -1,13 +1,9 @@
 return { 'catppuccin/nvim',
   version = '1',
   name = 'catppuccin',
-  build = ":CatppuccinCompile",
+  priority = 1000,
   opts = {
     flavour = 'mocha',
-    -- transparent_background = true,
-    compile = {
-      enabled = true,
-    },
     integrations = {
       coc_nvim = false,
       lsp_trouble = true,
