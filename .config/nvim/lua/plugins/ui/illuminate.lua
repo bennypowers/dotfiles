@@ -5,14 +5,16 @@ return { 'RRethy/vim-illuminate',
     'nvim-lua/plenary.nvim',
   },
   event = { 'CursorMoved', 'InsertLeave' },
-  opts = {
-    filetypes_denylist = {
-      'neotree',
-      'neo-tree',
-      'Telescope',
-      'telescope',
+  config = function()
+    require'illuminate'.configure {
+      filetypes_denylist = {
+        'neotree',
+        'neo-tree',
+        'Telescope',
+        'telescope',
+      }
     }
-  }
+  end
 }
 
 

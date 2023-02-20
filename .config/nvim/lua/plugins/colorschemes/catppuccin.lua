@@ -2,7 +2,7 @@ return { 'catppuccin/nvim',
   version = '1',
   name = 'catppuccin',
   build = ":CatppuccinCompile",
-  opts =  {
+  opts = {
     flavour = 'mocha',
     -- transparent_background = true,
     compile = {

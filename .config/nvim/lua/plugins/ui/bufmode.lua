@@ -1,5 +1,4 @@
-return { 'bennypowers/nvim-bufmode',
-  dev = true,
+return { 'Iron-E/nvim-bufmode',
   lazy = true,
   keys = {
     { 'gb', ':BufmodeEnter<cr>', desc = 'Enter Buffer Mode', },

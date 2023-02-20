@@ -3,8 +3,9 @@ return { 'utilyre/barbecue.nvim',
   version = '*',
   dependencies = {
     'SmiteshP/nvim-navic',
-    'catppuccin',
+    'neovim/nvim-lspconfig',
     'nvim-tree/nvim-web-devicons', -- optional dependency
+    'catppuccin'
   },
   opts = {
     theme = 'catppuccin'

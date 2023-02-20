@@ -36,7 +36,8 @@ return { 'nvim-telescope/telescope.nvim',
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-lua/popup.nvim',
-    'nvim-telescope/telescope-symbols.nvim'
+    'nvim-telescope/telescope-symbols.nvim',
+    'neovim/nvim-lspconfig',
   },
   config = function()
     local telescope = require 'telescope'

@@ -1,6 +1,8 @@
 -- 📎 Completions and Snippets
 return { 'hrsh7th/nvim-cmp',
   dependencies = {
+    'nvim-treesitter/nvim-treesitter',
+    'neovim/nvim-lspconfig',
     'nvim-lua/plenary.nvim',
     'hrsh7th/cmp-nvim-lsp', -- language-server-based completions
     'hrsh7th/cmp-nvim-lua', -- lua
