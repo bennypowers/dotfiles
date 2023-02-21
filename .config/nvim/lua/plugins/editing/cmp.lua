@@ -241,19 +241,12 @@ return {
       local JS_CONFIG = {
         sources = cmp.config.sources({
           { name = 'luasnip' },
-          { name = 'nvim_lsp', entry_filter = function(entry, _)
+          { name = 'nvim_lsp', entry_filter = function(entry, ctx)
+              ctx = require'cmp.config.context'
               -- only show emmet snippets in lit-like templates
               if (require 'cmp.types'.lsp.CompletionItemKind[entry:get_kind()] == 'Snippet'
                 and entry.source:get_debug_name() == 'nvim_lsp:emmet_ls') then
-                local lit_html_query = vim.treesitter.query.get_query('typescript', 'lit_html')
-                local parser = vim.treesitter.get_parser(0, 'typescript', {})
-                local tree = parser:parse()[1]
-                local row = unpack(vim.api.nvim_win_get_cursor(0))
-                local caps = {}
-                for id in lit_html_query:iter_captures(tree:root(), 0, row - 1, row) do
-                  table.insert(caps, lit_html_query.captures[id])
-                end
-                return vim.tbl_contains(caps, 'lit_html')
+                return ctx.in_treesitter_capture('lit_html')
               else
                 return true
               end
