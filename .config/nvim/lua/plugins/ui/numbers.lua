@@ -2,6 +2,8 @@
 return { 'nkakouros-original/numbers.nvim',
   opts = {
     excluded_filetypes = {
+      'Alpha',
+      'alpha',
       'neo-tree',
       'neo-tree-popup',
       'DressingInput',
