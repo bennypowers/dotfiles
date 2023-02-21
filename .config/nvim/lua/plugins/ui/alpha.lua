@@ -1,17 +1,17 @@
 return { 'goolord/alpha-nvim',
-  dir = '~/Developer/alpha-nvim',
-  enabled = false,
+  enabled = true,
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+    'nvim-tree/nvim-web-devicons',
+  },
   config = function()
-    math.randomseed(os.time(os.date("!*t")))
+    math.randomseed(os.time(os.date'!*t'))
 
-    local status_ok, alpha = pcall(require, "alpha")
-    if not status_ok then return end
-
-    local path_ok, path = pcall(require, "plenary.path")
-    if not path_ok then return end
-
-    local dashboard = require 'alpha.themes.dashboard'
+    local path = require 'plenary.path'
     local nvim_web_devicons = require 'nvim-web-devicons'
+    local alpha = require 'alpha'
+    local term = require 'alpha.term'
+    local dashboard = require 'alpha.themes.dashboard'
 
     local cdir = vim.fn.getcwd()
 
@@ -127,112 +127,104 @@ return { 'goolord/alpha-nvim',
       }
     end
 
-    local function header_color()
-      local headers_basedir = vim.fn.expand('~/.config/nvim/headers/')
+    local width = 16
+    local height = 16
 
-      local headers_dirnames = { headers_basedir .. 'small' }
+    local headers_cat = '16'
 
-      if vim.fn.winwidth('%') >= 100 then
-        table.insert(headers_dirnames, headers_basedir .. 'wide')
-      end
+    -- local winwidth = vim.fn.winwidth'%'
+    -- local winheight = vim.fn.winheight'%'
+    --
+    -- if winwidth >= 100 and winheight >= 60 then
+    --   headers_cat = 'small'
+    --   height = 25
+    -- end
+    --
+    -- if winwidth >= 100 and winheight >= 60 then
+    --   headers_cat = 'wide'
+    --   width = 100
+    -- end
+    --
+    -- if winheight >= 60 then
+    --   headers_cat = 'tall'
+    --   height = 40
+    -- end
 
-      if vim.fn.winheight('%') >= 60 then
-        table.insert(headers_dirnames, headers_basedir .. 'large')
-      end
+    local headers_dirname = vim.fn.expand('~/.config/nvim/headers/' .. headers_cat)
 
+    local function get_header_script()
       local headers = {}
 
-      for _, dirname in ipairs(headers_dirnames) do
-        for _, filename in ipairs(vim.fn.readdir(dirname)) do
-          table.insert(headers, vim.fn.readfile(dirname .. '/' .. filename))
-        end
+      for _, filename in ipairs(vim.fn.readdir(headers_dirname)) do
+        table.insert(headers, (headers_dirname .. '/' .. filename))
       end
 
       local idx = math.random(1, #headers)
-      local header_string_split = headers[idx]
-      local lines = {}
-      for i, line_chars in ipairs(header_string_split) do
-        local hi = "StartLogo" .. i
-        local line = {
-          type = "text",
-          val = line_chars,
-          opts = {
-            hl = hi,
-            shrink_margin = false,
-            position = "center",
-          },
-        }
-        table.insert(lines, line)
-      end
-
-      local output = {
-        type = "group",
-        val = lines,
-        opts = { position = "center", },
-      }
-
-      return output
-    end
-
-    local function padding(amt)
-      return { type = 'padding', val = amt }
+      return headers[idx]
     end
 
     alpha.setup {
-      layout = function()
-        return {
-          padding(2),
-
-          header_color(),
-
-          padding(2),
-
-          {
-            type = "group",
-            val = {
-              {
-                type = "text",
-                val = "Recent files",
-                opts = {
-                  hl = "SpecialComment",
-                  shrink_margin = false,
-                  position = "center",
-                },
-              },
-              padding(1),
-              {
-                type = "group",
-                val = function()
-                  return { mru(1, cdir, 9) }
-                end,
-                opts = { shrink_margin = false },
-              },
-            }
-          },
-
-          padding(2),
-
-          {
-            type = "group",
-            val = {
-              { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
-              padding(1),
-              dashboard.button("spc /", "  File Explorer", ":Neotree toggle filesystem<CR>"),
-              dashboard.button("spc p", "  Find file", ":Telescope find_files <CR>"),
-              dashboard.button("spc fg", "  Find text", ":Telescope live_grep <CR>"),
-              dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
-              dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
-              dashboard.button("u", "  Update plugins", ":PackerSync<CR>"),
-              dashboard.button("G", "  Git", "gG"),
-              dashboard.button("q", "  Quit", ":qa<CR>"),
+      layout = {
+        {
+          type = "terminal",
+          command = 'cat | ' .. get_header_script(),
+          width = width,
+          height = height,
+          opts = {
+            redraw = true,
+            window_config = {
+              width = width,
+              height = height,
+              style = 'minimal',
+              noautocmd = true,
             },
-            position = "center",
           },
-        }
-      end,
+        },
+
+        { type = 'padding', val = height },
+
+        {
+          type = "group",
+          val = {
+            {
+              type = "text",
+              val = "Recent files",
+              opts = {
+                hl = "SpecialComment",
+                shrink_margin = false,
+                position = "center",
+              },
+            },
+            { type = 'padding', val = 1 },
+            {
+              type = "group",
+              val = function()
+                return { mru(1, cdir, 5) }
+              end,
+              opts = { shrink_margin = false },
+            },
+          }
+        },
+
+        { type = 'padding', val = 2 },
+
+        {
+          type = "group",
+          val = {
+            { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
+            { type = 'padding', val = 1 },
+            dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
+            dashboard.button("spc /", "  File Explorer", ":Neotree float filesystem<CR>"),
+            dashboard.button("spc p", "  Find file", ":Telescope find_files <CR>"),
+            dashboard.button("spc fg", "  Find text", ":Telescope live_grep <CR>"),
+            dashboard.button("q", "  Quit", ":qa<CR>"),
+          },
+          position = "center",
+        },
+      },
       opts = {
         margin = 5,
-        autostart = false,
+        autostart = true,
       },
     }
   end
