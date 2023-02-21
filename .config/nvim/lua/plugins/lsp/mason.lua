@@ -24,12 +24,10 @@ return { 'williamboman/mason.nvim',
   config = function()
     local configs = require'lspconfigs'
 
-    local ensure_installed = vim.tbl_keys(configs)
-
     require 'mason'.setup()
 
     require 'mason-lspconfig'.setup {
-      ensure_installed = ensure_installed,
+      ensure_installed = vim.tbl_keys(configs),
     }
 
     local function default_capabilities()

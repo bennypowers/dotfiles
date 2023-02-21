@@ -2,6 +2,9 @@ return { 'catppuccin/nvim',
   version = '1',
   name = 'catppuccin',
   priority = 1000,
+  dependencies = {
+    'barbecue',
+  },
   opts = {
     flavour = 'mocha',
     integrations = {
