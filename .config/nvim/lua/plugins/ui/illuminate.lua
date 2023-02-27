@@ -8,13 +8,22 @@ return { 'RRethy/vim-illuminate',
   config = function()
     require'illuminate'.configure {
       filetypes_denylist = {
-        'neotree',
+        'alpha',
         'neo-tree',
+        'neo-tree-popup',
         'Telescope',
         'telescope',
       }
     }
+
+    vim.cmd[[
+      hi clear IlluminatedWordText
+      hi clear IlluminatedWordRead
+      hi clear IlluminatedWordWrite
+      hi link IlluminatedWordText CursorLine
+      hi link IlluminatedWordRead CursorLine
+      hi link IlluminatedWordWrite CursorLine
+      hi illuminatedCurWord cterm=italic gui=italic
+    ]]
   end
 }
-
-

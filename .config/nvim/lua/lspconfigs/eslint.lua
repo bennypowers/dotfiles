@@ -1,5 +1,5 @@
 return {
-  root_dir = function() return require 'lspconfig.util'.find_git_ancestor() end,
+  -- root_dir = function() return require 'lspconfig.util'.find_git_ancestor() end,
   settings = {
     codeActionsOnSave = {
       enable = true,
@@ -8,4 +8,3 @@ return {
     },
   },
 }
-

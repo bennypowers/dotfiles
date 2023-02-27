@@ -1,5 +1,6 @@
 -- 🤖 Language Servers, automatically installed
-return { 'williamboman/mason.nvim',
+return {
+  'williamboman/mason.nvim',
   dependencies = {
     'neovim/nvim-lspconfig',
     'williamboman/mason-lspconfig.nvim',
@@ -9,9 +10,8 @@ return { 'williamboman/mason.nvim',
     'b0o/schemastore.nvim', -- json schema support
     'onsails/lspkind-nvim', -- fancy icons for lsp AST types and such
     { 'lukas-reineke/lsp-format.nvim', opts = {} },
-    { 'folke/neodev.nvim', opts = {} }, -- nvim api docs, signatures, etc.
+    { 'folke/neodev.nvim',             opts = {} }, -- nvim api docs, signatures, etc.
   },
-
   init = function()
     vim.g.diagnostic_enable_virtual_text = 1
     vim.g.diagnostic_virtual_text_prefix = ' '
@@ -20,9 +20,8 @@ return { 'williamboman/mason.nvim',
     vim.fn.sign_define('DiagnosticSignInformation', { text = '👷', texthl = 'DiagnosticInformation' })
     vim.fn.sign_define('DiagnosticSignHint', { text = '🙋', texthl = 'DiagnosticHint' })
   end,
-
   config = function()
-    local configs = require'lspconfigs'
+    local configs = require 'lspconfigs'
 
     require 'mason'.setup()
 
@@ -55,17 +54,19 @@ return { 'williamboman/mason.nvim',
         local config = {}
 
         if type(mod_name) == 'string' then
-          config = require('lspconfigs.'..server_name)
+          config = require('lspconfigs.' .. server_name)
         end
 
-        local enabled = config.enabled; config.enabled = nil
+        local enabled = config.enabled;
+        config.enabled = nil
 
         if enabled ~= false then
-          require'lspconfig'[server_name].setup(vim.tbl_extend('force', {
+          require 'lspconfig'[server_name].setup(vim.tbl_extend('force', {
             capabilities = default_capabilities(),
             on_attach = function(client)
               -- default on_attach function
-              require'lsp-status'.on_attach(client)
+              require 'lsp-status'.on_attach(client)
+              -- require'lsp-format'.on_attach(client)
             end,
           }, config))
         end

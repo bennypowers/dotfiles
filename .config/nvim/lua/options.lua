@@ -8,7 +8,6 @@ end
 vim.g.loaded_netrw           = 1
 vim.g.loaded_matchparen      = 1
 vim.g.loaded_netrwPlugin     = 1
-vim.g.Illuminate_ftblacklist = { 'neo-tree' }
 
 vim.g.termguicolors = true
 vim.g.mapleader     = ' '

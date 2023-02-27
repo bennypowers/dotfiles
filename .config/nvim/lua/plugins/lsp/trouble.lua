@@ -4,7 +4,7 @@ return { 'folke/lsp-trouble.nvim',
   cmd = { 'Trouble', 'TroubleToggle' },
   dependencies = {
     'folke/trouble.nvim',
-    'web-devicons'
+    'nvim-tree/nvim-web-devicons',
   },
   keys = {
     {'gT', ':TroubleToggle<cr>', desc = 'Toggle trouble'},

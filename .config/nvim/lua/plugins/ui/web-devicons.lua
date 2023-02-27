@@ -1,5 +1,4 @@
 return { 'nvim-tree/nvim-web-devicons',
-  name = 'web-devicons',
   opts = {
     override = {
       ['.github'] = {

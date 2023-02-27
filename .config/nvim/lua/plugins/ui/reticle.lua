@@ -1,4 +1,13 @@
 return { 'tummetott/reticle.nvim',
-  opts = { },
-  event = { 'WinNew', 'WinLeave' }
+  event = { 'WinNew', 'WinLeave' },
+  enabled = false,
+  opts = {
+    always_highlight_number = true,
+    on_focus = {
+      cursorline = {
+        'alpha',
+        'neo-tree',
+      },
+    },
+  },
 }

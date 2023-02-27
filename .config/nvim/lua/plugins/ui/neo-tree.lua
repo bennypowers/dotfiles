@@ -1,23 +1,19 @@
-local DEPS = {
-  'nvim-lua/plenary.nvim',
-  'MunifTanjim/nui.nvim',
-  'web-devicons',
-}
-
 -- tree browser
 return { 'nvim-neo-tree/neo-tree.nvim',
   lazy = true,
   version = 'v2.x',
-  dependencies = DEPS,
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+    'MunifTanjim/nui.nvim',
+    'nvim-tree/nvim-web-devicons',
+  },
   cmd = 'Neotree',
   keys = {
-    { '<leader>|', ':Neotree reveal filesystem float toggle=true<cr>', desc = 'Toggle file tree (float)' },
-    { '<leader>\\', ':Neotree reveal filesystem show left toggle focus<cr>', desc = 'Toggle file tree (sidebar)' },
+    { '<leader>\\', ':Neotree reveal filesystem float toggle=true<cr>', desc = 'Toggle file tree (float)' },
+    { '<leader>|', ':Neotree reveal filesystem show left toggle focus<cr>', desc = 'Toggle file tree (sidebar)' },
   },
   config = function()
-
     local tree = require 'neo-tree'
-    local highlights = require 'neo-tree.ui.highlights'
     local renderer = require 'neo-tree.ui.renderer'
 
     -- ascend to the parent or close it
@@ -47,9 +43,8 @@ return { 'nvim-neo-tree/neo-tree.nvim',
     end
 
     tree.setup {
-      close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
-      -- popup_border_style = "rounded",
-      popup_border_style = "single",
+      close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
+      popup_border_style = 'rounded',
       enable_git_status = true,
       enable_diagnostics = true,
       use_libuv_filewatcher = true,
@@ -63,21 +58,17 @@ return { 'nvim-neo-tree/neo-tree.nvim',
           event = 'neo_tree_buffer_enter',
           handler = function()
             require 'cmp'.setup.buffer { enabled = false }
-            vim.opt_local.signcolumn = 'no'
-            vim.opt_local.cursorline = true
-            vim.opt_local.cursorcolumn = false
+            vim.wo.signcolumn = 'no'
+            vim.wo.cursorline = true
+            vim.wo.cursorcolumn = false
             vim.opt_local.guicursor:append('a:Cursor/lCursor')
-            vim.cmd [[
-              hi Cursor blend=100
-            ]]
+            vim.cmd [[hi Cursor blend=100]]
           end
         },
         {
           event = "neo_tree_buffer_leave",
           handler = function()
-            vim.cmd [[
-              hi Cursor blend=0
-            ]]
+            vim.cmd [[hi Cursor blend=0]]
           end
         },
       },
@@ -187,14 +178,15 @@ return { 'nvim-neo-tree/neo-tree.nvim',
         components = {
 
           icon = function(config, node)
+            local highlights = require 'neo-tree.ui.highlights'
+            local nvim_web_devicons = require 'nvim-web-devicons'
             local icon = config.default or ' '
             local padding = config.padding or ' '
             local highlight = config.highlight or highlights.FILE_ICON
-            local web_devicons = require 'nvim-web-devicons'
             if node.type == 'directory' then
               highlight = highlights.DIRECTORY_ICON
               if node.name == 'node_modules' or node.name == '.git' or node.name == '.github' then
-                local _icon, _highlight = web_devicons.get_icon(node.name)
+                local _icon, _highlight = nvim_web_devicons.get_icon(node.name)
                 icon = _icon or icon
                 highlight = _highlight or highlight
               elseif node:is_expanded() then
@@ -207,7 +199,7 @@ return { 'nvim-neo-tree/neo-tree.nvim',
               local name = node.name
               local ext = node.ext
               if ext == 'json' and name:match[[^tsconfig]] then name = 'tsconfig.json' end
-              local _icon, _highlight = web_devicons.get_icon(name, ext)
+              local _icon, _highlight = nvim_web_devicons.get_icon(name, ext)
               icon = _icon or icon
               highlight = _highlight or highlight
             end

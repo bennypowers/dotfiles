@@ -25,6 +25,15 @@ return {
         telemetry = {
           enable = false, -- Do not send telemetry data containing a randomized but unique identifier
         },
+        globals = {
+          'au',
+          'ag',
+          'command',
+          'describe',
+          'it',
+          'before_each',
+          'after_each',
+        }
       },
     },
   },
