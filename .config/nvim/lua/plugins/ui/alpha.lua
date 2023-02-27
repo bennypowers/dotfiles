@@ -1,5 +1,7 @@
 return { 'goolord/alpha-nvim',
   enabled = true,
+  dev = true,
+  branch = 'patch-3',
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons',
@@ -12,39 +14,50 @@ return { 'goolord/alpha-nvim',
     local nvim_web_devicons = require 'nvim-web-devicons'
 
     local width = 16
+
     local height = 16
 
-    local function get_header_script()
-      local headers_cat = '16'
+    local heights = {
+      [16] = 12,
+      [32] = 16,
+      [48] = 28,
+      [64] = 32,
+    }
 
-      -- local winwidth = vim.fn.winwidth'%'
-      -- local winheight = vim.fn.winheight'%'
-      --
-      -- if winwidth >= 100 and winheight >= 60 then
-      --   headers_cat = 'small'
-      --   height = 25
-      -- end
-      --
-      -- if winwidth >= 100 and winheight >= 60 then
-      --   headers_cat = 'wide'
-      --   width = 100
-      -- end
-      --
-      -- if winheight >= 60 then
-      --   headers_cat = 'tall'
-      --   height = 40
-      -- end
-      --
-      local headers_dirname = vim.fn.expand('~/.config/nvim/headers/' .. headers_cat)
+    local custom_heights = {
+      ['ness.bike'] = 24,
+      nessy = 30,
+      runaway5 = 24,
+      phasedistorter = 24,
+      skyrunner = 24,
+    }
+
+    local function get_header_script()
+      local cats = {16}
+
+      local winwidth = vim.fn.winwidth'%'
+      local winheight = vim.fn.winheight'%'
+
+      if winheight >= 40 then table.insert(cats, 32) end
+      if winheight >= 60 then table.insert(cats, 48) end
+      if winwidth >= 100 and winheight >= 60 then table.insert(cats, 64) end
+
+      local headers_dir = vim.fn.expand'~/.config/nvim/headers/'
 
       local headers = {}
 
-      for _, filename in ipairs(vim.fn.readdir(headers_dirname)) do
-        table.insert(headers, (headers_dirname .. '/' .. filename))
+      for _, size in ipairs(cats) do
+        for _, filename in ipairs(vim.fn.readdir(headers_dir .. size)) do
+          table.insert(headers, { size, headers_dir .. size .. '/' .. filename })
+        end
       end
 
-      local idx = math.random(1, #headers)
-      return 'cat | ' .. headers[idx]
+      local size, path = unpack(headers[math.random(1, #headers)])
+      local name = path:match'/([%w%.]+)%.sh$'
+      width = size
+      height = custom_heights[name] or heights[size] or 16
+
+      return 'cat | ' .. path
     end
 
     alpha.setup {
@@ -52,17 +65,19 @@ return { 'goolord/alpha-nvim',
         {
           type = 'terminal',
           command = get_header_script,
-          width = width,
-          height = height,
           opts = {
             redraw = true,
-            window_config = {
+            window_config = function() return {
               noautocmd = true,
-            },
+              focusable = false,
+              zindex = 1,
+              width = width,
+              height = height,
+            } end,
           },
         },
 
-        { type = 'padding', val = height },
+        { type = 'padding', val = function() return height + 4 end },
 
         {
           type = 'group',
@@ -135,6 +150,26 @@ return { 'goolord/alpha-nvim',
       opts = {
         margin = 5,
         autostart = true,
+        setup = function()
+          au('User', {
+            pattern = 'AlphaReady',
+            desc = 'hide cursor for alpha',
+            callback = function()
+              vim.opt_local.guicursor:append('a:Cursor/lCursor')
+              vim.opt_local.cursorline = true
+              vim.cmd [[hi Cursor blend=100]]
+              au('BufUnload', {
+                buffer = 0,
+                once = true,
+                desc = 'show cursor after alpha',
+                callback = function()
+                  vim.cmd [[hi Cursor blend=0]]
+                  vim.opt_local.guicursor:remove('a:Cursor/lCursor')
+                end,
+              })
+            end,
+          })
+        end,
       },
     }
   end
