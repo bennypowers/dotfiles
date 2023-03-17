@@ -76,6 +76,7 @@ set -x LESS " -R"
 
 set -x DENO_INSTALL ~/.deno
 set -x PATH $PATH ~/.ghcup/bin
+set -x PATH ~/go/bin $PATH
 set -x PATH ~/.cabal/bin $PATH
 set -x PATH ~/.cargo/bin $PATH
 set -x PATH ~/.local/bin $PATH []

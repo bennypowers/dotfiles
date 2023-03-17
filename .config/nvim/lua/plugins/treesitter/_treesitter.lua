@@ -9,8 +9,7 @@ return {
   'ziontee113/query-secretary',
 
   -- close HTML tags, but using treesitter
-  -- 'windwp/nvim-ts-autotag',
-  { 'bennypowers/nvim-ts-autotag', branch = 'template-tags' },
+  { 'windwp/nvim-ts-autotag', dev = true },
 
   -- append `end` in useful places
   'RRethy/nvim-treesitter-endwise',
