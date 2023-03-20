@@ -1,16 +1,12 @@
-(assignment_expression
-  left: (member_expression
-          property: (property_identifier) @_prop
-          (#eq? @_prop "innerHTML"))
-  right: (template_string) @html
-    (#offset! @html 0 1 0 -1))
+; svg``
+(call_expression
+ function: ((identifier) @_name (#eq? @_name "svg"))
+ arguments: ((template_string) @html (#offset! @html 0 1 0 -1)))
 
-(assignment_expression
-   left: (member_expression
-           property: (property_identifier) @_prop
-           (#eq? @_prop "innerHTML"))
-   right: (string (string_fragment) @html
-                  (#offset! @html 0 1 0 -1)))
+(call_expression
+ function: ((identifier) @_name
+   (#eq? @_name "html"))
+ arguments: ((template_string) @lit_html))
 
 ((comment) @_comment
   (#eq? @_comment "/* html */")

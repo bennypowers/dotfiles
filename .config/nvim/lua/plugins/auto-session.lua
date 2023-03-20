@@ -9,6 +9,7 @@ return { 'rmagatti/auto-session',
     auto_restore_enabled = true,
     auto_session_use_git_branch = true,
     bypass_session_save_file_types = {
+      'alpha',
       'neo-tree',
       'terminal',
       'tsplayground',

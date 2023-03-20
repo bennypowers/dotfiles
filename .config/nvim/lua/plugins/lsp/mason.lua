@@ -49,6 +49,7 @@ return {
 
     require 'mason-lspconfig'.setup_handlers {
       function(server_name)
+        if server_name == 'tsserver' then return end
         local mod_name = configs[server_name]
 
         local config = {}
@@ -63,9 +64,12 @@ return {
         if enabled ~= false then
           require 'lspconfig'[server_name].setup(vim.tbl_extend('force', {
             capabilities = default_capabilities(),
-            on_attach = function(client)
+            on_attach = function(client, bufnr)
               -- default on_attach function
               require 'lsp-status'.on_attach(client)
+              if client.server_capabilities.documentSymbolProvider then
+                require'nvim-navic'.attach(client, bufnr)
+              end
               -- require'lsp-format'.on_attach(client)
             end,
           }, config))

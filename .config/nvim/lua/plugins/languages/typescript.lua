@@ -1,9 +1,11 @@
 return { 'jose-elias-alvarez/typescript.nvim',
   name = 'typescript',
-  opts =  {
+  config = {
+    disable_commands = false,
     server = {
-      on_attach = function(client)
+      on_attach = function(client, bufnr)
         require 'lsp-status'.on_attach(client)
+        require 'nvim-navic'.attach(client, bufnr)
       end,
       settings = {
         format = false,
