@@ -48,6 +48,7 @@ vim.opt.shortmess:append'a' -- abbreviate built-in messages
 
 vim.filetype.add { extension = {
   njk = 'html',
+  webc = 'html',
   sketchpalette = 'json',
 } }
 

@@ -35,24 +35,29 @@ return { 'nvim-tree/nvim-web-devicons',
       js = {
         icon = '',
         color = "#f7df1e",
-        name = "Js",
+        name = "JavaScript",
       },
       ts = {
         icon = 'ﯤ',
         color = "#519aba",
         cterm_color = "67",
-        name = "Ts",
+        name = "TypeScript",
       },
       cjs = {
         icon = '',
         color = '#5FA04E',
-        name = 'Cjs'
+        name = 'CommonJS'
       },
       njk = {
         icon = '',
         color = '#3d8137',
-        name = 'Njk',
-      }
+        name = 'Nunjucks',
+      },
+      webc = {
+        icon = '',
+        color = '#ffa07a',
+        name = 'WebC',
+      },
     },
-  }
+  },
 }
