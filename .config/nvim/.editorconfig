@@ -46,7 +46,7 @@ if_condition_align_with_each_other = false
 
 long_chain_expression_allow_one_space_after_colon = false
 # optional crlf/lf/auto, if it is 'auto', in windows it is crlf other platforms are lf
-end_of_line = auto
+end_of_line = lf
 
 # [line layout]
 # The following configuration supports three expressions

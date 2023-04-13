@@ -1,0 +1,7 @@
+{
+  "Lua": {
+    "workspace": {
+      "library": "${3rd}/luv/library"
+    }
+  }
+}
