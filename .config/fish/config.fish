@@ -3,6 +3,7 @@ set -g fish_user_paths "/usr/local/opt/openssl@1.1/bin" $fish_user_paths
 set -g fish_user_paths "/usr/local/opt/gettext/bin" $fish_user_paths
 set -g fish_user_paths "/usr/local/opt/python/bin" $fish_user_paths
 set -g fish_user_paths "~/.yarn/bin" $fish_user_paths
+set -g fish_user_paths "~/miniconda3/bin" $fish_user_paths
 
 if status is-interactive
   source (rbenv init -|psub)
@@ -113,4 +114,10 @@ alias vim="nvim"
 alias vim-update="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias lg="lazygit"
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+eval /home/bennyp/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
 

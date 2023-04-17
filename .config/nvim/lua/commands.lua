@@ -5,8 +5,7 @@ command('ClearNotifications', function()
   elseif pcall(require, 'notifier') then
     vim.cmd[[:NotifierClear]]
   elseif pcall(require, 'noice') then
-    -- vim.cmd[[:NoiceDisable]]
-    -- vim.cmd[[:NoiceEnable]]
+    vim.cmd[[:Noice dismiss]]
   end
   vim.cmd[[nohlsearch|diffupdate|normal! <C-L><CR>]]
 end, {
