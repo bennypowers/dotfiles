@@ -16,6 +16,7 @@ end
 
 -- Take screenshots from nvim
 return { 'narutoxy/silicon.lua',
+  enabled = false,
   lazy = true,
   dependencies = { 'nvim-lua/plenary.nvim' },
   keys = {

@@ -1,7 +1,6 @@
 -- 🌳 Syntax
-return { 'bennypowers/nvim-treesitter',
-  dev = true,
-  -- branch = 'feat/markdown/aliases',
+return { 'nvim-treesitter/nvim-treesitter',
+  -- dev = true,
   build = ':TSUpdate',
   config = function()
     local parser_install_dir = vim.fn.expand'~/.local/share/treesitter';
