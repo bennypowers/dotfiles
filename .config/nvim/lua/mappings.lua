@@ -24,7 +24,7 @@ nmap('<A-k>',      '<C-w>k',                      'Move cursor to window above')
 nmap('<A-l>',      '<C-w>l',                      'Move cursor to window right')
 
 nmap('<leader>e',  open_diagnostics,            'Open diagnostics in floating window')
-nmap('O',          U.open_uri_under_cursor,       'Open URI under cursor')
+-- nmap('O',          U.open_uri_under_cursor,       'Open URI under cursor')
 nmap('<leader>lf', format_async,                  'Format file')
 
 nmap('K',          vim.lsp.buf.hover,             'Hover')
@@ -52,4 +52,3 @@ map('<A-l>',       '<c-\\><c-N><c-w>l',           'Move cursor to window right' 
 vmap('rn',         vim.lsp.buf.rename,            'Rename refactor')
 
 imap('<c-l>',      '<cmd>ClearNotifications<cr>', 'Clear Notifications')
-

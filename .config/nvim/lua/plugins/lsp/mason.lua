@@ -68,7 +68,7 @@ return {
               -- default on_attach function
               require 'lsp-status'.on_attach(client)
               if client.server_capabilities.documentSymbolProvider then
-                require'nvim-navic'.attach(client, bufnr)
+                require 'nvim-navic'.attach(client, bufnr)
               end
               -- require'lsp-format'.on_attach(client)
             end,
