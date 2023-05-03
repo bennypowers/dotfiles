@@ -12,3 +12,54 @@ snippet html
 		</body>
 	</html>
 
+snippet pfe
+  PatternFly Elements
+
+snippet pfeperformant
+	<p>
+		A performant design system, made with
+		☕
+		and
+		Web Components
+		for
+		Performant, progressively-enhanced experiences
+	</p>
+
+snippet pfedemohtml
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width">
+			<title>PatternFly Element</title>
+			<link rel="icon" href="https://patternflyelements.org/images/favicon.ico"/>
+			<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red Hat Text&display=swap"/>
+
+			<style>
+				body {
+					display: grid;
+					font-family: 'Red Hat Text', sans-serif;
+					place-content: center;
+					height: 100vh;
+					background-color:rebeccapurple;
+				}
+				pf-card {
+					width: 70vw;
+				}
+			</style>
+
+			<script type="importmap">
+			{
+				"imports": {
+					"@patternfly/elements/": "https://jspm.dev/@patternfly/elements/"
+				}
+			}
+			</script>
+
+			<script type="module">
+				import '@patternfly/elements/pf-card/pf-card.js';
+			</script>
+		</head>
+		<body>
+		</body>
+	</html>

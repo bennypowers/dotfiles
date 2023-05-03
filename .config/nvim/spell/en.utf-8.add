@@ -11,3 +11,10 @@ eleventyConfig
 css
 svg
 a11y
+esbuild
+execa
+patternfly
+rhds
+dx
+json
+npm's

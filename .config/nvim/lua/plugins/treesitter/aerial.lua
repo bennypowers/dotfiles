@@ -1,4 +1,17 @@
 return { 'stevearc/aerial.nvim',
-  lazy = true,
+  cmd = {
+    'AerialToggle',
+    'AerialOpen',
+    'AerialOpenAll',
+    'AerialClose',
+    'AerialCloseAll',
+    'AerialNext',
+    'AerialPrev',
+    'AerialGo',
+    'AerialInfo',
+    'AerialNavToggle',
+    'AerialNavOpen',
+    'AerialNavClose',
+  },
   opts = {}
 }
