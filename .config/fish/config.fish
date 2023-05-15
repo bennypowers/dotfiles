@@ -118,6 +118,8 @@ alias lg="lazygit"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-eval /home/bennyp/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+if test -e ~/miniconda3/bin/conda
+  eval ~/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+end
 # <<< conda initialize <<<
 
