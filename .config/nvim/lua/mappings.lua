@@ -13,8 +13,6 @@ local function imap(lhs, rhs, desc) map(lhs, rhs, desc, { mode = 'i' }) end
 local function format_async() vim.lsp.buf.format { async = true } end
 local function open_diagnostics() vim.diagnostic.open_float { focus = false } end
 
-local U = require 'utils'
-
 nmap('<leader>L',  ':Lazy<cr>',                   'Plugin manager')
 nmap('<c-l>',      '<cmd>ClearNotifications<cr>', 'Clear Notifications')
 
@@ -24,7 +22,6 @@ nmap('<A-k>',      '<C-w>k',                      'Move cursor to window above')
 nmap('<A-l>',      '<C-w>l',                      'Move cursor to window right')
 
 nmap('<leader>e',  open_diagnostics,            'Open diagnostics in floating window')
--- nmap('O',          U.open_uri_under_cursor,       'Open URI under cursor')
 nmap('<leader>lf', format_async,                  'Format file')
 
 nmap('K',          vim.lsp.buf.hover,             'Hover')
