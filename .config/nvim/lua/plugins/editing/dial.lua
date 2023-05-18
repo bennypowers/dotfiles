@@ -26,4 +26,3 @@ return { 'monaqa/dial.nvim',
     }
   end
 }
-
