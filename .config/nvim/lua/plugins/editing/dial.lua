@@ -1,4 +1,9 @@
-local function get_map(c, m, g) return function() require'dial.map'.manipulate(c, m, g) end end
+local function get_map(c, m, g) return function()
+  if vim.bo.filetype == 'markdown' then
+    pcall(require'commands'.toggle_markdown_image)
+  end
+  require'dial.map'.manipulate(c, m, g)
+end end
 
 -- c-a to toggle bool, increment version, etc
 return { 'monaqa/dial.nvim',

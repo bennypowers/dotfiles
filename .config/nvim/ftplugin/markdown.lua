@@ -1,3 +1,15 @@
+vim.bo.formatoptions = 'cqw'
+vim.bo.textwidth = 80
+vim.bo.wrapmargin = 0
+vim.bo.softtabstop = 2
+vim.bo.softtabstop = 2
+vim.bo.tabstop = 2
+vim.bo.autoindent = true
+vim.opt.colorcolumn = '80'
+vim.api.nvim_set_hl(0, 'MiniTrailspace', {
+  bg = '#333333'
+})
+
 local function get_table_and_paragraph_nodes(node)
   local tbl, paragraph
   while node do
@@ -10,8 +22,6 @@ local function get_table_and_paragraph_nodes(node)
   end
   return tbl, paragraph
 end
-
-local get_node_text = vim.treesitter.get_node_text
 
 au('InsertLeave', {
   group = ag('markdown_tables', {}),
@@ -43,55 +53,6 @@ au('InsertLeave', {
   end
 })
 
-command('MarkdownToggleImage', function()
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local parser = vim.treesitter.get_parser(0, 'markdown')
-  local langtree = parser:language_for_range({ row, col, row, col })
-  local caps = {}
-  langtree:for_each_tree(function(tree, ltree)
-    ltree:parse()
-    local lang = ltree:lang();
-    local query = vim.treesitter.query.get(lang, 'images')
-    if query then
-      for id, node in query:iter_captures(tree:root(), 0, row - 1, row) do
-        local cap = query.captures[id]
-        if cap == 'image' then
-          caps.node = node
-        elseif cap == '_attr' then
-          local name, value
-          for child in node:iter_children() do
-            local text = get_node_text(child, 0);
-            local type = child:type()
-            if type == 'attribute_name' then
-              name = text
-            elseif type == 'attribute_value' then
-              value = text
-            elseif type == 'quoted_attribute_value' then
-              value = text:gsub('^[\'|"](.*)[\'|"]$', '%1')
-            end
-          end
-          if name == 'src' or name == 'alt' then
-            caps[name] = value
-          end
-        elseif not cap:starts'_' then
-          local split = vim.split(cap, '.', { plain = true, trimempty = true })
-          local name = split[#split]
-          caps[name] = get_node_text(node, 0)
-        end
-      end
-    end
-  end)
-  if caps.node then
-    local type = caps.node:type()
-    local tag
-    if type:match'tag$' then
-      tag = '![' ..caps.alt .. '](' .. caps.src .. ')'
-    elseif type == 'image' then
-      tag = '<img alt="'..caps.alt .. '" src="' .. caps.src .. '">'
-    else
-      return
-    end
-    local start_row, start_col, end_row, end_col = vim.treesitter.get_node_range(caps.node)
-    vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { tag })
-  end
-end, { desc = 'Toggle Markdown image syntax' })
+command('MarkdownToggleImage', require'commands'.toggle_markdown_image, {
+  desc = 'Toggle Markdown image syntax',
+})
