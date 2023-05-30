@@ -49,4 +49,15 @@ return {
   fenced_code_block('sh', 'npm i lit'),
   fenced_code_block('js', 'console.log("hello world")');
   fenced_code_block('ts', 'console.log("hello world")'),
+  s({
+    trig = '---',
+    name = 'changeset'
+  }, fmt([[---
+"{}": {}
+---
+{}]], {
+    i(1, 'package'),
+    c(2, { t'patch', t'minor', t'major' }),
+    i(3, 'description'),
+  })),
 }

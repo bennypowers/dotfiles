@@ -40,7 +40,7 @@ local function treesitter_customelement_dynamicnode(args)
     setmetatable(pair, { kind = meta.kind })
     for id, node in pairs(match) do
       local name = query.captures[id]
-      local text = vim.treesitter.query.get_node_text(node, 0)
+      local text = vim.treesitter.get_node_text(node, 0)
       if text then
         pair[name] = text
       end

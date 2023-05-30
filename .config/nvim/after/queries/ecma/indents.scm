@@ -1,2 +1,2 @@
-; extends
+; inherits
 (comment) @auto
