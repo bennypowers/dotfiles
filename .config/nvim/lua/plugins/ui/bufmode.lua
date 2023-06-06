@@ -14,8 +14,10 @@ return { 'Iron-E/nvim-bufmode',
       d = 'BufDel',
       P = 'BufferLineTogglePin',
       e = 'BufferLineCycleNext',
-      j = 'BufferLineCycleNext',
-      k = 'BufferLineCyclePrev',
+      -- j = 'BufferLineCycleNext',
+      -- k = 'BufferLineCyclePrev',
+      j = 'bnext',
+      k = 'bprev',
       E = 'BufferLineMoveNext',
     }
   }

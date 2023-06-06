@@ -1,6 +1,6 @@
 -- editor tabs. yeah ok I know they're not "tabs"
 return { 'akinsho/bufferline.nvim',
-  version = "v2.*",
+  version = "v4.*",
   lazy = true,
   event = 'ColorScheme',
   dependencies = {'catppuccin/nvim'},
@@ -8,6 +8,7 @@ return { 'akinsho/bufferline.nvim',
     require 'bufferline'.setup {
       highlights = require'catppuccin.groups.integrations.bufferline'.get(),
       options = {
+        mode = 'tabs',
         separator_style = 'slant',
         numbers = 'none',
         diagnostics = 'nvim_lsp',
