@@ -8,7 +8,7 @@ return { 'akinsho/bufferline.nvim',
     require 'bufferline'.setup {
       highlights = require'catppuccin.groups.integrations.bufferline'.get(),
       options = {
-        mode = 'tabs',
+        -- mode = 'tabs',
         separator_style = 'slant',
         numbers = 'none',
         diagnostics = 'nvim_lsp',
