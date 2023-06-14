@@ -13,22 +13,28 @@ local function find_selection()
   }
 end
 
+local function pick_symbols()
+  require'telescope.builtin'.symbols { sources = {
+    'emoji', 'gitmoji', 'math',
+  } }
+end
 -- 🔭 Telescope - generic fuzzy finder with popup window
 return { 'nvim-telescope/telescope.nvim',
   name = 'telescope',
   lazy = true,
   cmd = {'Telescope'},
   keys = {
+
     {'<leader>p',  ':Telescope find_files hidden=true<cr>', desc = 'Find files'},
     {'<leader>fF', ':Telescope oldfiles<cr>',               desc = 'Find old files'},
     {'<leader>fg', ':Telescope live_grep<cr>',              desc = 'Find in files (live grep)'},
     {'<leader>fb', ':Telescope buffers<cr>',                desc = 'Find buffers'},
     {'<leader>fh', ':Telescope help_tags<cr>',              desc = 'Find in help'},
-    {'<leader>fs', ':Telescope symbols<cr>',                desc = 'Find symbol'},
+    {'<leader>fs', pick_symbols,                            desc = 'Find symbol'},
     {'<leader>fr', ':Telescope resume<cr>',                 desc = 'Resume finding'},
     {'<leader>fn', ':Telescope notify<cr>',                 desc = 'Find in Notifications'},
     {'<leader>fp', ':Telescope pickers<cr>',                desc = 'Choose Pickers'},
-    {'<c-e>',      '<cmd>Telescope symbols<cr>',            mode = 'i',    desc = 'Pick symbol via Telescope'},
+    {'<c-e>',      pick_symbols,                            mode = 'i',    desc = 'Pick symbol via Telescope'},
     {'F',          find_selection,                          mode = 'v',    desc = 'Find selection in project' },
     {'fg',         find_selection,                          mode = 'v',    desc = 'Find selection in project' },
 

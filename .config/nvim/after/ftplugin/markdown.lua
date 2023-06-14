@@ -65,17 +65,17 @@ au('InsertLeave', {
   end
 })
 
-au('InsertLeave', {
-  group = md_aucmd_group,
-  desc = 'Hardwrap markdown paragraphs',
-  callback = function()
-    local node = vim.treesitter.get_node()
-    local paragraph = get_paragraph_nodes(node)
-    if paragraph and not is_shortcode(node) then
-      vim.cmd.normal'gqap'
-    end
-  end
-})
+-- au('InsertLeave', {
+--   group = md_aucmd_group,
+--   desc = 'Hardwrap markdown paragraphs',
+--   callback = function()
+--     local node = vim.treesitter.get_node()
+--     local paragraph = get_paragraph_nodes(node)
+--     if paragraph and not is_shortcode(node) then
+--       vim.cmd.normal'gqap'
+--     end
+--   end
+-- })
 
 command('MarkdownToggleImage', require'commands'.toggle_markdown_image, {
   desc = 'Toggle Markdown image syntax',
