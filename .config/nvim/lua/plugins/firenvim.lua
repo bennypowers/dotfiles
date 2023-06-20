@@ -2,6 +2,7 @@
 --    here be 🐉 🐲
 return { 'glacambre/firenvim',
   cond = vim.g.started_by_firenvim,
+  enabled = false,
   build = function()
     vim.fn['firenvim#install'](0)
   end,

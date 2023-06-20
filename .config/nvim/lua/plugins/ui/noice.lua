@@ -1,5 +1,6 @@
 return { 'folke/noice.nvim',
-  cond = vim.fn.has'nvim-0.9',
+  -- enabled = false,
+  event = 'VeryLazy',
   dependencies = {
     'MunifTanjim/nui.nvim',
     'rcarriga/nvim-notify',

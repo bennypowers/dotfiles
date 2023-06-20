@@ -1,5 +1,6 @@
 return { 'rmagatti/auto-session',
   version = 'v2.*',
+  enabled = false,
   opts = {
     log_level = vim.log.levels.ERROR,
     auto_save_enabled = true,

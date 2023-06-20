@@ -9,8 +9,8 @@ return { 'nvim-neo-tree/neo-tree.nvim',
   },
   cmd = 'Neotree',
   keys = {
-    { '<leader>\\', ':Neotree reveal filesystem float toggle=true<cr>', desc = 'Toggle file tree (float)' },
-    { '<leader>|', ':Neotree reveal filesystem show left toggle focus<cr>', desc = 'Toggle file tree (sidebar)' },
+    { '<leader>|',  ':Neotree reveal filesystem float toggle=true<cr>', desc = 'Toggle file tree (float)' },
+    { '<leader>\\', ':Neotree reveal filesystem show left toggle focus<cr>', desc = 'Toggle file tree (sidebar)' },
   },
   config = function()
     local tree = require 'neo-tree'
