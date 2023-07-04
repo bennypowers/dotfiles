@@ -4,7 +4,7 @@ return {
   dependencies = {
     'neovim/nvim-lspconfig',
     'williamboman/mason-lspconfig.nvim',
-    'typescript',
+    -- 'typescript',
     'hrsh7th/nvim-cmp',
     'nvim-lua/lsp-status.nvim',
     'b0o/schemastore.nvim', -- json schema support

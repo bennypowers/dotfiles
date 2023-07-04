@@ -16,6 +16,7 @@ local lazygit_term_options = {
       require 'neo-tree.sources.manager'.refresh 'filesystem'
     end)
   end,
+  start_in_insert = true,
   shade_terminals = false,
   highlights = {
     NormalFloat = {
@@ -72,11 +73,17 @@ return { 'akinsho/toggleterm.nvim',
       direction = 'horizontal',
       size = 20,
       dir = 'git_dir',
+      start_in_insert = true,
       on_create = function()
         pcall(function() require'stickybuf'.pin_buftype() end)
       end
     }
 
+    au('TermOpen', {
+      pattern = '*',
+      group = ag('terminal_setup', {}),
+      command = 'nnoremap <buffer><LeftRelease> <LeftRelease>i'
+    })
   end
 }
 
