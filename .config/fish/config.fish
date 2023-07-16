@@ -80,6 +80,8 @@ end
 
 # eye candy
 function fish_greeting
-  colorscript random 2> /dev/null
+  if status is-interactive
+    colorscript random 2> /dev/null
+  end
 end
 
