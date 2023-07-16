@@ -1,3 +1,7 @@
+local ignores = {
+  'nusah/keymap.json'
+}
+
 return { 'mhartington/formatter.nvim',
   config = function()
     require('formatter').setup {
@@ -11,7 +15,11 @@ return { 'mhartington/formatter.nvim',
     au('BufWritePost', {
       group = ag('FormatAutogroup', {}),
       pattern = '*',
-      command = 'FormatWrite',
+      callback = function(args)
+        if vim.fn.match(ignores, args.file) ~= -1 then
+          vim.cmd[[FormatWrite]]
+        end
+      end
     })
   end,
 }

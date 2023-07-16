@@ -9,7 +9,7 @@ return {
     'nvim-lua/lsp-status.nvim',
     'b0o/schemastore.nvim', -- json schema support
     'onsails/lspkind-nvim', -- fancy icons for lsp AST types and such
-    { 'lukas-reineke/lsp-format.nvim', opts = {} },
+    -- { 'lukas-reineke/lsp-format.nvim', opts = {} },
     { 'folke/neodev.nvim',             opts = {} }, -- nvim api docs, signatures, etc.
   },
   init = function()

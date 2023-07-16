@@ -1,7 +1,7 @@
 -- tree browser
 return { 'nvim-neo-tree/neo-tree.nvim',
   lazy = true,
-  version = 'v2.x',
+  version = 'v3.x',
   dependencies = {
     'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',

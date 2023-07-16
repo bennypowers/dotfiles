@@ -1,6 +1,6 @@
 -- Live cheat sheet for key bindings
 return { 'folke/which-key.nvim',
-  dependencies = { 'legendary' },
+  dependencies = { 'mrjones2014/legendary.nvim' },
   config = function()
     local wk = require'which-key'
     wk.setup {
