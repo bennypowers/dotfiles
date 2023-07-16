@@ -32,3 +32,4 @@ node_modules
 .cfg
 
 ~/.config/karabiner/automatic_backups
+~/.config/gh/hosts.yml
