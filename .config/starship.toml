@@ -1,0 +1,6 @@
+[shell]
+bash_indicator = '  '
+fish_indicator = ''
+style = 'bright-green bold'
+format = '[$indicator]($style)'
+disabled = false
