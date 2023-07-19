@@ -1,6 +1,7 @@
 -- editor tabs. yeah ok I know they're not "tabs"
 return { 'akinsho/bufferline.nvim',
   version = "v4.*",
+  enabled = false,
   lazy = true,
   event = 'ColorScheme',
   dependencies = {'catppuccin/nvim'},
