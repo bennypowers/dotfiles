@@ -11,7 +11,6 @@ vim.api.nvim_set_hl(0, 'MiniTrailspace', {
   bg = '#333333'
 })
 
-
 local function get_markdown_nodes(nodetype)
   return function(node)
     local needle
@@ -33,17 +32,16 @@ local function is_shortcode(node)
   return vim.startswith(vim.trim(vim.treesitter.get_node_text(node, 0)), '{%')
 end
 
-
 local md_aucmd_group = ag('markdown_autoformat', {})
 
 au('InsertLeave', {
   group = md_aucmd_group,
+  pattern = {'*.md', '*.njk', '*.webc', '*.html'},
   desc = 'Align markdown tables',
   callback = function()
     local crow, ccol = unpack(vim.api.nvim_win_get_cursor(0))
     local node = vim.treesitter.get_node()
     local tbl = get_table_nodes(node)
-    print'table'
     if tbl then
       local s, _, e = tbl:range()
       local rstart = s + 1

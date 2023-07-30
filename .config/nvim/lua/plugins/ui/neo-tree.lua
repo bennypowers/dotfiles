@@ -53,6 +53,17 @@ return { 'nvim-neo-tree/neo-tree.nvim',
         winbar = true
       },
 
+      sort_function = function(a, b)
+        if a.path:match[[bennypowers.dev/posts/.+]] and a.type == b.type then
+          return a.path > b.path
+        -- default sort
+        elseif a.type == b.type then
+          return a.path < b.path
+        else
+          return a.type < b.type
+        end
+      end,
+
       event_handlers = {
         {
           event = 'neo_tree_buffer_enter',
