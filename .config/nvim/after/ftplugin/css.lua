@@ -271,21 +271,15 @@ command('ToggleCSSTokenFallback', function(args)
           local prop_name = get_node_text(prop, 0)
           local prop_value = pfv4_tokens[prop_name]
 
-          if prop_name then
+          if prop_value then
             local replacement
             if not has_fallback then
-              if not prop_value then
-                print(prop_name, )
-              else
-                replacement = prop_value:gsub('^var','')
-              end
+              replacement = prop_value:gsub('^var','')
             else
               replacement = '('..prop_name..')'
             end
-            if replacement then
-              local row_start, row_end, col_start, col_end = node:range()
-              vim.api.nvim_buf_set_text(0, row_start, row_end, col_start, col_end, {replacement})
-            end
+            local row_start, row_end, col_start, col_end = node:range()
+            vim.api.nvim_buf_set_text(0, row_start, row_end, col_start, col_end, {replacement})
           end
         end
       end

@@ -11,7 +11,7 @@ return { 'pmizio/typescript-tools.nvim',
     settings = {
       tsserver_file_preferences = {
         quotePreference = "auto",
-        importModuleSpecifierEnding = "auto",
+        importModuleSpecifierEnding = "js",
         jsxAttributeCompletionStyle = "auto",
         allowTextChangesInNewFiles = true,
         providePrefixAndSuffixTextForRename = true,
