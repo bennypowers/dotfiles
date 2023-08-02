@@ -70,6 +70,7 @@ alias lg="lazygit"
 switch (uname)
     case Linux
       alias wezterm="flatpak run org.wezfurlong.wezterm"
+      set -gx MOZ_ENABLE_WAYLAND 1
 end
 
 
