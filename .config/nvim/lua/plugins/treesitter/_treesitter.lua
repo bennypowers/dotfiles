@@ -1,9 +1,7 @@
 return {
+
   -- select a comment
   'nvim-treesitter/nvim-treesitter-textobjects',
-
-  -- tool for exploring treesitter ASTs
-  { 'nvim-treesitter/playground', cmd = 'TSPlaygroundToggle' },
 
   -- help writing treesitter queries
   'ziontee113/query-secretary',

@@ -31,7 +31,7 @@ return { 'nvim-treesitter/nvim-treesitter',
       ensure_installed = {
         'bash', 'fish',
         'c', 'cmake', 'cpp',
-        'comment',
+        -- 'comment',
         'commonlisp',
         'css', 'scss',
         'diff',
