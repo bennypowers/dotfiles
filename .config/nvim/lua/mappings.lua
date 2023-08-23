@@ -13,6 +13,12 @@ local function imap(lhs, rhs, desc) map(lhs, rhs, desc, { mode = 'i' }) end
 local function format_async() vim.lsp.buf.format { async = true } end
 local function open_diagnostics() vim.diagnostic.open_float { focus = false } end
 
+-- put without yanking
+nmap('<c-p>',      '"_dP')
+-- yank to system clipboard
+nmap('<c-y>',      '"+y')
+vmap('<c-y>',      '"+y')
+
 nmap('<leader>L',  ':Lazy<cr>',                   'Plugin manager')
 nmap('<c-l>',      '<cmd>ClearNotifications<cr>', 'Clear Notifications')
 
