@@ -1,5 +1,5 @@
 ; extends
-((text) @ninja (#match? @ninja "\\{\\%.*\\%\\}"))
+((text) @twig (#match? @twig "\\{\\%.*\\%\\}"))
 
 ((element
   (start_tag
