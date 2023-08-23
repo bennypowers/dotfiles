@@ -1,5 +1,5 @@
 os:
-  editCommand: floaterm
+  editPreset: nvim
 
 gui:
   theme:
