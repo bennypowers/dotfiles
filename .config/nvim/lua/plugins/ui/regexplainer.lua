@@ -1,6 +1,8 @@
 return { 'bennypowers/nvim-regexplainer',
   ft = { 'javascript', 'typescript', 'html', 'python', 'jinja' },
-  dependencies = { 'MunifTanjim/nui.nvim' },
+  dependencies = {
+    'MunifTanjim/nui.nvim',
+  },
   opts = {
     -- test authoring mode
     -- display = 'split',
