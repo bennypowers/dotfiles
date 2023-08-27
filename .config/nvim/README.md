@@ -1,24 +1,17 @@
+## Neovim
 
-```lua
-print'hello'
-```
+Text editor for nerds
 
-```ts
-console.log('yo')
-```
-```typescript
-console.log('yo')
-```
+- 🔑 [init][init]
+- 🔌 [plugins][plugins]
+- 💻 [commands][commands]
+- 🗺️ [mappings][mappings]
+- 🎛️ [options][options]
+- 🌐 [LSP configs][lsp]
 
-```js
-console.log('yo')
-```
-```javascript
-console.log('yo')
-```
-
-```html
-<p>Hi</p>
-```
-
-Markdown *fun* `for` the whole **family**.
+[init]: ./init.lua
+[plugins]: ./lua/plugins/
+[commands]: ./lua/commands.lua
+[mappings]: ./lua/mappings.lua
+[options]: ./lua/options.lua
+[lsp]: ./lua/lspconfigs/
