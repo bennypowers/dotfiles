@@ -1,0 +1,133 @@
+{
+    "overrides": [
+        {
+            "wmClass": "jetbrains-toolbox",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Com.github.amezin.ddterm",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Com.github.donadigo.eddy",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Conky",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Gnome-initial-setup",
+            "mode": "float"
+        },
+        {
+            "wmClass": "gnome-calculator",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Guake",
+            "mode": "float"
+        },
+        {
+            "wmClass": "zoom",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Spotify",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.World.PikaBackup",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Calculator",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Software",
+            "wmTitle": "Software",
+            "mode": "float"
+        },
+        {
+            "wmClass": "gnome-mahjongg",
+            "wmTitle": "Mahjongg",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Meld",
+            "wmTitle": "Meld",
+            "mode": "float"
+        },
+        {
+            "wmClass": "gnome-tweaks",
+            "wmTitle": "GNOME Tweaks",
+            "mode": "float"
+        },
+        {
+            "wmClass": "firefox",
+            "wmTitle": "Picture-in-Picture",
+            "mode": "float"
+        },
+        {
+            "wmClass": "chromium-browser",
+            "wmTitle": "Meet - egu-tzrd-pub - Chromium",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.vixalien.sticky",
+            "wmTitle": "Sticky Notes",
+            "mode": "float"
+        },
+        {
+            "wmClass": "input-remapper-gtk",
+            "wmTitle": "Input Remapper",
+            "mode": "float"
+        },
+        {
+            "wmClass": "de.haeckerfelix.Fragments",
+            "wmTitle": "Fragments",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.github.realmazharhussain.GdmSettings",
+            "wmTitle": "Login Manager Settings",
+            "mode": "float"
+        },
+        {
+            "wmClass": "gnome-sudoku",
+            "wmTitle": "Select Difficulty",
+            "mode": "float"
+        },
+        {
+            "wmClass": "gnome-sudoku",
+            "wmTitle": "Sudoku",
+            "mode": "float"
+        },
+        {
+            "wmClass": "dev.bragefuglseth.Fretboard",
+            "wmTitle": "Fretboard",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.github.idevecore.CurrencyConverter",
+            "wmTitle": "Currency Converter",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Tuple",
+            "wmTitle": "Tuple",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Tuple",
+            "wmTitle": "tuple",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.missioncenter.MissionCenter",
+            "wmTitle": "missioncenter",
+            "mode": "float"
+        }
+    ]
+}

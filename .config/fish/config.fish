@@ -39,6 +39,7 @@ set -gx LG_CONFIG_FILE ~/.config/lazygit/config.yml
 set -gx GOPATH ~/.config/go
 set -gx DENO_INSTALL ~/.deno
 set -gx QMK_HOME ~/Projects/qmk_firmware
+set -gx WIREIT_LOGGER quiet
 
 set fish_key_bindings fish_vi_key_bindings
 set hilite (which highlight)
