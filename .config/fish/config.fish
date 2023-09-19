@@ -68,6 +68,7 @@ alias vim="nvim"
 alias vim-update="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias lg="lazygit"
+alias meld="flatpak run org.gnome.Meld"
 switch (uname)
     case Linux
       alias wezterm="flatpak run org.wezfurlong.wezterm"
