@@ -115,6 +115,7 @@ return { 'nvim-treesitter/nvim-treesitter',
           'ts', 'typescript',
           'tsx', 'typescriptreact',
           'vue',
+          'webc',
         }
       },
 

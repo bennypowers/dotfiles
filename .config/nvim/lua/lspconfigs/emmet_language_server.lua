@@ -3,6 +3,7 @@ return {
   single_file_support = true,
   filetypes = {
     'html',
+    'webc',
     'svg',
     'css',
     'scss',
