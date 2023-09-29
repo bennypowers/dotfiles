@@ -1,12 +1,17 @@
-local configs = {}
+local FP = require'fp'
 
--- Read server configs from lua/plugins/lsp/lspconfig/*.lua
-for _, filename in ipairs(vim.fn.readdir(vim.fn.expand('~/.config/nvim/lua/lspconfigs/'))) do
-  local server_name = filename:gsub('%.lua$', '')
-  if server_name ~= 'init' then
-    configs[server_name] = 'lspconfigs.'..server_name
+local basename = vim.fs.basename
+local function remove_extension(filename) return filename:gsub('%.lua$', '') end
+local function glob(pat) return vim.fn.glob(pat, true, true) end
+
+local get_servers = FP.pipe(glob, FP.reduce(function (configs, path)
+  local file = basename(path)
+  if file ~= 'init.lua' then
+    local name = remove_extension(file)
+    configs[name] = 'lspconfigs.'..name
   end
-end
+  return configs
+end, {}))
 
-return configs
+return get_servers'~/.config/nvim/lua/lspconfigs/*.lua'
 

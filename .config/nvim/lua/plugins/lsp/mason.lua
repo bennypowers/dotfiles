@@ -23,10 +23,15 @@ return {
   config = function()
     local configs = require 'lspconfigs'
 
+    local ensure_installed = vim.tbl_filter(function(name)
+      -- vala is a special case, as mason has difficulty managing its build deps
+      return name ~= 'vala_ls'
+    end, vim.tbl_keys(configs))
+
     require 'mason'.setup()
 
     require 'mason-lspconfig'.setup {
-      ensure_installed = vim.tbl_keys(configs),
+      ensure_installed = ensure_installed,
     }
 
     local function default_capabilities()
@@ -47,34 +52,55 @@ return {
       return caps
     end
 
+    local default_config = {
+      capabilities = default_capabilities(),
+      on_attach = function(client, bufnr)
+        -- default on_attach function
+        require 'lsp-status'.on_attach(client)
+        if client.server_capabilities.documentSymbolProvider then
+          require 'nvim-navic'.attach(client, bufnr)
+        end
+        -- require'lsp-format'.on_attach(client)
+      end,
+    }
+
+    local function get_config_mod(server_name)
+      local mod_name = configs[server_name]
+
+      local config = {}
+
+      if type(mod_name) == 'string' then
+        config = require('lspconfigs.' .. server_name)
+      end
+
+      local enabled = config.enabled;
+      config.enabled = nil
+      if enabled == nil then enabled = true end
+
+      config = vim.tbl_extend('force', default_config, config)
+
+      return config, enabled
+    end
+
+    local function setup_vala()
+      local config, enabled = get_config_mod'vala_ls'
+      if enabled then
+        require'lspconfig'.vala_ls.setup(config)
+      end
+    end
+
     require 'mason-lspconfig'.setup_handlers {
       function(server_name)
         if server_name == 'tsserver' then return end
-        local mod_name = configs[server_name]
-
-        local config = {}
-
-        if type(mod_name) == 'string' then
-          config = require('lspconfigs.' .. server_name)
+        local config, enabled = get_config_mod(server_name)
+        if enabled then
+          require 'lspconfig'[server_name].setup(config)
         end
-
-        local enabled = config.enabled;
-        config.enabled = nil
-
-        if enabled ~= false then
-          require 'lspconfig'[server_name].setup(vim.tbl_extend('force', {
-            capabilities = default_capabilities(),
-            on_attach = function(client, bufnr)
-              -- default on_attach function
-              require 'lsp-status'.on_attach(client)
-              if client.server_capabilities.documentSymbolProvider then
-                require 'nvim-navic'.attach(client, bufnr)
-              end
-              -- require'lsp-format'.on_attach(client)
-            end,
-          }, config))
-        end
-      end
+      end,
+      vala_ls = setup_vala
     }
+
+    setup_vala();
   end,
+
 }
