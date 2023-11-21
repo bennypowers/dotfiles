@@ -12,6 +12,7 @@ return { 'kevinhwang91/nvim-ufo',
     { 'zm', function() require'ufo'.closeAllFolds() end, desc = 'Close folds with' },
     { 'zp', function() if not require'ufo'.peedFoldedLinesUnderCursor() then vim.lsp.buf.hover() end end, desc = 'Peek folds' },
   },
+  event = 'VeryLazy',
   dependencies = {
     'kevinhwang91/promise-async',
     'luukvbaal/statuscol.nvim',

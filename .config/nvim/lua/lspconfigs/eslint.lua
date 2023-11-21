@@ -7,4 +7,9 @@ return {
       rules = { '!debugger', '!no-only-tests/*' },
     },
   },
+  filetypes = {
+    'javascript', 'javascriptreact',
+    'typescript', 'typescriptreact',
+    'html',
+  }
 }

@@ -4,23 +4,33 @@ return { 'lukas-reineke/indent-blankline.nvim',
   event = 'CursorMoved',
   main = 'ibl',
   opts = {
-    space_char_blankline = " ",
-    show_current_context = true,
-    show_current_context_start = false,
-    show_end_of_line = true,
-    filetype_exclude = {
-      'Regexplainer',
-      'VGit',
-      'alpha',
-      'Alpha',
-      'dashboard',
-      'packer',
-      'fugitive',
-      'help',
-      'neo-tree',
-      'notify',
-      'unix',
-      'dressing',
-    }
-  }
+    indent = {
+      -- enabled = true,
+      -- char = ' ',
+    },
+    scope = {
+      enabled = true,
+      show_start = false,
+      show_end = true,
+    },
+    whitespace = {
+      remove_blankline_trail = true,
+    },
+    exclude = {
+      filetypes = {
+        'Regexplainer',
+        'VGit',
+        'alpha',
+        'Alpha',
+        'dashboard',
+        'packer',
+        'fugitive',
+        'help',
+        'neo-tree',
+        'notify',
+        'unix',
+        'dressing',
+      },
+    },
+  },
 }

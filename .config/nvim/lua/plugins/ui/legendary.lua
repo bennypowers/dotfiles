@@ -5,8 +5,10 @@ return { 'mrjones2014/legendary.nvim',
     { '<leader>k',  ':Legendary<cr>', desc = 'Command Palette' },
   },
   opts = {
-    lazy_nvim = {
-      auto_register = true,
+    extensions = {
+      lazy_nvim = {
+        auto_register = true,
+      },
     },
   },
 }

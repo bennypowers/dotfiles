@@ -1,7 +1,19 @@
 {
-  "Lua": {
-    "workspace": {
-      "library": "${3rd}/luv/library"
-    }
-  }
+  "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  "completion.autoRequire": true,
+  "completion.callSnippet": "Both",
+  "completion.displayContext": 5,
+  "completion.keywordSnippet": "Both",
+  "diagnostics.globals": [
+    "command",
+    "ag",
+    "au"
+  ],
+  "hint.enable": true,
+  "workspace.library": [
+    "/home/bennyp/.local/share/nvim/lazy/neodev.nvim/types/stable",
+    "/home/bennyp/.config/nvim/init.lua",
+    "/usr/share/nvim/runtime/lua",
+    "${3rd}/luv/library"
+  ]
 }

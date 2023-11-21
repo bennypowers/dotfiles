@@ -16,10 +16,4 @@ require 'lazy'.setup('plugins', {
   }
 })
 
-vim.cmd.colorscheme
-  'catppuccin'
-  -- 'noctis'
-  -- 'leaf'
-  -- 'tokyonight'
-  -- 'github_dark_default'
-  -- 'oxocarbon-lua'
+vim.cmd.colorscheme'catppuccin'

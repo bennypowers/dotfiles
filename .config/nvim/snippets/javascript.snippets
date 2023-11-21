@@ -248,3 +248,26 @@ snippet expe "expect(...).to.equal(...)" b
 
 snippet expd "expect(...).to.deep.equal(...)" b
 	expect(${1:}).to.deep.equal(${0});
+
+snippet lite "LitElement" b
+	import { LitElement, html } from 'lit';
+	import { customElement } from 'lit/decorators/custom-element.js';
+
+	import style from './$1.css';
+
+	@customElement('$1')
+	export class ${1:/pascalcase} extends LitElement {
+		static readonly styles = [style];
+
+		render() {
+			return html\`
+				$2
+			\`;
+		}
+	}
+
+	declare global {
+	  interface HTMLElementTagNameMap {
+		  '${1}': ${1:/pascalcase};
+		}
+	}

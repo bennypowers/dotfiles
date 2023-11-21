@@ -1,8 +1,8 @@
 -- 🔥 Browser Integration
 --    here be 🐉 🐲
 return { 'glacambre/firenvim',
-  cond = vim.g.started_by_firenvim,
-  enabled = false,
+  -- Explanation: https://github.com/folke/lazy.nvim/discussions/463#discussioncomment-4819297
+  lazy = not vim.g.started_by_firenvim,
   build = function()
     vim.fn['firenvim#install'](0)
   end,
@@ -21,4 +21,3 @@ return { 'glacambre/firenvim',
     end
   end
 }
-

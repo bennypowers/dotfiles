@@ -11,6 +11,7 @@ return { 'pmizio/typescript-tools.nvim',
     end,
     settings = {
       tsserver_file_preferences = {
+        preferTypeOnlyAutoImports = true,
         quotePreference = "auto",
         importModuleSpecifierEnding = "js",
         jsxAttributeCompletionStyle = "auto",
@@ -38,6 +39,7 @@ return { 'pmizio/typescript-tools.nvim',
         includeInlayEnumMemberValueHints = true,
       },
       tsserver_format_options = {
+        preferTypeOnlyAutoImports = true,
         insertSpaceAfterCommaDelimiter = true,
         insertSpaceAfterConstructor = false,
         insertSpaceAfterSemicolonInForStatements = true,
