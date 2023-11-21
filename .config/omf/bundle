@@ -1,9 +1,8 @@
+package bang-bang
 package foreign-env
 package https://github.com/edc/bass
 package https://github.com/fabioantunes/fish-nvm
 package nvm
 package osx
 package thefuck
-package z
-theme bobthefish
 theme default
