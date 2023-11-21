@@ -15,7 +15,6 @@ set -x LC_TIME en_US.UTF-8
 set -x LC_ALL en_US.UTF-8
 
 set -x SHELL /usr/bin/fish
-set -x EDITOR nvim
 set -x GIT_EDITOR nvim
 
 set -gx VISUAL nvim
@@ -56,6 +55,7 @@ bind \ce edit_command_buffer
 bind \cv edit_command_buffer
 
 # aliases
+alias c="clear; and omf reload"
 alias g="git"
 alias nr="npm run"
 alias run="npm run"
@@ -70,6 +70,7 @@ alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias lg="lazygit"
 alias lgc="lazygit -g ~/.cfg -w ~"
 alias meld="flatpak run org.gnome.Meld"
+
 switch (uname)
     case Linux
       alias wezterm="flatpak run org.wezfurlong.wezterm"
@@ -89,3 +90,4 @@ function fish_greeting
   end
 end
 
+zoxide init fish | source
