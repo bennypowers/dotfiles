@@ -172,5 +172,14 @@ return { 'goolord/alpha-nvim',
         end,
       },
     }
+    au('User', {
+      pattern = 'BDeletePre *',
+      group = ag('alpha_on_empty', { clear = true }),
+      callback = function()
+        if vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()) == "" then
+          vim.cmd([[:Alpha | bd#]])
+        end
+      end,
+    })
   end
 }

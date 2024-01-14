@@ -1,9 +1,11 @@
 -- LSP eye-candy
 return { 'j-hui/fidget.nvim',
-  tag = 'legacy',
+  tag = 'v1.1.0',
   opts = {
-    window = {
-      blend = 0,
+    notification = {
+      window = {
+        winblend = 0,
+      }
     }
   },
 }
