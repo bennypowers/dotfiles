@@ -45,13 +45,33 @@
             "mode": "float"
         },
         {
-            "wmClass": "io.missioncenter.MissionCenter",
-            "wmTitle": "missioncenter",
+            "wmClass": "org.gnome.Snapshot",
+            "wmTitle": "Camera",
             "mode": "float"
         },
         {
-            "wmClass": "org.gnome.Mahjongg",
-            "wmTitle": "Mahjongg",
+            "wmClass": "hu.irl.cameractrls",
+            "wmTitle": "/dev/v4l/by-id/usb-046d_Brio_300_2246CFA11038-video-index0",
+            "mode": "float"
+        },
+        {
+            "wmClass": "gnome-boxes",
+            "wmTitle": "Boxes",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Tuple",
+            "wmTitle": "Tuple",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Tuple",
+            "wmTitle": "tuple",
+            "mode": "float"
+        },
+        {
+            "wmClass": "firefox",
+            "wmTitle": "Picture-in-Picture",
             "mode": "float"
         }
     ]

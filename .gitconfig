@@ -69,3 +69,5 @@
 
 [delta "interactive"]
 	keep-plus-minus-markers = false
+[safe]
+	directory = *

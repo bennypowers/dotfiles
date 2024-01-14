@@ -6,13 +6,6 @@ set -g fish_user_paths "~/.yarn/bin" $fish_user_paths
 
 # unicode
 set -x LANG en_US.UTF-8
-set -x LC_COLLATE en_US.UTF-8
-set -x LC_CTYPE en_US.UTF-8
-set -x LC_MESSAGES en_US.UTF-8
-set -x LC_MONETARY en_US.UTF-8
-set -x LC_NUMERIC en_US.UTF-8
-set -x LC_TIME en_US.UTF-8
-set -x LC_ALL en_US.UTF-8
 
 set -x SHELL /usr/bin/fish
 set -x GIT_EDITOR nvim
@@ -20,8 +13,8 @@ set -x GIT_EDITOR nvim
 set -gx VISUAL nvim
 set -gx EDITOR nvim
 
-set -x LESSOPEN "| $hilite %s --out-format xterm256 --quiet --force "
-set -x LESS " -R"
+# set -x LESSOPEN "| $hilite %s --out-format xterm256 --quiet --force "
+# set -x LESS " -R"
 
 set -x PATH $PATH ~/.ghcup/bin
 set -x PATH ~/go/bin $PATH
@@ -34,6 +27,7 @@ set -x PATH $DENO_INSTALL/bin $PATH
 
 set -x NODE_ENV
 set -x NODE_OPTIONS --max_old_space_size=4096
+
 set -gx LG_CONFIG_FILE ~/.config/lazygit/config.yml
 set -gx GOPATH ~/.config/go
 set -gx DENO_INSTALL ~/.deno
