@@ -1,6 +1,5 @@
 package bang-bang
 package foreign-env
-package git@github.com:patrickf1/colored_man_pages.fish.git
 package https://github.com/decors/fish-colored-man
 package https://github.com/edc/bass
 package https://github.com/fabioantunes/fish-nvm
