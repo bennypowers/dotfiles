@@ -73,6 +73,146 @@
             "wmClass": "firefox",
             "wmTitle": "Picture-in-Picture",
             "mode": "float"
+        },
+        {
+            "wmClass": "app.drey.Dialect",
+            "wmTitle": "Dialect",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Characters",
+            "wmTitle": "Characters",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.gitlab.gregorni.Letterpress",
+            "wmTitle": "Letterpress",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.vixalien.sticky",
+            "wmTitle": "Sticky Notes",
+            "mode": "float"
+        },
+        {
+            "wmClass": "input-remapper-gtk",
+            "wmTitle": "Input Remapper",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Chromium-browser",
+            "wmTitle": "localhost:8001/?wtr-session-id=LNEkGH5_mHMMaFpnfvKDt - Chromium",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Chromium-browser",
+            "wmTitle": "localhost:8001/?wtr-session-id=eFXhvYSPvMaYpKrCZbWti - Chromium",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.raspberrypi.rpi-imager",
+            "wmTitle": "Raspberry Pi Imager v1.8.5",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.mozilla.firefox",
+            "wmTitle": "Picture-in-Picture",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Software",
+            "wmTitle": "Software",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.gitlab.adhami3310.Impression",
+            "wmTitle": "Impression",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.mattjakeman.ExtensionManager",
+            "wmTitle": "Extension Manager",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.quexten.Goldwarden.settings",
+            "wmTitle": "Goldwarden",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.quexten.Goldwarden.autofill-menu",
+            "wmTitle": "Goldwarden Quick Access",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.quexten.Goldwarden.shortcuts",
+            "wmTitle": "Goldwarden Shortcuts",
+            "mode": "float"
+        },
+        {
+            "wmClass": "detwinner",
+            "wmTitle": "Detwinner",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.NautilusPreviewer",
+            "wmTitle": "CIMG0650.JPG",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Nautilus",
+            "wmTitle": "Search for “November 2007”",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.NautilusPreviewer",
+            "wmTitle": "IMG_2489.JPG",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.mozilla.firefox",
+            "wmTitle": "NVMe SSD boot with the Raspberry Pi 5 | Jeff Geerling — Mozilla Firefox",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.NautilusPreviewer",
+            "wmTitle": "astronaut1.png",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Mahjongg",
+            "wmTitle": "Mahjongg",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Bitwarden",
+            "wmTitle": "Bitwarden",
+            "mode": "float"
+        },
+        {
+            "wmClass": "evince",
+            "wmTitle": "gpdqth8j.pdf",
+            "mode": "float"
+        },
+        {
+            "wmClass": "evince",
+            "wmTitle": "masleka-mar7.pdf",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.mozilla.Thunderbird",
+            "wmTitle": "Write: (no subject) - Thunderbird",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.World.Iotas",
+            "wmTitle": "Iotas",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.belmoussaoui.Decoder",
+            "wmTitle": "Decoder",
+            "mode": "float"
         }
     ]
 }
