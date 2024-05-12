@@ -12,9 +12,25 @@ set -x GIT_EDITOR nvim
 
 set -gx VISUAL nvim
 set -gx EDITOR nvim
+set -gx PAGER less
 
 # set -x LESSOPEN "| $hilite %s --out-format xterm256 --quiet --force "
 # set -x LESS " -R"
+
+# set -gx LESS_TERMCAP_mb "$(tput bold; tput setaf 10)" # green
+# set -gx LESS_TERMCAP_md "$(tput bold; tput setaf 14)" # cyan
+# set -gx LESS_TERMCAP_me "$(tput sgr0)"
+# set -gx LESS_TERMCAP_so "$(tput bold; tput setaf 11; tput setab 12)" # yellow on blue
+# set -gx LESS_TERMCAP_se "$(tput rmso; tput sgr0)"
+# set -gx LESS_TERMCAP_us "$(tput smul; tput bold; tput setaf 15)" # white
+# set -gx LESS_TERMCAP_ue "$(tput rmul; tput sgr0)"
+# set -gx LESS_TERMCAP_mr "$(tput rev)"
+# set -gx LESS_TERMCAP_mh "$(tput dim)"
+# set -gx LESS_TERMCAP_ZN "$(tput ssubm)"
+# set -gx LESS_TERMCAP_ZV "$(tput rsubm)"
+# set -gx LESS_TERMCAP_ZO "$(tput ssupm)"
+# set -gx LESS_TERMCAP_ZW "$(tput rsupm)"
+# set -gx GROFF_NO_SGR 1
 
 set -x PATH $PATH ~/.ghcup/bin
 set -x PATH ~/go/bin $PATH
@@ -35,7 +51,9 @@ set -gx QMK_HOME ~/Projects/qmk_firmware
 set -gx WIREIT_LOGGER quiet
 
 set fish_key_bindings fish_vi_key_bindings
-set hilite (which highlight)
+if type -q highlight
+  set hilite (which highlight)
+end
 
 set fish_greeting ''
 
@@ -64,24 +82,29 @@ alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias lg="lazygit"
 alias lgc="lazygit -g ~/.cfg -w ~"
 alias meld="flatpak run org.gnome.Meld"
+alias ssk="kitten ssh"
 
 switch (uname)
     case Linux
       alias wezterm="flatpak run org.wezfurlong.wezterm"
-      set -gx MOZ_ENABLE_WAYLAND 1
 end
 
 
 if status is-interactive
-  source (rbenv init -|psub)
-  starship init fish | source
+  if type -q rbenv
+    source (rbenv init -|psub)
+  end
+  if type -q starship
+    starship init fish | source
+  end
+  if type -q zoxide
+    zoxide init fish | source
+  end
 end
 
 # eye candy
 function fish_greeting
-  if status is-interactive
+  if status is-interactive; and type -q colorscript
     colorscript random 2> /dev/null
   end
 end
-
-zoxide init fish | source
