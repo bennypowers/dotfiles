@@ -21,7 +21,7 @@ end
 -- gd, but in a floating window
 return { 'rmagatti/goto-preview',
   lazy = true,
-  requires = {'telescope'},
+  dependencies = {'telescope'},
   keys = {
     { 'gpd', goto_definition,      desc = 'Preview Definition' },
     { 'gpi', goto_implementation,  desc = 'Preview implementation' },

@@ -1,7 +1,7 @@
 -- resolve conflicts
 return { 'akinsho/git-conflict.nvim',
   enabled = true,
-  events = { 'BufEnter' },
+  event = { 'BufEnter' },
   opts = {
     disable_diagnostics = true, -- This will disable the diagnostics in a buffer whilst it is conflicted
     default_mappings = {

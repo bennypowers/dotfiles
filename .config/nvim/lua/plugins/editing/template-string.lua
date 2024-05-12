@@ -4,13 +4,13 @@ local filetypes = {
   'html',
   'javascript',
   'typescript',
-  'javascriptreact',
-  'typescriptreact',
+  -- 'javascriptreact',
+  -- 'typescriptreact',
   'python',
 }
 
 return { 'axelvc/template-string.nvim',
-  filetypes = filetypes,
+  ft = filetypes,
   opts = {
     filetypes = filetypes
   }

@@ -14,6 +14,7 @@ vim.g.mapleader     = ' '
 vim.env.BASH_ENV    = '~/.config/bashrc'
 
 vim.opt.rtp:prepend(lazypath)
+vim.opt.rtp:prepend('/usr/local/share/gnvim/runtime/')
 vim.opt.backspace      = 'indent,eol,start'
 vim.opt.cmdheight      = 0
 vim.opt.colorcolumn    = '100'

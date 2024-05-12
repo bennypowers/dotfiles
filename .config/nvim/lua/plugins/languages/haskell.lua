@@ -1,5 +1,5 @@
 return { 'MrcJkb/haskell-tools.nvim',
-  ft = 'haskell',
+  ft = { 'haskell' },
   dependencies = {
     'neovim/nvim-lspconfig',
     'nvim-lua/plenary.nvim',

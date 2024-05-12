@@ -10,6 +10,7 @@ return { 'pmizio/typescript-tools.nvim',
       require 'nvim-navic'.attach(client, bufnr)
     end,
     settings = {
+      tsserver_max_memory = 6000,
       tsserver_file_preferences = {
         preferTypeOnlyAutoImports = true,
         quotePreference = "auto",

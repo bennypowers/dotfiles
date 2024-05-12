@@ -49,3 +49,28 @@ au('TextYankPost', {
   end,
 })
 
+-- Only setup gnvim when it attaches.
+au('UIEnter', {
+  callback = function()
+    local chanid = vim.v.event.chan
+    print (chanid)
+    local chan = vim.api.nvim_get_chan_info(chanid)
+    if chan.client and chan.client.name == 'gnvim' then
+      -- Gnvim brings its own runtime files.
+      local gnvim = require'gnvim'
+
+      -- Set the font
+      vim.opt.guifont = 'FiraCode Nerd Font 13'
+
+      -- Increase/decrease font.
+      vim.keymap.set('n', '<c-+>', function() gnvim.font_size(1) end)
+      vim.keymap.set('n', '<c-->', function() gnvim.font_size(-1) end)
+
+      gnvim.setup({
+          cursor = {
+              blink_transition = 300
+          }
+      })
+    end
+  end
+})

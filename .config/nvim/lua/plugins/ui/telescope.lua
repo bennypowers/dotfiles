@@ -73,6 +73,7 @@ return { 'nvim-telescope/telescope.nvim',
         },
         mappings = {
           i = {
+            ['<C-q>'] = actions.smart_send_to_qflist,
             ['<C-k>'] = actions.move_selection_previous,
             ['<C-j>'] = actions.move_selection_next,
             ['<esc>'] = actions.close

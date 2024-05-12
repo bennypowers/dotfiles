@@ -22,6 +22,7 @@ return { 'Iron-E/nvim-bufmode',
   -- },
   config = function()
     require'bufmode'.setup {
+      bufferline = true,
       keymaps = {
         ['<cr>'] = '<esc>',
         B = '<esc>',
@@ -34,14 +35,5 @@ return { 'Iron-E/nvim-bufmode',
         h = 'bprev',
       }
     }
-    au('ModeChanged', {
-      group = ag('bufmodechanged', {}),
-      callback = function(args)
-        local prev, next = unpack(vim.split(args.match, ':'))
-        if next == 'BUFFERS' or prev == 'BUFFERS' then
-          require'buffertabs'.toggle()
-        end
-      end
-    })
   end
 }
