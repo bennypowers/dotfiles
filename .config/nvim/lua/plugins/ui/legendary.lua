@@ -1,4 +1,5 @@
 return { 'mrjones2014/legendary.nvim',
+  enabled = true,
   lazy = false,
   priority = 10000,
   keys = {

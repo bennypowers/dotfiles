@@ -1,6 +1,7 @@
 -- 🌳 Syntax
 return { 'nvim-treesitter/nvim-treesitter',
-  -- dev = true,
+  enabled = true,
+  dev = false,
   build = ':TSUpdate',
   config = function()
     local parser_install_dir = vim.fn.expand'~/.local/share/treesitter';

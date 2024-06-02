@@ -5,6 +5,7 @@ au('BufWritePost', {
 })
 
 return { 'projekt0n/github-nvim-theme',
+  enabled = false,
   lazy = true,
   opts = {
     theme_style = 'dark_default',

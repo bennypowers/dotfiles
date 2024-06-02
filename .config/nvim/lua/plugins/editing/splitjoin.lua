@@ -1,5 +1,6 @@
 -- like vmp `g,` action
 return { 'bennypowers/splitjoin.nvim',
+  enabled = true,
   lazy = true,
   keys = {
     { 'gj', function() require'splitjoin'.join() end, desc = 'Join the object under cursor' },

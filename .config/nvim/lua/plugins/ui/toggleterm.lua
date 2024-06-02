@@ -46,6 +46,7 @@ end
 
 -- 🖥️  terminal emulator
 return { 'akinsho/toggleterm.nvim',
+  enabled = true,
   keys = {
     { '<c-t>', toggle_term_pinned,  desc = 'Toggle terminal in horizontal split', mode = { 'n', 'i', 't' } },
     { '<leader>t', toggle_term_pinned,  desc = 'Toggle terminal in horizontal split' },

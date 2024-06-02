@@ -1,4 +1,5 @@
 return { 'stevearc/aerial.nvim',
+  enabled = true,
   cmd = {
     'AerialToggle',
     'AerialOpen',

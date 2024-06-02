@@ -1,4 +1,5 @@
 return { 'utilyre/barbecue.nvim',
+  enabled = true,
   name = 'barbecue',
   version = '*',
   dependencies = {

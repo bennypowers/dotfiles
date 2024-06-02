@@ -1,5 +1,6 @@
 -- display colour values
 return { 'RRethy/vim-hexokinase',
+  enabled = true,
   build = 'make hexokinase',
   cmd = { 'HexokinaseToggle', 'HexokinaseTurnOn' },
   init = function()

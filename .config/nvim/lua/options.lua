@@ -18,25 +18,31 @@ vim.opt.rtp:prepend('/usr/local/share/gnvim/runtime/')
 vim.opt.backspace      = 'indent,eol,start'
 vim.opt.cmdheight      = 0
 vim.opt.colorcolumn    = '100'
-vim.opt.completeopt    = 'menu,menuone,noselect'
 vim.opt.cursorcolumn   = true
 vim.opt.cursorline     = true
 vim.opt.encoding       = 'UTF-8'
-vim.opt.expandtab      = true
 vim.opt.laststatus     = 3
+
 vim.opt.linebreak      = true
 vim.opt.list           = true
+
+vim.opt.completeopt    = 'menu,menuone,noselect'
+
 vim.opt.mouse          = 'a'
 vim.opt.mousemoveevent = true
+
 vim.opt.number         = true
-vim.opt.pastetoggle    = '<F10>'
 vim.opt.relativenumber = true
+
 vim.opt.shell          = 'bash'
-vim.opt.shiftwidth     = 2
 vim.opt.showtabline    = 0
-vim.opt.softtabstop    = 2
 vim.opt.spell          = true
+
+vim.opt.expandtab      = true
 vim.opt.tabstop        = 2
+vim.opt.softtabstop    = 2
+vim.opt.shiftwidth     = 2
+
 vim.opt.virtualedit    = 'block,onemore'
 vim.opt.wrap           = false
 

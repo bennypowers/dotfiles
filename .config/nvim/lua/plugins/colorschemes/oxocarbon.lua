@@ -1,1 +1,4 @@
-return { 'B4mbus/oxocarbon-lua.nvim', lazy = true }
+return { 'B4mbus/oxocarbon-lua.nvim',
+  enabled = false,
+  lazy = true,
+}

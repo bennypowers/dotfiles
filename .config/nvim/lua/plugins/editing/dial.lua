@@ -7,6 +7,7 @@ end end
 
 -- c-a to toggle bool, increment version, etc
 return { 'monaqa/dial.nvim',
+  enabled = true,
   lazy = true,
   keys = {
     { '<c-a>',  get_map('increment','normal'),  mode = {'n'}, desc = 'Increment (dial)' },

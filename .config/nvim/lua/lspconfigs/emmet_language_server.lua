@@ -10,7 +10,7 @@ return {
     'njk',
     'nunjucks',
     'jinja',
-    -- 'markdown',
+    'markdown',
     'ts',
     'typescript',
     'js',

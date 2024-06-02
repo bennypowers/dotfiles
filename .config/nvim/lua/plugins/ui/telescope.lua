@@ -20,6 +20,7 @@ local function pick_symbols()
 end
 -- 🔭 Telescope - generic fuzzy finder with popup window
 return { 'nvim-telescope/telescope.nvim',
+  enabled = true,
   name = 'telescope',
   lazy = true,
   cmd = {'Telescope'},

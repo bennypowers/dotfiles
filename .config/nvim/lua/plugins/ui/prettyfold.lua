@@ -1,5 +1,6 @@
 -- pretty folds with previews
 return { 'anuvyklack/pretty-fold.nvim',
+  enabled = true,
   dependencies = {
     'anuvyklack/nvim-keymap-amend',
     'anuvyklack/fold-preview.nvim'

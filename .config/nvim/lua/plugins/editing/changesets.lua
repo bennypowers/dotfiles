@@ -1,4 +1,5 @@
 return { 'bennypowers/changesets.nvim',
+  enabled = true,
   keys = {
     { '<leader>cs',
       function() require'changesets'.create() end,

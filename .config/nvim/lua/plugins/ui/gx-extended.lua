@@ -1,5 +1,6 @@
 return { 'rmagatti/gx-extended.nvim',
-  -- dev = true,
+  enabled = vim.version().major == 0 and vim.version().minor < 10,
+  dev = false,
   keys = { 'gx' },
   opts = {
     open_fn = require'lazy.util'.open,

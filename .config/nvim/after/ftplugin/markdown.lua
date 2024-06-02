@@ -78,3 +78,6 @@ au('InsertLeave', {
 command('MarkdownToggleImage', require'commands'.toggle_markdown_image, {
   desc = 'Toggle Markdown image syntax',
 })
+command('MarkdownToggleLink', require'commands'.toggle_markdown_link, {
+  desc = 'Toggle Markdown link syntax',
+})

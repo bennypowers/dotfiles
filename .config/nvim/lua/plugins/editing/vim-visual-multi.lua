@@ -1,6 +1,7 @@
 -- multiple cursors, kinda like atom + vim-mode-plus
 return { 'mg979/vim-visual-multi',
   branch = 'master',
+  enabled = true,
   lazy = true,
   keys = {
     { '<c-n>', nil, mode = { 'n', 'v' } },

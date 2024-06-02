@@ -1,6 +1,6 @@
 return { 'RRethy/vim-illuminate',
-  lazy = true,
   enabled = true,
+  lazy = true,
   dependencies = {
     'nvim-lua/plenary.nvim',
   },

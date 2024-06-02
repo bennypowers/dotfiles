@@ -1,4 +1,5 @@
 return { 'Iron-E/nvim-bufmode',
+  enabled = true,
   lazy = true,
   keys = {
     { 'gb', ':BufmodeEnter<cr>', desc = 'Enter Buffer Mode', },

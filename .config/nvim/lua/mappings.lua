@@ -41,7 +41,6 @@ map('<A-l>',       '<c-\\><c-N><c-w>l',           'Move cursor to window right' 
 nmap('<leader>e',  open_diagnostics,              'Open diagnostics in floating window')
 nmap('<leader>lf', format_async,                  'Format file')
 
-nmap('K',          vim.lsp.buf.hover,             'Hover')
 nmap('<leader>.',  vim.lsp.buf.code_action,       'Code actions')
 nmap('<c-k>',      vim.lsp.buf.signature_help,    'Signature help')
 nmap('<leader>lr', vim.lsp.buf.rename,            'Rename')
@@ -55,3 +54,10 @@ nmap('gi',         vim.lsp.buf.implementation,    'Go to implementations')
 nmap('gr',         vim.lsp.buf.references,        'Go to references')
 nmap('<m-,>',      vim.diagnostic.goto_prev,      'Previous diagnostic')
 nmap('<m-.>',      vim.diagnostic.goto_next,      'Next diagnostic')
+
+if vim.version().major == 0 and vim.version().minor < 10 then
+  nmap('K',       vim.lsp.buf.hover,              'Hover')
+  nmap('[d',      vim.diagnostic.goto_prev,       'Previous diagnostic')
+  nmap(']d',      vim.diagnostic.goto_next,       'Next diagnostic')
+  nmap('<c-w>d',  vim.diagnostic.open_float,      'Open diagnostic in float')
+end

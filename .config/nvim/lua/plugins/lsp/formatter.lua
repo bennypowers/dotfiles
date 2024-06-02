@@ -38,6 +38,7 @@ local function ignore_file(filepath)
 end
 
 return { 'mhartington/formatter.nvim',
+  enabled = true,
   config = function()
     require'formatter'.setup {
       filetype = {

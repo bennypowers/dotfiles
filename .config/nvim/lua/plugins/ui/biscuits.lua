@@ -4,6 +4,7 @@ end
 
 -- hints for block ends
 return { 'code-biscuits/nvim-biscuits',
+  enabled = true,
   lazy = true,
   keys = {
     { '<leader>cb', biscuits_toggle, desc = 'Toggle code biscuits' },

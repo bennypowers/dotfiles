@@ -1,8 +1,10 @@
 return { 'bennypowers/nvim-regexplainer',
-  enabled = false,
+  enabled = true,
+  dev = true,
   ft = { 'javascript', 'typescript', 'html', 'python', 'jinja' },
   dependencies = {
     'MunifTanjim/nui.nvim',
+    'edluffy/hologram.nvim'
   },
   opts = {
     -- test authoring mode
@@ -16,17 +18,11 @@ return { 'bennypowers/nvim-regexplainer',
     debug = true,
     mode = 'narrative',
     -- mode = 'debug',
-    -- mode = 'graphical',
-    narrative = {
-      separator = function(component)
-        local sep = '\n';
-        if component.depth > 0 then
-          for _ = 1, component.depth do
-            sep = sep .. '> '
-          end
-        end
-        return sep
-      end
-    },
+    -- mode = 'railroad',
+
+    -- narrative = {
+    --   indentation_string = '> '
+    -- },
+
   },
 }

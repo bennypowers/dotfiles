@@ -1,4 +1,5 @@
 return { 'luukvbaal/statuscol.nvim',
+  enabled = true,
   cond = vim.fn.exists'&statuscolumn' == 1,
   config = function()
     local builtin = require'statuscol.builtin'

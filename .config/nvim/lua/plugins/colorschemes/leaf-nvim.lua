@@ -1,5 +1,6 @@
 return { 'daschw/leaf.nvim',
   lazy = true,
+  enabled = false,
   config = function()
     local colors = require'leaf.colors'.setup()
     require'leaf'.setup {

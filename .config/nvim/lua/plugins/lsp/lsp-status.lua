@@ -1,5 +1,6 @@
 -- support for reporting buffer's lsp status (diagnostics, etc) to other plugins
 return { 'nvim-lua/lsp-status.nvim',
+  enabled = true,
   config = function()
     local lsp_status = require 'lsp-status'
     lsp_status.config {

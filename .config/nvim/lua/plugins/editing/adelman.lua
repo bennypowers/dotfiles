@@ -1,1 +1,3 @@
-return { 'bennypowers/adelman-keyboard' }
+return { 'bennypowers/adelman-keyboard',
+  enabled = true,
+}

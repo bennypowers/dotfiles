@@ -1,5 +1,6 @@
 -- tree browser
 return { 'nvim-neo-tree/neo-tree.nvim',
+  enabled = true,
   lazy = true,
   version = 'v3.x',
   dependencies = {
@@ -164,7 +165,7 @@ return { 'nvim-neo-tree/neo-tree.nvim',
       },
 
       nesting_rules = {
-        ts = { 'js', 'js.map', 'd.ts' },
+        ts = { 'js', 'js.map', 'd.ts', 'spec.js', 'test.js', 'ssr.js', 'e2e.js' },
         scss = { 'css', 'min.css', 'css.map', 'min.css.map' },
       },
 

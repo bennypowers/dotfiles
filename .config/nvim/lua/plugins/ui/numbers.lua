@@ -1,5 +1,6 @@
 -- disables relative line numbers when appropriate
 return { 'nkakouros-original/numbers.nvim',
+  enabled = true,
   opts = {
     excluded_filetypes = {
       'Alpha',

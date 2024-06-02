@@ -2,7 +2,8 @@
 return {
 
   { 'L3MON4D3/LuaSnip',
-    version = '1',
+    enabled = true,
+    version = '2',
     build = 'make install_jsregexp',
     config = function()
       require 'luasnip'.config.setup {
@@ -26,9 +27,10 @@ return {
         },
       }
       require 'luasnip.loaders.from_lua'.lazy_load()
-      require 'luasnip.loaders.from_vscode'.lazy_load { paths = {
-        '~/Developer/redhat-ux/red-hat-design-tokens/editor/vscode',
-      } }
+      require 'luasnip.loaders.from_snipmate'.lazy_load {
+        paths =  '~/Developer/redhat-ux/red-hat-design-tokens/editor/textmate',
+        fs_event_providers = { libuv = true },
+      }
       require 'luasnip.loaders.from_snipmate'.lazy_load { paths = {
         '~/.config/nvim/snippets',
       } }
@@ -36,6 +38,7 @@ return {
   },
 
   { 'hrsh7th/nvim-cmp',
+    enabled = true,
     dependencies = {
       'hrsh7th/cmp-nvim-lsp', -- language-server-based completions
       'hrsh7th/cmp-nvim-lua', -- lua

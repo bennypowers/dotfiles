@@ -1,6 +1,6 @@
 -- 🤖 Language Servers, automatically installed
-return {
-  'williamboman/mason.nvim',
+return { 'williamboman/mason.nvim',
+  enabled = true,
   dependencies = {
     'neovim/nvim-lspconfig',
     'williamboman/mason-lspconfig.nvim',
@@ -9,8 +9,30 @@ return {
     'nvim-lua/lsp-status.nvim',
     'b0o/schemastore.nvim', -- json schema support
     'onsails/lspkind-nvim', -- fancy icons for lsp AST types and such
-    -- { 'lukas-reineke/lsp-format.nvim', opts = {} },
-    { 'folke/neodev.nvim',             opts = {} }, -- nvim api docs, signatures, etc.
+    { 'lukas-reineke/lsp-format.nvim', opts = {} },
+    { 'folke/lazydev.nvim',
+      ft = 'lua', -- only load on lua files
+      opts = {
+        library = {
+          -- Library items can be absolute paths
+          -- "~/projects/my-awesome-lib",
+          -- Or relative, which means they will be resolved as a plugin
+          'LazyVim',
+          -- When relative, you can also provide a path to the library in the plugin dir
+          'luvit-meta/library', -- see below
+        },
+      },
+    },
+ { 'Bilal2453/luvit-meta', lazy = true }, -- optional `vim.uv` typings
+ { 'hrsh7th/nvim-cmp',
+      opts = function(_, opts)
+        opts.sources = opts.sources or {}
+        table.insert(opts.sources, {
+          name = 'lazydev',
+          group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+        })
+      end,
+    },
   },
   init = function()
     vim.g.diagnostic_enable_virtual_text = 1
@@ -59,6 +81,9 @@ return {
         require 'lsp-status'.on_attach(client)
         if client.server_capabilities.documentSymbolProvider then
           require 'nvim-navic'.attach(client, bufnr)
+        end
+        if client.server_capabilities.inlayHintProvider then
+            vim.lsp.inlay_hint.enable(true)
         end
         -- require'lsp-format'.on_attach(client)
       end,

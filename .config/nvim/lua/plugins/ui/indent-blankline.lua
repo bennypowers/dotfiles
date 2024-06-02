@@ -1,6 +1,8 @@
 -- indent guide
 return { 'lukas-reineke/indent-blankline.nvim',
+  enabled = true,
   lazy = true,
+  version = '*',
   event = 'CursorMoved',
   main = 'ibl',
   opts = {

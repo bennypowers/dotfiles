@@ -9,6 +9,7 @@ end
 
 -- convert colour values
 return { 'NTBBloodbath/color-converter.nvim',
+  enabled = true,
   lazy = true,
   keys = {
     { '<leader>roc', cycle_color, desc = 'Cycle colour format' },

@@ -1,4 +1,5 @@
 return { 'lvimuser/lsp-inlayhints.nvim',
+  enabled = vim.version().major == 0 and vim.version().minor < 10,
   config = function()
 
     require 'lsp-inlayhints'.setup {

@@ -1,2 +1,6 @@
-return { 'kartikp10/noctis.nvim', lazy = true, dependencies = { 'rktjmp/lush.nvim' } }
+return { 'kartikp10/noctis.nvim',
+  enabled = false,
+  lazy = true,
+  dependencies = { 'rktjmp/lush.nvim' },
+}
 

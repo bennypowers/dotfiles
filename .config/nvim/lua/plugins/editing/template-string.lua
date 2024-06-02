@@ -10,6 +10,7 @@ local filetypes = {
 }
 
 return { 'axelvc/template-string.nvim',
+  enabled = true,
   ft = filetypes,
   opts = {
     filetypes = filetypes

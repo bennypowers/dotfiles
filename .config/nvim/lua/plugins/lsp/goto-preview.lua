@@ -20,6 +20,7 @@ end
 
 -- gd, but in a floating window
 return { 'rmagatti/goto-preview',
+  enabled = true,
   lazy = true,
   dependencies = {'telescope'},
   keys = {

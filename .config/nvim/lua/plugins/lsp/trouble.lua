@@ -1,5 +1,6 @@
 -- language-server diagnostics panel
 return { 'folke/lsp-trouble.nvim',
+  enabled = true,
   lazy = true,
   cmd = { 'Trouble', 'TroubleToggle' },
   dependencies = {

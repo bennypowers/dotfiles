@@ -1,6 +1,7 @@
 local function wrap_with_abbreviation (...) require'nvim-emmet'.wrap_with_abbreviation(...) end
 
 return { 'olrtg/nvim-emmet',
+  enabled = true,
   ft = {
     'html', 'webc', 'svg',
     'css', 'scss',

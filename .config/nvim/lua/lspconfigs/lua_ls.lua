@@ -36,7 +36,6 @@ return {
         },
         workspace = {
           library = {
-            '/home/bennyp/.local/share/nvim/lazy/neodev.nvim/types/stable',
             '/usr/share/nvim/runtime/lua',
             '${3rd}/luv/library'
           },
