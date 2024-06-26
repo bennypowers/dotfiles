@@ -4,7 +4,7 @@
 
 [core]
 	excludesfile = /Users/bennyp/.config/git/gitignore
-	editor=nvim
+	editor = nvim
 	pager = delta
 
 [alias]
@@ -71,3 +71,13 @@
 	keep-plus-minus-markers = false
 [safe]
 	directory = *
+[http]
+	postBuffer = 157286400
+
+[url "git@github.com:"]
+  insteadOf = git@github.com/
+  insteadOf = github.com/
+  insteadOf = git://github.com/
+  insteadOf = git@github.com:
+  insteadOf = github.com:
+  insteadOf = git://github.com:

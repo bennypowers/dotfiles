@@ -83,6 +83,8 @@ alias lg="lazygit"
 alias lgc="lazygit -g ~/.cfg -w ~"
 alias meld="flatpak run org.gnome.Meld"
 alias ssk="kitten ssh"
+alias pbcopy="xsel --input --clipboard"
+alias pbpaste="xsel --output --clipboard"
 
 switch (uname)
     case Linux

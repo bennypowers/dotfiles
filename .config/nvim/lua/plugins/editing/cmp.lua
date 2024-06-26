@@ -20,6 +20,7 @@ return {
         },
         ft_func = require 'luasnip.extras.filetype_functions'.from_pos_or_filetype,
         load_ft_func = require 'luasnip.extras.filetype_functions'.extend_load_ft {
+          css = { 'css', 'scss' },
           markdown = { 'lua', 'json', 'html', 'yaml', 'css', 'typescript', 'javascript' },
           html = { 'javascript', 'css', 'graphql', 'json' },
           javascript = { 'html', 'css', 'graphql' },
@@ -27,13 +28,13 @@ return {
         },
       }
       require 'luasnip.loaders.from_lua'.lazy_load()
-      require 'luasnip.loaders.from_snipmate'.lazy_load {
-        paths =  '~/Developer/redhat-ux/red-hat-design-tokens/editor/textmate',
-        fs_event_providers = { libuv = true },
-      }
-      require 'luasnip.loaders.from_snipmate'.lazy_load { paths = {
-        '~/.config/nvim/snippets',
-      } }
+      -- require 'luasnip.loaders.from_snipmate'.lazy_load {
+      --   paths =  {
+      --     -- '~/.config/nvim/snippets',
+      --     -- '~/Developer/redhat-ux/red-hat-design-tokens/editor/textmate',
+      --   },
+      --   fs_event_providers = { libuv = true },
+      -- }
     end
   },
 
@@ -168,14 +169,11 @@ return {
         },
 
         sources = cmp.config.sources({
-            { name = 'luasnip' },
-          }, {
+            { name = 'luasnip', option = { show_autosnippets = true } },
             { name = 'nvim_lsp' },
             { name = 'nvim_lsp_signature_help' },
-          }, {
             { name = 'treesitter' },
             { name = 'buffer', keyword_length = 3 },
-          }, {
             { name = 'path' },
             { name = 'calc' },
             { name = 'emoji' },
@@ -210,6 +208,7 @@ return {
 
       cmp.setup.filetype('lua', {
         sources = cmp.config.sources({
+          { name = 'luasnip', option = { show_autosnippets = true } },
           { name = 'plugins' },
           { name = 'nvim_lua' },
         }, {
@@ -222,6 +221,7 @@ return {
 
       cmp.setup.filetype('fish', {
         sources = cmp.config.sources({
+          { name = 'luasnip', option = { show_autosnippets = true } },
           { name = 'fish' },
         }, {
           { name = 'buffer' },
@@ -233,6 +233,7 @@ return {
 
       cmp.setup.filetype('json', {
         sources = cmp.config.sources({
+          { name = 'luasnip', option = { show_autosnippets = true } },
           { name = 'npm', keyword_length = 2 },
         }, {
           { name = 'buffer' },
@@ -242,9 +243,19 @@ return {
         })
       })
 
+      cmp.setup.filetype('html', {
+        sources = cmp.config.sources({
+        { name = 'luasnip', option = { show_autosnippets = true } },
+        { name = 'nvim_lsp' },
+        { name = 'nvim_lsp_signature_help' },
+        { name = 'treesitter' },
+        { name = 'buffer', keyword_length = 3 },
+        })
+      })
+
       local JS_CONFIG = {
         sources = cmp.config.sources({
-          { name = 'luasnip' },
+          { name = 'luasnip', option = { show_autosnippets = true } },
           { name = 'nvim_lsp', entry_filter = function(entry, ctx)
               ctx = require'cmp.config.context'
               -- only show emmet snippets in lit-like templates
@@ -268,6 +279,24 @@ return {
 
       cmp.setup.filetype('javascript', JS_CONFIG)
       cmp.setup.filetype('typescript', JS_CONFIG)
+
+      local function choice_next()
+        if luasnip.choice_active() then
+          return luasnip.change_choice(1)
+        end
+      end
+
+      local function choice_prev()
+        if luasnip.choice_active() then
+          return luasnip.change_choice(-1)
+        end
+      end
+
+      -- feel free to change the keys to new ones, those are just my current mappings
+      vim.keymap.set('i', '<C-f>', choice_next, { noremap = true })
+      vim.keymap.set('s', '<C-f>', choice_next, { noremap = true })
+      vim.keymap.set('i', '<C-d>', choice_prev, { noremap = true })
+      vim.keymap.set('s', '<C-d>', choice_prev, { noremap = true })
 
     end
   }

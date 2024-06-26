@@ -29,7 +29,7 @@ Temporary Items
 node_modules
 
 # Dotfiles repo see https://www.atlassian.com/git/tutorials/dotfiles
-.cfg
+~/.cfg
 
 ~/.config/karabiner/automatic_backups
 ~/.config/gh/hosts.yml

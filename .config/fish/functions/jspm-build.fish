@@ -1,4 +1,5 @@
-function jspm-build -d "Request a build from JSPM" set -f pkg "$argv[1]"
+function jspm-build -d "Request a build from JSPM"
+  set -f pkg "$argv[1]"
   if set -q argv[2]
     set -f pkg_version $argv[2]
    else

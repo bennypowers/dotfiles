@@ -5,10 +5,10 @@ return { 'akinsho/git-conflict.nvim',
   opts = {
     disable_diagnostics = true, -- This will disable the diagnostics in a buffer whilst it is conflicted
     default_mappings = {
-      ours = 'co',
-      theirs = 'ct',
-      none = 'c0',
-      both = 'cb',
+      ours = 'gCo',
+      theirs = 'gCt',
+      none = 'gC0',
+      both = 'gCb',
       next = '[x',
       prev = ']x',
     },

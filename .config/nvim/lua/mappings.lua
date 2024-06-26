@@ -54,10 +54,3 @@ nmap('gi',         vim.lsp.buf.implementation,    'Go to implementations')
 nmap('gr',         vim.lsp.buf.references,        'Go to references')
 nmap('<m-,>',      vim.diagnostic.goto_prev,      'Previous diagnostic')
 nmap('<m-.>',      vim.diagnostic.goto_next,      'Next diagnostic')
-
-if vim.version().major == 0 and vim.version().minor < 10 then
-  nmap('K',       vim.lsp.buf.hover,              'Hover')
-  nmap('[d',      vim.diagnostic.goto_prev,       'Previous diagnostic')
-  nmap(']d',      vim.diagnostic.goto_next,       'Next diagnostic')
-  nmap('<c-w>d',  vim.diagnostic.open_float,      'Open diagnostic in float')
-end
