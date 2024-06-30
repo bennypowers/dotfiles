@@ -7,9 +7,13 @@ return { 'bennypowers/splitjoin.nvim',
     { 'g,', function() require'splitjoin'.split() end, desc = 'Split the object under cursor' },
   },
   opts = {
-    html = {
-      attribute = {
-        aligned = true,
+    languages = {
+      html = {
+        nodes = {
+          attribute = {
+            aligned = true,
+          },
+        },
       },
     },
   },
