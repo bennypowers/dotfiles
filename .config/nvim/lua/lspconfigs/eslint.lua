@@ -1,12 +1,15 @@
 return {
   -- root_dir = function() return require 'lspconfig.util'.find_git_ancestor() end,
-  on_attach = function(client)
-    require 'lsp-format'.on_attach(client)
-    require 'lsp-status'.on_attach(client)
+  on_attach = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = true
+    require 'lsp-format'.on_attach(client, bufnr)
+    require 'lsp-status'.on_attach(client, bufnr)
   end,
   settings = {
-    codeActionsOnSave = {
+    format = {
       enable = true,
+    },
+    codeActionsOnSave = {
       mode = 'all',
       rules = { '!debugger', '!no-only-tests/*' },
     },
