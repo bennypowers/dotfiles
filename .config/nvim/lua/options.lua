@@ -51,8 +51,14 @@ vim.opt.sessionoptions:append'blank,buffers,curdir,folds,help,tabpages,winsize,w
 vim.opt.shortmess:append'I' -- no welcome message
 vim.opt.shortmess:append'a' -- abbreviate built-in messages
 
-vim.filetype.add { extension = {
-  njk = 'html',
-  sketchpalette = 'json',
-} }
+vim.filetype.add {
+  extension = {
+    njk = 'html',
+    sketchpalette = 'json',
+    container = 'systemd',
+    volume = 'systemd',
+    network = 'systemd',
+    service = 'systemd',
+  },
+}
 

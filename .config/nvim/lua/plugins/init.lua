@@ -1,6 +1,7 @@
 return {
 
   { import = 'plugins.colorschemes' },
+  { import = 'plugins.debugger' },
   { import = 'plugins.editing' },
   { import = 'plugins.git' },
   { import = 'plugins.languages' },

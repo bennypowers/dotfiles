@@ -1,4 +1,5 @@
 return { 'rest-nvim/rest.nvim',
+  enabled = false,
   ft = 'http',
   dependencies = { 'vhyrro/luarocks.nvim' },
   config = function()
