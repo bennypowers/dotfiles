@@ -27,11 +27,11 @@ return {
           typescript = { 'html', 'css', 'graphql' },
         },
       }
-      require 'luasnip.loaders.from_lua'.lazy_load()
       require 'luasnip.loaders.from_snipmate'.lazy_load {
         paths =  { '~/.config/nvim/snippets' },
         fs_event_providers = { libuv = true },
       }
+      require 'luasnip.loaders.from_lua'.lazy_load()
     end
   },
 
@@ -237,6 +237,24 @@ return {
         }, {
           { name = 'calc' },
           { name = 'emoji' },
+        })
+      })
+
+      cmp.setup.filetype('css', {
+        sources = cmp.config.sources({
+        { name = 'luasnip', option = { show_autosnippets = true } },
+        { name = 'nvim_lsp' },
+        { name = 'treesitter' },
+        { name = 'buffer', keyword_length = 3 },
+        })
+      })
+
+      cmp.setup.filetype('scss', {
+        sources = cmp.config.sources({
+        { name = 'luasnip', option = { show_autosnippets = true } },
+        { name = 'nvim_lsp' },
+        { name = 'treesitter' },
+        { name = 'buffer', keyword_length = 3 },
         })
       })
 
