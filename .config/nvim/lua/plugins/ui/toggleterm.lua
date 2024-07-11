@@ -56,11 +56,10 @@ return { 'akinsho/toggleterm.nvim',
   dependencies = {
     { 'stevearc/stickybuf.nvim', enabled = false, opts = {} }
   },
+  opts = {
+    shell = 'fish'
+  },
   config = function()
-
-    require 'toggleterm'.setup {
-      shell = 'fish'
-    }
 
     local Terminal = require 'toggleterm.terminal'.Terminal
 
