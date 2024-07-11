@@ -28,13 +28,10 @@ return {
         },
       }
       require 'luasnip.loaders.from_lua'.lazy_load()
-      -- require 'luasnip.loaders.from_snipmate'.lazy_load {
-      --   paths =  {
-      --     -- '~/.config/nvim/snippets',
-      --     -- '~/Developer/redhat-ux/red-hat-design-tokens/editor/textmate',
-      --   },
-      --   fs_event_providers = { libuv = true },
-      -- }
+      require 'luasnip.loaders.from_snipmate'.lazy_load {
+        paths =  { '~/.config/nvim/snippets' },
+        fs_event_providers = { libuv = true },
+      }
     end
   },
 
