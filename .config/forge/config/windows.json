@@ -213,6 +213,38 @@
             "wmClass": "com.belmoussaoui.Decoder",
             "wmTitle": "Decoder",
             "mode": "float"
+        },
+        {
+            "wmClass": "com.quexten.Goldwarden.settings",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.quexten.Goldwarden.quickaccess",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Jellyfin Media Player",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Shell.Extensions",
+            "mode": "float"
+        },
+        {
+            "wmClass": "extension-manager",
+            "mode": "float"
+        },
+        {
+            "wmClass": "Totem",
+            "mode": "float"
+        },
+        {
+            "wmClass": "gnome-software",
+            "mode": "float"
+        },
+        {
+            "wmClass": "iotas",
+            "mode": "float"
         }
     ]
 }
