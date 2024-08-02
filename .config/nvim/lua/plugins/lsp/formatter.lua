@@ -13,6 +13,7 @@ local function prettier_package_json_key_exists(project_root)
   end)
   return ok and has_prettier_key
 end
+
 ---Adapted from MunifTanjim/prettier.nvim
 ---@param project_root string
 ---@return boolean

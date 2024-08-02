@@ -5,64 +5,29 @@ return { 'folke/which-key.nvim',
   config = function()
     local wk = require'which-key'
     wk.setup {
-      plugins = {
-        spelling = {
-          enabled = true,
-        },
-        presets = {
-          -- modes.nvim is incompatible
-          -- https://github.com/mvllow/modes.nvim/blob/b1cea686c049b03cb01300b6a6367b81302d2a90/readme.md#known-issues
-          operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-          motions = true, -- adds help for motions
-          text_objects = true, -- help for text objects triggered after entering an operator
-          windows = true, -- default bindings on <c-w>
-          nav = true, -- misc bindings to work with windows
-          z = true, -- bindings for folds, spelling and others prefixed with z
-          g = true, -- bindings for prefixed with g
-        },
-      },
-      -- add operators that will trigger motion and text object completion
-      -- to enable all native operators, set the preset / operators plugin above
-      operators = { gc = "Comments" },
+      preset = 'helix',
     }
 
-    wk.register({
-      F = { name = '+telescope' },
-      ['<leader>'] = {
-        name = '+leader',
-        l = { name = '+lsp' },
-        r = {
-          name = '+re...',
-          o = { name = '+colours' },
-          c = { name = '+caser' },
-        },
-        s = { name = '+screenshots' },
-        f = { name = '+telescope' },
-      },
-      g = {
-        name = '+global',
-        L = { name = 'align right', },
-        l = { name = 'align left', },
-        ['%'] = 'match surround backwards',
-        c = {
-          name = '+comments',
-          c = 'comment line',
-        },
-        n = {
-          name = '+incremental',
-          n    = 'select'
-        },
-      },
-    }, { mode = 'n' })
+    wk.add({
+      mode = {'n', 'v' },
+      { 'F', group = 'Telescope' },
+      { '<leader>', group = 'Leader' },
+      { '<leader>l', group = 'LSP' },
+      { '<leader>r', group = '+re...', },
+      { '<leader>ro', group = '+colours' },
+      { '<leader>rc', group = '+caser' },
+      { '<leader>s', group = '+screenshots' },
+      { '<leader>f', group = '+telescope' },
+    })
 
-    wk.register({
-      s = { name = '+screenshots', },
-      r = {
-        name = '+rename/rotate',
-        c = { name = '+caser' },
-        o = { name = '+colours' },
-      }
-    }, { mode = 'v' })
+    wk.add({
+      mode = 'v',
+      { 'gL', name = 'align right' },
+      { 'gl', name = 'align left' },
+      { 'g%', name = 'match surround backwards' },
+      { 'gn', group = 'incremental' },
+      { 'gnn', name = 'select' },
+    })
 
   end
 }

@@ -49,17 +49,15 @@ return { 'akinsho/toggleterm.nvim',
   enabled = true,
   keys = {
     { '<c-t>', toggle_term_pinned,  desc = 'Toggle terminal in horizontal split', mode = { 'n', 'i', 't' } },
-    { '<leader>t', toggle_term_pinned,  desc = 'Toggle terminal in horizontal split' },
-    { '<leader>g', toggle_term_lazygit, desc = 'Git UI via lazygit' },
     { '<c-g>', toggle_term_lazygit, desc = 'Git UI via lazygit', mode = { 'n', 't' } },
   },
   dependencies = {
     { 'stevearc/stickybuf.nvim', enabled = false, opts = {} }
   },
-  opts = {
-    shell = 'fish'
-  },
   config = function()
+    require'toggleterm'.setup {
+      shell = 'fish'
+    }
 
     local Terminal = require 'toggleterm.terminal'.Terminal
 

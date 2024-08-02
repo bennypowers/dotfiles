@@ -2,13 +2,14 @@
 return { 'folke/lsp-trouble.nvim',
   enabled = true,
   lazy = true,
-  cmd = { 'Trouble', 'TroubleToggle' },
+  cmd = { 'Trouble' },
   dependencies = {
     'folke/trouble.nvim',
     'nvim-tree/nvim-web-devicons',
   },
   keys = {
-    {'gT', ':TroubleToggle<cr>', desc = 'Toggle trouble'},
+    {'<leader>td', ':Trouble diagnostics<cr>', desc = 'Toggle trouble (diagnostics)' },
+    {'<leader>ts', ':Trouble symbols<cr>', desc = 'Toggle trouble (symbols)' },
   },
   opts = {
     auto_open = false,

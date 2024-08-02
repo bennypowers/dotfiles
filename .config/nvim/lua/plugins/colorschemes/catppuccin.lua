@@ -8,6 +8,7 @@ return { 'catppuccin/nvim',
   },
   opts = {
     flavour = 'mocha',
+
     integrations = {
       coc_nvim = false,
       lsp_trouble = true,
@@ -70,6 +71,7 @@ return { 'catppuccin/nvim',
       local colors = require 'catppuccin.palettes'.get_palette()
       local darken = require 'catppuccin.utils.colors'.darken
       local dark = {}
+
       for k, v in pairs(colors) do
         if k ~= 'none' then
           dark[k] = darken(v, 0.5)
@@ -129,6 +131,11 @@ return { 'catppuccin/nvim',
         -- DiagnosticVirtualTextWarn = { bg = colors.none },
         -- DiagnosticVirtualTextInfo = { bg = colors.none },
         -- DiagnosticVirtualTextHint = { bg = colors.none },
+
+        ModesCopy   = { bg = dark.orange, fg = colors.orange },
+        ModesDelete = { bg = dark.red, fg = colors.red },
+        ModesInsert = { bg = dark.blue, fg = colors.blue },
+        ModesVisual = { bg = dark.purple, fg = colors.purple },
 
         TelescopePromptPrefix = { bg = colors.crust },
         TelescopePromptNormal = { bg = colors.crust },
