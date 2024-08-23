@@ -100,14 +100,13 @@ local function get_context(token, snippet_type)
 end
 
 local function get_property_snippet(token)
-  return
-  s(get_context(token, 'property'), fmt([[var(--{}{});]], {
-      t(token.name),
-      c(1, {
-        t'',
-        t(', '..token['$value'])
-      }),
-  }))
+    return s(get_context(token, 'property'), fmt([[var(--{}{});]], {
+        t(token.name),
+        c(1, {
+          t'',
+          t(', '..token['$value'])
+        }),
+    }))
 end
 
 local function get_value_snippet(token)
@@ -123,7 +122,11 @@ end
 
 local tokens = read_tokens'~/Developer/redhat-ux/red-hat-design-tokens/json/rhds.tokens.json'
 
-return vim.iter(flatten_tokens(tokens))
-  :map(make_snippets)
-  :flatten()
-  :totable()
+if tokens then
+  return vim.iter(flatten_tokens(tokens))
+    :map(make_snippets)
+    :flatten()
+    :totable()
+else
+  return {}
+end

@@ -6,4 +6,3 @@ return { 'barrett-ruth/import-cost.nvim',
   opts = {},
 }
 
-

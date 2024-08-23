@@ -209,5 +209,92 @@ function M.toggle_markdown_link()
   end
 end
 
+command('CssInlineDefaultToValidJSDoc', function(args)
+  local ts_query = vim.treesitter.query.parse('typescript', [[
+    (comment) @comment
+  ]])
+
+  local jsdoc_query = vim.treesitter.query.parse('jsdoc', [[
+    (document
+      (tag
+        (tag_name) @tag_name
+        (#eq? @tag_name "@cssprop")
+        (description
+          (inline_tag
+            (tag_name) @itag_name
+            (#eq? @itag_name "@default")
+            (description) @value)) @description)
+      )
+  ]])
+
+  local langtree = vim.treesitter.get_parser(0)
+
+  local kids = langtree:children()
+
+  local function string_replace(str, this, that)
+    return str:gsub(this:gsub("[%(%)%.%%%+%-%*%?%[%^%$%]]", "%%%1"), that) -- only % needs to be escaped for 'that'
+  end
+
+  if kids.jsdoc then
+    local nvim_buf_set_text_calls = {}
+    local jsdoc_tree = kids.jsdoc
+    for _, tree in ipairs(jsdoc_tree:parse()) do
+      for id, node in jsdoc_query:iter_captures(tree:root(), 0) do
+        local cap = jsdoc_query.captures[id]
+        if cap == 'value' then
+          local value = vim.treesitter.get_node_text(node, 0)
+          if vim.trim(value):match('^`(.*)`$') then
+            value = value:gsub('^`', ''):gsub('`$', '')
+          end
+          local inline_tag = node:parent()
+          local description = inline_tag and inline_tag:parent()
+          local tag = description and description:parent()
+          if description and inline_tag and tag then
+            local r_start, c_start, r_end, c_end = tag:range()
+            local tag_text = vim.treesitter.get_node_text(tag, 0)
+            local inline_tag_text = vim.treesitter.get_node_text(inline_tag, 0)
+            local description_text = vim.treesitter.get_node_text(description, 0)
+            local css_prop_name = unpack(vim.split(description_text, ' '))
+
+            if css_prop_name and vim.startswith(css_prop_name, '--') then
+              local ok = pcall(function()
+                local new_name = '[' ..vim.trim(css_prop_name) ..'=' ..vim.trim(value) ..']'
+
+                local name_replaced = string_replace(tag_text, vim.trim(css_prop_name), new_name)
+
+                local inline_removed = string_replace(name_replaced, inline_tag_text, '')
+
+                table.insert(nvim_buf_set_text_calls, {
+                  r_start,
+                  c_start,
+                  r_end,
+                  c_end,
+                  vim.split(inline_removed, '\n')
+                })
+              end)
+              if not ok then print(css_prop_name) end
+            end
+          end
+        end
+      end
+    end
+    for _, call in ipairs(nvim_buf_set_text_calls) do
+      local r_start, c_start, r_end, c_end, text = unpack(call)
+      vim.api.nvim_buf_set_text(
+        0,
+        r_start,
+        c_start,
+        r_end,
+        c_end,
+        text
+      )
+    end
+  end
+
+end, {
+  bang = true,
+  range = '%'
+})
+
 return M
 

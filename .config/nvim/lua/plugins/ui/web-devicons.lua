@@ -38,7 +38,7 @@ return { 'nvim-tree/nvim-web-devicons',
         name = "JavaScript",
       },
       ts = {
-        icon = 'ﯤ',
+        icon = '󰛦',
         color = "#519aba",
         cterm_color = "67",
         name = "TypeScript",

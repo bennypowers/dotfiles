@@ -25,9 +25,11 @@ return { 'monaqa/dial.nvim',
       default = {
         a.integer.alias.decimal,
         a.constant.alias.bool,
+        a.constant.new { elements = {'✅', '❌'} },
+        a.constant.new { elements = {'ON', 'OFF'} },
+        a.hexcolor.new { case = "lower" },
         a.semver.alias.semver,
         a.misc.alias.markdown_header,
-        a.hexcolor.new { case = "lower" },
       }
     }
   end
