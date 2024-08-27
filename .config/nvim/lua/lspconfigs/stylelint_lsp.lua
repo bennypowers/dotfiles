@@ -1,14 +1,8 @@
 -- stylelint_lsp
 return {
   on_attach = function(client, bufnr)
-    require 'lsp-format'.on_attach(client)
-    require 'lsp-status'.on_attach(client)
-    au('BufWritePre', {
-      buffer = bufnr,
-      callback = function()
-        vim.lsp.buf.format()
-      end
-    })
+    require 'lsp-format'.on_attach(client, bufnr)
+    require 'lsp-status'.on_attach(client, bufnr)
   end,
   filetypes = { 'css', 'scss', },
   settings = {
