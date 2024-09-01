@@ -4,7 +4,7 @@ return { 'rest-nvim/rest.nvim',
   dependencies = { 'vhyrro/luarocks.nvim' },
   main = 'rest-nvim',
   keys = {
-    { '<c-r>', ':Rest run<cr>', 'Run request under the cursor' },
+    { '<c-r>', ':Rest run<cr>', ft = 'http', desc = 'Run request under the cursor' },
   },
   opts = { }
 }

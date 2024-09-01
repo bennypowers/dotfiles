@@ -228,8 +228,9 @@ return {
         })
       })
 
-      cmp.setup.filetype('json', {
+      local JSON_CONFIG = {
         sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
           { name = 'luasnip', option = { show_autosnippets = true } },
           { name = 'npm', keyword_length = 2 },
         }, {
@@ -238,7 +239,10 @@ return {
           { name = 'calc' },
           { name = 'emoji' },
         })
-      })
+      }
+
+      cmp.setup.filetype('json', JSON_CONFIG)
+      cmp.setup.filetype('jsonc', JSON_CONFIG)
 
       cmp.setup.filetype('css', {
         sources = cmp.config.sources({
