@@ -12,7 +12,16 @@ return {
         propertyDeclarationTypes = { enabled = true },
         functionLikeReturnTypes = { enabled = true },
         enumMemberValues = { enabled = true },
-      }
+      },
+      referenceCodeLens = {
+        enabled = true,
+      },
+      implementationsCodeLens = {
+        enabled = true,
+      },
+      format = {
+        enabled = false
+      },
     },
   },
 }

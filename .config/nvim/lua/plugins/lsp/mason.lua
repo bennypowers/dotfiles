@@ -116,7 +116,7 @@ return { 'williamboman/mason.nvim',
 
     require 'mason-lspconfig'.setup_handlers {
       function(server_name)
-        if server_name == 'tsserver' then return end
+        if server_name == 'ts_ls' then return end
         local config, enabled = get_config_mod(server_name)
         if enabled then
           require 'lspconfig'[server_name].setup(config)
