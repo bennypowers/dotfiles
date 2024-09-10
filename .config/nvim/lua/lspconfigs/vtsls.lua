@@ -13,7 +13,7 @@ return {
         functionLikeReturnTypes = { enabled = true },
         enumMemberValues = { enabled = true },
       },
-      referenceCodeLens = {
+      referencesCodeLens = {
         enabled = true,
       },
       implementationsCodeLens = {
