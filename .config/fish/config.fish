@@ -67,7 +67,7 @@ bind \ce edit_command_buffer
 bind \cv edit_command_buffer
 
 # aliases
-alias c="clear; and omf reload"
+alias c="clear; and source ~/.config/fish/config.fish"
 alias g="git"
 alias v="nvim"
 alias run="npm run"

@@ -1,9 +1,0 @@
-package bang-bang
-package foreign-env
-package https://github.com/decors/fish-colored-man
-package https://github.com/edc/bass
-package https://github.com/fabioantunes/fish-nvm
-package nvm
-package osx
-package thefuck
-theme default
