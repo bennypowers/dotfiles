@@ -81,3 +81,88 @@ command('MarkdownToggleImage', require'commands'.toggle_markdown_image, {
 command('MarkdownToggleLink', require'commands'.toggle_markdown_link, {
   desc = 'Toggle Markdown link syntax',
 })
+
+local function get_all_link_references()
+  local parser = vim.treesitter.get_parser(0, 'markdown')
+  local query = vim.treesitter.query.get('markdown', 'link_reference_definitions')
+  local refs = {}
+  if query then
+    for _, tree in ipairs(parser:parse()) do
+      for _, node in query:iter_captures(tree:root(), 0) do
+        local label_node, dest_node = unpack(node:named_children())
+        if label_node and dest_node then
+          local label = vim.treesitter.get_node_text(label_node, 0)
+          local dest = vim.treesitter.get_node_text(dest_node, 0)
+          table.insert(refs, { label, dest })
+        end
+      end
+    end
+  end
+  return refs
+end
+
+---@param node TSNode
+---@param replacement string
+local function replace_node_text(node, replacement)
+  local sr, sc, er, ec = vim.treesitter.get_node_range(node)
+  vim.api.nvim_buf_set_text(
+    0,
+    sr,
+    sc,
+    er,
+    ec,
+    vim.split(replacement, '\n')
+  )
+end
+
+---@param text string
+local function append_text(text)
+  vim.api.nvim_buf_set_lines(
+    0,
+    -1,
+    -1,
+    true,
+    vim.split(text, '\n')
+  )
+end
+
+command('MarkdownToggleLinkToRef', function(args)
+  local parser = vim.treesitter.get_parser(0, 'markdown_inline')
+  local query = vim.treesitter.query.get('markdown_inline', 'toggle_links_ref')
+  local _line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local row = _line - 1
+  if not query then return end
+  for _, tree in ipairs(parser:parse()) do
+    for id, node in query:iter_captures(tree:root(), 0) do
+      if vim.treesitter.is_in_node_range(node, row, col) then
+        local name = query.captures[id]
+        local text_node, ref_or_dest_node = unpack(node:named_children())
+        if not text_node or not ref_or_dest_node then return end
+        local text = vim.treesitter.get_node_text(text_node, 0)
+        local ref_or_dest = vim.treesitter.get_node_text(ref_or_dest_node, 0)
+        if name == 'inline' then
+          local dest = ref_or_dest
+          for _, tuple in ipairs(get_all_link_references()) do
+            local referant_ref, referant_dest = unpack(tuple)
+            if dest == referant_dest then
+              replace_node_text(node, '['..text..']['..referant_ref..']')
+            end
+          end
+          local new_ref = text:gsub('%W',''):lower()
+          replace_node_text(node, '['..text..']['..new_ref..']')
+          append_text('['..new_ref..']: '..dest)
+        else
+          local ref = ref_or_dest
+          for _, tuple in ipairs(get_all_link_references()) do
+            local referant_ref, referant_dest = unpack(tuple)
+            if ref == referant_ref then
+              replace_node_text(node, '['..text..']('..referant_dest..')')
+            end
+          end
+        end
+      end
+    end
+  end
+end, { desc = 'Toggle Markdown links between reference links and inline' })
+
+vim.keymap.set('n', 'gtl', ':MarkdownToggleLinkToRef<cr>', { desc = 'Toggle Markdown links between reference links and inline' })
