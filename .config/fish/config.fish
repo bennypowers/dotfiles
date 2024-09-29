@@ -91,11 +91,11 @@ if status is-interactive
   if type -q rbenv
     source (rbenv init -|psub)
   end
-  if type -q starship
-    starship init fish | source
-  end
   if type -q zoxide
     zoxide init fish | source
+  end
+  if type -q starship
+    starship init fish | source
   end
 end
 
