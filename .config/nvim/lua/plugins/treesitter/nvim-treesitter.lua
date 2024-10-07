@@ -1,5 +1,7 @@
 -- 🌳 Syntax
-return { 'nvim-treesitter/nvim-treesitter',
+return {
+  { 'nvim-treesitter/nvim-treesitter-textobjects', dependencies = 'nvim-treesitter/nvim-treesitter'},
+  { 'nvim-treesitter/nvim-treesitter',
   enabled = true,
   dev = false,
   build = ':TSUpdate',
@@ -65,7 +67,7 @@ return { 'nvim-treesitter/nvim-treesitter',
       highlight = {
         enable = true,
         custom_captures = {
-          ["(method_signature name:(property_identifier)"] = "BP_TSMethodSignature",
+          ['(method_signature name:(property_identifier)'] = 'BP_TSMethodSignature',
         },
       },
 
@@ -77,22 +79,32 @@ return { 'nvim-treesitter/nvim-treesitter',
         select = {
           enable = true,
           lookahead = true,
+          include_surrounding_whitespace = true,
           keymaps = {
-            ["aa"] = "@attribute.outer",
-            ["ia"] = "@attribute.inner",
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-            ["ab"] = "@block.outer",
-            ["ib"] = "@block.inner",
-            ["a*"] = "@comment.outer",
-            ["i*"] = "@comment.inner",
+            ['aa'] = '@attribute.outer',
+            ['ia'] = '@attribute.inner',
+            ['af'] = '@function.outer',
+            ['if'] = '@function.inner',
+            ['ac'] = '@class.outer',
+            ['ic'] = '@class.inner',
+            ['ab'] = '@block.outer',
+            ['ib'] = '@block.inner',
+            ['a*'] = '@comment.outer',
+            ['i*'] = '@comment.inner',
           },
           peek_definition_code = {
-            ["<leader>df"] = "@function.outer",
-            ["<leader>dF"] = "@class.outer",
+            ['<leader>df'] = '@function.outer',
+            ['<leader>dF'] = '@class.outer',
           },
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ['gsa'] = '@attribute.outer',
+          },
+          swap_previous = {
+            ['gSa'] = '@attribute.outer',
+          }
         }
       },
 
@@ -140,5 +152,5 @@ return { 'nvim-treesitter/nvim-treesitter',
       },
     }
   end,
-}
+} }
 

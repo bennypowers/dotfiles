@@ -1,8 +1,5 @@
 return {
 
-  -- select a comment
-  'nvim-treesitter/nvim-treesitter-textobjects',
-
   -- help writing treesitter queries
   'ziontee113/query-secretary',
 
