@@ -99,6 +99,14 @@ if status is-interactive
   end
 end
 
+function nvm_use_on_dir --on-variable PWD
+  if status is-interactive
+    if test -e ./.nvmrc
+      nvm use
+    end
+  end
+end
+
 # eye candy
 function fish_greeting
   if status is-interactive; and type -q colorscript
