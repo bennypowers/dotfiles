@@ -103,6 +103,8 @@ function nvm_use_on_dir --on-variable PWD
   if status is-interactive
     if test -e ./.nvmrc
       nvm use
+    else
+      nvm -s use system
     end
   end
 end
