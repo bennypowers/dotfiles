@@ -97,16 +97,16 @@ if status is-interactive
   if type -q starship
     starship init fish | source
   end
-end
 
-function nvm_use_on_dir --on-variable PWD
-  if status is-interactive
+  function nvm_use_on_dir --on-variable PWD
     if test -e ./.nvmrc
       nvm -s use
     else
       nvm -s use system
     end
   end
+
+  nvm_use_on_dir
 end
 
 # eye candy
