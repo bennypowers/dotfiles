@@ -1,0 +1,3 @@
+return {
+  'gentoo/gentoo-syntax',
+}
