@@ -33,7 +33,7 @@ set -gx PAGER less
 # set -gx GROFF_NO_SGR 1
 
 set -x PATH $PATH ~/.ghcup/bin
-set -x PATH ~/go/bin $PATH
+set -x PATH ~/.config/go/bin $PATH
 set -x PATH ~/.cabal/bin $PATH
 set -x PATH ~/.cargo/bin $PATH
 set -x PATH ~/.local/bin $PATH []
@@ -91,11 +91,17 @@ if status is-interactive
   if type -q rbenv
     source (rbenv init -|psub)
   end
+
   if type -q zoxide
     zoxide init fish | source
   end
+
   if type -q starship
     starship init fish | source
+  end
+
+  if type -q glab
+    glab completion -s fish | source
   end
 
   function nvm_use_on_dir --on-variable PWD
