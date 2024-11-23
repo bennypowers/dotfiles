@@ -37,6 +37,7 @@ set -x PATH ~/.config/go/bin $PATH
 set -x PATH ~/.cabal/bin $PATH
 set -x PATH ~/.cargo/bin $PATH
 set -x PATH ~/.local/bin $PATH []
+set -x PATH ~/bin $PATH []
 set -x PATH /usr/local/opt/python/bin/ $PATH
 set -x PATH /usr/local/opt/gnu-sed/libexec/gnubin $PATH
 set -x PATH $DENO_INSTALL/bin $PATH
