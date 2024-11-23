@@ -296,6 +296,7 @@ return {
         })
       }
 
+      cmp.setup.filetype('eruby', JS_CONFIG)
       cmp.setup.filetype('javascript', JS_CONFIG)
       cmp.setup.filetype('typescript', JS_CONFIG)
 

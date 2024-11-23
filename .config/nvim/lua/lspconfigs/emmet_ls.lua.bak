@@ -4,6 +4,8 @@ return {
   filetypes = {
     'html',
     'webc',
+    'erb',
+    'eruby',
     'svg',
     'css',
     'scss',

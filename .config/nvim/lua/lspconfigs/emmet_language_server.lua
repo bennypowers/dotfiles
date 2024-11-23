@@ -6,9 +6,10 @@ return {
     'svg',
     'css', 'scss',
     'markdown',
+    'eruby',
     'nunjucks', 'njk', 'jinja',
-    'typescript', 'ts',
-    'javascript', 'js',
+    'typescript',
+    'javascript',
   },
 }
 
