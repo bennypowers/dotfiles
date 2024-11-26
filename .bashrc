@@ -5,7 +5,6 @@ fi
 
 if [ -f /etc/gentoo-release ]; then
   export SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
-
   if [[ "$(tty)" == "/dev/tty1" ]]; then
           dbus-run-session sway
   elif [ -x /bin/fish ]; then
