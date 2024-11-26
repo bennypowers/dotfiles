@@ -108,7 +108,7 @@ if status is-interactive
   function nvm_use_on_dir --on-variable PWD
     if test -e ./.nvmrc
       nvm -s use
-    else
+    else if type -q node
       nvm -s use system
     end
   end
