@@ -21,3 +21,4 @@ else
 
   eval "$(starship init bash)"
 fi
+
