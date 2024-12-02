@@ -119,6 +119,6 @@ end
 # eye candy
 function fish_greeting
   if status is-interactive; and type -q colorscript
-    colorscript random 2> /dev/null
+    colorscript --random
   end
 end
