@@ -19,9 +19,9 @@ local lazygit_term_options = {
   start_in_insert = true,
   shade_terminals = false,
   highlights = {
-    NormalFloat = {
-      guibg = "#212121",
-    },
+    -- NormalFloat = {
+    --   guibg = "#212121",
+    -- },
   },
   float_opts = {
     -- winblend = 3,

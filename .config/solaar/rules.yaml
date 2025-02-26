@@ -10,6 +10,9 @@
 - Key: [Forward Button, pressed]
 - Device: 90DB215F
 - KeyPress:
-  - [Control_L, Alt_L, a]
+  - [Super_L]
+  - click
+- KeyPress:
+  - [Super_L]
   - click
 ...

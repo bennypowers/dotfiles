@@ -7,8 +7,6 @@ return { 'catppuccin/nvim',
     'barbecue',
   },
   opts = {
-    flavour = 'mocha',
-
     integrations = {
       coc_nvim = false,
       lsp_trouble = true,

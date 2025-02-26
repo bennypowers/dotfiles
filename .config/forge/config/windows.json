@@ -75,6 +75,15 @@
             "mode": "float"
         },
         {
+            "wmClass": "zen-alpha",
+            "wmTitle": "Picture-in-Picture",
+            "mode": "float"
+        },
+        {
+            "wmTitle": "Picture-in-Picture",
+            "mode": "float"
+        },
+        {
             "wmClass": "app.drey.Dialect",
             "wmTitle": "Dialect",
             "mode": "float"
@@ -244,6 +253,26 @@
         },
         {
             "wmClass": "iotas",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.bassi.Amberol",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.Settings",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.github.tchx84.Flatseal",
+            "mode": "float"
+        },
+        {
+            "wmClass": "solaar",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.github.ronniedroid.concessio",
             "mode": "float"
         }
     ]

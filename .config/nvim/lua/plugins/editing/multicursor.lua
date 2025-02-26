@@ -14,13 +14,20 @@ return { 'jake-stewart/multicursor.nvim',
         set({'n', 'v'}, '<leader><down>', function() mc.lineSkipCursor(1) end)
 
         -- Add or skip adding a new cursor by matching word/selection
-        set({'n', 'v'}, '<leader>n', function() mc.matchAddCursor(1) end)
-        set({'n', 'v'}, '<leader>s', function() mc.matchSkipCursor(1) end)
-        set({'n', 'v'}, '<leader>N', function() mc.matchAddCursor(-1) end)
-        set({'n', 'v'}, '<leader>S', function() mc.matchSkipCursor(-1) end)
+        set({'n', 'v'}, '<c-n>', function() mc.matchAddCursor(-1) end)
+        set({'n', 'v'}, '<c-N>', function() mc.matchAddCursor(1) end)
+        set({'n', 'v'}, '<leader>s', function() mc.matchSkipCursor(-1) end)
+        set({'n', 'v'}, '<leader>S', function() mc.matchSkipCursor(1) end)
 
         -- Add all matches in the document
         set({'n', 'v'}, '<leader>A', mc.matchAllAddCursors)
+
+        set({"n", "x"}, "mw", function()
+            mc.operator({ motion = "iw", visual = true })
+            -- Or you can pass a pattern, press `mwi{` will select every \w,
+            -- basically every char in a `{ a, b, c, d }`.
+            -- mc.operator({ pattern = [[\<\w]] })
+        end)
 
         -- You can also add cursors with any motion you prefer:
         -- set('n', '<right>', function()

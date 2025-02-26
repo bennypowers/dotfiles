@@ -1,5 +1,5 @@
 return { 'willothy/flatten.nvim',
-  enabled = true,
+  enabled = false,
   opts = {
     callbacks = {
       pre_open = function()

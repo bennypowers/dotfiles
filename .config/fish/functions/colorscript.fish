@@ -29,7 +29,7 @@ Options:
 
         case -r --random
             if test -d $SCRIPTDIR
-                set -l random_script (random choice (ls -1 $SCRIPTDIR))
+                set -l random_script (random choice (ls -1p $SCRIPTDIR | grep -v '/'))
                 sh $SCRIPTDIR/$random_script
             else
                 echo "No color scripts directory found at $SCRIPTDIR"

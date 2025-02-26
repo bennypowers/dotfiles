@@ -11,6 +11,6 @@ gui:
 git:
   paging:
     colorArg: never
-    pager: delta --dark --paging=never
+    pager: delta --paging=never
 
 quitOnTopLevelReturn: true

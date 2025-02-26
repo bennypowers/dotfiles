@@ -71,8 +71,10 @@ bind \cv edit_command_buffer
 alias c="clear; and source ~/.config/fish/config.fish"
 alias g="git"
 alias v="nvim"
+alias vi="nvim"
 alias run="npm run"
 alias vim="nvim"
+alias rub0="run0 --background=''"
 alias vim-update="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 alias config="git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias lg="lazygit"
@@ -81,6 +83,7 @@ alias meld="flatpak run org.gnome.Meld"
 alias ssk="kitten ssh"
 alias pbcopy="xsel --input --clipboard"
 alias pbpaste="xsel --output --clipboard"
+alias makearm64="make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-"
 
 switch (uname)
     case Linux
