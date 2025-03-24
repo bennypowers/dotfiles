@@ -1,3 +1,21 @@
+local filetype_extensions = {
+  css = { 'css', 'scss' },
+  html = { 'javascript', 'css', 'graphql', 'json', 'svg' },
+  svg = { 'css', 'html' },
+  javascript = { 'html', 'css', 'graphql', 'svg' },
+  typescript = { 'html', 'css', 'graphql', 'svg' },
+  markdown = {
+    'lua',
+    'json',
+    'html',
+    'svg',
+    'yaml',
+    'css',
+    'typescript',
+    'javascript',
+  }
+}
+
 -- 📎 Completions and Snippets
 return {
 
@@ -6,7 +24,8 @@ return {
     version = '2',
     build = 'make install_jsregexp',
     config = function()
-      require 'luasnip'.config.setup {
+      local ls = require'luasnip'
+      ls.config.setup {
         history = true,
         native_menu = true,
         updateevents = 'TextChanged,TextChangedI',
@@ -18,20 +37,20 @@ return {
             }
           }
         },
-        ft_func = require 'luasnip.extras.filetype_functions'.from_pos_or_filetype,
-        load_ft_func = require 'luasnip.extras.filetype_functions'.extend_load_ft {
-          css = { 'css', 'scss' },
-          markdown = { 'lua', 'json', 'html', 'yaml', 'css', 'typescript', 'javascript' },
-          html = { 'javascript', 'css', 'graphql', 'json' },
-          javascript = { 'html', 'css', 'graphql' },
-          typescript = { 'html', 'css', 'graphql' },
-        },
+        -- ft_func = require 'luasnip.extras.filetype_functions'.from_pos_or_filetype,
+        ft_func = require 'luasnip.extras.filetype_functions'.from_pos,
+        load_ft_func = require 'luasnip.extras.filetype_functions'.extend_load_ft(filetype_extensions),
       }
+      require 'luasnip.loaders.from_lua'.lazy_load()
       require 'luasnip.loaders.from_snipmate'.lazy_load {
         paths =  { '~/.config/nvim/snippets' },
         fs_event_providers = { libuv = true },
       }
-      require 'luasnip.loaders.from_lua'.lazy_load()
+      for ft, extensions in pairs(filetype_extensions) do
+        if #ft > 0 then
+          ls.filetype_extend(ft, extensions)
+        end
+      end
     end
   },
 
@@ -190,79 +209,21 @@ return {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
           { name = 'path' },
-        }, {
           { name = 'cmdline' },
         }),
-      })
-
-      cmp.setup.filetype('gitcommit', {
-        sources = cmp.config.sources({
-          { name = 'git' },
-        }, {
-          { name = 'buffer' },
-        })
-      })
-
-      cmp.setup.filetype('lua', {
-        sources = cmp.config.sources({
-          { name = 'luasnip', option = { show_autosnippets = true } },
-          { name = 'plugins' },
-          { name = 'nvim_lua' },
-        }, {
-          { name = 'buffer' },
-        }, {
-          { name = 'calc' },
-          { name = 'emoji' },
-        })
       })
 
       cmp.setup.filetype('fish', {
         sources = cmp.config.sources({
           { name = 'luasnip', option = { show_autosnippets = true } },
           { name = 'fish' },
-        }, {
           { name = 'buffer' },
-        }, {
           { name = 'calc' },
           { name = 'emoji' },
         })
       })
 
-      local JSON_CONFIG = {
-        sources = cmp.config.sources({
-          { name = 'nvim_lsp' },
-          { name = 'luasnip', option = { show_autosnippets = true } },
-          { name = 'npm', keyword_length = 2 },
-        }, {
-          { name = 'buffer' },
-        }, {
-          { name = 'calc' },
-          { name = 'emoji' },
-        })
-      }
-
-      cmp.setup.filetype('json', JSON_CONFIG)
-      cmp.setup.filetype('jsonc', JSON_CONFIG)
-
-      cmp.setup.filetype('css', {
-        sources = cmp.config.sources({
-        { name = 'luasnip', option = { show_autosnippets = true } },
-        { name = 'nvim_lsp' },
-        { name = 'treesitter' },
-        { name = 'buffer', keyword_length = 3 },
-        })
-      })
-
-      cmp.setup.filetype('scss', {
-        sources = cmp.config.sources({
-        { name = 'luasnip', option = { show_autosnippets = true } },
-        { name = 'nvim_lsp' },
-        { name = 'treesitter' },
-        { name = 'buffer', keyword_length = 3 },
-        })
-      })
-
-      cmp.setup.filetype('html', {
+      cmp.setup.filetype({ 'html', 'svg' }, {
         sources = cmp.config.sources({
         { name = 'luasnip', option = { show_autosnippets = true } },
         { name = 'nvim_lsp' },
@@ -272,7 +233,16 @@ return {
         })
       })
 
-      local JS_CONFIG = {
+      cmp.setup.filetype({ 'css', 'scss' }, {
+        sources = cmp.config.sources({
+        { name = 'luasnip', option = { show_autosnippets = true } },
+        { name = 'nvim_lsp' },
+        { name = 'treesitter' },
+        { name = 'buffer', keyword_length = 3 },
+        })
+      })
+
+      cmp.setup.filetype({ 'javascript', 'typescript', 'eruby'  }, {
         sources = cmp.config.sources({
           { name = 'luasnip', option = { show_autosnippets = true } },
           { name = 'nvim_lsp', entry_filter = function(entry, ctx)
@@ -286,19 +256,42 @@ return {
               end
             end },
           { name = 'nvim_lsp_signature_help' },
-        }, {
           { name = 'treesitter' },
           { name = 'path' },
           { name = 'buffer', keyword_length = 3 },
-        }, {
           { name = 'calc' },
           { name = 'emoji' },
         })
-      }
+      })
 
-      cmp.setup.filetype('eruby', JS_CONFIG)
-      cmp.setup.filetype('javascript', JS_CONFIG)
-      cmp.setup.filetype('typescript', JS_CONFIG)
+      cmp.setup.filetype({ 'json', 'jsonc' }, {
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'luasnip', option = { show_autosnippets = true } },
+          { name = 'npm', keyword_length = 2 },
+          { name = 'buffer' },
+          { name = 'calc' },
+          { name = 'emoji' },
+        })
+      })
+
+      cmp.setup.filetype('gitcommit', {
+        sources = cmp.config.sources({
+          { name = 'git' },
+          { name = 'buffer' },
+        })
+      })
+
+      cmp.setup.filetype('lua', {
+        sources = cmp.config.sources({
+          { name = 'luasnip', option = { show_autosnippets = true } },
+          { name = 'plugins' },
+          { name = 'nvim_lua' },
+          { name = 'buffer' },
+          { name = 'calc' },
+          { name = 'emoji' },
+        })
+      })
 
       local function choice_next()
         if luasnip.choice_active() then

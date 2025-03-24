@@ -1,3 +1,4 @@
+
 return { 'catppuccin/nvim',
   enabled = true,
   version = '1',

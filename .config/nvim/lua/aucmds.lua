@@ -75,3 +75,16 @@ au('UIEnter', {
   end
 })
 
+au('OptionSet', {
+  group = ag('auto_dark_light', {clear=true}),
+  pattern = 'background',
+  callback = function(data)
+    -- print(vim.inspect(data))
+    -- if vim.o.background == 'dark' then
+    --   vim.cmd.colorscheme'catppuccin-mocha'
+    -- else
+    --   vim.cmd.colorscheme'catppuccin-latte'
+    -- end
+  end
+})
+

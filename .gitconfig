@@ -64,7 +64,6 @@
 
 [delta]
 	features = collared-trogon
-	syntax-theme = Dracula
 	navigate = true
 
 [delta "interactive"]
