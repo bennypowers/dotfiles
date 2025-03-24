@@ -33,15 +33,9 @@ local function is_matching_token_type_for_property(token, property)
   return true
 end
 
-local function get_context(token, snippet_type)
-  local td = token['$description']
-  -- json.decode can produce `vim.NIL` types
-  if td == vim.NIL then td = nil end
-  return {
-    trig = token.name,
-    name = '--' .. token.name,
-    desc = td or nil,
-    show_condition = function(line_to_cursor)
+local function show_condition(token, snippet_type)
+  return function(line_to_cursor)
+    if vim.endswith(vim.bo.filetype, 'css') then
       local after_colon = line_to_cursor:match':';
       if snippet_type == 'property' then
         return after_colon and is_matching_token_type_for_property(
@@ -51,16 +45,42 @@ local function get_context(token, snippet_type)
       else
         return not after_colon
       end
-    end,
+    else
+      return true
+    end
+  end
+end
+
+local function td(token)
+  local d = token['$description']
+  -- json.decode can produce `vim.NIL` types
+  if d == vim.NIL then return nil end
+  return d
+end
+
+local function get_context(token, snippet_type)
+  local trig = token.name:gsub('-', '')
+  return {
+    trig = trig,
+    name = '--' .. token.name,
+    desc = td(token),
+    show_condition = show_condition(token, snippet_type),
   }
 end
 
 local function get_property_snippet(token)
-    return s(get_context(token, 'property'), fmt([[var(--{}{});]], {
+  local value = token['$value']
+  local trig = token.name:gsub('-', '')
+    return s({
+        trig = trig,
+        name = '--' .. token.name,
+        desc = td(token),
+        show_condition = show_condition(token, 'property'),
+      }, fmt([[var(--{}{})]], {
         t(token.name),
         c(1, {
           t'',
-          t(', '..token['$value'])
+          t(', '..value)
         }),
     }))
 end
@@ -69,10 +89,37 @@ local function get_value_snippet(token)
   return s(get_context(token, 'value'), fmt([[--{}: {}]], { t(token.name), i(1) }))
 end
 
+local function get_fallback_snippets(token)
+  local type = token['$type']
+  local value = token['$value']
+  if type ~= 'color' then return {} end
+  local light, dark = unpack(vim.iter(value:gmatch[[#%x+]]):totable())
+  return vim.iter(value:gmatch[[#%x+]])
+    :map(function(hex)
+      local trig = hex:gsub('#', '')
+      return s({
+        trig = trig,
+        name = '--' .. token.name,
+        desc = td(token),
+        show_condition = show_condition(token),
+      }, fmt([[var(--{}{})]], {
+          t(token.name),
+          c(1, {
+            t'',
+            t(', '..value),
+            light and t(', '..light),
+            dark and t(', '..dark)
+          }),
+      }))
+    end)
+    :totable()
+end
+
 local function make_snippets(token)
   return {
-    get_property_snippet(token),
-    get_value_snippet(token),
+    {get_property_snippet(token)},
+    {get_value_snippet(token)},
+    get_fallback_snippets(token),
   }
 end
 
@@ -80,5 +127,5 @@ local rhds_tokens = read_flattened_tokens'~/Developer/redhat-ux/red-hat-design-t
 
 return vim.iter(rhds_tokens)
   :map(make_snippets)
-  :flatten()
+  :flatten(2)
   :totable()
