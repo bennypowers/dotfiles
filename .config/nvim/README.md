@@ -14,4 +14,4 @@ Text editor for nerds
 [commands]: ./lua/commands.lua
 [mappings]: ./lua/mappings.lua
 [options]: ./lua/options.lua
-[lsp]: ./lua/lspconfigs/
+[lsp]: ./lsp/

@@ -1,9 +1,8 @@
 -- Lua
 return { 'gbprod/phpactor.nvim',
-  enabled = true,
+  enabled = false,
   dependencies = {
     'nvim-lua/plenary.nvim',
-    'neovim/nvim-lspconfig'
   },
   build = function()
     require'phpactor.handler.update'()

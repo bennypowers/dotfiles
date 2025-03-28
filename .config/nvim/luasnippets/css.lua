@@ -59,7 +59,7 @@ local function td(token)
 end
 
 local function get_context(token, snippet_type)
-  local trig = token.name:gsub('-', '')
+  local trig = token.name;
   return {
     trig = trig,
     name = '--' .. token.name,
@@ -70,7 +70,7 @@ end
 
 local function get_property_snippet(token)
   local value = token['$value']
-  local trig = token.name:gsub('-', '')
+  local trig = token.name;
     return s({
         trig = trig,
         name = '--' .. token.name,
