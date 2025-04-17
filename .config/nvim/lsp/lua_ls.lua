@@ -39,6 +39,7 @@ return {
       },
       globals = {
         'au',
+        'bit',
         'ag',
         'command',
         'describe',

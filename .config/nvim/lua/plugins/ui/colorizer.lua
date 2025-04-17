@@ -1,5 +1,6 @@
-return {"catgoose/nvim-colorizer.lua",
+return { "catgoose/nvim-colorizer.lua",
     event = "BufReadPre",
+    enabled = false,
     opts = { -- set to setup table
     user_default_options = {
       mode = 'virtualtext',

@@ -36,6 +36,8 @@ local function toggle_term_lazygit()
   if cwd and vim.startswith(cwd, vim.fn.expand'~/.config') then
     term_lazydotfiles:toggle()
   else
+    local Terminal = require 'toggleterm.terminal'.Terminal
+    term_lazygit = term_lazygit or Terminal:new(lazygit_term_options)
     term_lazygit:toggle()
   end
 end

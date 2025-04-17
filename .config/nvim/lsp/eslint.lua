@@ -1,20 +1,5 @@
 local cfg = require 'lsp'
 
-local function eslint_fix_all()
-  local client = unpack(vim.lsp.get_clients { bufnr = 0, name = 'eslint' })
-  if client then
-    client:request_sync('workspace/executeCommand', {
-      command = 'eslint.applyAllFixes',
-      arguments = {
-        {
-          uri = vim.uri_from_bufnr(0),
-          version = vim.lsp.util.buf_versions[0],
-        },
-      },
-    }, nil, 0)
-  end
-end
-
 ---@type vim.lsp.ClientConfig
 return {
   cmd = { 'vscode-eslint-language-server', '--stdio' },
@@ -66,7 +51,20 @@ return {
     end,
   },
   commands = {
-    EslintFixAll = eslint_fix_all
+    EslintFixAll = function ()
+      local client = unpack(vim.lsp.get_clients { bufnr = 0, name = 'eslint' })
+      if client then
+        client:request_sync('workspace/executeCommand', {
+          command = 'eslint.applyAllFixes',
+          arguments = {
+            {
+              uri = vim.uri_from_bufnr(0),
+              version = vim.lsp.util.buf_versions[0],
+            },
+          },
+        }, nil, 0)
+      end
+    end
   },
   settings = {
     validate = 'on',

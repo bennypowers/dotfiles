@@ -1,5 +1,6 @@
 local get_cursor = vim.api.nvim_win_get_cursor
 local get_query = vim.treesitter.query.get
+local lsp = require 'commands.lsp'
 
 command('ClearNotifications', function()
   local has_notify, notify = pcall(require, 'notify')
@@ -48,6 +49,28 @@ command('HighlightRepeats', function(args)
 end, {
   bang = true,
   range = '%'
+})
+
+command('LspStart', lsp.start, {
+  desc = 'Manually launches a language server',
+  nargs = '?',
+  complete = lsp.get_enabled_clients,
+})
+
+command('LspRestart', lsp.restart, {
+  desc = 'Manually restart the given language client(s)',
+  nargs = '?',
+  complete = lsp.get_active_clients,
+})
+
+command('LspStop', lsp.stop, {
+  desc = 'Manually stops the given language client(s)',
+  nargs = '?',
+  complete = lsp.get_active_clients,
+})
+
+command('LspLog', lsp.log, {
+  desc = 'Opens the Nvim LSP client log.',
 })
 
 local get_node_text = vim.treesitter.get_node_text

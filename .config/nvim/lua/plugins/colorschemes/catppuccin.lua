@@ -11,9 +11,9 @@ return { 'catppuccin/nvim',
       which_key = true,
     },
 
-    custom_highlights = function ()
-      local colors = require 'catppuccin.palettes'.get_palette()
+    custom_highlights = function (colors)
       local darken = require 'catppuccin.utils.colors'.darken
+      local blend = require 'catppuccin.utils.colors'.blend
       local dark = {}
 
       for k, v in pairs(colors) do
@@ -21,6 +21,7 @@ return { 'catppuccin/nvim',
           dark[k] = darken(v, 0.5)
         end
       end
+
 
       return {
         Folded = { fg = colors.subtext0, bg = 'NONE' },
@@ -40,6 +41,10 @@ return { 'catppuccin/nvim',
         TelescopePromptTitle = { fg = colors.crust },
         TelescopeResultsTitle = { fg = colors.text },
         TelescopePreviewTitle = { fg = colors.crust },
+
+        DiagnosticErrorLine = { bg = blend(colors.red, colors.surface0, 0.2) },
+        DiagnosticWarningLine = { bg = blend(colors.yellow, colors.surface0, 0.2) },
+
       }
     end
   },

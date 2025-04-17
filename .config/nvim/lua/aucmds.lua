@@ -78,13 +78,11 @@ au('UIEnter', {
 au('OptionSet', {
   group = ag('auto_dark_light', {clear=true}),
   pattern = 'background',
-  callback = function(data)
-    -- print(vim.inspect(data))
-    -- if vim.o.background == 'dark' then
-    --   vim.cmd.colorscheme'catppuccin-mocha'
-    -- else
-    --   vim.cmd.colorscheme'catppuccin-latte'
-    -- end
+  callback = function()
+    local colors = require'catppuccin.palettes'.get_palette()
+    local blend = require 'catppuccin.utils.colors'.blend
+    vim.api.nvim_set_hl(0, 'DiagnosticErrorLine', { bg = blend(colors.red, colors.surface0, 0.2) })
+    vim.api.nvim_set_hl(0, 'DiagnosticWarningLine', { bg = blend(colors.yellow, colors.surface0, 0.2) })
   end
 })
 

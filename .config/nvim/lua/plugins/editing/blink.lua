@@ -1,41 +1,26 @@
-local function next_choice()
-  local luasnip = require'luasnip'
-  if luasnip.choice_active() then
-    luasnip.change_choice(1)
-  elseif luasnip.expand_or_jumpable() then
-    luasnip.expand_or_jump()
-  end
-end
-
-local function prev_choice()
-  local luasnip = require'luasnip'
-  if luasnip.choice_active() then
-    luasnip.change_choice(-1)
-  elseif luasnip.jumpable(-1) then
-    luasnip.jump(-1)
-  end
-end
-
-local function pick_choice()
-  require'luasnip.extras.select_choice'()
-end
-
 return { 'saghen/blink.cmp',
-  version = '1.*',
-  branch = 'fix/luasnip-hidden-snippet',
+  -- version = '1.*',
+  version = '*',
+  enabled = true,
+  -- branch = 'fix/luasnip-hidden-snippet',
   dependencies = { 'L3MON4D3/LuaSnip' },
   opts_extend = { 'sources.default' },
-    ---@module 'blink.cmp'
-    ---@type blink.cmp.Config
+  ---@type blink.cmp.Config
   opts = {
+    snippets = { preset = 'luasnip', },
+    sources = {
+      default = {
+        'lsp',
+        'path',
+        'snippets',
+        'buffer',
+      },
+    },
+    fuzzy = {
+      implementation = 'prefer_rust_with_warning',
+    },
     keymap = {
       preset = 'enter',
-      ['<c-e>'] = { pick_choice },
-      ['<c-j>'] = { next_choice },
-      ['<c-k>'] = { prev_choice },
-    },
-    snippets = {
-      preset = 'luasnip',
     },
     signature = {
       enabled = true,
@@ -65,12 +50,6 @@ return { 'saghen/blink.cmp',
       ghost_text = {
         enabled = true,
       },
-    },
-    sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer' },
-    },
-    fuzzy = {
-      implementation = 'prefer_rust_with_warning',
     },
   },
 }

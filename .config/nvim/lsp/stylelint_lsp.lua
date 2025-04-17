@@ -28,6 +28,9 @@ return {
       autoFixOnFormat = true,
       autoFixOnSave = true,
       cssInJs = false,
+      config = {
+        rules = {},
+      },
     },
   },
 }

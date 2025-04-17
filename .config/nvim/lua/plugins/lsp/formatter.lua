@@ -48,11 +48,11 @@ return {
         -- lua = require'formatter.filetypes.lua'.stylua,
         javascript = {
           require 'formatter.filetypes.javascript'.eslint_d,
-          prettier_d,
+          -- prettier_d,
         },
         typescript = {
           require 'formatter.filetypes.typescript'.eslint_d,
-          prettier_d,
+          -- prettier_d,
         },
         json = require 'formatter.filetypes.json'.fixjson,
       },

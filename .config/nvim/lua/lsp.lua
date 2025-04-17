@@ -26,4 +26,15 @@ function M.config()
   }
 end
 
+---@param markers string|string[]
+function M.required_root_markers(markers)
+  return function(buf, cb)
+    local path = vim.api.nvim_buf_get_name(buf)
+    local tsconfig_dir = vim.fs.dirname(vim.fs.find(markers, { path = path, upward = true })[1])
+    if tsconfig_dir then
+      cb(tsconfig_dir)
+    end
+  end
+end
+
 return M

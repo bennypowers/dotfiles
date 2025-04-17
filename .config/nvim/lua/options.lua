@@ -63,19 +63,19 @@ vim.filetype.add {
 }
 
 vim.diagnostic.config {
-  virtual_lines = true,
+  virtual_lines = {
+    current_line = true,
+  },
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = '🔥',
-      [vim.diagnostic.severity.WARN] = '🚧',
-      [vim.diagnostic.severity.INFO] = '👷',
-      [vim.diagnostic.severity.HINT] = '🙋',
+      [vim.diagnostic.severity.ERROR] = '\u{ea87}',
+      [vim.diagnostic.severity.WARN] = '\u{ea6c}',
+      [vim.diagnostic.severity.INFO] = '\u{ea74}',
+      [vim.diagnostic.severity.HINT] = '💭',
     },
     linehl = {
-      [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
-      [vim.diagnostic.severity.WARN] = 'DiagnosticWarning',
-      [vim.diagnostic.severity.INFO] = 'DiagnosticInformation',
-      [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
+      [vim.diagnostic.severity.ERROR] = 'DiagnosticErrorLine',
+      [vim.diagnostic.severity.WARN] = 'DiagnosticWarningLine',
     },
     numhl = {
       [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
@@ -86,18 +86,40 @@ vim.diagnostic.config {
   }
 }
 
+-- au('LspAttach', {
+--   callback = function(ev)
+--     local client = vim.lsp.get_client_by_id(ev.data.client_id)
+--     if client and client:supports_method('textDocument/completion') then
+--       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+--     end
+--   end,
+-- })
+
+vim.lsp.handlers['window/showMessage'] = function(_, result)
+  vim.notify(vim.inspect(result), ({
+    vim.log.levels.ERROR,
+    vim.log.levels.WARN,
+    vim.log.levels.INFO,
+    vim.log.levels.DEBUG,
+    vim.log.levels.TRACE
+  })[result.type])
+end
+
 vim.lsp.enable {
   'bashls',
   'cssls',
   'custom_elements_ls',
   'emmet_language_server',
   'eslint',
-  'fish_lsp',
+  -- 'fish_lsp',
   'html',
   'jsonls',
   'lua_ls',
   'marksman',
   'stylelint_lsp',
+  'rust_analyzer',
   'vtsls',
   'yamlls',
+  'denols',
+  'design_tokens_ls'
 }

@@ -1,3 +1,24 @@
+local function next_choice()
+  local luasnip = require'luasnip'
+  if luasnip.in_snippet() then
+    luasnip.change_choice(1)
+  end
+end
+
+local function prev_choice()
+  local luasnip = require'luasnip'
+  if luasnip.in_snippet() then
+    luasnip.change_choice(-1)
+  end
+end
+
+local function pick_choice()
+  local luasnip = require'luasnip'
+  if luasnip.in_snippet() then
+    require'luasnip.extras.select_choice'()
+  end
+end
+
 local filetype_extensions = {
   css = { 'css', 'scss' },
   html = { 'css', 'javascript', 'json', 'svg' },
@@ -20,6 +41,12 @@ return { 'L3MON4D3/LuaSnip',
   enabled = true,
   version = '2.*',
   build = 'make install_jsregexp',
+  dependencies = { 'bennypowers/design-tokens.nvim' },
+  keys = {
+    { '<C-j>', next_choice, mode = { 'i' }, desc = 'Luasnip - next choice' },
+    { '<C-k>', prev_choice, mode = { 'i' }, desc = 'Luasnip - prev choice' },
+    { '<C-e>', pick_choice, mode = { 'i' }, desc = 'Luasnip - pick choice' },
+  },
   config = function()
     local ls = require'luasnip'
     local ft = require'luasnip.extras.filetype_functions'

@@ -4,7 +4,7 @@ local cfg = require'lsp'
 ---@type vim.lsp.ClientConfig
 return {
   cmd = { 'vscode-html-language-server', '--stdio' },
-  filetypes = { 'html', 'templ', 'njk', 'markdown', 'svg' },
+  filetypes = { 'html', 'templ', 'njk', 'svg' },
   root_markers = { 'package.json', '.git' },
   single_file_support = true,
   init_options = {
