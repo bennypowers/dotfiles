@@ -1,6 +1,14 @@
 {
     "overrides": [
         {
+            "wmClass": "org.gnome.Aisleriot",
+            "mode": "tile"
+        },
+        {
+            "wmTitle": "Klondike",
+            "mode": "tile"
+        },
+        {
             "wmClass": "jetbrains-toolbox",
             "mode": "float"
         },
@@ -50,23 +58,8 @@
             "mode": "float"
         },
         {
-            "wmClass": "hu.irl.cameractrls",
-            "wmTitle": "/dev/v4l/by-id/usb-046d_Brio_300_2246CFA11038-video-index0",
-            "mode": "float"
-        },
-        {
             "wmClass": "gnome-boxes",
             "wmTitle": "Boxes",
-            "mode": "float"
-        },
-        {
-            "wmClass": "Tuple",
-            "wmTitle": "Tuple",
-            "mode": "float"
-        },
-        {
-            "wmClass": "Tuple",
-            "wmTitle": "tuple",
             "mode": "float"
         },
         {
@@ -109,18 +102,7 @@
             "mode": "float"
         },
         {
-            "wmClass": "Chromium-browser",
-            "wmTitle": "localhost:8001/?wtr-session-id=LNEkGH5_mHMMaFpnfvKDt - Chromium",
-            "mode": "float"
-        },
-        {
-            "wmClass": "Chromium-browser",
-            "wmTitle": "localhost:8001/?wtr-session-id=eFXhvYSPvMaYpKrCZbWti - Chromium",
-            "mode": "float"
-        },
-        {
             "wmClass": "org.raspberrypi.rpi-imager",
-            "wmTitle": "Raspberry Pi Imager v1.8.5",
             "mode": "float"
         },
         {
@@ -164,31 +146,6 @@
             "mode": "float"
         },
         {
-            "wmClass": "org.gnome.NautilusPreviewer",
-            "wmTitle": "CIMG0650.JPG",
-            "mode": "float"
-        },
-        {
-            "wmClass": "org.gnome.Nautilus",
-            "wmTitle": "Search for “November 2007”",
-            "mode": "float"
-        },
-        {
-            "wmClass": "org.gnome.NautilusPreviewer",
-            "wmTitle": "IMG_2489.JPG",
-            "mode": "float"
-        },
-        {
-            "wmClass": "org.mozilla.firefox",
-            "wmTitle": "NVMe SSD boot with the Raspberry Pi 5 | Jeff Geerling — Mozilla Firefox",
-            "mode": "float"
-        },
-        {
-            "wmClass": "org.gnome.NautilusPreviewer",
-            "wmTitle": "astronaut1.png",
-            "mode": "float"
-        },
-        {
             "wmClass": "org.gnome.Mahjongg",
             "wmTitle": "Mahjongg",
             "mode": "float"
@@ -196,21 +153,6 @@
         {
             "wmClass": "Bitwarden",
             "wmTitle": "Bitwarden",
-            "mode": "float"
-        },
-        {
-            "wmClass": "evince",
-            "wmTitle": "gpdqth8j.pdf",
-            "mode": "float"
-        },
-        {
-            "wmClass": "evince",
-            "wmTitle": "masleka-mar7.pdf",
-            "mode": "float"
-        },
-        {
-            "wmClass": "org.mozilla.Thunderbird",
-            "wmTitle": "Write: (no subject) - Thunderbird",
             "mode": "float"
         },
         {
@@ -229,10 +171,6 @@
         },
         {
             "wmClass": "com.quexten.Goldwarden.quickaccess",
-            "mode": "float"
-        },
-        {
-            "wmClass": "Jellyfin Media Player",
             "mode": "float"
         },
         {
@@ -273,6 +211,34 @@
         },
         {
             "wmClass": "io.github.ronniedroid.concessio",
+            "mode": "float"
+        },
+        {
+            "wmClass": "me.dusansimic.DynamicWallpaper",
+            "mode": "float"
+        },
+        {
+            "wmClass": "nl.emphisia.icon",
+            "mode": "float"
+        },
+        {
+            "wmClass": "org.gnome.design.IconLibrary",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.github.nate_xyz.Chromatic",
+            "mode": "float"
+        },
+        {
+            "wmClass": "com.vixalien.sticky",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.github.herve4m.Length",
+            "mode": "float"
+        },
+        {
+            "wmClass": "io.github.tfuxu.floodit",
             "mode": "float"
         }
     ]
