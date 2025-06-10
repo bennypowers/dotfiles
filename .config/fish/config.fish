@@ -9,6 +9,7 @@ set -x LANG en_US.UTF-8
 
 set -x SHELL /usr/bin/fish
 set -x GIT_EDITOR nvim
+set -x QT_QPA_PLATFORMTHEME qt5ct
 
 set -gx VISUAL nvim
 set -gx EDITOR nvim
@@ -84,7 +85,7 @@ alias ssk="kitten ssh"
 alias pbcopy="xsel --input --clipboard"
 alias pbpaste="xsel --output --clipboard"
 alias makearm64="make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-"
-
+alias codium="flatpak run com.vscodium.codium"
 switch (uname)
     case Linux
       alias wezterm="flatpak run org.wezfurlong.wezterm"
@@ -125,3 +126,14 @@ function fish_greeting
     colorscript --random
   end
 end
+
+# pnpm
+set -gx PNPM_HOME "/var/home/bennyp/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
