@@ -15,7 +15,6 @@ return {
   capabilities = cfg.capabilities({
     documentFormattingProvider = true,
   }),
-  on_attach = cfg.on_attach,
   settings = {
     html = {
       format = {

@@ -26,7 +26,8 @@ return { 'kevinhwang91/nvim-ufo',
     vim.opt.foldenable = true
   end,
   opts = {
-    provider_selector = function()
+    provider_selector = function(bufnr, filetype, buftype)
+      if vim.startswith(filetype, "dapui") then return nil end
       return { 'treesitter', 'indent' }
     end
   },

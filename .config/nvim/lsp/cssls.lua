@@ -1,5 +1,3 @@
-local cfg = require'lsp'
-
 ---https://github.com/hrsh7th/vscode-langservers-extracted
 ---
 ---`css-languageserver` can be installed via `npm`:
@@ -12,8 +10,7 @@ local cfg = require'lsp'
 ---install a snippet plugin and add the following override to your language client capabilities during setup.
 ---
 ---```lua
------Enable (broadcasting) snippet capability for completion
----local capabilities = vim.lsp.protocol.make_client_capabilities()
+-----Enable (broadcasting) snippet capability for completion local capabilities = vim.lsp.protocol.make_client_capabilities()
 ---capabilities.textDocument.completion.completionItem.snippetSupport = true
 ---
 ---require'lspconfig'.cssls.setup {
@@ -42,5 +39,4 @@ return {
     scss = { validate = true, lint = false },
     less = { validate = true, lint = false },
   },
-  on_attach = cfg.on_attach,
 }

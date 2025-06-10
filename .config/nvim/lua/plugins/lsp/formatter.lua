@@ -8,7 +8,7 @@ local ignores = {
 local function prettier_package_json_key_exists(project_root)
   local ok, has_prettier_key = pcall(function()
     local package_json_blob = table.concat(vim.fn.readfile(require 'lspconfig.util'.path.join(project_root,
-      '/package.json')))
+                                                                                              '/package.json')))
     local package_json = vim.json.decode(package_json_blob) or {}
     return not not package_json.prettier
   end)
@@ -30,6 +30,7 @@ local function prettier_d()
     or require 'lspconfig.util'.find_package_json_ancestor(startpath))
   if prettier_config_file_exists(project_root)
       or prettier_package_json_key_exists(project_root) then
+    vim.notify 'prettier'
     return require 'formatter.defaults.prettierd' ()
   end
 end
@@ -51,8 +52,19 @@ return {
           -- prettier_d,
         },
         typescript = {
-          require 'formatter.filetypes.typescript'.eslint_d,
-          -- prettier_d,
+          function()
+            local cwd = vim.fn.getcwd()
+            local is_deno = vim.fn.filereadable(cwd .. '/deno.json') == 1
+                or vim.fn.filereadable(cwd .. '/deno.jsonc') == 1
+
+            if is_deno then
+              return { exe = 'deno', args = { 'fmt' }, stdin = false }
+            elseif prettier_config_file_exists(cwd) then
+              return prettier_d()
+            else
+              return require 'formatter.filetypes.typescript'.eslint_d()
+            end
+          end,
         },
         json = require 'formatter.filetypes.json'.fixjson,
       },

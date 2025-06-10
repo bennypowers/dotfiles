@@ -1,4 +1,5 @@
-return { 'catppuccin/nvim',
+return {
+  'catppuccin/nvim',
   enabled = true,
   name = 'catppuccin',
   priority = 1000,
@@ -11,9 +12,10 @@ return { 'catppuccin/nvim',
       which_key = true,
     },
 
-    custom_highlights = function (colors)
+    custom_highlights = function(colors)
       local darken = require 'catppuccin.utils.colors'.darken
       local blend = require 'catppuccin.utils.colors'.blend
+      local opacity = require 'catppuccin.utils.colors'.opacity
       local dark = {}
 
       for k, v in pairs(colors) do
@@ -24,26 +26,26 @@ return { 'catppuccin/nvim',
 
 
       return {
-        Folded = { fg = colors.subtext0, bg = 'NONE' },
+        Folded                 = { fg = colors.subtext0, bg = 'NONE' },
 
-        ModesCopy   = { bg = dark.orange, fg = colors.orange },
-        ModesDelete = { bg = dark.red, fg = colors.red },
-        ModesInsert = { bg = dark.blue, fg = colors.blue },
-        ModesVisual = { bg = dark.purple, fg = colors.purple },
+        ModesCopy              = { bg = dark.orange, fg = colors.orange },
+        ModesDelete            = { bg = dark.red, fg = colors.red },
+        ModesInsert            = { bg = dark.blue, fg = colors.blue },
+        ModesVisual            = { bg = dark.purple, fg = colors.purple },
 
-        TelescopePromptPrefix = { bg = colors.crust },
-        TelescopePromptNormal = { bg = colors.crust },
+        TelescopePromptPrefix  = { bg = colors.crust },
+        TelescopePromptNormal  = { bg = colors.crust },
         TelescopeResultsNormal = { bg = colors.mantle },
         TelescopePreviewNormal = { bg = colors.crust },
-        TelescopePromptBorder = { bg = colors.crust, fg = colors.crust },
+        TelescopePromptBorder  = { bg = colors.crust, fg = colors.crust },
         TelescopeResultsBorder = { bg = colors.mantle, fg = colors.crust },
         TelescopePreviewBorder = { bg = colors.crust, fg = colors.crust },
-        TelescopePromptTitle = { fg = colors.crust },
-        TelescopeResultsTitle = { fg = colors.text },
-        TelescopePreviewTitle = { fg = colors.crust },
+        TelescopePromptTitle   = { fg = colors.crust },
+        TelescopeResultsTitle  = { fg = colors.text },
+        TelescopePreviewTitle  = { fg = colors.crust },
 
-        DiagnosticErrorLine = { bg = blend(colors.red, colors.surface0, 0.2) },
-        DiagnosticWarningLine = { bg = blend(colors.yellow, colors.surface0, 0.2) },
+        DiagnosticErrorLine    = { bg = blend(colors.red, colors.mantle, 0.075) },
+        DiagnosticWarningLine  = { bg = blend(colors.yellow, colors.mantle, 0.1) },
 
       }
     end

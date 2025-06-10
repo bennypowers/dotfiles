@@ -15,8 +15,7 @@ local m = require 'luasnip.extras'.m
 local lambda = require 'luasnip.extras'.l
 
 local function is_github_issue_template()
-  local file_name = vim.fn.expand('%')
-  print(file_name)
+  local file_name = vim.fn.expand '%'
   return file_name:find [[.github/ISSUE_TEMPLATE]]
 end
 
@@ -26,10 +25,10 @@ local gh_form_markdown = s('form-markdown', fmt([[
     value: |
       {}
 ]], {
-  i(1, 'insert markdown body'),
-}), {
-  show_condition = is_github_issue_template
-})
+                                                  i(1, 'insert markdown body'),
+                                                }), {
+                             show_condition = is_github_issue_template
+                           })
 
 local gh_form_input = s('form-input', fmt([[
 - type: input
@@ -44,18 +43,18 @@ local gh_form_input = s('form-input', fmt([[
   validations:
     required: {}
   ]], {
-  i(1),
-  i(2),
-  i(3),
-  i(4),
-  i(5),
-  c(6, {
-    t 'true',
-    t 'false',
-  }),
-}), {
-  show_condition = is_github_issue_template
-})
+                                            i(1),
+                                            i(2),
+                                            i(3),
+                                            i(4),
+                                            i(5),
+                                            c(6, {
+                                              t 'true',
+                                              t 'false',
+                                            }),
+                                          }), {
+                          show_condition = is_github_issue_template
+                        })
 
 local gh_form_textarea = s('form-textarea', fmt([[
 - type: textarea
@@ -71,26 +70,26 @@ local gh_form_textarea = s('form-textarea', fmt([[
   validations:
     required: {}
   ]], {
-  i(1),
-  i(2),
-  i(3),
-  i(4),
-  i(5),
-  c(6, {
-    t 'HTML',
-    t 'CSS',
-    t 'SCSS',
-    t 'JS',
-    t 'TS',
-    t 'JSON',
-  }),
-  c(7, {
-    t 'true',
-    t 'false',
-  }),
-}), {
-  show_condition = is_github_issue_template
-})
+                                                  i(1),
+                                                  i(2),
+                                                  i(3),
+                                                  i(4),
+                                                  i(5),
+                                                  c(6, {
+                                                    t 'HTML',
+                                                    t 'CSS',
+                                                    t 'SCSS',
+                                                    t 'JS',
+                                                    t 'TS',
+                                                    t 'JSON',
+                                                  }),
+                                                  c(7, {
+                                                    t 'true',
+                                                    t 'false',
+                                                  }),
+                                                }), {
+                             show_condition = is_github_issue_template
+                           })
 
 local gh_form_dropdown = s('form-dropdown', fmt([[
 - type: dropdown
@@ -105,21 +104,21 @@ local gh_form_dropdown = s('form-dropdown', fmt([[
   validations:
     required: {}
   ]], {
-  i(1),
-  i(2),
-  i(3),
-  c(4, {
-    t 'true',
-    t 'false',
-  }),
-  i(5),
-  c(6, {
-    t 'true',
-    t 'false',
-  }),
-}), {
-  show_condition = is_github_issue_template
-})
+                                                  i(1),
+                                                  i(2),
+                                                  i(3),
+                                                  c(4, {
+                                                    t 'true',
+                                                    t 'false',
+                                                  }),
+                                                  i(5),
+                                                  c(6, {
+                                                    t 'true',
+                                                    t 'false',
+                                                  }),
+                                                }), {
+                             show_condition = is_github_issue_template
+                           })
 
 local gh_form_checkboxes = s('form-checkboxes', fmt([[
 - type: checkboxes
@@ -132,17 +131,17 @@ local gh_form_checkboxes = s('form-checkboxes', fmt([[
       - label: {}
         required: {}
   ]], {
-  i(1),
-  i(2),
-  i(3),
-  i(4),
-  c(5, {
-    t 'true',
-    t 'false',
-  }),
-}), {
-  show_condition = is_github_issue_template
-})
+                                                      i(1),
+                                                      i(2),
+                                                      i(3),
+                                                      i(4),
+                                                      c(5, {
+                                                        t 'true',
+                                                        t 'false',
+                                                      }),
+                                                    }), {
+                               show_condition = is_github_issue_template
+                             })
 
 return {
   gh_form_markdown,

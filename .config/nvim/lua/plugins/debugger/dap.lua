@@ -1,3 +1,29 @@
+local get_args = function()
+  local cmd_args = vim.fn.input'CommandLine Args:'
+  local params = {}
+  for param in string.gmatch(cmd_args, "[^%s]+") do
+    table.insert(params, param)
+  end
+  return params
+end;
+
+au({ "BufWinEnter", "WinEnter", "WinLeave" }, {
+  desc = "Set options on DAP windows",
+  group = vim.api.nvim_create_augroup("set_dap_win_options", { clear = true }),
+  pattern = { "\\[dap-repl*\\]", "DAP *" },
+  callback = function(args)
+    local win = vim.fn.bufwinid(args.buf)
+    vim.schedule(function()
+      if not vim.api.nvim_win_is_valid(win) then return end
+      vim.opt_local.number = false
+      vim.opt_local.relativenumber = false
+      vim.opt_local.fillchars = ""
+      vim.opt_local.foldlevel = 0
+      vim.opt_local.foldenable = false
+    end)
+  end,
+})
+
 return { 'mfussenegger/nvim-dap',
   dependencies = {
     { 'nvim-neotest/nvim-nio' },
@@ -10,6 +36,7 @@ return { 'mfussenegger/nvim-dap',
           },
           opts = {} },
     { 'mxsdev/nvim-dap-vscode-js' },
+    { 'leoluz/nvim-dap-go' }
   },
 
   -- stylua: ignore
@@ -35,29 +62,14 @@ return { 'mfussenegger/nvim-dap',
   },
 
   config = function(_, opts)
+    vim.fn.sign_define('DapBreakpoint', { text = '🔴' })
+    vim.fn.sign_define('DapBreakpointRejected', { text = '⭕' })
+    vim.fn.sign_define('DapBreakpointCondition', { text = '🟠' })
+    vim.fn.sign_define('DapLogPoint', { text = '🔵' })
+    vim.fn.sign_define('DapStopped', { text = '➡️' })
     vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
     local dap = require'dap'
-
-    local mason_pkg_path = vim.fn.glob(vim.fn.stdpath 'data' .. '/mason/packages/')
-
-    -- dap.adapters.node = {
-    --   type = 'executable',
-    --   command = 'node',
-    --   args = { mason_pkg_path .. 'js-debug-adapter/js-debug/src/dapDebugServer.js' }
-    -- }
-
-    require'dap-vscode-js'.setup({
-      -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
-      debugger_path = '~/.local/share/nvim/masoin/packages/js-debug-adapter/js-debug-adapter', -- Path to vscode-js-debug installation.
-      debugger_cmd = { 'js-debug-adapter' }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
-      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
-      node_path = 'node',
-      -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
-      -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
-      -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
-    })
-
 
     dap.adapters["pwa-node"] = {
       type = "server",
@@ -69,14 +81,16 @@ return { 'mfussenegger/nvim-dap',
       }
     }
 
-    local dapui = require'dapui'
-    dap.listeners.after.event_initialized['dapui_config'] = function()
+
+    dap.listeners.after.event_initialized.dapui_config = function()
+      local dapui = require'dapui'
       dapui.open()
     end
-    dap.listeners.before.event_terminated['dapui_config'] = function()
-      dapui.close()
-    end
-    dap.listeners.before.event_exited['dapui_config'] = function()
+    -- dap.listeners.before.event_terminated['dapui_config'] = function()
+    --   dapui.close()
+    -- end
+    dap.listeners.before.event_exited.dapui_config = function()
+      local dapui = require'dapui'
       dapui.close()
     end
 
@@ -86,5 +100,26 @@ return { 'mfussenegger/nvim-dap',
     vscode.json_decode = function(str)
       return vim.json.decode(json.json_strip_comments(str))
     end
+
+    -- local mason_pkg_path = vim.fn.glob(vim.fn.stdpath 'data' .. '/mason/packages/')
+    -- dap.adapters.node = {
+    --   type = 'executable',
+    --   command = 'node',
+    --   args = { mason_pkg_path .. 'js-debug-adapter/js-debug/src/dapDebugServer.js' }
+    -- }
+
+    require'dap-go'.setup()
+
+    require'dap-vscode-js'.setup({
+      -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+      debugger_path = '~/.local/share/nvim/mason/packages/js-debug-adapter/js-debug-adapter', -- Path to vscode-js-debug installation.
+      debugger_cmd = { 'js-debug-adapter' }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
+      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+      node_path = 'node',
+      -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
+      -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
+      -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
+    })
+
   end,
 }

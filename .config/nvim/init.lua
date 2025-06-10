@@ -10,10 +10,10 @@ require 'mappings'
 
 require 'lazy'.setup('plugins', {
   dev = {
-    path = '~/Developer',
+    path = '~/Projects',
     patterns = { 'bennypowers' },
     fallback = true,
   }
 })
 
-vim.cmd.colorscheme'catppuccin'
+vim.cmd.colorscheme 'catppuccin'

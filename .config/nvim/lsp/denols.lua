@@ -1,5 +1,5 @@
 local lsp = vim.lsp
-local cfg = require'lsp'
+local cfg = require 'lsp'
 
 local function virtual_text_document_handler(uri, res, client)
   if not res then
@@ -56,7 +56,7 @@ return {
     'typescript'
   },
   root_markers = { 'deno.json', 'deno.jsonc', '.git' },
-  root_dir = cfg.required_root_markers {'deno.json', 'deno.jsonc'},
+  root_dir = cfg.required_root_markers { 'deno.json', 'deno.jsonc' },
   settings = {
     deno = {
       lint = true,

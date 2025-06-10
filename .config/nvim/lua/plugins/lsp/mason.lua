@@ -5,10 +5,9 @@ return {
   dependencies = {
     -- 'typescript',
     'nvim-lua/lsp-status.nvim',
-    'b0o/schemastore.nvim', -- json schema support
-    'onsails/lspkind-nvim', -- fancy icons for lsp AST types and such
-    { 'lukas-reineke/lsp-format.nvim', opts = {} },
-    { 'Bilal2453/luvit-meta',          lazy = true }, -- optional `vim.uv` typings
+    'b0o/schemastore.nvim',                           -- json schema support
+    'onsails/lspkind-nvim',                           -- fancy icons for lsp AST types and such
+    { 'Bilal2453/luvit-meta', lazy = true },          -- optional `vim.uv` typings
     {
       'folke/lazydev.nvim',
       ft = 'lua', -- only load on lua files

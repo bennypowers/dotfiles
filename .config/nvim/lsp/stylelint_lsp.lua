@@ -1,5 +1,3 @@
-local cfg = require'lsp'
-
 ---stylelint language server
 ---@type vim.lsp.ClientConfig
 return {
@@ -22,7 +20,6 @@ return {
     'stylelint.config.cjs',
     'stylelint.config.js',
   },
-  on_attach = cfg.on_attach,
   settings = {
     stylelintplus = {
       autoFixOnFormat = true,

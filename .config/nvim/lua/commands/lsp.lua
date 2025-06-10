@@ -3,30 +3,29 @@ local M = {}
 ---@param arg string
 function M.get_enabled_clients(arg)
   return vim.iter(vim.lsp._enabled_configs)
-    ---@param config { resolved_config: vim.lsp.Config }
-    :filter(function(config)
-      if arg and arg:len() > 0 then
-        return vim.startswith(config.resolved_config.name, arg)
-      else
-        return true
-      end
-    end)
-    :totable()
+      ---@param config { resolved_config: vim.lsp.Config }
+      :filter(function(config)
+        if arg and arg:len() > 0 then
+          return vim.startswith(config.resolved_config.name, arg)
+        else
+          return true
+        end
+      end)
+      :totable()
 end
 
 ---@param arg string
 function M.get_active_clients(arg)
   return vim.iter(vim.lsp.get_clients { bufnr = 0 })
-    :map(function(x) print(x.name); return x end)
-    ---@param client vim.lsp.Client
-    :filter(function(client)
-      if arg and arg:len() > 0 then
-        return vim.startswith(client.name, arg)
-      else
-        return true
-      end
-    end)
-    :totable()
+      ---@param client vim.lsp.Client
+      :filter(function(client)
+        if arg and arg:len() > 0 then
+          return vim.startswith(client.name, vim.trim(arg))
+        else
+          return true
+        end
+      end)
+      :totable()
 end
 
 ---@param info vim.api.keyset.create_user_command.command_args
@@ -68,11 +67,11 @@ function M.restart(info)
     100,
     vim.schedule_wrap(function()
       for client_name, tuple in pairs(detach_clients) do
-        if require('lspconfig.configs')[client_name] then
+        if require 'lspconfig.configs'[client_name] then
           local client, attached_buffers = unpack(tuple)
           if client.is_stopped() then
             for _, buf in pairs(attached_buffers) do
-              require('lspconfig.configs')[client_name].launch(buf)
+              require 'lspconfig.configs'[client_name].launch(buf)
             end
             detach_clients[client_name] = nil
           end
@@ -101,13 +100,10 @@ function M.stop(info)
   if #args == 0 then
     clients = vim.lsp.get_clients { bufnr = 0 }
   else
-    print(args)
     clients = vim.lsp.get_clients { name = vim.trim(args) }
   end
 
-  print(vim.inspect(clients))
   for _, client in ipairs(clients) do
-    print(client.name)
     client:stop(force)
   end
 end
@@ -115,4 +111,5 @@ end
 function M.log()
   vim.cmd(string.format('tabnew %s', vim.lsp.get_log_path()))
 end
+
 return M

@@ -3,6 +3,20 @@ local cfg = require 'lsp'
 ---@type vim.lsp.ClientConfig
 return {
   cmd = { 'vscode-eslint-language-server', '--stdio' },
+  root_dir = cfg.required_root_markers {
+    '.eslintrc',
+    '.eslintrc.js',
+    '.eslintrc.cjs',
+    '.eslintrc.yaml',
+    '.eslintrc.yml',
+    '.eslintrc.json',
+    'eslint.config.js',
+    'eslint.config.mjs',
+    'eslint.config.cjs',
+    'eslint.config.ts',
+    'eslint.config.mts',
+    'eslint.config.cts',
+  },
   filetypes = {
     'javascript', 'javascriptreact',
     'typescript', 'typescriptreact',
@@ -24,7 +38,6 @@ return {
     'package.json',
     '.git',
   },
-  on_attach = cfg.on_attach,
   capabilities = cfg.capabilities {
     documentFormattingProvider = true,
   },
@@ -51,18 +64,18 @@ return {
     end,
   },
   commands = {
-    EslintFixAll = function ()
+    EslintFixAll = function()
       local client = unpack(vim.lsp.get_clients { bufnr = 0, name = 'eslint' })
       if client then
         client:request_sync('workspace/executeCommand', {
-          command = 'eslint.applyAllFixes',
-          arguments = {
-            {
-              uri = vim.uri_from_bufnr(0),
-              version = vim.lsp.util.buf_versions[0],
-            },
-          },
-        }, nil, 0)
+                              command = 'eslint.applyAllFixes',
+                              arguments = {
+                                {
+                                  uri = vim.uri_from_bufnr(0),
+                                  version = vim.lsp.util.buf_versions[0],
+                                },
+                              },
+                            }, nil, 0)
       end
     end
   },
@@ -78,7 +91,7 @@ return {
       mode = 'all',
       rules = { '!debugger', '!no-only-tests/*' },
     },
-    format = true,
+    format = false,
     quiet = false,
     onIgnoredFiles = 'off',
     rulesCustomizations = {},

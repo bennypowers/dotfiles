@@ -9,15 +9,24 @@ function M.capabilities(caps)
 end
 
 function M.on_attach(client, bufnr)
-  require 'lsp-format'.on_attach(client, bufnr)
+  -- require 'lsp-format'.on_attach(client, bufnr)
   require 'lsp-status'.on_attach(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     require 'nvim-navic'.attach(client, bufnr)
   end
   if client.server_capabilities.inlayHintProvider then
-      vim.lsp.inlay_hint.enable(true)
+    vim.lsp.inlay_hint.enable(true)
   end
 end
+
+au('LspAttach', {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client then
+      M.on_attach(client, args.buf)
+    end
+  end
+})
 
 function M.config()
   return {

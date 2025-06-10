@@ -17,7 +17,6 @@ return {
   cmd = { 'vtsls', '--stdio' },
   root_markers = {'tsconfig.json', 'package.json', 'jsconfig.json', '.git'},
   root_dir = cfg.required_root_markers {'jsconfig.json', 'tsconfig.json'},
-  on_attach = cfg.on_attach,
   filetypes = {
     'javascript',
     'javascriptreact',
