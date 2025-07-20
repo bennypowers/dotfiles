@@ -1,5 +1,5 @@
 return { 'goolord/alpha-nvim',
-  enabled = true,
+  enabled = false,
   dev = true,
   branch = 'patch-3',
   dependencies = {

@@ -1,5 +1,5 @@
 return { 'kevinhwang91/nvim-ufo',
-  enabled = true,
+  enabled = false,
   keys = {
     { 'zc' },
     { 'zo' },

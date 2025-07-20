@@ -21,7 +21,7 @@ end
 -- 🔭 Telescope - generic fuzzy finder with popup window
 return {
   'nvim-telescope/telescope.nvim',
-  enabled = true,
+  enabled = false,
   name = 'telescope',
   lazy = true,
   cmd = { 'Telescope' },

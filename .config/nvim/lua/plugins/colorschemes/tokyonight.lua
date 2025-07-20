@@ -1,13 +1,11 @@
 return { 'folke/tokyonight.nvim',
-  enabled = false,
-  lazy = true,
+  enabled = true,
+  lazy = false,
+  priority = 1000,
   opts = {
-    on_highlights = function(hl, colors)
-      local util = require 'tokyonight.util'
-      hl.ModesCopy = util.lighten(colors.orange, 0.15)
-      hl.ModesDelete = util.lighten(colors.red, 0.15)
-      hl.ModesInsert = 'TRANSPARENT'
-      hl.ModesVisual = util.lighten(colors.purple, 0.15)
-    end
+    style = 'moon',
+    light_style = 'day',
+    transparent = true,
+    lualine_bold = true,
   }
 }

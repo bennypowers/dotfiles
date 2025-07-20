@@ -9,14 +9,12 @@ return { 'akinsho/bufferline.nvim',
     require 'bufferline'.setup {
       highlights = require'catppuccin.groups.integrations.bufferline'.get(),
       options = {
-        -- mode = 'tabs',
-        separator_style = 'slant',
-        numbers = 'none',
+        separator_style = 'slope',
         diagnostics = 'nvim_lsp',
         show_buffer_icons = true,
-        show_close_icon = true,
-        right_mouse_command = 'bdelete',
-        close_command = 'bdelete',
+        -- show_close_icon = true,
+        middle_mouse_command = 'bdelete! %d',
+        close_command = 'bdelete! %d',
         custom_filter = function(bufnr)
           local filetype = vim.bo[bufnr].filetype
           local filename = vim.fn.bufname(bufnr)

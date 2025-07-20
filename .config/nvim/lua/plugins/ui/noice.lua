@@ -3,7 +3,7 @@ return { 'folke/noice.nvim',
   event = 'VeryLazy',
   dependencies = {
     'MunifTanjim/nui.nvim',
-    'rcarriga/nvim-notify',
+    -- 'rcarriga/nvim-notify',
   },
   config = function()
     if vim.fn.has'gui_running' == 0 then
@@ -43,7 +43,7 @@ return { 'folke/noice.nvim',
           },
         },
       }
-      require'telescope'.load_extension'noice'
+      -- require'telescope'.load_extension'noice'
     end
   end,
 }
