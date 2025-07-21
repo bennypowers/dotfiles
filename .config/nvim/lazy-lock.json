@@ -16,7 +16,7 @@
   "gemini.nvim": { "branch": "master", "commit": "23c25e604d4afced87afca3f169f17a00989b4a7" },
   "gentoo-syntax": { "branch": "master", "commit": "1b3a81ec62e5c843245dc431be0fe072add7eca8" },
   "git-conflict.nvim": { "branch": "main", "commit": "a1badcd070d176172940eb55d9d59029dad1c5a6" },
-  "gitsigns.nvim": { "branch": "main", "commit": "bb808fc7376ed7bac0fbe8f47b83d4bf01738167" },
+  "gitsigns.nvim": { "branch": "main", "commit": "7010000889bfb6c26065e0b0f7f1e6aa9163edd9" },
   "goto-preview": { "branch": "main", "commit": "d1faf6ea992b5bcaaaf2c682e1aba3131a01143e" },
   "haskell-tools.nvim": { "branch": "master", "commit": "8332df69f30cc66d6c166d282ee9b3f69cef0dc4" },
   "hologram.nvim": { "branch": "main", "commit": "f5194f71ec1578d91b2e3119ff08e574e2eab542" },

@@ -19,6 +19,8 @@ return {
           'LazyVim',
           -- When relative, you can also provide a path to the library in the plugin dir
           'luvit-meta/library', -- see below
+          vim.fn.stdpath'data'..'/lazy',
+          { path = 'snacks.nvim', words = { 'Snacks' } }
         },
       },
     },

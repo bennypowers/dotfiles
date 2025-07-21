@@ -50,7 +50,8 @@ return {
       workspace = {
         library = {
           '/usr/share/nvim/runtime/lua',
-          '${3rd}/luv/library'
+          '${3rd}/luv/library',
+          vim.fn.stdpath'data'..'/lazy',
         },
       }
     },

@@ -11,6 +11,15 @@ local function lazygit()
   end
 end
 
+au('User', {
+  pattern = 'OilActionsPost',
+  callback = function(event)
+      if event.data.actions.type == 'move' then
+          Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
+      end
+  end,
+})
+
 return { 'folke/snacks.nvim',
   priority = 1000,
   lazy = false,
@@ -48,6 +57,11 @@ return { 'folke/snacks.nvim',
       render = 'minimal',
     },
     scope = {},
-    statuscolumn = {},
+    statuscolumn = {
+      folds = {
+        open = true,
+        git_hl = true,
+      }
+    },
   }
 }
