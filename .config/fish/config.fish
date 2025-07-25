@@ -122,7 +122,7 @@ end
 
 # eye candy
 function fish_greeting
-  if status is-interactive; and type -q colorscript
+  if status is-interactive
     colorscript --random
   end
 end

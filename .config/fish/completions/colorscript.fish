@@ -1,78 +1,31 @@
-# Completions for fish shell
-# This file should go in /usr/share/fish/vendor_completions.d
-# according to https://fishshell.com/docs/current/completions.html
-# function
+# fish completion for colorscript
 
-set dir_colorscripts "/opt/shell-color-scripts/colorscripts"
-set dir_blacklisted_colorscripts "$dir_colorscripts/blacklisted"
-
-# Lists all filenames in a given directory
-function list_filenames
-    set dir $argv[1]
-    if command -q find
-        # use find if available
-        set files (command find $dir -maxdepth 1 -type f)
-    else if command -q ls
-        # use ls if available
-        set files (command ls $dir)
-    else
-        # cannot provide coloscript name autocompletions for args of exec, blacklist, and unblacklist
-        return
-    end
-
-    for file in $files
-        echo (basename $file)
+function __fish_colorscript_get_scripts
+    set -l SCRIPTDIR (colorscript -S | string trim)
+    if test -d $SCRIPTDIR
+        ls -1p $SCRIPTDIR | grep -v '/$'
     end
 end
 
-# List all colorscript names
-function cs_names
-    echo (list_filenames $dir_colorscripts | string collect)
+function __fish_colorscript_get_animation_names
+    set -l SCRIPTDIR (colorscript -S | string trim)
+    if test -d $SCRIPTDIR
+        find $SCRIPTDIR -type f -regextype posix-extended -regex '.*\.[0-9]+\..*' | sed -E 's/.*\/(.*)\.[0-9]+\..*$/\1/' | sort -u
+    end
 end
 
-# List all blacklisted colorscript names
-function blacklisted_cs_names
-    echo (list_filenames $dir_blacklisted_colorscripts | string collect)
-end
+# Main command completions
+set -l subcommands "-h --help -l --list -r --random -e --exec --animate generate -d --delay -S --show-script-dir"
+complete -c colorscript -n "not __fish_seen_subcommand_from $subcommands" -s h -l help -d "Show this help message"
+complete -c colorscript -n "not __fish_seen_subcommand_from $subcommands" -s l -l list -d "List all color scripts"
+complete -c colorscript -n "not __fish_seen_subcommand_from $subcommands" -s r -l random -d "Run a random color script"
+complete -c colorscript -n "not __fish_seen_subcommand_from $subcommands" -s e -l exec -d "Execute a specific color script by name" -r
+complete -c colorscript -n "not __fish_seen_subcommand_from $subcommands" -l animate -d "Animate a sequence of colorscripts"
+complete -c colorscript -n "not __fish_seen_subcommand_from $subcommands" -a "generate" -d "Generate a new colorscript from a sprite sheet" -r
+complete -c colorscript -n "not __fish_seen_subcommand_from $subcommands" -s S -l show-script-dir -d "Show the directory where colorscripts are stored"
 
-# Description text
-set -l help_desc 'Print help'
-set -l list_desc 'List all installed color scripts'
-set -l random_desc 'Run a random color script'
-set -l exec_desc  'Run a specified color script by SCRIPT NAME or INDEX'
-set -l blacklist_desc  'Blacklist a color script by SCRIPT NAME or INDEX'
-set -l unblacklist_desc  'Unblacklist a color script by SCRIPT NAME or INDEX'
-set -l all_desc  'List the outputs of all colorscripts with their SCRIPT NAME'
-
-# List of all available commands and flag-style commands
-set -l commands -h --help help -l --list list -r --random random -e --exec exec \
-    -b --blacklist blacklist -u --unblacklist unblacklist -a --all all
-
-# turn off built-in file completions
-complete -c colorscript -f
-
-# Commands autocompletions
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -a help -d "$help_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -a list -d "$list_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -a random -d "$random_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -a exec -d "$exec_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -a blacklist -d "$blacklist_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -a unblacklist -d "$unblacklist_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -a all -d "$all_desc"
-
-# Flag-style commands autocompletions
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -s h -l help -d "$help_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -s l -l list -d "$list_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -s r -l random -d "$random_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -s e -l exec -d "$exec_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -s b -l blacklist -d "$blacklist_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -s u -l unblacklist -d "$unblacklist_desc"
-complete -c colorscript -n "not __fish_seen_subcommand_from $commands" -s a -l all -d "$all_desc"
-
-# Coloscript name autocompletions
-set -l commands_that_take_names -e --exec exec -b --blacklist blacklist
-complete -c colorscript -n "__fish_seen_subcommand_from $commands_that_take_names" -a '(cs_names)'
-
-# Blacklisted colorscript name autocompletions
-set -l commands_that_take_blacklisted_names -u --unblacklist unblacklist
-complete -c colorscript -n "__fish_seen_subcommand_from $commands_that_take_blacklisted_names" -a '(blacklisted_cs_names)'
+# Argument completions for subcommands
+complete -c colorscript -n "__fish_seen_subcommand_from -e --exec" -f -a "(__fish_colorscript_get_scripts)" -d "Script name"
+complete -c colorscript -n "__fish_seen_subcommand_from --animate" -f -a "(__fish_colorscript_get_animation_names)" -d "Animation name"
+complete -c colorscript -n "__fish_seen_subcommand_from --animate" -s d -l delay -d "Animation delay in milliseconds" -r
+complete -c colorscript -n "__fish_seen_subcommand_from generate" -d "Path or URL to sprite sheet"
