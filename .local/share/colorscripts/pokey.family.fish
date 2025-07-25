@@ -1,18 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env fish
 
-# This script combines the output of ness, paula, jeff, and poo colorscripts horizontally.
-# It reads the output of each script into an array of lines.
-# Then, it iterates through the lines of the longest script (ness.sh, 17 lines)
-# and prints the corresponding line from each character's script.
-# For the shorter scripts, this will print empty strings, effectively padding the output.
+set DIR (dirname (status --current-filename))
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+paste -d '' \
+    (fish "$DIR/aloysius.fish" | psub) \
+    (fish "$DIR/lardna.fish" | psub) \
+    (fish "$DIR/pokey.fish" | psub) \
+    (fish "$DIR/picky.fish" | psub)
 
-mapfile -t a < <(bash "$DIR/aloysius.sh")
-mapfile -t b < <(bash "$DIR/lardna.sh")
-mapfile -t c < <(bash "$DIR/pokey.sh")
-mapfile -t d < <(bash "$DIR/picky.sh")
-
-for i in {0..16}; do
-    printf "%s%s%s%s\n" "${a[$i]}" "${b[$i]}" "${c[$i]}" "${d[$i]}"
-done

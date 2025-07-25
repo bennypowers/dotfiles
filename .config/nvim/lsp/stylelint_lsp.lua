@@ -1,3 +1,5 @@
+local cfg = require 'lsp'
+
 ---stylelint language server
 ---@type vim.lsp.ClientConfig
 return {
@@ -10,7 +12,7 @@ return {
     'vue',
     'wxss',
   },
-  root_markers = {
+  root_dir = cfg.required_root_markers{
     '.stylelintrc',
     '.stylelintrc.cjs',
     '.stylelintrc.js',
@@ -25,9 +27,6 @@ return {
       autoFixOnFormat = true,
       autoFixOnSave = true,
       cssInJs = false,
-      config = {
-        rules = {},
-      },
     },
   },
 }

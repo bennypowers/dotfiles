@@ -39,6 +39,11 @@ return { 'nvim-tree/nvim-web-devicons',
         cterm_color = '67',
         name = 'Markdown',
       },
+      css = {
+        icon = '',
+        color = '#0074bf',
+        name = 'CSS',
+      },
       js = {
         icon = JS,
         color = '#f7df1e',

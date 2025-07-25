@@ -5,10 +5,8 @@ return {
     'nvim-treesitter/nvim-treesitter',
   },
   opts = {
-    strategies = {
-      inline = {
-        adapter = 'copilot'
-      }
+    adapters = {
+      gemini = {}
     }
   }
 }

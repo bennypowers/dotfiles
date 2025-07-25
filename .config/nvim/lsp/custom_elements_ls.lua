@@ -1,3 +1,4 @@
+local cfg = require'lsp'
 ---https://github.com/Matsuuu/custom-elements-language-server
 ---
 ---`custom-elements-languageserver` depends on `typescript`. Both packages can be installed via `npm`:
@@ -28,6 +29,6 @@
 return {
   init_options = { hostInfo = 'neovim' },
   cmd = { 'custom-elements-languageserver', '--stdio' },
-  root_markers = { 'custom-elements.json', 'tsconfig.json', 'package.json', 'jsconfig.json', '.git' },
+  root_dir = cfg.required_root_markers{ 'custom-elements.json', 'tsconfig.json', 'package.json', 'jsconfig.json', '.git' },
   filetypes = { 'html' },
 }
