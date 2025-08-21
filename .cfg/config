@@ -1,0 +1,7 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	excludesfile = /home/bennyp/.config/git/gitignore
+[remote "origin"]
+	url = https://github.com/bennypowers/dotfiles.git

@@ -1,0 +1,85 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+Yubico
+
+# Dev Stuff
+node_modules
+
+.cache
+.config/fish/fish_variables
+.config/gcloud
+.config/fish/conf.d/env.fish
+.config/Yubico
+.config/karabiner/automatic_backups
+.config/gh/hosts.yml
+.config/gh/config.yml.bak
+.config/go/
+.config/gtk-3.0/bookmarks
+.config/QtProject.conf
+.config/pulse
+.config/systemd/**/*.wants
+
+.local/bin
+.local/share/
+.local/state/
+
+**/.claude/settings.local.json
+**/CLAUDE.local.md
+
+.claude.json
+.claude.json.backup
+.claude/local
+.claude/projects
+.claude/shell-snapshots
+.claude/statsig
+.claude/todos
+.claude/settings.json
+
+.mozilla
+.npm
+.ssh
+.thunderbird
+
+.var/app
+
+Developer
+Downloads
+Documents
+Pictures
+Videos
+
+.bash_history
+
+.boto
+
+.lesshst
+.node_repl_history
+.wget-hsts
+dconf
+
+# Dotfiles repo see https://www.atlassian.com/git/tutorials/dotfiles
+.cfg

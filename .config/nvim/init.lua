@@ -16,4 +16,4 @@ require 'lazy'.setup('plugins', {
   }
 })
 
-vim.cmd.colorscheme 'catppuccin'
+vim.cmd.colorscheme 'catppuccin-macchiato'

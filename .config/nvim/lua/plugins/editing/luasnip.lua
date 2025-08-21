@@ -41,7 +41,6 @@ return { 'L3MON4D3/LuaSnip',
   enabled = true,
   version = '2.*',
   build = 'make install_jsregexp',
-  dependencies = { 'bennypowers/design-tokens.nvim' },
   keys = {
     { '<C-j>', next_choice, mode = { 'i' }, desc = 'Luasnip - next choice' },
     { '<C-k>', prev_choice, mode = { 'i' }, desc = 'Luasnip - prev choice' },

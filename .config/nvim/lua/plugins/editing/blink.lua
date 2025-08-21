@@ -18,6 +18,12 @@ return { 'saghen/blink.cmp',
     },
     fuzzy = {
       implementation = 'prefer_rust_with_warning',
+      sorts = {
+        'score',
+        'kind',
+        'sort_text',
+        'label',
+      }
     },
     keymap = {
       preset = 'enter',

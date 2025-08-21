@@ -3,7 +3,7 @@
 	email = web@bennypowers.com
 
 [core]
-	excludesfile = /Users/bennyp/.config/git/gitignore
+	excludesfile = ~/.config/git/gitignore
 	editor = nvim
 	pager = delta
 

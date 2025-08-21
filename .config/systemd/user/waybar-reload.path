@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch Waybar config directory for changes
+Requires=waybar.service
+
+[Path]
+PathModified=/home/bennyp/.config/waybar
+Unit=waybar-reload.service
+
+[Install]
+WantedBy=waybar.service

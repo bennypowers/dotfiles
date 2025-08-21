@@ -1,0 +1,5 @@
+# Processes that should inhibit system suspend
+# One process name per line
+# Lines starting with # are comments
+
+claude

@@ -99,10 +99,10 @@ end
 vim.lsp.enable {
   'bashls',
   'cssls',
-  'custom_elements_ls',
+  'cem',
   'emmet_language_server',
   'eslint',
-  -- 'fish_lsp',
+  'fish_lsp',
   'html',
   'gopls',
   'jsonls',

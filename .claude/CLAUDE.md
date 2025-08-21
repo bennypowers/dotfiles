@@ -1,0 +1,1 @@
+- never introduce a regression to a feature just to meet performance goals

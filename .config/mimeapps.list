@@ -1,0 +1,8 @@
+[Added Associations]
+image/webp=org.gnome.Evince.desktop;
+video/mp4=org.gnome.Showtime.desktop;
+video/webm=org.gnome.Showtime.desktop;
+
+[Default Applications]
+video/mp4=org.gnome.Showtime.desktop
+video/webm=org.gnome.Showtime.desktop

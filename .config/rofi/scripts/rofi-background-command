@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# A simple list of common applications you might want to run in the background.
+apps="firefox\nsteam\nthunar"
+
+# Launch Rofi and get user input.
+# The `rofi -dmenu` command presents a list of options.
+# The `-p` flag sets the prompt text.
+# The `<<<` operator feeds the list of apps into Rofi.
+# You can also just use `rofi -dmenu` for a simple text input.
+choice=$(echo -e "$apps" | rofi -dmenu -i -p "Run in Background")
+
+# Check if a choice was made and execute it.
+if [ -n "$choice" ]; then
+    # The `nohup` command prevents the process from being killed when the terminal closes.
+    # The `&` at the end backgrounds the process.
+    # The `>/dev/null 2>&1` redirects all output (stdout and stderr) to /dev/null
+    # so you don't get any messages cluttering your terminal or session.
+    nohup $choice > /dev/null 2>&1 &
+fi

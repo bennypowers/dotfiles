@@ -1,0 +1,6 @@
+[Unit]
+Description=Reload Waybar configuration
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl --user reload-or-restart waybar.service
