@@ -15,7 +15,8 @@ ShellRoot {
     readonly property int panelLeftMargin: 22
     readonly property int panelRightMargin: 16
     
-
+    // Volume OSD
+    VolumeOSD {}
 
     Variants {
         model: Quickshell.screens
@@ -84,6 +85,7 @@ ShellRoot {
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: 60
                 }
+
 
             }
         }
