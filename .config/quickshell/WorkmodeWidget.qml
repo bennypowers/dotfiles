@@ -29,7 +29,7 @@ Rectangle {
                 } else if (workmodeWidget.vmRunning) {
                     return "󰾔"  // Computer icon for running VM without viewer
                 } else {
-                    return "󰩟"  // Sleep/suspended icon for stopped VM
+                    return ""  // Sleep/suspended icon for stopped VM
                 }
             }
             font.family: "JetBrainsMono Nerd Font"
@@ -37,6 +37,23 @@ Rectangle {
             color: workmodeWidget.vmRunning ? colors.green : colors.overlay
             anchors.horizontalCenter: parent.horizontalCenter
         }
+    }
+
+    function generateTooltipText() {
+        let text = `<b>Workmode VM (${workmodeWidget.vmName})</b><br/>`
+
+        if (workmodeWidget.vmRunning && workmodeWidget.viewerActive) {
+            text += `<b>Status:</b> <span style="color: ${colors.green};">Running with viewer</span><br/>`
+            text += `<b>Action:</b> Click to suspend VM and close viewer`
+        } else if (workmodeWidget.vmRunning) {
+            text += `<b>Status:</b> <span style="color: ${colors.yellow};">Running (no viewer)</span><br/>`
+            text += `<b>Action:</b> Click to launch viewer on workspace 10`
+        } else {
+            text += `<b>Status:</b> <span style="color: ${colors.overlay};">Stopped/Suspended</span><br/>`
+            text += `<b>Action:</b> Click to start/resume VM and launch viewer`
+        }
+
+        return text
     }
 
     MouseArea {
@@ -51,8 +68,19 @@ Rectangle {
             }
         }
         hoverEnabled: true
-        onEntered: parent.color = colors.surface
-        onExited: parent.color = "transparent"
+        onEntered: {
+            parent.color = colors.surface
+            tooltip.showAt(workmodeWidget.mapToGlobal(workmodeWidget.width, 0).x, workmodeWidget.mapToGlobal(0, 0).y, generateTooltipText())
+        }
+        onExited: {
+            parent.color = "transparent"
+            tooltip.hide()
+        }
+    }
+
+    // Tooltip
+    SimpleTooltip {
+        id: tooltip
     }
 
     // Check VM status

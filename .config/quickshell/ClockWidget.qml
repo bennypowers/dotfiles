@@ -11,7 +11,7 @@ Column {
     readonly property string weekFormat: "ddd"
 
     // Font properties with optional overrides - access root via Quickshell.root
-    property string fontFamily: "JetBrainsMono Nerd Font"
+    property string fontFamily: "Liberation Sans"
     property int timeFontSize: 18
     property int dateFontSize: 12
 
