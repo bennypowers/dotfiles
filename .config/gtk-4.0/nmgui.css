@@ -1,0 +1,132 @@
+/* Catppuccin Mocha theme for nmgui */
+@define-color accent_color #cba6f7;
+@define-color accent_bg_color #cba6f7;
+@define-color accent_fg_color #11111b;
+@define-color destructive_color #f38ba8;
+@define-color destructive_bg_color #f38ba8;
+@define-color destructive_fg_color #11111b;
+@define-color success_color #a6e3a1;
+@define-color success_bg_color #a6e3a1;
+@define-color success_fg_color #11111b;
+@define-color warning_color #f9e2af;
+@define-color warning_bg_color #f9e2af;
+@define-color warning_fg_color #11111b;
+@define-color error_color #f38ba8;
+@define-color error_bg_color #f38ba8;
+@define-color error_fg_color #11111b;
+@define-color window_bg_color #1e1e2e;
+@define-color window_fg_color #cdd6f4;
+@define-color view_bg_color #181825;
+@define-color view_fg_color #cdd6f4;
+@define-color headerbar_bg_color #313244;
+@define-color headerbar_fg_color #cdd6f4;
+@define-color headerbar_border_color #45475a;
+@define-color headerbar_backdrop_color #313244;
+@define-color headerbar_shade_color rgba(0,0,0,0.36);
+@define-color card_bg_color #313244;
+@define-color card_fg_color #cdd6f4;
+@define-color card_shade_color rgba(0,0,0,0.36);
+@define-color popover_bg_color #313244;
+@define-color popover_fg_color #cdd6f4;
+@define-color shade_color rgba(0,0,0,0.36);
+@define-color scrollbar_outline_color rgba(0,0,0,0.5);
+@define-color sidebar_bg_color #181825;
+@define-color sidebar_fg_color #cdd6f4;
+@define-color sidebar_backdrop_color #181825;
+@define-color sidebar_shade_color rgba(0,0,0,0.25);
+
+/* Base styling */
+* {
+    color: #cdd6f4;
+    background-color: #1e1e2e;
+}
+
+window {
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+}
+
+headerbar {
+    background-color: #313244;
+    color: #cdd6f4;
+    border-bottom: 1px solid #45475a;
+}
+
+button {
+    background-color: #45475a;
+    color: #cdd6f4;
+    border: 1px solid #585b70;
+}
+
+button:hover {
+    background-color: #585b70;
+}
+
+button:active {
+    background-color: #6c7086;
+}
+
+button.suggested-action {
+    background-color: #cba6f7;
+    color: #11111b;
+}
+
+button.destructive-action {
+    background-color: #f38ba8;
+    color: #11111b;
+}
+
+entry {
+    background-color: #313244;
+    color: #cdd6f4;
+    border: 1px solid #585b70;
+}
+
+entry:focus {
+    border-color: #cba6f7;
+}
+
+listbox {
+    background-color: #181825;
+    color: #cdd6f4;
+}
+
+row {
+    background-color: transparent;
+    color: #cdd6f4;
+}
+
+row:hover {
+    background-color: #313244;
+}
+
+row:selected {
+    background-color: #cba6f7;
+    color: #11111b;
+}
+
+menu {
+    background-color: #313244;
+    color: #cdd6f4;
+    border: 1px solid #585b70;
+}
+
+menuitem {
+    color: #cdd6f4;
+}
+
+menuitem:hover {
+    background-color: #45475a;
+}
+
+scrollbar {
+    background-color: #313244;
+}
+
+scrollbar slider {
+    background-color: #585b70;
+}
+
+scrollbar slider:hover {
+    background-color: #6c7086;
+}

@@ -60,15 +60,25 @@
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "clock#time": {
-        "format": "{:%I:%M %p}",
+        "format": "{:%I:%M %p}"
     },
     "network": {
-        "format-wifi": " {essid}",
-        "format-ethernet": "",
-        "format-disconnected": "󰌙"
+        "family": "ipv4",
+        "format-wifi": "{icon}",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰌙",
+        "format-icons": {
+            "wifi": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+            "ethernet": "󰈀",
+            "disconnected": "󰌙"
+        },
+        "tooltip-format-wifi": "Network: {essid}\nSignal: {signalStrength}%\nFrequency: {frequency}MHz\nIPv4: {ipaddr}/{cidr}\nGateway: {gwaddr}\nInterface: {ifname}",
+        "tooltip-format-ethernet": "Ethernet Connected\nIPv4: {ipaddr}/{cidr}\nGateway: {gwaddr}\nInterface: {ifname}",
+        "tooltip-format-disconnected": "No Network Connection",
+        "on-click": "nmgui"
     },
     "bluetooth": {
-        "format": ""
+        "format": ""
     },
     "tray": {
         "icon-size": 21,
@@ -76,10 +86,10 @@
     },
     "wireplumber": {
         "format": "{volume}% {icon}",
-        "format-muted": "",
+        "format-muted": "",
         "format-icons": {
-            "headphone": "",
-            "default": ["", "", ""]
+            "headphone": "",
+            "default": ["", "", ""]
         },
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",

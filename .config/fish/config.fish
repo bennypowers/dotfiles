@@ -1,8 +1,9 @@
-set -g fish_user_paths $HOME/.rbenv/bin $fish_user_paths
-set -g fish_user_paths "/usr/local/opt/openssl@1.1/bin" $fish_user_paths
-set -g fish_user_paths "/usr/local/opt/gettext/bin" $fish_user_paths
-set -g fish_user_paths "/usr/local/opt/python/bin" $fish_user_paths
-set -g fish_user_paths "~/.yarn/bin" $fish_user_paths
+fish_add_path $HOME/.rbenv/bin
+fish_add_path /usr/local/opt/openssl@1.1/bin
+fish_add_path /usr/local/opt/gettext/bin
+fish_add_path /usr/local/opt/python/bin
+fish_add_path ~/.yarn/bin
+fish_add_path ~/.opencode/bin
 
 # unicode
 set -x LANG en_US.UTF-8
@@ -115,3 +116,4 @@ end
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
+
