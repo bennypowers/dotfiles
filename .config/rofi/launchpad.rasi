@@ -19,14 +19,22 @@
     margin:           0px;
 }
 
+configuration {
+    drun-display-format: "{name}";
+}
+
 window {
-    fullscreen: true;
+    fullscreen: false;
+    width: 60%;
+    height: 50%;
     padding: 1em;
-    background-color: @bg0;
+    background-color: rgba(30, 30, 46, 0.9);
+    location: center;
+    anchor: center;
 }
 
 mainbox {
-    padding:  8px;
+    padding:      32px 16px;
 }
 
 inputbar {
@@ -59,10 +67,11 @@ entry {
 }
 
 listview {
-    margin:   48px calc( 50% - 560px );
-    spacing:  48px;
-    columns:  6;
+    margin:   24px 48px;
+    spacing:  4px 16px;
+    columns:  5;
     fixed-columns: true;
+    cycle: false;
 }
 
 element, element-text, element-icon {
@@ -70,11 +79,12 @@ element, element-text, element-icon {
 }
 
 element {
-    padding:      8px;
-    spacing:      4px;
-
-    orientation:     vertical;
-    border-radius:   16px;
+    padding:      4px 16px;
+    spacing:      8px;
+    orientation:  vertical;
+    border-radius: 16px;
+    width: 80px;
+    height: 80px;
 }
 
 element selected {
@@ -82,10 +92,12 @@ element selected {
 }
 
 element-icon {
-    size: 4em;
+    size: 80px;
     horizontal-align: 0.5;
 }
 
 element-text {
     horizontal-align: 0.5;
+    width: 80px;
+    font: "Montserrat 8";
 }
