@@ -48,7 +48,18 @@ return {
       filetype = {
         -- lua = require'formatter.filetypes.lua'.stylua,
         javascript = {
-          require 'formatter.filetypes.javascript'.eslint_d,
+          function()
+            return {
+              exe = vim.fn.stdpath('data') .. '/mason/bin/eslint_d',
+              args = {
+                '--stdin',
+                '--stdin-filename',
+                require('formatter.util').escape_path(require('formatter.util').get_current_buffer_file_path()),
+                '--fix-to-stdout',
+              },
+              stdin = true,
+            }
+          end,
           -- prettier_d,
         },
         typescript = {
@@ -62,7 +73,16 @@ return {
             elseif prettier_config_file_exists(cwd) then
               return prettier_d()
             else
-              return require 'formatter.filetypes.typescript'.eslint_d()
+              return {
+                exe = vim.fn.stdpath('data') .. '/mason/bin/eslint_d',
+                args = {
+                  '--stdin',
+                  '--stdin-filename',
+                  require('formatter.util').escape_path(require('formatter.util').get_current_buffer_file_path()),
+                  '--fix-to-stdout',
+                },
+                stdin = true,
+              }
             end
           end,
         },

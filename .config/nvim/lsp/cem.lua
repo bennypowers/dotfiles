@@ -14,7 +14,6 @@
 ---@type vim.lsp.Config
 return {
   cmd = { 'cem', 'lsp', '-v' },
-  on_attach = function() vim.lsp.set_log_level'DEBUG' end,
   root_markers = {
     'custom-elements.json',
     'package.json',

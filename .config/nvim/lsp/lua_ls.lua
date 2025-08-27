@@ -1,5 +1,5 @@
 ---lua language server
----@type vim.lsp.ClientConfig
+---@type vim.lsp.Config
 return {
   root_markers = {
     '.luarc.json',

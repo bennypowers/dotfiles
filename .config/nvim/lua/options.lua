@@ -106,6 +106,7 @@ vim.lsp.enable {
   'html',
   'gopls',
   'jsonls',
+  'qmlls',
   'lua_ls',
   'marksman',
   'stylelint_lsp',
