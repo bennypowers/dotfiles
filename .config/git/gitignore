@@ -57,6 +57,7 @@ node_modules
 .config/gtk-4.0/servers
 .config/libvirt/qemu/*.xml
 .config/libvirt/storage
+.config/libvirt/**/*.aes
 
 .local/bin
 .local/share/
