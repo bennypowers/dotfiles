@@ -1,5 +1,5 @@
 [Unit]
 Description=Hyprland Wayland Session
-Wants=waybar.service
+Wants=quickshell.service
 Wants=swaync.service
 Wants=hypridle.service
