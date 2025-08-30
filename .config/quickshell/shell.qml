@@ -1,6 +1,10 @@
+//@ pragma UseQApplication
+
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Services.SystemTray
+import Quickshell.DBusMenu
 
 ShellRoot {
     // Global font configuration
@@ -14,7 +18,7 @@ ShellRoot {
     readonly property int panelBottomMargin: 24
     readonly property int panelLeftMargin: 22
     readonly property int panelRightMargin: 16
-    
+
     // Volume OSD
     VolumeOSD {}
 
@@ -41,6 +45,14 @@ ShellRoot {
                 anchors.leftMargin: panelLeftMargin
                 anchors.rightMargin: panelRightMargin
 
+                // CPU widget
+                CpuWidget {
+                    Layout.preferredWidth: parent.width
+                    Layout.preferredHeight: 60
+                    Layout.leftMargin: 6
+                    Layout.alignment: Qt.AlignCenter
+                }
+
                 // Workspace switcher (minimap style) at top
                 WorkspaceIndicator {
                     Layout.preferredWidth: parent.width
@@ -62,6 +74,12 @@ ShellRoot {
                     Layout.fillHeight: true
                 }
 
+                // System tray
+                SystemTrayWidget {
+                    Layout.preferredWidth: parent.width
+                    Layout.preferredHeight: 120
+                }
+
                 // Workmode widget (vm/WM) at very bottom
                 WorkmodeWidget {
                     Layout.preferredWidth: parent.width
@@ -74,18 +92,11 @@ ShellRoot {
                     Layout.preferredHeight: 40
                 }
 
-                // CPU widget
-                CpuWidget {
-                    Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: 60
-                }
-
                 // Volume widget at bottom
                 VolumeWidget {
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: 60
                 }
-
 
             }
         }

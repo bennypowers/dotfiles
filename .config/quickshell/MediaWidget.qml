@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import Quickshell
 import Quickshell.Services.Mpris
 
@@ -10,7 +11,7 @@ Rectangle {
     radius: 8
     visible: Mpris.players.length > 0
 
-    property var player: Mpris.players[0]
+    property MprisPlayer player: Mpris.players[0]
     
     Colors {
         id: colors

@@ -23,4 +23,9 @@ QtObject {
     readonly property int smallIconSize: 14
     readonly property int textSize: 16
     readonly property int smallTextSize: 12
+    
+    // Global spacing and styling
+    readonly property int spacing: 4
+    readonly property int borderRadius: 4
+    readonly property string fontFamily: "JetBrainsMono Nerd Font"
 }

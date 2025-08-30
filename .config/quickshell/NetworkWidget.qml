@@ -16,8 +16,13 @@ Rectangle {
     property string ipv4Address: ""
     property string ssidName: ""
     property string connectionType: ""
-    property var networkStats: []
+    property list<var> networkStats: []
+    
+    // Configurable parameters
     property int maxNetworkStats: 20
+    property int networkCheckInterval: 5000
+    property int statsCheckInterval: 2000
+    property int defaultWifiStrength: 75
 
     Colors {
         id: colors
@@ -91,7 +96,7 @@ Rectangle {
                                 networkWidget.isWifi = true
                                 networkWidget.connectionName = "WiFi"
                                 networkWidget.connectionType = "Wi-Fi"
-                                networkWidget.wifiStrength = 75
+                                networkWidget.wifiStrength = networkWidget.defaultWifiStrength
                                 // Get detailed info for wifi
                                 detailedInfoProcess.running = true
                             } else if (connType.includes("ethernet") || connType.includes("802-3")) {
@@ -111,7 +116,7 @@ Rectangle {
     }
 
     Timer {
-        interval: 5000
+        interval: networkWidget.networkCheckInterval
         running: true
         repeat: true
         onTriggered: {
@@ -227,7 +232,7 @@ Rectangle {
 
     // Stats collection timer
     Timer {
-        interval: 2000
+        interval: networkWidget.statsCheckInterval
         running: true
         repeat: true
         onTriggered: {

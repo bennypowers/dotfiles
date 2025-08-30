@@ -8,12 +8,47 @@ Rectangle {
     radius: 8
 
     property real cpuUsage: 0
-    property var coreUsages: []  // Array to store individual core usage
-    property var tooltipWindow: null  // Reference to tooltip window
-    property var tempCoreData: []  // Temporary array to accumulate core data
+    property real animatedCpuUsage: 0  // Animated version of cpuUsage for needle
+    property list<real> coreUsages: []  // Array to store individual core usage
+    property QtObject tooltipWindow: null  // Reference to tooltip window
+    property list<real> tempCoreData: []  // Temporary array to accumulate core data
     property var tooltipUpdateFunction: null  // Reference to tooltip update function
     property real mouseX: 0  // Store mouse X position
     property real mouseY: 0  // Store mouse Y position
+
+    // Configurable appearance parameters
+    property real gaugeSize: 32
+    property real gaugeRadius: 16
+    property real needleLength: 8
+    property real needleWidth: 3
+    property real centerDotRadius: 2.5
+    property real tickRadius: 14
+    property real colorBandRadius: 12
+    property real colorBandWidth: 7
+    property int tickCount: 4
+
+    // Opacity and color parameters
+    property real backgroundOpacityIdle: 1
+    property real backgroundOpacityHover: 1
+    property real activeBandOpacity: 1.0
+    property real inactiveBandOpacity: 0.3
+    property string needleColor: "#ffffff"
+    property string centerDotColor: "#ffffff"
+
+    // Animation parameters
+    property int animationDuration: 600
+    property real animationOvershoot: 1.2
+    property int colorAnimationDuration: 300
+    property int updateInterval: 2000
+
+    // Animate the needle with overbounce effect
+    Behavior on animatedCpuUsage {
+        NumberAnimation {
+            duration: cpuWidget.animationDuration
+            easing.type: Easing.OutBack
+            easing.overshoot: cpuWidget.animationOvershoot
+        }
+    }
 
 
     // Color module instance
@@ -43,16 +78,16 @@ Rectangle {
             Rectangle {
                 id: gaugeBackground
                 anchors.centerIn: parent
-                width: 32
-                height: 32
-                radius: 16
-                color: cpuWidget.usageColor
-                opacity: 0.3
+                width: cpuWidget.gaugeSize
+                height: cpuWidget.gaugeSize
+                radius: cpuWidget.gaugeRadius
+                color: colors.surface
+                opacity: cpuWidget.backgroundOpacityIdle
                 border.color: colors.overlay
                 border.width: 1
 
                 Behavior on color {
-                    ColorAnimation { duration: 300 }
+                    ColorAnimation { duration: cpuWidget.colorAnimationDuration }
                 }
             }
 
@@ -60,8 +95,8 @@ Rectangle {
             Canvas {
                 id: gaugeTicks
                 anchors.centerIn: parent
-                width: 32
-                height: 32
+                width: cpuWidget.gaugeSize
+                height: cpuWidget.gaugeSize
 
                 onPaint: {
                     var ctx = getContext("2d")
@@ -69,14 +104,14 @@ Rectangle {
 
                     var centerX = width / 2
                     var centerY = height / 2
-                    var radius = 14
+                    var radius = cpuWidget.tickRadius
 
                     // Draw tick marks
                     ctx.strokeStyle = colors.overlay
                     ctx.lineWidth = 1
 
-                    for (var i = 0; i <= 4; i++) {
-                        var angle = Math.PI * 0.75 + (Math.PI * 1.5 * i / 4)  // 135° to 405° (270° span)
+                    for (var i = 0; i <= cpuWidget.tickCount; i++) {
+                        var angle = Math.PI * 0.75 + (Math.PI * 1.5 * i / cpuWidget.tickCount)  // 135° to 405° (270° span)
                         var innerRadius = radius - 2
                         var outerRadius = radius
 
@@ -97,8 +132,8 @@ Rectangle {
             Canvas {
                 id: coloredBands
                 anchors.centerIn: parent
-                width: 32
-                height: 32
+                width: cpuWidget.gaugeSize
+                height: cpuWidget.gaugeSize
 
                 onPaint: {
                     var ctx = getContext("2d")
@@ -106,8 +141,8 @@ Rectangle {
 
                     var centerX = width / 2
                     var centerY = height / 2
-                    var radius = 12
-                    var lineWidth = 7  // Thick colored bands
+                    var radius = cpuWidget.colorBandRadius
+                    var lineWidth = cpuWidget.colorBandWidth  // Thick colored bands
                     var totalAngle = Math.PI * 1.5  // 270 degrees total
                     var startAngle = Math.PI * 0.75  // Start at 135 degrees
 
@@ -125,7 +160,7 @@ Rectangle {
                     var greenEnd = startAngle + (totalAngle * 0.25)
                     ctx.beginPath()
                     ctx.arc(centerX, centerY, radius, greenStart, greenEnd)
-                    ctx.globalAlpha = activeBand === 0 ? 1.0 : 0.3
+                    ctx.globalAlpha = activeBand === 0 ? cpuWidget.activeBandOpacity : cpuWidget.inactiveBandOpacity
                     ctx.strokeStyle = colors.green
                     ctx.stroke()
 
@@ -134,7 +169,7 @@ Rectangle {
                     var yellowEnd = startAngle + (totalAngle * 0.5)
                     ctx.beginPath()
                     ctx.arc(centerX, centerY, radius, yellowStart, yellowEnd)
-                    ctx.globalAlpha = activeBand === 1 ? 1.0 : 0.3
+                    ctx.globalAlpha = activeBand === 1 ? cpuWidget.activeBandOpacity : cpuWidget.inactiveBandOpacity
                     ctx.strokeStyle = colors.yellow
                     ctx.stroke()
 
@@ -143,7 +178,7 @@ Rectangle {
                     var peachEnd = startAngle + (totalAngle * 0.75)
                     ctx.beginPath()
                     ctx.arc(centerX, centerY, radius, peachStart, peachEnd)
-                    ctx.globalAlpha = activeBand === 2 ? 1.0 : 0.3
+                    ctx.globalAlpha = activeBand === 2 ? cpuWidget.activeBandOpacity : cpuWidget.inactiveBandOpacity
                     ctx.strokeStyle = colors.peach
                     ctx.stroke()
 
@@ -152,7 +187,7 @@ Rectangle {
                     var redEnd = startAngle + totalAngle
                     ctx.beginPath()
                     ctx.arc(centerX, centerY, radius, redStart, redEnd)
-                    ctx.globalAlpha = activeBand === 3 ? 1.0 : 0.3
+                    ctx.globalAlpha = activeBand === 3 ? cpuWidget.activeBandOpacity : cpuWidget.inactiveBandOpacity
                     ctx.strokeStyle = colors.red
                     ctx.stroke()
 
@@ -165,8 +200,8 @@ Rectangle {
             Canvas {
                 id: needle
                 anchors.centerIn: parent
-                width: 32
-                height: 32
+                width: cpuWidget.gaugeSize
+                height: cpuWidget.gaugeSize
 
                 onPaint: {
                     var ctx = getContext("2d")
@@ -174,15 +209,15 @@ Rectangle {
 
                     var centerX = width / 2
                     var centerY = height / 2
-                    var needleLength = 8
-                    var needleAngle = Math.PI * 0.75 + (Math.PI * 1.5 * cpuWidget.cpuUsage / 100)
+                    var needleLength = cpuWidget.needleLength
+                    var needleAngle = Math.PI * 0.75 + (Math.PI * 1.5 * cpuWidget.animatedCpuUsage / 100)
 
                     var needleX = centerX + Math.cos(needleAngle) * needleLength
                     var needleY = centerY + Math.sin(needleAngle) * needleLength
 
-                    // Draw needle with white color for visibility
-                    ctx.strokeStyle = "#ffffff"
-                    ctx.lineWidth = 3
+                    // Draw needle with configurable color
+                    ctx.strokeStyle = cpuWidget.needleColor
+                    ctx.lineWidth = cpuWidget.needleWidth
                     ctx.lineCap = "round"
                     ctx.beginPath()
                     ctx.moveTo(centerX, centerY)
@@ -190,9 +225,9 @@ Rectangle {
                     ctx.stroke()
 
                     // Draw center dot
-                    ctx.fillStyle = "#ffffff"
+                    ctx.fillStyle = cpuWidget.centerDotColor
                     ctx.beginPath()
-                    ctx.arc(centerX, centerY, 2.5, 0, 2 * Math.PI)
+                    ctx.arc(centerX, centerY, cpuWidget.centerDotRadius, 0, 2 * Math.PI)
                     ctx.fill()
                 }
             }
@@ -205,12 +240,12 @@ Rectangle {
                 hoverEnabled: true
 
                 onEntered: {
-                    gaugeBackground.opacity = 0.6
+                    gaugeBackground.opacity = cpuWidget.backgroundOpacityHover
                     showTooltip()
                 }
 
                 onExited: {
-                    gaugeBackground.opacity = 0.3
+                    gaugeBackground.opacity = cpuWidget.backgroundOpacityIdle
                     hideTooltip()
                 }
 
@@ -303,11 +338,16 @@ Rectangle {
 
     // Redraw gauge when CPU usage changes
     onCpuUsageChanged: {
-        needle.requestPaint()
+        animatedCpuUsage = cpuUsage  // Trigger animation
         coloredBands.requestPaint()
         if (tooltipUpdateFunction) {
             tooltipUpdateFunction()
         }
+    }
+
+    // Redraw needle when animated value changes
+    onAnimatedCpuUsageChanged: {
+        needle.requestPaint()
     }
 
     // Update tooltip when core data changes
@@ -370,7 +410,7 @@ Rectangle {
     }
 
     Timer {
-        interval: 2000
+        interval: cpuWidget.updateInterval
         running: true
         repeat: true
         onTriggered: {
