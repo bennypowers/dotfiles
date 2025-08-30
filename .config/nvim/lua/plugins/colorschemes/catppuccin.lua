@@ -4,6 +4,7 @@ return { 'catppuccin/nvim',
   priority = 1000,
   opts = {
     default_integrations = true,
+    transparent_background = true,
     integrations = {
       lsp_trouble = true,
       notify = true,
