@@ -405,19 +405,15 @@ Rectangle {
             return count
         }
 
-        width: 350
-        height: {
+        implicitWidth: 350
+        implicitHeight: {
             var baseHeight = 80  // Header + margins + padding
             var channelHeight = 70  // Height per audio channel
             return baseHeight + (availableChannels * channelHeight)
         }
 
-        Component.onCompleted: {
-            console.log("PopupWindow created, size:", width, "x", height)
-        }
 
         onVisibleChanged: {
-            console.log("PopupWindow visible changed to:", visible, "size:", width, "x", height)
             volumeWidget.mixerVisible = visible
         }
 
@@ -428,10 +424,6 @@ Rectangle {
             radius: 8
             border.color: colors.overlay
             border.width: 2
-
-            Component.onCompleted: {
-                console.log("Background Rectangle created, size:", width, "x", height)
-            }
 
             // MouseArea to keep popup open when clicking inside and detect hover
             MouseArea {
@@ -452,10 +444,6 @@ Rectangle {
                 font.pixelSize: 16
                 font.bold: true
                 color: colors.text
-
-                Component.onCompleted: {
-                    console.log("Header Text created")
-                }
             }
 
             Column {

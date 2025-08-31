@@ -67,6 +67,12 @@ Column {
                         smooth: true
                         cache: false
                         fillMode: Image.PreserveAspectFit
+                        onStatusChanged: {
+                            // Silently handle icon loading errors
+                            if (status === Image.Error && source !== "") {
+                                // Icon failed to load, fallback will be handled by secondary icon or text
+                            }
+                        }
                     }
 
                     // Second attempt with different extension or fallback to icon theme
@@ -96,6 +102,12 @@ Column {
                         smooth: true
                         cache: false
                         fillMode: Image.PreserveAspectFit
+                        onStatusChanged: {
+                            // Silently handle secondary icon loading errors
+                            if (status === Image.Error && source !== "") {
+                                // Secondary icon failed, text fallback will be used if enabled
+                            }
+                        }
                     }
 
                     // Text fallback when both images fail (configurable)
@@ -151,111 +163,52 @@ Column {
                     }
 
                     onClicked: function(mouse) {
-                        console.log("=== TRAY CLICK DEBUG ===")
-                        console.log("Mouse button:", mouse.button)
-                        console.log("Mouse position:", mouse.x, mouse.y)
-                        console.log("Parent item exists:", parent.parent.item ? "YES" : "NO")
-
                         if (parent.parent.item) {
-                            console.log("Item details:")
-                            console.log("  - Title:", parent.parent.item.title)
-                            console.log("  - ID:", parent.parent.item.id)
-                            console.log("  - Status:", parent.parent.item.status)
-                            console.log("  - Category:", parent.parent.item.category)
-                            console.log("  - HasMenu:", parent.parent.item.hasMenu)
-                            console.log("  - OnlyMenu:", parent.parent.item.onlyMenu)
-
                             if (mouse.button === 2 && parent.parent.item.hasMenu) {
-                                console.log("Right click - opening menu with QsMenuAnchor")
-                                console.log("Item menu exists:", parent.parent.item.menu ? "YES" : "NO")
-                                console.log("Item menu object:", parent.parent.item.menu)
-
-                                // Set the menu dynamically
+                                // Right click - open context menu
                                 if (parent.parent.item.menu) {
                                     menuAnchor.menu = parent.parent.item.menu
-                                    console.log("Set menu anchor menu:", menuAnchor.menu)
-                                } else {
-                                    console.log("No menu to set on anchor")
                                 }
 
                                 // Set up window and anchor positioning
-                                console.log("Setting up menu anchor...")
                                 try {
-                                    // Try different ways to get the window
-                                    var window1 = mouse.QsWindow
                                     var window2 = systemTrayWidget.QsWindow
-                                    var window3 = parent.parent.parent.parent.parent.parent // Navigate up to find window
-
-                                    // Try to use the best window candidate
-                                    var window = null
-
-                                    // window2 is ProxyWindowAttached - get the actual window
                                     if (window2 && window2.window) {
-                                        window = window2.window
-                                        console.log("Using ProxyWindowAttached.window:", window)
-                                    } else if (window1) {
-                                        window = window1
-                                        console.log("Using mouse window:", window)
-                                    } else if (window3) {
-                                        window = window3
-                                        console.log("Using navigation window:", window)
-                                    }
-
-                                    if (window) {
-                                        console.log("Final window properties:", Object.getOwnPropertyNames(window))
-                                        menuAnchor.anchor.window = window
-                                        // Get global coordinates of the mouse position
+                                        menuAnchor.anchor.window = window2.window
                                         var globalMousePos = systemTrayWidget.mapToGlobal(parent.parent.x + mouse.x, parent.parent.y + mouse.y)
 
-                                        // Position menu so its bottom-left appears at mouse position
-                                        // This means the menu rect should be positioned slightly above/to the right
                                         menuAnchor.anchor.rect.x = globalMousePos.x - 2
                                         menuAnchor.anchor.rect.y = globalMousePos.y - 2  
                                         menuAnchor.anchor.rect.width = 4
                                         menuAnchor.anchor.rect.height = 4
-
-                                        console.log("Mouse pos in item:", mouse.x, mouse.y)
-                                        console.log("Item pos:", parent.parent.x, parent.parent.y)
-                                        console.log("Menu anchored to mouse at global:", globalMousePos.x, globalMousePos.y)
-                                        console.log("Anchor window and rect set successfully")
-                                    } else {
-                                        console.log("No suitable window found")
                                     }
                                 } catch (e) {
-                                    console.log("Error setting anchor:", e)
+                                    // Silently handle anchor setup errors
                                 }
 
                                 try {
                                     if (menuAnchor.menu) {
-                                        console.log("Calling menuAnchor.open()")
                                         menuAnchor.open()
-                                    } else {
-                                        console.log("MenuAnchor has no menu")
                                     }
                                 } catch (e) {
-                                    console.log("MenuAnchor open failed:", e)
+                                    // Silently handle menu open errors
                                 }
                             } else if (mouse.button === Qt.LeftButton) {
-                                // Left click - try activate
-                                console.log("Attempting activate()...")
+                                // Left click - activate
                                 try {
                                     parent.parent.item.activate()
-                                    console.log("✓ activate() completed")
                                 } catch (e) {
-                                    console.log("✗ activate() failed:", e)
+                                    // Silently handle activation errors
                                 }
                             } else if (mouse.button === Qt.RightButton) {
-                                // Right click - try secondaryActivate
-                                console.log("Attempting secondaryActivate()...")
+                                // Right click - secondary activate (for items without menus)
                                 try {
                                     parent.parent.item.secondaryActivate()
-                                    console.log("✓ secondaryActivate() completed")
                                 } catch (e) {
-                                    console.log("✗ secondaryActivate() failed:", e)
+                                    // Silently handle secondary activation errors
                                 }
                             }
                         }
-                        console.log("=== END DEBUG ===")
                     }
 
                     onWheel: function(wheel) {

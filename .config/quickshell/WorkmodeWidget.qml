@@ -10,7 +10,7 @@ Rectangle {
     property bool viewerActive: false
     property bool initializing: false  // No longer need startup delay
     property string vmName: "silverblue"
-    
+
     // Configurable parameters
     property int statusCheckInterval: 5000
     property int viewerWorkspace: 10
@@ -34,18 +34,18 @@ Rectangle {
         Text {
             text: {
                 if (workmodeWidget.vmRunning && workmodeWidget.viewerActive) {
-                    return "󰍹"  // Desktop/monitor icon for active VM with viewer
+                    return "󰃖"  // Briefcase icon (on)
                 } else if (workmodeWidget.vmRunning) {
-                    return "󰾔"  // Computer icon for running VM without viewer
+                    return ""  // Briefcase icon (on)
                 } else {
-                    return ""  // Sleep/suspended icon for stopped VM
+                    return ""  // Sleep/suspended icon for stopped VM
                 }
             }
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: colors.iconSize
             color: workmodeWidget.vmRunning ? colors.green : colors.overlay
             anchors.horizontalCenter: parent.horizontalCenter
-            
+
             // No spinning animation - it's annoying
         }
     }
@@ -105,13 +105,13 @@ Rectangle {
                 if (data && data.trim()) {
                     const state = data.trim()
                     const wasRunning = workmodeWidget.vmRunning
-                    workmodeWidget.vmRunning = (state === "running")
-                    
+                    workmodeWidget.vmRunning = (state === "running" || state === "paused")
+
                     // Log state changes for debugging
                     if (wasRunning !== workmodeWidget.vmRunning) {
                         console.log("WorkmodeWidget: VM state changed to:", state)
                     }
-                    
+
                     // After checking VM, check virt-viewer
                     viewerCheckProcess.running = true
                 }
@@ -162,7 +162,7 @@ Rectangle {
     // VM start/resume process
     Process {
         id: vmStartProcess
-        command: ["bash", "-c", "virsh domstate " + workmodeWidget.vmName + " | grep -q 'shut off' && virsh start " + workmodeWidget.vmName + " || virsh resume " + workmodeWidget.vmName]
+        command: ["bash", "-c", "state=$(virsh domstate " + workmodeWidget.vmName + "); if [ \"$state\" = \"shut off\" ]; then virsh start " + workmodeWidget.vmName + "; elif [ \"$state\" = \"paused\" ]; then virsh resume " + workmodeWidget.vmName + "; fi"]
         onExited: {
             // After starting/resuming, launch virt-viewer on workspace 10
             launchViewerProcess.running = true
