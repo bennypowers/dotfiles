@@ -19,8 +19,9 @@ Rectangle {
     property bool micActive: false  // Will be monitored via process checking
     property bool cameraActive: false  // Will be monitored via process checking
 
+    property int spacing: 8
     // Configurable appearance parameters
-    property real knobSize: 32
+    property real knobSize: parent.width - spacing * 2
     property real knobRadius: 16
     property real arcRadius: 12
     property real arcLineWidth: 3
@@ -357,32 +358,22 @@ Rectangle {
     // Function to show mixer popup
     function showMixerPopup() {
         try {
-            console.log("showMixerPopup called")
             // Get the correct window reference
             var window = volumeWidget.QsWindow
-            console.log("QsWindow:", window)
             if (window && window.window) {
                 mixerPopup.anchor.window = window.window
-                console.log("Set anchor window to:", window.window)
             } else if (window) {
                 mixerPopup.anchor.window = window
-                console.log("Set anchor window to:", window)
             } else {
-                console.log("No window found, trying without anchor")
+                console.log("volumeWidget: No window found, trying without anchor")
             }
 
             // Position the popup next to the volume widget
-            console.log("Getting global position...")
             var globalPos = volumeWidget.mapToGlobal(volumeWidget.width + 10, 0)
-            console.log("Global position:", globalPos.x, globalPos.y)
             mixerPopup.anchor.rect.x = globalPos.x
             mixerPopup.anchor.rect.y = globalPos.y
-
-            console.log("Setting popup visible to true")
             mixerPopup.visible = true
             volumeWidget.mixerVisible = true
-            console.log("Mixer visible set to:", volumeWidget.mixerVisible)
-            console.log("showMixerPopup completed successfully")
         } catch (error) {
             console.log("Error in showMixerPopup:", error)
         }

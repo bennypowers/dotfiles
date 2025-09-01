@@ -23,6 +23,7 @@ QtObject {
     readonly property int smallIconSize: 14
     readonly property int textSize: 16
     readonly property int smallTextSize: 12
+    readonly property int largeTextSize: 24
 
     // Global spacing and styling
     readonly property int spacing: 4

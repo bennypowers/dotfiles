@@ -6,6 +6,7 @@ Rectangle {
     height: 60
     color: "transparent"
     radius: 8
+    property int spacing: 8
 
     property real cpuUsage: 0
     property real animatedCpuUsage: 0  // Animated version of cpuUsage for needle
@@ -17,8 +18,8 @@ Rectangle {
     property real mouseY: 0  // Store mouse Y position
 
     // Configurable appearance parameters
-    property real gaugeSize: 32
-    property real gaugeRadius: 16
+    property real gaugeSize: parent.width - spacing
+    property real gaugeRadius: gaugeSize / 2
     property real needleLength: 8
     property real needleWidth: 3
     property real centerDotRadius: 2.5
@@ -70,8 +71,8 @@ Rectangle {
 
         // CPU gauge
         Item {
-            width: 36
-            height: 36
+            width: 60
+            height: 60
             anchors.horizontalCenter: parent.horizontalCenter
 
             // Background circle with usage color

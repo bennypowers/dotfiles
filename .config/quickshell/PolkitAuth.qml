@@ -27,142 +27,35 @@ Item {
     property bool fidoRetrying: false    // FIDO retry in progress
     property bool authTimedOut: false    // Authentication timed out or failed
 
+
+    property int windowWidth: 680
+    property int windowHeight: 420
+
     // User information
     property string currentUser: ""
     property string userFullName: ""
     property string userIconPath: ""
 
-    // AccountsService process with proper stdout collection
-    Process {
-        id: userInfoProcess
-        running: false
-        command: ["/home/bennyp/.config/quickshell/get-user-info.sh"]
-
-        stdout: StdioCollector {
-            id: stdoutCollector
-            onStreamFinished: {
-                console.log("AccountsService script output received:", this.text)
-                parseAccountsServiceData(this.text)
-            }
-        }
-
-        onExited: {
-            console.log("AccountsService process exited with code:", exitCode)
-            if (exitCode !== 0) {
-                console.log("Process failed, using fallback")
-                setFallbackUserInfo()
-            }
-        }
+    property var actionMap: {
+        "org.freedesktop.policykit.exec": "Run program as administrator",
+        "org.freedesktop.systemd1.manage-units": "Manage system services",
+        "org.freedesktop.systemd1.reload-daemon": "Reload system configuration",
+        "org.freedesktop.NetworkManager.network-control": "Control network connections",
+        "org.freedesktop.udisks2.filesystem-mount": "Mount storage device",
+        "org.freedesktop.udisks2.filesystem-unmount": "Unmount storage device",
+        "org.freedesktop.login1.power-off": "Power off the system",
+        "org.freedesktop.login1.reboot": "Restart the system",
+        "org.freedesktop.packagekit.package-install": "Install software packages",
+        "org.freedesktop.packagekit.package-remove": "Remove software packages"
     }
 
     // Load user information
     function loadUserInfo() {
-        console.log("Loading user information from AccountsService...")
         userInfoProcess.running = true
-    }
-
-    // Parse AccountsService data from script output
-    function parseAccountsServiceData(output) {
-        console.log("Parsing real AccountsService data...")
-
-        if (!output || output.length === 0) {
-            console.log("No output from AccountsService script")
-            setFallbackUserInfo()
-            return
-        }
-
-        // Parse the output from our script
-        var lines = output.split('\n')
-
-        for (var i = 0; i < lines.length; i++) {
-            var line = lines[i].trim()
-
-            if (line.startsWith("ICON_FILE=")) {
-                var iconPath = line.substring(10) // Remove "ICON_FILE="
-                if (iconPath && iconPath.length > 0) {
-                    polkitAuth.userIconPath = iconPath
-                    console.log("Set user avatar from AccountsService:", iconPath)
-                }
-            }
-
-            if (line.startsWith("REAL_NAME=")) {
-                var realName = line.substring(10) // Remove "REAL_NAME="
-                if (realName && realName.length > 0) {
-                    polkitAuth.userFullName = realName
-                    console.log("Set user real name from AccountsService:", realName)
-                } else {
-                    console.log("RealName is empty, keeping username:", polkitAuth.userFullName)
-                }
-            }
-
-            if (line.startsWith("EMAIL=")) {
-                var email = line.substring(6) // Remove "EMAIL="
-                if (email && email.length > 0) {
-                    console.log("User email from AccountsService:", email)
-                }
-            }
-        }
-
-        console.log("AccountsService data loaded - Name:", polkitAuth.userFullName, "Avatar:", polkitAuth.userIconPath)
-    }
-
-    // Fallback user info
-    function setFallbackUserInfo() {
-        console.log("Using fallback user information")
-        // Username is already set in Component.onCompleted
-        // Avatar will remain empty, showing fallback initial
-        console.log("Fallback - Name:", polkitAuth.userFullName, "Avatar: (empty)")
-    }
-
-    Component.onCompleted: {
-        // Get current user from environment
-        polkitAuth.currentUser = Quickshell.env("USER") || "user"
-        polkitAuth.userFullName = polkitAuth.currentUser // Fallback
-
-        // Load user info from AccountsService
-        loadUserInfo()
-    }
-
-    // Signals
-    signal authCompleted(bool success)
-    signal authCancelled()
-
-    // PAM context for authentication
-    PamContext {
-        id: pamContext
-        config: "system-auth"  // Use system auth config like sudo
-
-        onCompleted: function(result) {
-            console.log("Polkit PAM auth completed:", result)
-            polkitAuth.authInProgress = false
-            polkitAuth.dialogVisible = false
-
-            if (result === PamResult.Success) {
-                polkitAuth.authCompleted(true)
-            } else {
-                polkitAuth.authCompleted(false)
-            }
-        }
-
-        onError: function(error) {
-            console.log("Polkit PAM auth error:", error)
-            polkitAuth.authInProgress = false
-            polkitAuth.dialogVisible = false
-            polkitAuth.authCompleted(false)
-        }
-
-        onPamMessage: function(message) {
-            console.log("Polkit PAM message:", message)
-            // Update UI with PAM prompts
-            if (message && message.length > 0) {
-                authDialog.messageText = message
-            }
-        }
     }
 
     // Function to start authentication
     function startAuthentication(actionId, message, useIpcMode, cookie) {
-        console.log("Starting polkit authentication for:", actionId)
         polkitAuth.actionId = actionId
         polkitAuth.message = message || "Authentication required"
         polkitAuth.authInProgress = true
@@ -178,21 +71,14 @@ Item {
         // Detect FIDO keys when starting authentication
         fidoDetector.running = true
 
-        if (polkitAuth.ipcMode) {
-            console.log("Using IPC mode - authentication handled by quickshell-polkit-agent")
-            console.log("Cookie:", polkitAuth.currentCookie)
-            // Don't start PAM - the agent handles authentication
-
-        } else {
-            console.log("Using direct PAM mode")
-            // Start PAM authentication
+        // Don't start PAM for ipc calls - the agent handles authentication
+        if (!polkitAuth.ipcMode) {
             pamContext.start()
         }
     }
 
     // Function to cancel authentication
     function cancelAuthentication() {
-        console.log("Cancelling polkit authentication")
         if (pamContext.active) {
             pamContext.abort()
         }
@@ -206,6 +92,37 @@ Item {
         polkitAuth.authCancelled()
     }
 
+    // Function to get human-readable action names
+    function getActionDisplayName(actionId) {
+        return polkitAuth.actionMap[actionId] || actionId
+    }
+
+    // Signals
+    signal authCompleted(bool success)
+    signal authCancelled()
+
+    // AccountsService process with inline command
+    Process {
+        id: userInfoProcess
+        running: false
+        command: [
+          "sh",
+          "-c",
+          "uid=$(id -u); busctl get-property org.freedesktop.Accounts /org/freedesktop/Accounts/User$uid org.freedesktop.Accounts.User IconFile 2>/dev/null && busctl get-property org.freedesktop.Accounts /org/freedesktop/Accounts/User$uid org.freedesktop.Accounts.User RealName 2>/dev/null"
+        ]
+        stdout: StdioCollector {
+            id: stdoutCollector
+            onStreamFinished: {
+                var [[,iconPath], [,realName]] =
+                    this.text
+                        .split('\n')
+                        .map(l => l?.match(/s "(.+)"/) ??[])
+                if (iconPath) polkitAuth.userIconPath = iconPath
+                if (realName) polkitAuth.userFullName = realName
+            }
+        }
+    }
+
     // FIDO key detection
     Process {
         id: fidoDetector
@@ -216,26 +133,52 @@ Item {
             onStreamFinished: {
                 // Check for common FIDO key vendors
                 var output = this.text.toLowerCase()
-                polkitAuth.fidoKeyPresent = output.includes("yubico") || 
+                polkitAuth.fidoKeyPresent = output.includes("yubico") ||
                                           output.includes("feitian") ||
                                           output.includes("nitrokey") ||
                                           output.includes("1050:") ||  // Yubico vendor ID
                                           output.includes("20a0:")     // Nitrokey vendor ID
-                console.log("FIDO key detection:", polkitAuth.fidoKeyPresent ? "Found" : "Not found")
-
                 // Auto-submit for FIDO keys in IPC mode
                 if (polkitAuth.fidoKeyPresent && polkitAuth.ipcMode && polkitAuth.currentCookie) {
-                    console.log("Auto-submitting FIDO authentication")
                     polkitAuth.authInProgress = true
                     // Submit empty response to trigger FIDO auth
-                    console.log("DEBUG: socketClient exists:", !!polkitAuth.socketClient)
                     if (polkitAuth.socketClient) {
-                        console.log("DEBUG: Calling submitAuthentication with cookie:", polkitAuth.currentCookie)
                         polkitAuth.socketClient.submitAuthentication(polkitAuth.currentCookie, "")
-                    } else {
-                        console.log("ERROR: socketClient not available")
                     }
                 }
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        // Get current user from environment
+        polkitAuth.currentUser = Quickshell.env("USER") || "user"
+        polkitAuth.userFullName = polkitAuth.currentUser // Fallback
+        // Load user info from AccountsService
+        loadUserInfo()
+    }
+
+    // PAM context for authentication
+    PamContext {
+        id: pamContext
+        config: "system-auth"  // Use system auth config like sudo
+
+        onCompleted: function(result) {
+            polkitAuth.authInProgress = false
+            polkitAuth.dialogVisible = false
+            polkitAuth.authCompleted(result === PamResult.Success)
+        }
+
+        onError: function(error) {
+            polkitAuth.authInProgress = false
+            polkitAuth.dialogVisible = false
+            polkitAuth.authCompleted(false)
+        }
+
+        onPamMessage: function(message) {
+            // Update UI with PAM prompts
+            if (message && message.length > 0) {
+                authDialog.messageText = message
             }
         }
     }
@@ -250,7 +193,6 @@ Item {
         onTriggered: {
             if (authDialog.visible && passwordField.visible) {
                 passwordField.forceActiveFocus()
-                console.log("Focus restored to password field")
             }
         }
     }
@@ -266,7 +208,6 @@ Item {
         onTriggered: {
             attempts++
             if (authDialog.visible && passwordField.visible && !passwordField.activeFocus && attempts < 10) {
-                console.log("Focus attempt", attempts, "for password field")
                 passwordField.forceActiveFocus()
             } else {
                 attempts = 0
@@ -284,31 +225,12 @@ Item {
 
         onTriggered: {
             if (polkitAuth.fidoRetrying) {
-                console.log("FIDO retry timed out, falling back to password")
                 polkitAuth.fidoRetrying = false
                 polkitAuth.fidoFallback = true
                 polkitAuth.authInProgress = false
                 focusTimer.start()
             }
         }
-    }
-
-    // Function to get human-readable action names
-    function getActionDisplayName(actionId) {
-        var actionMap = {
-            "org.freedesktop.policykit.exec": "Run program as administrator",
-            "org.freedesktop.systemd1.manage-units": "Manage system services",
-            "org.freedesktop.systemd1.reload-daemon": "Reload system configuration", 
-            "org.freedesktop.NetworkManager.network-control": "Control network connections",
-            "org.freedesktop.udisks2.filesystem-mount": "Mount storage device",
-            "org.freedesktop.udisks2.filesystem-unmount": "Unmount storage device",
-            "org.freedesktop.login1.power-off": "Power off the system",
-            "org.freedesktop.login1.reboot": "Restart the system",
-            "org.freedesktop.packagekit.package-install": "Install software packages",
-            "org.freedesktop.packagekit.package-remove": "Remove software packages"
-        }
-
-        return actionMap[actionId] || actionId
     }
 
     // Authentication dialog layer shell
@@ -320,13 +242,19 @@ Item {
         exclusiveZone: 0
         keyboardFocus: WlrKeyboardFocus.Exclusive
 
+        color: "transparent"
+
         // Center on screen using margins
         anchors.bottom: true
         margins.bottom: (screen.height - height) / 2
         margins.left: (screen.width - width) / 2
 
+        implicitWidth: Math.min(polkitAuth.windowWidth, screen.width - 40)
+        implicitHeight: Math.min(polkitAuth.fidoFallback ? polkitAuth.windowHeight : (polkitAuth.fidoKeyPresent ? 280 : 320), screen.height - 40)
+
+        property string messageText: polkitAuth.message
+
         onVisibleChanged: {
-            console.log("PolkitAuth dialog visibility changed to:", visible)
             if (visible) {
                 passwordField.text = ""
                 // Force focus after a delay to ensure layer shell is ready
@@ -371,12 +299,6 @@ Item {
             }
         }
 
-        width: Math.min(450, screen.width - 40)
-        height: Math.min(polkitAuth.fidoFallback ? 360 : (polkitAuth.fidoKeyPresent ? 280 : 320), screen.height - 40)
-
-        property string messageText: polkitAuth.message
-
-
         Rectangle {
             anchors.fill: parent
             color: colors.base
@@ -408,8 +330,8 @@ Item {
 
                     // User avatar
                     Item {
-                        width: 48
-                        height: 48
+                        Layout.preferredWidth: 64
+                        Layout.preferredHeight: 64
 
                         // Real user avatar if available
                         Rectangle {
@@ -424,6 +346,9 @@ Item {
                                 anchors.fill: parent
                                 source: polkitAuth.userIconPath ? "file://" + polkitAuth.userIconPath : ""
                                 fillMode: Image.PreserveAspectCrop
+                                onStatusChanged: {
+                                    console.log("Avatar image status:", status, "source:", source)
+                                }
                             }
                         }
 
@@ -439,7 +364,7 @@ Item {
                                 text: polkitAuth.userFullName.charAt(0).toUpperCase()
                                 color: colors.crust
                                 font.family: colors.fontFamily
-                                font.pixelSize: 20
+                                font.pixelSize: colors.largeTextSize
                                 font.bold: true
                             }
                         }
@@ -452,7 +377,7 @@ Item {
                             text: "Authentication Required"
                             color: colors.text
                             font.family: colors.fontFamily
-                            font.pixelSize: colors.textSize + 2
+                            font.pixelSize: colors.largeTextSize + 2
                             font.bold: true
                         }
 
@@ -470,7 +395,7 @@ Item {
                             }
                             color: colors.subtext
                             font.family: colors.fontFamily
-                            font.pixelSize: colors.smallTextSize
+                            font.pixelSize: colors.textSize
                         }
                     }
                 }
@@ -480,7 +405,7 @@ Item {
                     text: authDialog.messageText
                     color: colors.green
                     font.family: colors.fontFamily
-                    font.pixelSize: colors.smallTextSize
+                    font.pixelSize: colors.textSize
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter
@@ -489,10 +414,10 @@ Item {
 
                 // Human-readable action description
                 Text {
-                    text: getActionDisplayName(polkitAuth.actionId)
+                    text: polkitAuth.getActionDisplayName(polkitAuth.actionId)
                     color: colors.peach
                     font.family: colors.fontFamily
-                    font.pixelSize: colors.smallTextSize
+                    font.pixelSize: colors.textSize
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter
@@ -530,7 +455,7 @@ Item {
 
                     color: colors.text
                     font.family: colors.fontFamily
-                    font.pixelSize: colors.smallTextSize
+                    font.pixelSize: colors.textSize
 
                     Keys.onReturnPressed: authenticateButton.clicked()
                     Keys.onEscapePressed: polkitAuth.cancelAuthentication()
@@ -554,7 +479,7 @@ Item {
                     }
                     color: colors.yellow
                     font.family: colors.fontFamily
-                    font.pixelSize: 10
+                    font.pixelSize: colors.smallTextSize
                     Layout.alignment: Qt.AlignHCenter
                     visible: polkitAuth.authInProgress
                 }
@@ -658,11 +583,8 @@ Item {
                         }
 
                         onClicked: {
-                            console.log("Authentication button clicked")
-
                             if (polkitAuth.ipcMode && polkitAuth.currentCookie) {
                                 // IPC mode - send to quickshell polkit agent
-                                console.log("Submitting authentication via IPC, cookie:", polkitAuth.currentCookie)
                                 // Submit via socket client
                                 if (polkitAuth.socketClient) {
                                     polkitAuth.socketClient.submitAuthentication(polkitAuth.currentCookie, passwordField.text)
