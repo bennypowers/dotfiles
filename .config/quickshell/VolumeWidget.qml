@@ -44,6 +44,11 @@ Rectangle {
         id: colors
     }
 
+    // Smart anchor utility
+    SmartAnchor {
+        id: smartAnchor
+    }
+
     // Tooltip for mic/camera indicators (defined early to avoid reference errors)
     SimpleTooltip {
         id: tooltip
@@ -79,11 +84,11 @@ Rectangle {
                 }
             }
 
-            // Circular mouse area for hover effect
+            // Larger mouse area for easier hovering
             MouseArea {
                 anchors.centerIn: parent
-                width: 36
-                height: 36
+                width: 50
+                height: 50
                 hoverEnabled: true
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
 
@@ -93,11 +98,16 @@ Rectangle {
                     if (volumeWidget.defaultSource) {
                         tooltipText += "<br/><br/><b>Dual Volume Display:</b><br/>Outer arc: Speaker volume (purple)<br/>Inner arc: Microphone volume (green)"
                     }
-                    tooltip.showAt(
-                        volumeWidget.mapToGlobal(volumeWidget.width, 0).x,
-                        volumeWidget.mapToGlobal(0, 0).y,
-                        tooltipText
-                    )
+                    try {
+                        var anchorInfo = smartAnchor.calculateTooltipPosition(volumeWidget, 300, 120)
+                        tooltip.showAt(anchorInfo.x, anchorInfo.y, tooltipText)
+                    } catch (e) {
+                        tooltip.showAt(
+                            volumeWidget.mapToGlobal(volumeWidget.width, 0).x,
+                            volumeWidget.mapToGlobal(0, 0).y,
+                            tooltipText
+                        )
+                    }
                 }
 
                 onExited: {
@@ -243,11 +253,8 @@ Rectangle {
                             status = "<b>Microphone:</b> Available (not in use)"
                         }
 
-                        tooltip.showAt(
-                            volumeWidget.mapToGlobal(parent.x + parent.width, parent.y).x,
-                            volumeWidget.mapToGlobal(parent.x, parent.y).y,
-                            status
-                        )
+                        var anchorInfo = smartAnchor.calculateTooltipPosition(volumeWidget, 200, 60)
+                        tooltip.showAt(anchorInfo.x, anchorInfo.y, status)
                     }
                     onExited: {
                         tooltip.hide()
@@ -276,13 +283,11 @@ Rectangle {
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: {
-                        tooltip.showAt(
-                            volumeWidget.mapToGlobal(parent.x + parent.width, parent.y).x,
-                            volumeWidget.mapToGlobal(parent.x, parent.y).y,
-                            volumeWidget.cameraActive ? 
-                                "<b>Camera:</b> Active (in use)" : 
-                                "<b>Camera:</b> Inactive"
-                        )
+                        var tooltipText = volumeWidget.cameraActive ? 
+                            "<b>Camera:</b> Active (in use)" : 
+                            "<b>Camera:</b> Inactive"
+                        var anchorInfo = smartAnchor.calculateTooltipPosition(volumeWidget, 200, 60)
+                        tooltip.showAt(anchorInfo.x, anchorInfo.y, tooltipText)
                     }
                     onExited: {
                         tooltip.hide()
@@ -368,10 +373,10 @@ Rectangle {
                 console.log("volumeWidget: No window found, trying without anchor")
             }
 
-            // Position the popup next to the volume widget
-            var globalPos = volumeWidget.mapToGlobal(volumeWidget.width + 10, 0)
-            mixerPopup.anchor.rect.x = globalPos.x
-            mixerPopup.anchor.rect.y = globalPos.y
+            // Use smart anchor calculation for mixer popup positioning
+            var anchorInfo = smartAnchor.calculateAnchor(volumeWidget, mixerPopup.implicitWidth, mixerPopup.implicitHeight)
+            mixerPopup.anchor.rect.x = anchorInfo.x
+            mixerPopup.anchor.rect.y = anchorInfo.y
             mixerPopup.visible = true
             volumeWidget.mixerVisible = true
         } catch (error) {

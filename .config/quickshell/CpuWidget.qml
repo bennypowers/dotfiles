@@ -57,6 +57,11 @@ Rectangle {
         id: colors
     }
 
+    // Smart anchor utility
+    SmartAnchor {
+        id: smartAnchor
+    }
+
     // Color based on CPU usage
     property string usageColor: {
         if (cpuUsage < 25) return colors.green
@@ -233,11 +238,11 @@ Rectangle {
                 }
             }
 
-            // Circular mouse area for hover effect
+            // Larger mouse area for easier hovering
             MouseArea {
                 anchors.centerIn: parent
-                width: 36
-                height: 36
+                width: 50
+                height: 50
                 hoverEnabled: true
 
                 onEntered: {
@@ -249,7 +254,6 @@ Rectangle {
                     gaugeBackground.opacity = cpuWidget.backgroundOpacityIdle
                     hideTooltip()
                 }
-
 
                 onClicked: {
                     clickProcess.running = true
@@ -319,9 +323,15 @@ Rectangle {
                             // Just update text if tooltip is already visible
                             cpuWidget.tooltipWindow.updateText(tooltip)
                         } else {
-                            // Show tooltip at fixed position relative to widget (right side)
-                            var globalPos = mapToGlobal(40, 0)
-                            cpuWidget.tooltipWindow.showAt(globalPos.x, globalPos.y, tooltip)
+                            // Use smart anchor calculation for tooltip positioning
+                            try {
+                                var anchorInfo = smartAnchor.calculateTooltipPosition(cpuWidget, 300, 200)
+                                cpuWidget.tooltipWindow.showAt(anchorInfo.x, anchorInfo.y, tooltip)
+                            } catch (e) {
+                                // Fallback to original positioning
+                                var globalPos = mapToGlobal(40, 0)
+                                cpuWidget.tooltipWindow.showAt(globalPos.x, globalPos.y, tooltip)
+                            }
                         }
                     }
                 }
@@ -336,6 +346,7 @@ Rectangle {
         }
 
     }
+
 
     // Redraw gauge when CPU usage changes
     onCpuUsageChanged: {

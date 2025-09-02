@@ -130,28 +130,18 @@ Item {
             console.log("❌ Not connected to polkit agent")
             return false
         }
-
-        var message = {
-            "type": "submit_authentication",
-            "cookie": cookie,
-            "response": response || ""
-        }
-
-        console.log("📤 Submitting authentication:", response)
-        socket.write(JSON.stringify(message) + "\n")
+        console.log("📤 Submitting authentication...")
+        const type = "submit_authentication"
+        socket.write(JSON.stringify({ type, cookie, response }) + "\n")
         socket.flush()
         return true
     }
 
     function cancelAuthentication() {
         if (!socket.connected) return
-
-        var message = {
-            "type": "cancel_authorization"
-        }
-
         console.log("📤 Cancelling authentication")
-        socket.write(JSON.stringify(message) + "\n")
+        const type = "cancel_authorization"
+        socket.write(JSON.stringify({ type }) + "\n")
         socket.flush()
     }
 }

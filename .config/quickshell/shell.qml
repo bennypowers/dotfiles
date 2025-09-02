@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Io
 
 ShellRoot {
+    id: root
     // Global font configuration
     readonly property string defaultFontFamily: colors.fontFamily
     readonly property int defaultFontSize: 12
@@ -41,12 +42,13 @@ ShellRoot {
             polkitAuth.authInProgress = false
 
             if (!authorized) {
-                // Authentication failed/timed out - show timeout message
-                polkitAuth.authTimedOut = true
-                // Don't auto-dismiss, let user see the failure and manually cancel
+                // Authentication failed/cancelled - dismiss dialog
+                polkitAuth.dialogVisible = false
+                polkitAuth.authCompleted(false)
             } else {
                 // Success - dismiss dialog
                 polkitAuth.dialogVisible = false
+                polkitAuth.authCompleted(true)
             }
         }
 
@@ -65,7 +67,7 @@ ShellRoot {
             polkitAuth.currentCookie = cookie
             // Dialog should now show both "Try FIDO Again" and password input
             // Trigger focus restoration
-            polkitAuth.focusTimer.start()
+            polkitAuth.startFocusTimer()
         }
     }
 
@@ -186,11 +188,13 @@ ShellRoot {
                     VolumeWidget {
                         Layout.preferredWidth: parent.width
                         Layout.preferredHeight: 60
+                        Layout.leftMargin: 4
                     }
 
                     // Workspace switcher (minimap style) at top
                     WorkspaceIndicator {
                         Layout.preferredWidth: parent.width
+                        Layout.leftMargin: 8
                     }
 
                     // Spacer to center clock
@@ -213,24 +217,28 @@ ShellRoot {
                     SystemTrayWidget {
                         Layout.preferredWidth: parent.width
                         Layout.preferredHeight: 120
+                        Layout.leftMargin: 8
                     }
 
                     // Workmode widget (vm/WM) at very bottom
                     WorkmodeWidget {
                         Layout.preferredWidth: parent.width
                         Layout.preferredHeight: 40
+                        Layout.leftMargin: 8
                     }
 
                     // Network widget at bottom
                     NetworkWidget {
                         Layout.preferredWidth: parent.width
                         Layout.preferredHeight: 40
+                        Layout.leftMargin: 8
                     }
 
                     // Power widget at very bottom
                     PowerWidget {
                         Layout.preferredWidth: parent.width
                         Layout.preferredHeight: 40
+                        Layout.leftMargin: 8
                     }
 
                 }

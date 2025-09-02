@@ -21,6 +21,12 @@ Rectangle {
         id: colors
     }
 
+    // Smart anchor utility
+    SmartAnchor {
+        id: smartAnchor
+    }
+
+
     Component.onCompleted: {
         // Start status checking immediately - no longer need delay for safety
         statusTimer.start()
@@ -83,7 +89,12 @@ Rectangle {
         hoverEnabled: true
         onEntered: {
             parent.color = colors.surface
-            tooltip.showAt(workmodeWidget.mapToGlobal(workmodeWidget.width, 0).x, workmodeWidget.mapToGlobal(0, 0).y, generateTooltipText())
+            try {
+                var anchorInfo = smartAnchor.calculateTooltipPosition(workmodeWidget, 200, 100)
+                tooltip.showAt(anchorInfo.x, anchorInfo.y, generateTooltipText())
+            } catch (e) {
+                tooltip.showAt(workmodeWidget.mapToGlobal(workmodeWidget.width, 0).x, workmodeWidget.mapToGlobal(0, 0).y, generateTooltipText())
+            }
         }
         onExited: {
             parent.color = "transparent"
@@ -183,22 +194,12 @@ Rectangle {
         }
     }
 
-    // Launch virt-viewer on workspace 10
+    // Launch virt-viewer completely detached from quickshell
     Process {
         id: launchViewerProcess
-        command: ["bash", "-c", "hyprctl dispatch workspace " + workmodeWidget.viewerWorkspace + " && sleep " + (workmodeWidget.viewerStartDelay / 1000) + " && until virsh domstate " + workmodeWidget.vmName + " | grep -q running; do sleep " + (workmodeWidget.vmStartupCheckDelay / 1000) + "; done && virt-viewer --attach " + workmodeWidget.vmName]
-        stderr: SplitParser {
-            onRead: function(data) {
-                console.log("WorkmodeWidget: virt-viewer stderr:", JSON.stringify(data))
-            }
-        }
-        stdout: SplitParser {
-            onRead: function(data) {
-                console.log("WorkmodeWidget: virt-viewer stdout:", JSON.stringify(data))
-            }
-        }
+        command: ["setsid", "-f", "/home/bennyp/.config/quickshell/launch-virt-viewer.sh", workmodeWidget.vmName, workmodeWidget.viewerWorkspace.toString(), (workmodeWidget.viewerStartDelay / 1000).toString(), (workmodeWidget.vmStartupCheckDelay / 1000).toString()]
         onExited: function(exitCode) {
-            console.log("WorkmodeWidget: virt-viewer process exited with code:", exitCode)
+            console.log("WorkmodeWidget: virt-viewer launcher detached with code:", exitCode)
             // Refresh status after launching viewer
             vmStatusProcess.running = true
         }

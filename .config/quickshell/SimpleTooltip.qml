@@ -42,9 +42,9 @@ Window {
 
     function showAt(x, y, text) {
         tooltipText = text
-        // Position tooltip with bottom-left anchor
+        // Use the exact coordinates provided - smart anchor already calculated the right position
         tooltipWindow.x = x
-        tooltipWindow.y = y - height
+        tooltipWindow.y = y
         visible = true
     }
 

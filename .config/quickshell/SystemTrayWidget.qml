@@ -7,7 +7,7 @@ Column {
     spacing: 4
 
     // Configurable parameters
-    property real itemSize: 32
+    property real itemSize: 42
 
     // Icon fallback configuration - can be customized per user/system
     // iconExtensions: File extensions to try when applications specify custom icon paths
@@ -17,6 +17,11 @@ Column {
 
     Colors {
         id: colors
+    }
+
+    // Smart anchor utility
+    SmartAnchor {
+        id: smartAnchor
     }
 
     Repeater {
@@ -150,11 +155,8 @@ Column {
 
                     onEntered: {
                         if (parent.parent.item && parent.parent.item.title) {
-                            tooltip.showAt(
-                                systemTrayWidget.mapToGlobal(parent.parent.x + parent.parent.width, parent.parent.y).x,
-                                systemTrayWidget.mapToGlobal(parent.parent.x, parent.parent.y).y,
-                                parent.parent.item.title
-                            )
+                            var anchorInfo = smartAnchor.calculateTooltipPosition(systemTrayWidget, 200, 60)
+                            tooltip.showAt(anchorInfo.x, anchorInfo.y, parent.parent.item.title)
                         }
                     }
 
@@ -175,10 +177,11 @@ Column {
                                     var window2 = systemTrayWidget.QsWindow
                                     if (window2 && window2.window) {
                                         menuAnchor.anchor.window = window2.window
-                                        var globalMousePos = systemTrayWidget.mapToGlobal(parent.parent.x + mouse.x, parent.parent.y + mouse.y)
-
-                                        menuAnchor.anchor.rect.x = globalMousePos.x - 2
-                                        menuAnchor.anchor.rect.y = globalMousePos.y - 2  
+                                        
+                                        // Use smart anchor calculation for context menu positioning
+                                        var anchorInfo = smartAnchor.calculateAnchor(systemTrayWidget, 200, 150)
+                                        menuAnchor.anchor.rect.x = anchorInfo.x
+                                        menuAnchor.anchor.rect.y = anchorInfo.y
                                         menuAnchor.anchor.rect.width = 4
                                         menuAnchor.anchor.rect.height = 4
                                     }

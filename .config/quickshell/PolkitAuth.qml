@@ -54,12 +54,14 @@ Item {
         userInfoProcess.running = true
     }
 
+    function startFocusTimer() {
+      focusTimer.start()
+    }
+
     // Function to start authentication
     function startAuthentication(actionId, message, useIpcMode, cookie) {
         polkitAuth.actionId = actionId
         polkitAuth.message = message || "Authentication required"
-        polkitAuth.authInProgress = true
-        polkitAuth.dialogVisible = true
         polkitAuth.ipcMode = useIpcMode || false
         polkitAuth.currentCookie = cookie || ""
 
@@ -68,13 +70,19 @@ Item {
         polkitAuth.fidoRetrying = false
         fidoRetryTimer.stop()
 
-        // Detect FIDO keys when starting authentication
+        // Detect FIDO keys FIRST, before showing dialog
         fidoDetector.running = true
 
-        // Don't start PAM for ipc calls - the agent handles authentication
-        if (!polkitAuth.ipcMode) {
-            pamContext.start()
-        }
+        // Small delay to let FIDO detection complete before showing dialog
+        Qt.callLater(function() {
+            polkitAuth.authInProgress = true
+            polkitAuth.dialogVisible = true
+
+            // Don't start PAM for ipc calls - the agent handles authentication
+            if (!polkitAuth.ipcMode) {
+                pamContext.start()
+            }
+        })
     }
 
     // Function to cancel authentication
@@ -90,6 +98,10 @@ Item {
         focusTimer.stop()
         initialFocusTimer.stop()
         polkitAuth.authCancelled()
+        // Only emit authCompleted for direct PAM mode, not IPC mode
+        if (!polkitAuth.ipcMode) {
+            polkitAuth.authCompleted(false)
+        }
     }
 
     // Function to get human-readable action names
@@ -117,8 +129,8 @@ Item {
                     this.text
                         .split('\n')
                         .map(l => l?.match(/s "(.+)"/) ??[])
-                if (iconPath) polkitAuth.userIconPath = iconPath
-                if (realName) polkitAuth.userFullName = realName
+                if (iconPath) { polkitAuth.userIconPath = iconPath }
+                if (realName) { polkitAuth.userFullName = realName }
             }
         }
     }
@@ -138,8 +150,8 @@ Item {
                                           output.includes("nitrokey") ||
                                           output.includes("1050:") ||  // Yubico vendor ID
                                           output.includes("20a0:")     // Nitrokey vendor ID
-                // Auto-submit for FIDO keys in IPC mode
-                if (polkitAuth.fidoKeyPresent && polkitAuth.ipcMode && polkitAuth.currentCookie) {
+                // Auto-submit for FIDO keys in IPC mode, but not when in fallback mode
+                if (polkitAuth.fidoKeyPresent && polkitAuth.ipcMode && polkitAuth.currentCookie && !polkitAuth.fidoFallback) {
                     polkitAuth.authInProgress = true
                     // Submit empty response to trigger FIDO auth
                     if (polkitAuth.socketClient) {
@@ -275,27 +287,20 @@ Item {
             }
         }
 
-        // Focus trapping - WlrLayershell handles focus automatically
-        Keys.onPressed: function(event) {
-            if (event.key === Qt.Key_Escape) {
-                polkitAuth.cancelAuthentication()
-                event.accepted = true
-            } else if (event.key === Qt.Key_Tab) {
-                // Trap focus within dialog
-                if (event.modifiers & Qt.ShiftModifier) {
-                    // Shift+Tab - go to cancel button
-                    cancelButton.forceActiveFocus()
+        // Global ESC key handler
+        Shortcut {
+            sequence: "Escape"
+            enabled: polkitAuth.dialogVisible
+            onActivated: {
+                console.log("ESC shortcut activated")
+                // Handle ESC key same as cancel button
+                if (polkitAuth.ipcMode && polkitAuth.socketClient) {
+                    console.log("ESC: sending socket cancellation")
+                    polkitAuth.socketClient.cancelAuthentication()
                 } else {
-                    // Tab - go to authenticate button or password field
-                    if (passwordField.activeFocus) {
-                        if (authenticateButton.enabled) {
-                            authenticateButton.forceActiveFocus()
-                        }
-                    } else {
-                        passwordField.forceActiveFocus()
-                    }
+                    console.log("ESC: calling direct cancellation")
+                    polkitAuth.cancelAuthentication()
                 }
-                event.accepted = true
             }
         }
 
@@ -458,7 +463,10 @@ Item {
                     font.pixelSize: colors.textSize
 
                     Keys.onReturnPressed: authenticateButton.clicked()
-                    Keys.onEscapePressed: polkitAuth.cancelAuthentication()
+                    Keys.onEscapePressed: {
+                        console.log("ESC pressed from password field")
+                        cancelButton.clicked()
+                    }
 
                     Component.onCompleted: forceActiveFocus()
                 }
@@ -514,9 +522,11 @@ Item {
                             // Send cancellation to polkit agent if in IPC mode
                             if (polkitAuth.ipcMode && polkitAuth.socketClient) {
                                 polkitAuth.socketClient.cancelAuthentication()
+                                // Don't close dialog immediately - wait for authorization_result
+                            } else {
+                                // For direct PAM mode, use full cancellation
+                                polkitAuth.cancelAuthentication()
                             }
-
-                            polkitAuth.cancelAuthentication()
                         }
                     }
 

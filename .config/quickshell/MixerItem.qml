@@ -20,6 +20,11 @@ Rectangle {
         id: colors
     }
 
+    // Smart anchor utility
+    SmartAnchor {
+        id: smartAnchor
+    }
+
     // Bind the node so we can read its properties
     PwObjectTracker { 
         objects: [node] 
@@ -215,11 +220,8 @@ Rectangle {
                         mixerWidget = mixerWidget.parent
                     }
                     if (mixerWidget && mixerWidget.tooltip) {
-                        mixerWidget.tooltip.showAt(
-                            mixerItem.mapToGlobal(parent.x + parent.width, parent.y).x,
-                            mixerItem.mapToGlobal(parent.x, parent.y).y,
-                            "Click to set volume, scroll to adjust"
-                        )
+                        var anchorInfo = smartAnchor.calculateTooltipPosition(mixerItem, 200, 60)
+                        mixerWidget.tooltip.showAt(anchorInfo.x, anchorInfo.y, "Click to set volume, scroll to adjust")
                     }
                 }
                 onExited: {
@@ -281,12 +283,10 @@ Rectangle {
                         mixerWidget = mixerWidget.parent
                     }
                     if (mixerWidget && mixerWidget.tooltip) {
-                        mixerWidget.tooltip.showAt(
-                            mixerItem.mapToGlobal(parent.x + parent.width, parent.y).x,
-                            mixerItem.mapToGlobal(parent.x, parent.y).y,
-                            mixerItem.node && mixerItem.node.audio && mixerItem.node.audio.muted ? 
+                        var anchorInfo = smartAnchor.calculateTooltipPosition(mixerItem, 200, 60)
+                        var tooltipText = mixerItem.node && mixerItem.node.audio && mixerItem.node.audio.muted ? 
                                 "Click to unmute" : "Click to mute"
-                        )
+                        mixerWidget.tooltip.showAt(anchorInfo.x, anchorInfo.y, tooltipText)
                     }
                 }
                 onExited: {
