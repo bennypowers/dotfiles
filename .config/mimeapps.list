@@ -3,8 +3,10 @@ image/webp=org.gnome.Evince.desktop;
 video/mp4=org.gnome.Showtime.desktop;
 video/webm=org.gnome.Showtime.desktop;
 text/plain=nvim.desktop;dev.zed.Zed.desktop;
+image/png=org.gnome.Loupe.desktop;
 
 [Default Applications]
 video/mp4=org.gnome.Showtime.desktop
 video/webm=org.gnome.Showtime.desktop
 text/plain=dev.zed.Zed.desktop
+image/png=org.gnome.Loupe.desktop
