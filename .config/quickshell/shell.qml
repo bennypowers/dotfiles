@@ -234,6 +234,13 @@ ShellRoot {
                         Layout.leftMargin: 8
                     }
 
+                    // Language switcher widget
+                    LanguageWidget {
+                        Layout.preferredWidth: parent.width
+                        Layout.preferredHeight: 40
+                        Layout.leftMargin: 8
+                    }
+
                     // Power widget at very bottom
                     PowerWidget {
                         Layout.preferredWidth: parent.width

@@ -1,0 +1,1 @@
+- when making changes to quickshell configuration, don't kill the quickshell process or restart the service - it automatically reloads

@@ -18,24 +18,14 @@ Column {
     // Offset to compensate for asymmetric panel margins
     property int centerOffset: 4  // Adjust this to fine-tune centering
 
-    Component.onCompleted: {
-        // Try to get font settings from shell root
-        let root = Quickshell.shellDir
-        if (root && root.defaultFontFamily) {
-            fontFamily = root.defaultFontFamily
-            timeFontSize = root.largeFontSize
-            dateFontSize = root.defaultFontSize
-        }
-    }
-
     Timer {
         interval: 1000
         running: true
         repeat: true
         onTriggered: {
-            const now = new Date()
-            timeText.text = Qt.formatTime(now, clockWidget.timeFormat)
-            dateText.text = Qt.formatDate(now, clockWidget.dateFormat)
+            const now = new Date();
+            timeText.text = Qt.formatTime(now, clockWidget.timeFormat);
+            dateText.text = Qt.formatDate(now, clockWidget.dateFormat);
         }
     }
 
