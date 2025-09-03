@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xkbConfigRegistry SYSTEM "xkb.dtd">
+<xkbConfigRegistry version="1.1">
+  <layoutList>
+    <layout>
+      <configItem>
+        <name>adelman</name>
+        <shortDescription>he</shortDescription>
+        <description>Hebrew (Adelman)</description>
+        <countryList>
+          <iso3166Id>IL</iso3166Id>
+        </countryList>
+        <languageList>
+          <iso639Id>heb</iso639Id>
+        </languageList>
+      </configItem>
+      <variantList>
+        <variant>
+          <configItem>
+            <name>adelman</name>
+            <shortDescription>he</shortDescription>
+            <description>Hebrew (Adelman)</description>
+          </configItem>
+        </variant>
+      </variantList>
+    </layout>
+  </layoutList>
+</xkbConfigRegistry>
