@@ -104,6 +104,7 @@ vim.lsp.enable {
   'eslint',
   'fish_lsp',
   'html',
+  'hyprls',
   'gopls',
   'jsonls',
   'qmlls',
