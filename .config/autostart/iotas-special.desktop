@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Iotas on Special Workspace
+Comment=Launch Iotas on special:magic workspace
+Exec=hyprctl dispatch exec "[workspace special:magic]" "flatpak run org.gnome.World.Iotas"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true

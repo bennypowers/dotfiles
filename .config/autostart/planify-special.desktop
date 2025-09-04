@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Planify on Special Workspace
+Comment=Launch Planify on special:magic workspace
+Exec=hyprctl dispatch exec "[workspace special:magic]" "flatpak run io.github.alainm23.planify"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true

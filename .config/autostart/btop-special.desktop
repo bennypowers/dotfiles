@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal with btop on Special Workspace
+Comment=Launch terminal running btop on special:magic workspace
+Exec=hyprctl dispatch exec "[workspace special:magic]" "kitty btop"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
