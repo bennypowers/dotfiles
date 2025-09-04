@@ -3,22 +3,54 @@
   "logo": {
     "type": "auto",
     "source": "~/Pictures/Gentoo/Larry.png",
-    // "width": 30,
-    // "height": 15,
+    "width": 32,
+    "position": "right",
     "padding": {
-      "right": 5
+      "top": 1,
+      "right": 1
     }
-   },
+  },
   "modules": [
     "title",
     "separator",
+    {
+      "type": "custom",
+      "format": "\u001b[33m▓▓▓▓▓▓▓▓ Hardware ▓▓▓▓▓▓▓▓\u001b[0m"
+    },
+    "board",
+    "cpu",
+    "gpu",
+    "display",
+    {
+      "type": "keyboard"
+    },
+    "mouse",
+    {
+      "type": "memory",
+      "format": "{1} / {2} ({3})"
+    },
+    {
+      "type": "swap",
+      "format": "{1} / {2} ({3})"
+    },
+    "disk",
+    "battery",
+    "poweradapter",
+    "break",
+    {
+      "type": "custom",
+      "format": "\u001b[35m▓▓▓▓▓▓▓▓▓ System ▓▓▓▓▓▓▓▓▓\u001b[0m"
+    },
     "os",
-    "host",
     "kernel",
     "uptime",
     "packages",
     "shell",
-    "display",
+    "break",
+    {
+      "type": "custom",
+      "format": "\u001b[36m▓▓▓▓▓▓▓▓ Desktop ▓▓▓▓▓▓▓▓▓\u001b[0m"
+    },
     "de",
     "wm",
     "wmtheme",
@@ -28,14 +60,6 @@
     "cursor",
     "terminal",
     "terminalfont",
-    "cpu",
-    "gpu",
-    "memory",
-    "swap",
-    "disk",
-    "localip",
-    "battery",
-    "poweradapter",
     "locale",
     "break",
     "colors"
