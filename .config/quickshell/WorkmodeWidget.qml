@@ -6,14 +6,18 @@ Rectangle {
     color: "transparent"
     radius: 8
 
-    property bool vmRunning: false
-    property bool viewerActive: false
     property bool initializing: false  // No longer need startup delay
     property string vmName: "silverblue"
 
+    property string iconOn: "󰃖"  // Green filled briefcase (workmode ON)
+    property string iconOff: "󰠔"  // Grey empty outlined briefcase (workmode OFF)
+
+    // State tracking
+    property bool vmRunning: false
+    property bool viewerActive: false
+
     // Configurable parameters
     property int statusCheckInterval: 5000
-    property int viewerWorkspace: 10
     property int viewerStartDelay: 2000
     property int vmStartupCheckDelay: 1000
 
@@ -39,17 +43,15 @@ Rectangle {
 
         Text {
             text: {
-                if (workmodeWidget.vmRunning && workmodeWidget.viewerActive) {
-                    return "󰃖"  // Briefcase icon (on)
-                } else if (workmodeWidget.vmRunning) {
-                    return ""  // Briefcase icon (on)
+                if (vmRunning && viewerActive) {
+                    return workmodeWidget.iconOn
                 } else {
-                    return ""  // Sleep/suspended icon for stopped VM
+                    return workmodeWidget.iconOff
                 }
             }
-            font.family: "JetBrainsMono Nerd Font"
+            font.family: colors.fontFamily
             font.pixelSize: colors.iconSize
-            color: workmodeWidget.vmRunning ? colors.green : colors.overlay
+            color: (vmRunning && viewerActive) ? colors.green : colors.overlay
             anchors.horizontalCenter: parent.horizontalCenter
 
             // No spinning animation - it's annoying
@@ -59,15 +61,12 @@ Rectangle {
     function generateTooltipText() {
         let text = `<b>Workmode VM (${workmodeWidget.vmName})</b><br/>`
 
-        if (workmodeWidget.vmRunning && workmodeWidget.viewerActive) {
-            text += `<b>Status:</b> <span style="color: ${colors.green};">Running with viewer</span><br/>`
-            text += `<b>Action:</b> Click to suspend VM and close viewer`
-        } else if (workmodeWidget.vmRunning) {
-            text += `<b>Status:</b> <span style="color: ${colors.yellow};">Running (no viewer)</span><br/>`
-            text += `<b>Action:</b> Click to launch viewer on workspace ${workmodeWidget.viewerWorkspace}`
+        if (vmRunning && viewerActive) {
+            text += `<b>Status:</b> <span style="color: ${colors.green};">ON (running + viewer)</span><br/>`
+            text += `<b>Action:</b> Click to turn OFF (suspend VM)`
         } else {
-            text += `<b>Status:</b> <span style="color: ${colors.overlay};">Stopped/Suspended</span><br/>`
-            text += `<b>Action:</b> Click to start/resume VM and launch viewer`
+            text += `<b>Status:</b> <span style="color: ${colors.overlay};">OFF (suspended)</span><br/>`
+            text += `<b>Action:</b> Click to turn ON (resume VM + launch viewer)`
         }
 
         return text
@@ -76,13 +75,13 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            if (workmodeWidget.vmRunning && workmodeWidget.viewerActive) {
-                // VM is running and viewer is active -> suspend and kill viewer
-                console.log("WorkmodeWidget: User requested VM suspend and viewer close")
+            if (vmRunning && viewerActive) {
+                // Workmode ON -> turn OFF (suspend VM, which will also kill viewer)
+                console.log("💼: User requested workmode OFF")
                 vmSuspendProcess.running = true
             } else {
-                // VM is stopped/suspended -> start/resume and launch viewer
-                console.log("WorkmodeWidget: User requested VM start/resume and viewer launch")
+                // Workmode OFF -> turn ON (start/resume VM and launch viewer)
+                console.log("💼: User requested workmode ON")
                 vmStartProcess.running = true
             }
         }
@@ -107,7 +106,7 @@ Rectangle {
         id: tooltip
     }
 
-    // Check VM status (read-only monitoring, never affects running VMs)
+    // Check VM status and enforce clean state management
     Process {
         id: vmStatusProcess
         command: ["virsh", "domstate", workmodeWidget.vmName]
@@ -116,11 +115,11 @@ Rectangle {
                 if (data && data.trim()) {
                     const state = data.trim()
                     const wasRunning = workmodeWidget.vmRunning
-                    workmodeWidget.vmRunning = (state === "running" || state === "paused")
+                    workmodeWidget.vmRunning = (state === "running")
 
                     // Log state changes for debugging
                     if (wasRunning !== workmodeWidget.vmRunning) {
-                        console.log("WorkmodeWidget: VM state changed to:", state)
+                        console.log("💼: VM state changed to:", state)
                     }
 
                     // After checking VM, check virt-viewer
@@ -130,19 +129,33 @@ Rectangle {
         }
     }
 
-    // Check virt-viewer status
+    // Check virt-viewer status and enforce clean state management
     Process {
         id: viewerCheckProcess
         command: ["pgrep", "-f", "virt-viewer"]
         stdout: SplitParser {
             onRead: function(data) {
+                const wasViewerActive = workmodeWidget.viewerActive
                 workmodeWidget.viewerActive = data && data.trim().length > 0
+
+                // Auto-suspend VM if viewer was closed but VM is still running
+                if (wasViewerActive && !workmodeWidget.viewerActive && workmodeWidget.vmRunning) {
+                    console.log("💼: Viewer closed, auto-suspending VM to maintain clean state")
+                    vmSuspendProcess.running = true
+                }
             }
         }
         onExited: function(exitCode) {
             // pgrep returns 1 if no processes found
+            const wasViewerActive = workmodeWidget.viewerActive
             if (exitCode === 1) {
                 workmodeWidget.viewerActive = false
+            }
+
+            // Auto-suspend VM if viewer was closed but VM is still running
+            if (wasViewerActive && !workmodeWidget.viewerActive && workmodeWidget.vmRunning) {
+                console.log("💼: Viewer closed, auto-suspending VM to maintain clean state")
+                vmSuspendProcess.running = true
             }
         }
     }
@@ -161,10 +174,10 @@ Rectangle {
         id: vmSuspendProcess
         command: ["virsh", "suspend", workmodeWidget.vmName]
         onStarted: {
-            console.log("WorkmodeWidget: Suspending VM:", workmodeWidget.vmName)
+            console.log("💼: Suspending VM:", workmodeWidget.vmName)
         }
         onExited: {
-            console.log("WorkmodeWidget: VM suspend completed, killing viewer")
+            console.log("💼: VM suspend completed, killing viewer")
             // After suspending, kill virt-viewer
             killViewerProcess.running = true
         }
@@ -185,10 +198,10 @@ Rectangle {
         id: killViewerProcess
         command: ["pkill", "-f", "virt-viewer"]
         onStarted: {
-            console.log("WorkmodeWidget: Killing virt-viewer processes")
+            console.log("💼: Killing virt-viewer processes")
         }
         onExited: {
-            console.log("WorkmodeWidget: virt-viewer processes killed, refreshing status")
+            console.log("💼: virt-viewer processes killed, refreshing status")
             // Refresh status after killing viewer
             vmStatusProcess.running = true
         }
@@ -197,9 +210,9 @@ Rectangle {
     // Launch virt-viewer completely detached from quickshell
     Process {
         id: launchViewerProcess
-        command: ["setsid", "-f", "/home/bennyp/.config/quickshell/launch-virt-viewer.sh", workmodeWidget.vmName, workmodeWidget.viewerWorkspace.toString(), (workmodeWidget.viewerStartDelay / 1000).toString(), (workmodeWidget.vmStartupCheckDelay / 1000).toString()]
+        command: ["setsid", "-f", "/home/bennyp/.config/quickshell/launch-virt-viewer.sh", workmodeWidget.vmName, "workmode", (workmodeWidget.viewerStartDelay / 1000).toString(), (workmodeWidget.vmStartupCheckDelay / 1000).toString()]
         onExited: function(exitCode) {
-            console.log("WorkmodeWidget: virt-viewer launcher detached with code:", exitCode)
+            console.log("💼: virt-viewer launcher detached with code:", exitCode)
             // Refresh status after launching viewer
             vmStatusProcess.running = true
         }

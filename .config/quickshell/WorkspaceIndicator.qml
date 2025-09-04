@@ -14,28 +14,85 @@ Column {
         id: colors
     }
 
+    // Properties to track special workspace visibility
+    property bool magicVisible: false
+    property bool workmodeVisible: false
+
+    property bool specialActive: magicVisible || workmodeVisible
+
+    // Listen to Hyprland events to update special workspace visibility
+    Connections {
+        target: Hyprland
+        function onRawEvent(event) {
+            switch (event.name) {
+                case "activespecial":
+                    const specialData = event.data.split(",")[0] // Get workspace name part
+
+                    if (specialData === "special:magic") {
+                        workspaceIndicator.magicVisible = true
+                        workspaceIndicator.workmodeVisible = false
+                    } else if (specialData === "special:workmode") {
+                        workspaceIndicator.magicVisible = false
+                        workspaceIndicator.workmodeVisible = true
+                    } else if (specialData === "") {
+                        // Empty means special workspace closed
+                        workspaceIndicator.magicVisible = false
+                        workspaceIndicator.workmodeVisible = false
+                    }
+                    break
+            }
+        }
+    }
+
+    // First show magic special workspace if it exists
     Repeater {
-        id: repeater
         model: Hyprland.workspaces
-
         Rectangle {
-            id: ws
-            width: parent.width - workspaceIndicator.spacing
-            height: workspaceIndicator.rectHeight
+            visible: modelData.name === "special:magic"
+            width: visible ? parent.width - workspaceIndicator.spacing : 0
+            height: visible ? workspaceIndicator.rectHeight : 0
             radius: workspaceIndicator.rectRadius
-
-            Layout.leftMargin: workspaceIndicator.spacing
-            Layout.rightMargin: workspaceIndicator.spacing
 
             required property HyprlandWorkspace modelData
             property bool hovered: false
-            property bool isSpecial: modelData.name && modelData.name.toString().includes("special")
+
+            color: workspaceIndicator.magicVisible ? colors.mauve : colors.overlay
+
+            Text {
+                anchors.centerIn: parent
+                font.family: colors.fontFamily
+                font.pixelSize: colors.textSize
+                font.bold: workspaceIndicator.magicVisible
+                text: "S"
+                color: colors.surface
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: Hyprland.dispatch("togglespecialworkspace magic")
+                hoverEnabled: true
+                onEntered: parent.hovered = true
+                onExited: parent.hovered = false
+            }
+        }
+    }
+
+    // Then show regular workspaces
+    Repeater {
+        model: Hyprland.workspaces
+        Rectangle {
+            visible: modelData.id > 0
+            width: visible ? parent.width - workspaceIndicator.spacing : 0
+            height: visible ? workspaceIndicator.rectHeight : 0
+            radius: workspaceIndicator.rectRadius
+
+            required property HyprlandWorkspace modelData
+            property bool hovered: false
 
             color: {
-                if (isSpecial) {
-                    return ws.modelData.active ? colors.mauve : colors.peach
-                } else if (ws.modelData.active) {
-                    return colors.sapphire
+                if (modelData.active) {
+                    // Use dimmed sapphire when any special workspace is active
+                    return workspaceIndicator.specialActive ? colors.surface : colors.sapphire
                 } else if (hovered) {
                     return colors.overlay
                 } else {
@@ -47,35 +104,52 @@ Column {
                 anchors.centerIn: parent
                 font.family: colors.fontFamily
                 font.pixelSize: colors.textSize
-                font.bold: ws.modelData.active
-                text:
-                    ws.isSpecial ? "S"
-                  : ws.modelData.name || ws.modelData.id
-                color:
-                    ws.isSpecial ? colors.surface
-                  : ws.modelData.active ? colors.crust
-                  : colors.text
+                font.bold: parent.modelData.active
+                text: parent.modelData.name || parent.modelData.id
+                color: parent.modelData.active ? colors.crust : colors.text
             }
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
-                    if (ws.isSpecial) {
-                        Hyprland.dispatch("workspace " + ws.modelData.name)
-                    } else {
-                        Hyprland.dispatch("workspace " + ws.modelData.id)
-                    }
-                }
+                onClicked: Hyprland.dispatch("workspace " + parent.modelData.id)
                 hoverEnabled: true
-
-                onEntered: {
-                    ws.hovered = true
-                }
-
-                onExited: {
-                    ws.hovered = false
-                }
+                onEntered: parent.hovered = true
+                onExited: parent.hovered = false
             }
         }
     }
+
+    // Finally show workmode special workspace if it exists
+    Repeater {
+        model: Hyprland.workspaces
+        Rectangle {
+            visible: modelData.name === "special:workmode"
+            width: visible ? parent.width - workspaceIndicator.spacing : 0
+            height: visible ? workspaceIndicator.rectHeight : 0
+            radius: workspaceIndicator.rectRadius
+
+            required property HyprlandWorkspace modelData
+            property bool hovered: false
+
+            color: workspaceIndicator.workmodeVisible ? colors.mauve : colors.overlay
+
+            Text {
+                anchors.centerIn: parent
+                font.family: colors.fontFamily
+                font.pixelSize: colors.iconSize
+                font.bold: workspaceIndicator.workmodeVisible
+                text: "󰃖"  // Briefcase icon
+                color: workspaceIndicator.workmodeVisible ? colors.green : colors.surface
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: Hyprland.dispatch("togglespecialworkspace workmode")
+                hoverEnabled: true
+                onEntered: parent.hovered = true
+                onExited: parent.hovered = false
+            }
+        }
+    }
+
 }

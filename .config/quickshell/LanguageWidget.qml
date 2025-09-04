@@ -10,7 +10,7 @@ Rectangle {
     color: "transparent"
     radius: 8
 
-    property string currentLayout: "us"
+    property string currentLayout: "A"
     property string mainKeyboard: "diego-palacios-cantor-keyboard"
 
     Colors {
@@ -84,7 +84,7 @@ Rectangle {
 
     Text {
         anchors.centerIn: parent
-        text: currentLayout.toUpperCase()
+        text: languageWidget.currentLayout
         color: colors.text
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: colors.iconSize

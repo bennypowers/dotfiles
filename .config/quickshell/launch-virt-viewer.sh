@@ -4,18 +4,18 @@
 # This script runs completely separate from quickshell
 
 VM_NAME="$1"
-WORKSPACE="$2"
+WORKSPACE_TYPE="$2"
 START_DELAY="$3"
 STARTUP_CHECK_DELAY="$4"
 
 # Default values if not provided
 VM_NAME="${VM_NAME:-silverblue}"
-WORKSPACE="${WORKSPACE:-10}"
+WORKSPACE_TYPE="${WORKSPACE_TYPE:-workmode}"
 START_DELAY="${START_DELAY:-2}"
 STARTUP_CHECK_DELAY="${STARTUP_CHECK_DELAY:-1}"
 
-# Switch to workspace
-hyprctl dispatch workspace "$WORKSPACE"
+# Switch to special workmode workspace
+hyprctl dispatch togglespecialworkspace workmode
 
 # Wait for VM to be ready
 sleep "$START_DELAY"
