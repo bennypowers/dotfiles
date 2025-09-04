@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Hyprland
+import Quickshell.Io
 
 Column {
     id: workspaceIndicator
@@ -20,13 +21,20 @@ Column {
 
     property bool specialActive: magicVisible || workmodeVisible
 
+    // Workmode state tracking (same as WorkmodeWidget)
+    property string vmName: "silverblue"
+    property bool vmRunning: false
+    property bool viewerActive: false
+    property string iconWorkmodeOn: "󰃖"  // Green filled briefcase (workmode ON)
+    property string iconWorkmodeOff: "󰠔"  // Grey empty outlined briefcase (workmode OFF)
+
     // Listen to Hyprland events to update special workspace visibility
     Connections {
         target: Hyprland
         function onRawEvent(event) {
             switch (event.name) {
                 case "activespecial":
-                    const specialData = event.data.split(",")[0] // Get workspace name part
+                    const [specialData] = event.data.split(",") // Get workspace name part
 
                     if (specialData === "special:magic") {
                         workspaceIndicator.magicVisible = true
@@ -42,6 +50,49 @@ Column {
                     break
             }
         }
+    }
+
+    // VM state checking processes (same as WorkmodeWidget)
+    Component.onCompleted: {
+        statusTimer.start()
+        vmStatusProcess.running = true
+    }
+
+    Process {
+        id: vmStatusProcess
+        command: ["virsh", "domstate", workspaceIndicator.vmName]
+        stdout: SplitParser {
+            onRead: function(data) {
+                if (data && data.trim()) {
+                    const state = data.trim()
+                    workspaceIndicator.vmRunning = (state === "running")
+                    viewerCheckProcess.running = true
+                }
+            }
+        }
+    }
+
+    Process {
+        id: viewerCheckProcess
+        command: ["pgrep", "-f", "virt-viewer"]
+        stdout: SplitParser {
+            onRead: function(data) {
+                workspaceIndicator.viewerActive = data && data.trim().length > 0
+            }
+        }
+        onExited: function(exitCode) {
+            if (exitCode === 1) {
+                workspaceIndicator.viewerActive = false
+            }
+        }
+    }
+
+    Timer {
+        id: statusTimer
+        interval: 5000
+        running: false
+        repeat: true
+        onTriggered: vmStatusProcess.running = true
     }
 
     // First show magic special workspace if it exists
@@ -63,7 +114,7 @@ Column {
                 font.family: colors.fontFamily
                 font.pixelSize: colors.textSize
                 font.bold: workspaceIndicator.magicVisible
-                text: "S"
+                text: workspaceIndicator.magicVisible ? "":""
                 color: colors.surface
             }
 
@@ -138,8 +189,21 @@ Column {
                 font.family: colors.fontFamily
                 font.pixelSize: colors.iconSize
                 font.bold: workspaceIndicator.workmodeVisible
-                text: "󰃖"  // Briefcase icon
-                color: workspaceIndicator.workmodeVisible ? colors.green : colors.surface
+                text: {
+                    if (workspaceIndicator.vmRunning && workspaceIndicator.viewerActive) {
+                        return workspaceIndicator.iconWorkmodeOn
+                    } else {
+                        return workspaceIndicator.iconWorkmodeOff
+                    }
+                }
+                color: {
+                    if (workspaceIndicator.vmRunning) {
+                        // When workspace is active (purple background), use darker green for contrast
+                        return workspaceIndicator.workmodeVisible ? colors.surface : colors.green
+                    } else {
+                        return colors.overlay
+                    }
+                }
             }
 
             MouseArea {
