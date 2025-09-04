@@ -1,9 +1,9 @@
 [Unit]
 Description=QuickShell - A QtQuick-based desktop shell
 Documentation=https://quickshell.outfoxxed.me/
-PartOf=graphical-session.target
-After=graphical-session.target
-Requisite=graphical-session.target
+PartOf=hyprland-session.target
+After=hyprland-session.target
+Requisite=hyprland-session.target
 Conflicts=waybar.service
 
 [Service]
