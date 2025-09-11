@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 
-Column {
+Row {
     id: root
     
     required property real cpuUsage
@@ -11,45 +11,38 @@ Column {
     property string fontFamily: "JetBrainsMono Nerd Font Mono"
     property int fontSize: 14
     property string textColor: "#cdd6f4"
-    property real barSpacing: 4
+    property real barSpacing: 2
     property real maxBarHeight: 140
     
-    spacing: 12
+    spacing: 16
     
-    // Overall CPU usage header
+    // Overall CPU usage header - left side
     Text {
         id: cpuHeader
         text: `CPU: ${Math.round(root.cpuUsage)}%`
         font.family: root.fontFamily
-        font.pixelSize: root.fontSize + 2
+        font.pixelSize: root.fontSize + 8
         font.bold: true
         color: root.textColor
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
     }
     
-    // EQ Visualizer bars
-    Item {
-        id: eqContainer
-        width: Math.max(250, root.coreUsages.length * (20 + root.barSpacing) + 40)
-        height: root.maxBarHeight + 80
-        anchors.horizontalCenter: parent.horizontalCenter
+    // EQ Visualizer bars - right side
+    Row {
+        spacing: root.barSpacing
+        anchors.verticalCenter: parent.verticalCenter
         
-        Row {
-            anchors.centerIn: parent
-            spacing: root.barSpacing
+        Repeater {
+            id: coreRepeater
+            model: root.coreUsages.length
             
-            Repeater {
-                id: coreRepeater
-                model: root.coreUsages.length
-                
-                delegate: CpuBar {
-                    required property int index
-                    coreIndex: index
-                    usage: index < root.coreUsages.length ? root.coreUsages[index] : 0
-                    colors: root.colors
-                    fontFamily: root.fontFamily
-                    fontSize: root.fontSize
-                }
+            delegate: CpuBar {
+                required property int index
+                coreIndex: index
+                usage: index < root.coreUsages.length ? root.coreUsages[index] : 0
+                colors: root.colors
+                fontFamily: root.fontFamily
+                fontSize: root.fontSize
             }
         }
     }
