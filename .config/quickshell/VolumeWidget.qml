@@ -163,7 +163,7 @@ Rectangle {
                     var arcSpacing = 3  // Space between speaker and mic arcs
                     var speakerRadius = baseRadius
                     var micRadius = baseRadius - arcSpacing - (volumeWidget.arcLineWidth / 2)
-                    
+
                     var startAngle = Math.PI * 0.75  // Start at 135 degrees
                     var maxAngle = Math.PI * 1.5     // 270 degrees max span
 
@@ -262,7 +262,7 @@ Rectangle {
                 }
             }
 
-            // Camera indicator  
+            // Camera indicator
             Item {
                 width: 16
                 height: 16
@@ -283,8 +283,8 @@ Rectangle {
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: {
-                        var tooltipText = volumeWidget.cameraActive ? 
-                            "<b>Camera:</b> Active (in use)" : 
+                        var tooltipText = volumeWidget.cameraActive ?
+                            "<b>Camera:</b> Active (in use)" :
                             "<b>Camera:</b> Inactive"
                         var anchorInfo = smartAnchor.calculateTooltipPosition(volumeWidget, 200, 60)
                         tooltip.showAt(anchorInfo.x, anchorInfo.y, tooltipText)
@@ -387,6 +387,7 @@ Rectangle {
     // Mixer popup window
     PopupWindow {
         id: mixerPopup
+        color: "transparent"
         anchor {
             rect.x: 0
             rect.y: 0

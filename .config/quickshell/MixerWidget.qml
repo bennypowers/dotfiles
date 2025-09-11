@@ -10,12 +10,12 @@ Rectangle {
     radius: 8
     border.color: colors.overlay
     border.width: 1
-    
+
     Component.onCompleted: {
         console.log("MixerWidget created, size:", width, "x", height)
         console.log("MixerWidget visible:", visible)
     }
-    
+
     onWidthChanged: console.log("MixerWidget width changed to:", width)
     onHeightChanged: console.log("MixerWidget height changed to:", height)
     onVisibleChanged: console.log("MixerWidget visible changed to:", visible)
@@ -108,7 +108,7 @@ Rectangle {
                     volumeSliderHeight: mixerWidget.volumeSliderHeight
                     muteButtonSize: mixerWidget.muteButtonSize
                     animationDuration: mixerWidget.animationDuration
-                    
+
                     Component.onCompleted: {
                         console.log("MixerItem delegate created for node:", modelData ? modelData.description : "null")
                     }
