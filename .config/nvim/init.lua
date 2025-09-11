@@ -10,10 +10,15 @@ require 'mappings'
 
 require 'lazy'.setup('plugins', {
   dev = {
-    path = '~/Projects',
+    path = '~/Developer',
     patterns = { 'bennypowers' },
     fallback = true,
-  }
+  },
+  performance = {
+    rtp = {
+      paths = { "/usr/share/vim/vimfiles/" },
+    },
+  },
 })
 
 vim.cmd.colorscheme 'catppuccin-macchiato'

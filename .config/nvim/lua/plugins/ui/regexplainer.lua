@@ -1,28 +1,24 @@
-return { 'bennypowers/nvim-regexplainer',
+return {
+  'bennypowers/nvim-regexplainer',
   enabled = true,
   dev = true,
   ft = { 'javascript', 'typescript', 'html', 'python', 'jinja' },
   dependencies = {
     'MunifTanjim/nui.nvim',
-    'edluffy/hologram.nvim'
+    'edluffy/hologram.nvim',
   },
   opts = {
-    -- test authoring mode
-    -- display = 'split',
-    -- debug = true,
-    -- mode = 'narrative',
-
     auto = true,
-    display = 'popup',
-    -- display = 'split',
-    debug = true,
-    mode = 'narrative',
-    -- mode = 'debug',
-    -- mode = 'railroad',
+    display =
+      -- 'split' | 'popup'
+      -- 'split',
+      'popup',
+    debug = false,
 
-    -- narrative = {
-    --   indentation_string = '> '
-    -- },
-
+    mode =
+      -- 'graphical' | 'narrative' | 'debug'
+      'graphical',
+    -- 'narrative',
+    -- 'debug',
   },
 }

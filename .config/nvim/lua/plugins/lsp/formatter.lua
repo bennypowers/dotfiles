@@ -46,7 +46,7 @@ return {
   config = function()
     require 'formatter'.setup {
       filetype = {
-        -- lua = require'formatter.filetypes.lua'.stylua,
+        lua = require'formatter.filetypes.lua'.stylua,
         javascript = {
           function()
             return {
