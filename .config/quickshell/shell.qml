@@ -191,6 +191,20 @@ ShellRoot {
                         Layout.leftMargin: 4
                     }
 
+                    // Microphone widget
+                    MicWidget {
+                        Layout.preferredWidth: parent.width
+                        Layout.preferredHeight: 40
+                        Layout.leftMargin: 4
+                    }
+
+                    // Camera widget
+                    CameraWidget {
+                        Layout.preferredWidth: parent.width
+                        Layout.preferredHeight: 40
+                        Layout.leftMargin: 4
+                    }
+
                     // Workspace switcher (minimap style) at top
                     WorkspaceIndicator {
                         Layout.preferredWidth: parent.width

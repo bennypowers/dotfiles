@@ -11,13 +11,6 @@ Rectangle {
     property real cpuUsage: 0
     property real animatedCpuUsage: 0  // Animated version of cpuUsage for needle
     property list<real> coreUsages: []  // Array to store individual core usage
-    // Tooltip for CPU metrics
-    Tooltip {
-        id: tooltip
-        backgroundColor: colors.surface
-        borderColor: colors.overlay
-        textColor: colors.text
-    }
     property list<real> tempCoreData: []  // Temporary array to accumulate core data
     property var tooltipUpdateFunction: null  // Reference to tooltip update function
     property real mouseX: 0  // Store mouse X position
@@ -277,6 +270,9 @@ Rectangle {
                     cpuWidget.tooltipUpdateFunction = updateTooltipData
                 }
 
+                // Tooltip for CPU metrics
+                Tooltip { id: tooltip }
+
                 function createTooltipContent() {
                     var component = Qt.createComponent("CpuTooltipContent.qml")
                     if (component.status === Component.Ready) {
@@ -288,12 +284,12 @@ Rectangle {
                             fontSize: tooltip.fontSize,
                             textColor: tooltip.textColor
                         })
-                        
+
                         if (tooltipContent) {
                             // Create live property bindings after initial creation
                             tooltipContent.cpuUsage = Qt.binding(function() { return cpuWidget.cpuUsage })
                             tooltipContent.coreUsages = Qt.binding(function() { return cpuWidget.coreUsages })
-                            
+
                             tooltip.contentItem = tooltipContent
                         }
                     } else if (component.status === Component.Error) {

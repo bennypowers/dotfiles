@@ -16,8 +16,6 @@ Rectangle {
     property bool isMuted: defaultSink && defaultSink.ready && defaultSink.audio ? defaultSink.audio.muted : false
     property real currentMicVolume: defaultSource && defaultSource.ready && defaultSource.audio && !isNaN(defaultSource.audio.volume) ? defaultSource.audio.volume : 0.5
     property bool isMicMuted: defaultSource && defaultSource.ready && defaultSource.audio ? defaultSource.audio.muted : false
-    property bool micActive: false  // Will be monitored via process checking
-    property bool cameraActive: false  // Will be monitored via process checking
 
     property int spacing: 8
     // Configurable appearance parameters
@@ -34,15 +32,11 @@ Rectangle {
     property real highVolumeThreshold: 0.7
     property real mediumVolumeThreshold: 0.3
 
-    // Mic/Camera monitoring parameters
-    property int deviceCheckInterval: 2000
 
     // Mixer popup properties
     property bool mixerVisible: false
 
-    Colors {
-        id: colors
-    }
+    Colors { id: colors }
 
     // Smart anchor utility
     SmartAnchor {
@@ -50,12 +44,7 @@ Rectangle {
     }
 
     // Tooltip for all hover information
-    Tooltip {
-        id: tooltip
-        backgroundColor: colors.surface
-        borderColor: colors.overlay
-        textColor: colors.text
-    }
+    Tooltip { id: tooltip }
 
     Column {
         anchors.centerIn: parent
@@ -210,117 +199,6 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
-        // Mic and Camera status indicators
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 8
-
-            // Microphone indicator
-            Item {
-                width: 16
-                height: 16
-
-                Text {
-                    text: {
-                        // Show muted icon if mic is muted, otherwise show based on activity
-                        if (volumeWidget.defaultSource && volumeWidget.defaultSource.audio && volumeWidget.defaultSource.audio.muted) {
-                            return "󰍭"  // Muted mic icon
-                        }
-                        return volumeWidget.micActive ? "󰍬" : "󰍭"  // Active/inactive based on app usage
-                    }
-                    font.family: "JetBrainsMono Nerd Font"
-                    font.pixelSize: 12
-                    color: {
-                        // Red if muted, green if active and unmuted, gray if inactive
-                        if (volumeWidget.defaultSource && volumeWidget.defaultSource.audio && volumeWidget.defaultSource.audio.muted) {
-                            return colors.red
-                        }
-                        return volumeWidget.micActive ? colors.green : colors.overlay
-                    }
-                    anchors.centerIn: parent
-
-                    Behavior on color {
-                        ColorAnimation { duration: volumeWidget.colorAnimationDuration }
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onEntered: {
-                        var status = ""
-                        if (volumeWidget.defaultSource && volumeWidget.defaultSource.audio && volumeWidget.defaultSource.audio.muted) {
-                            status = "<b>Microphone:</b> Muted"
-                        } else if (volumeWidget.micActive) {
-                            status = "<b>Microphone:</b> Active (in use)"
-                        } else {
-                            status = "<b>Microphone:</b> Available (not in use)"
-                        }
-
-                        tooltip.contentItem = Qt.createQmlObject(`
-                            import QtQuick
-                            Text {
-                                text: "${status}"
-                                font.family: "${tooltip.fontFamily}"
-                                font.pixelSize: ${tooltip.fontSize}
-                                color: "${tooltip.textColor}"
-                                textFormat: Text.RichText
-                                wrapMode: Text.WordWrap
-                                width: Math.min(200, implicitWidth)
-                            }
-                        `, tooltip.contentContainer)
-                        tooltip.showForWidget(volumeWidget)
-                    }
-                    onExited: {
-                        tooltip.hide()
-                    }
-                }
-            }
-
-            // Camera indicator
-            Item {
-                width: 16
-                height: 16
-
-                Text {
-                    text: volumeWidget.cameraActive ? "󰄀" : "󰄁"  // Camera on/off icons
-                    font.family: "JetBrainsMono Nerd Font"
-                    font.pixelSize: 12
-                    color: volumeWidget.cameraActive ? colors.red : colors.overlay
-                    anchors.centerIn: parent
-
-                    Behavior on color {
-                        ColorAnimation { duration: volumeWidget.colorAnimationDuration }
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onEntered: {
-                        var tooltipText = volumeWidget.cameraActive ?
-                            "<b>Camera:</b> Active (in use)" :
-                            "<b>Camera:</b> Inactive"
-                        tooltip.contentItem = Qt.createQmlObject(`
-                            import QtQuick
-                            Text {
-                                text: "${tooltipText}"
-                                font.family: "${tooltip.fontFamily}"
-                                font.pixelSize: ${tooltip.fontSize}
-                                color: "${tooltip.textColor}"
-                                textFormat: Text.RichText
-                                wrapMode: Text.WordWrap
-                                width: Math.min(200, implicitWidth)
-                            }
-                        `, tooltip.contentContainer)
-                        tooltip.showForWidget(volumeWidget)
-                    }
-                    onExited: {
-                        tooltip.hide()
-                    }
-                }
-            }
-        }
     }
 
     // Redraw arc when volume changes
@@ -329,62 +207,6 @@ Rectangle {
     onCurrentMicVolumeChanged: volumeArc.requestPaint()
     onIsMicMutedChanged: volumeArc.requestPaint()
 
-    // Camera monitoring process - checks for active camera processes
-    Process {
-        id: cameraCheckProcess
-        command: ["sh", "-c", "lsof /dev/video* 2>/dev/null | grep -v 'COMMAND' | wc -l"]
-        stdout: SplitParser {
-            onRead: function(data) {
-                if (data && data.trim()) {
-                    var activeCount = parseInt(data.trim())
-                    volumeWidget.cameraActive = activeCount > 0
-                }
-            }
-        }
-        onExited: function(exitCode) {
-            // lsof returns 1 if no processes found, which is normal
-            if (exitCode === 1) {
-                volumeWidget.cameraActive = false
-            }
-        }
-    }
-
-    // Microphone monitoring process - checks for processes actively recording audio
-    Process {
-        id: micCheckProcess
-        command: ["sh", "-c", "pactl list short source-outputs | wc -l"]
-        stdout: SplitParser {
-            onRead: function(data) {
-                if (data && data.trim()) {
-                    var activeCount = parseInt(data.trim())
-                    volumeWidget.micActive = activeCount > 0
-                }
-            }
-        }
-        onExited: function(exitCode) {
-            if (exitCode !== 0) {
-                volumeWidget.micActive = false
-            }
-        }
-    }
-
-    // Timer for periodic camera/mic checks
-    Timer {
-        id: deviceCheckTimer
-        interval: volumeWidget.deviceCheckInterval
-        running: true
-        repeat: true
-        onTriggered: {
-            cameraCheckProcess.running = true
-            micCheckProcess.running = true
-        }
-    }
-
-    // Start monitoring immediately
-    Component.onCompleted: {
-        cameraCheckProcess.running = true
-        micCheckProcess.running = true
-    }
 
     // Function to show mixer popup
     function showMixerPopup() {
