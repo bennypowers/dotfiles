@@ -36,6 +36,12 @@ node_modules
 .pki
 .vscode-oss
 
+.config/evince/print-settings
+.config/tmux/plugins
+.cups/lpoptions
+.config/configstore/update-notifier-@google
+.gtklp
+
 .pnpm-store
 .cache
 .cargo
