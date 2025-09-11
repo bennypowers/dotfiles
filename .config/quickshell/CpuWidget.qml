@@ -261,7 +261,7 @@ Rectangle {
 
                 function showTooltip() {
                     if (!cpuWidget.tooltipWindow) {
-                        var component = Qt.createComponent("SimpleTooltip.qml")
+                        var component = Qt.createComponent("CpuTooltip.qml")
                         if (component.status === Component.Ready) {
                             cpuWidget.tooltipWindow = component.createObject(null, {
                                 "transientParent": cpuWidget.Window.window,
@@ -280,57 +280,19 @@ Rectangle {
 
                 function updateTooltipContent() {
                     if (cpuWidget.tooltipWindow) {
-                        var tooltip = ""
-                        tooltip += "<h1>CPU Overall: " + Math.round(cpuWidget.cpuUsage) + "%</h1>"
-
-                        if (cpuWidget.coreUsages.length > 0) {
-
-                            // Add each core with a colored progress bar
-                            for (var i = 0; i < cpuWidget.coreUsages.length; i++) {
-                                var coreNum = String(i).padStart(2, '0')
-                                var usage = Math.round(cpuWidget.coreUsages[i])
-                                var usageStr = String(usage + "%").padStart(4, ' ')
-
-                                // Determine color based on usage
-                                var color = ""
-                                if (usage < 25) color = colors.green
-                                else if (usage < 50) color = colors.yellow
-                                else if (usage < 75) color = colors.peach
-                                else color = colors.red
-
-                                // Create colored text bar (20 chars wide)
-                                var barWidth = 20
-                                var filledBars = Math.round((usage / 100) * barWidth)
-
-                                var bar = "<span style='color: " + color + ";'>"
-                                for (var j = 0; j < filledBars; j++) {
-                                    bar += "█"
-                                }
-                                bar += "</span>"
-                                for (var k = filledBars; k < barWidth; k++) {
-                                    bar += "░"
-                                }
-
-                                tooltip += coreNum + "  " + bar + "  " + usageStr + "<br>"
-                            }
-                        } else {
-                            tooltip += "Core data loading..."
-                        }
-
-                        tooltip += ""
-
                         if (cpuWidget.tooltipWindow.visible) {
-                            // Just update text if tooltip is already visible
-                            cpuWidget.tooltipWindow.updateText(tooltip)
+                            // Just update data if tooltip is already visible
+                            cpuWidget.tooltipWindow.updateData(cpuWidget.cpuUsage, cpuWidget.coreUsages, colors)
                         } else {
                             // Use smart anchor calculation for tooltip positioning
                             try {
-                                var anchorInfo = smartAnchor.calculateTooltipPosition(cpuWidget, 300, 200)
-                                cpuWidget.tooltipWindow.showAt(anchorInfo.x, anchorInfo.y, tooltip)
+                                var tooltipWidth = Math.max(200, cpuWidget.coreUsages.length * 16 + 32)
+                                var anchorInfo = smartAnchor.calculateTooltipPosition(cpuWidget, tooltipWidth, 160)
+                                cpuWidget.tooltipWindow.showAt(anchorInfo.x, anchorInfo.y, cpuWidget.cpuUsage, cpuWidget.coreUsages, colors)
                             } catch (e) {
                                 // Fallback to original positioning
                                 var globalPos = mapToGlobal(40, 0)
-                                cpuWidget.tooltipWindow.showAt(globalPos.x, globalPos.y, tooltip)
+                                cpuWidget.tooltipWindow.showAt(globalPos.x, globalPos.y, cpuWidget.cpuUsage, cpuWidget.coreUsages, colors)
                             }
                         }
                     }
