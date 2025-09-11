@@ -47,6 +47,11 @@ Column {
 
                         var iconStr = parent.parent.item.icon.toString()
 
+                        // Handle qspixmap scheme (direct pixmap data from applications)
+                        if (iconStr.startsWith("image://qspixmap/")) {
+                            return iconStr
+                        }
+
                         // Handle custom path format: iconname?path=/custom/path
                         // This is used by some applications (like Flatpak apps) to specify custom icon locations
                         if (iconStr.includes("?path=")) {
@@ -89,6 +94,11 @@ Column {
                             if (!parent.parent.parent.item || !parent.parent.parent.item.icon) return ""
 
                             var iconStr = parent.parent.parent.item.icon.toString()
+
+                            // Don't provide secondary fallback for qspixmap - it's direct pixmap data
+                            if (iconStr.startsWith("image://qspixmap/")) {
+                                return ""
+                            }
 
                             // If it was a custom path, try the second configured extension
                             if (iconStr.includes("?path=") && systemTrayWidget.iconExtensions.length > 1) {

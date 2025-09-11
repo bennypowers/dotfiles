@@ -217,7 +217,7 @@ ShellRoot {
                     SystemTrayWidget {
                         Layout.preferredWidth: parent.width
                         Layout.preferredHeight: 120
-                        Layout.leftMargin: 8
+                        Layout.leftMargin: 14
                     }
 
                     // Workmode widget (vm/WM) at very bottom
