@@ -15,14 +15,9 @@ Column {
     property var iconExtensions: [".png", ".svg", ".xpm", ""]
     property bool enableTextFallback: true
 
-    Colors {
-        id: colors
-    }
-
-    // Smart anchor utility
-    SmartAnchor {
-        id: smartAnchor
-    }
+    Colors { id: colors }
+    Tooltip { id: tooltip }
+    SmartAnchor { id: smartAnchor }
 
     Repeater {
         model: SystemTray.items
@@ -169,10 +164,10 @@ Column {
                             var tooltipHeight = 60
                             var widgetCenter = systemTrayWidget.mapToGlobal(systemTrayWidget.width/2, systemTrayWidget.height/2)
                             var widgetLeftEdge = systemTrayWidget.mapToGlobal(0, systemTrayWidget.height/2)
-                            
+
                             var tooltipX = widgetLeftEdge.x - tooltipWidth
                             var tooltipY = widgetCenter.y - tooltipHeight/2
-                            
+
                             tooltip.showAt(tooltipX, tooltipY, parent.parent.item.title, "right", tooltipWidth, tooltipHeight/2)
                         }
                     }
@@ -194,7 +189,7 @@ Column {
                                     var window2 = systemTrayWidget.QsWindow
                                     if (window2 && window2.window) {
                                         menuAnchor.anchor.window = window2.window
-                                        
+
                                         // Use smart anchor calculation for context menu positioning
                                         var anchorInfo = smartAnchor.calculateAnchor(systemTrayWidget, 200, 150)
                                         menuAnchor.anchor.rect.x = anchorInfo.x
@@ -241,11 +236,4 @@ Column {
         }
     }
 
-    // Tooltip
-    Tooltip {
-        id: tooltip
-        backgroundColor: colors.surface
-        borderColor: colors.overlay
-        textColor: colors.text
-    }
 }

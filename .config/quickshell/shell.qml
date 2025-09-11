@@ -188,7 +188,7 @@ ShellRoot {
                     VolumeWidget {
                         Layout.preferredWidth: parent.width
                         Layout.preferredHeight: 60
-                        Layout.leftMargin: 4
+                        Layout.leftMargin: 6
                     }
 
                     // Microphone widget

@@ -17,17 +17,16 @@ Rectangle {
     property string ssidName: ""
     property string connectionType: ""
     property list<var> networkStats: []
-    
+
     // Configurable parameters
     property int maxNetworkStats: 20
     property int networkCheckInterval: 5000
     property int statsCheckInterval: 2000
     property int defaultWifiStrength: 75
 
-    Colors {
-        id: colors
-    }
+    Tooltip { id: tooltip }
 
+    Colors { id: colors }
 
     Component.onCompleted: {
         networkProcess.running = true
@@ -54,7 +53,7 @@ Rectangle {
         anchors.fill: parent
         property bool hovered: false
         hoverEnabled: true
-        
+
         onClicked: {
             clickProcess.running = true
         }
@@ -74,7 +73,7 @@ Rectangle {
             parent.color = "transparent"
             tooltip.hide()
         }
-        
+
         function showTooltip() {
             tooltip.showForWidget(mouseArea, generateTooltipText())
         }
@@ -152,7 +151,7 @@ Rectangle {
                             // Get IP address for this device
                             ipAddressProcess.command = ["ip", "addr", "show", deviceName]
                             ipAddressProcess.running = true
-                            
+
                             // Get SSID if wifi
                             if (networkWidget.isWifi && deviceName) {
                                 ssidProcess.command = ["iwgetid", deviceName, "-r"]
@@ -216,7 +215,7 @@ Rectangle {
                         const lines = data.split("\n")
                         let totalRx = 0
                         let totalTx = 0
-                        
+
                         for (let line of lines) {
                             if (line.includes(":") && !line.includes("lo:")) {
                                 const parts = line.trim().split(/\s+/)
@@ -226,11 +225,11 @@ Rectangle {
                                 }
                             }
                         }
-                        
+
                         // Add to stats history
                         const timestamp = Date.now()
                         networkWidget.networkStats.push({rx: totalRx, tx: totalTx, time: timestamp})
-                        
+
                         // Keep only last N entries
                         if (networkWidget.networkStats.length > networkWidget.maxNetworkStats) {
                             networkWidget.networkStats.shift()
@@ -258,38 +257,30 @@ Rectangle {
         command: ["nmgui"]
     }
 
-    // Tooltip
-    Tooltip {
-        id: tooltip
-        backgroundColor: colors.surface
-        borderColor: colors.overlay
-        textColor: colors.text
-    }
-
     function generateTooltipText() {
         let text = `<b>Network Status</b><br/>`
         text += `<b>Type:</b> ${networkWidget.connectionType}<br/>`
         text += `<b>Connection:</b> ${networkWidget.connectionName}<br/>`
-        
+
         if (networkWidget.isWifi && networkWidget.ssidName) {
             text += `<b>SSID:</b> ${networkWidget.ssidName}<br/>`
             text += `<b>Signal:</b> ${networkWidget.wifiStrength}%<br/>`
         }
-        
+
         text += `<b>IPv4:</b> ${networkWidget.ipv4Address}<br/><br/>`
-        
+
         // Simple network activity indicator
         if (networkWidget.networkStats.length > 1) {
             const latest = networkWidget.networkStats[networkWidget.networkStats.length - 1]
             const previous = networkWidget.networkStats[networkWidget.networkStats.length - 2]
             const rxRate = (latest.rx - previous.rx) / 1024 // KB/s
             const txRate = (latest.tx - previous.tx) / 1024 // KB/s
-            
+
             text += `<b>Network Activity:</b><br/>`
             text += `↓ ${rxRate.toFixed(1)} KB/s<br/>`
             text += `↑ ${txRate.toFixed(1)} KB/s`
         }
-        
+
         return text
     }
 }

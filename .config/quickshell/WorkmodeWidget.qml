@@ -21,11 +21,8 @@ Rectangle {
     property int viewerStartDelay: 2000
     property int vmStartupCheckDelay: 1000
 
-    Colors {
-        id: colors
-    }
-
-
+    Colors { id: colors }
+    Tooltip { id: tooltip }
 
     Component.onCompleted: {
         // Start status checking immediately - no longer need delay for safety
@@ -73,7 +70,7 @@ Rectangle {
         anchors.fill: parent
         property bool hovered: false
         hoverEnabled: true
-        
+
         onClicked: {
             if (vmRunning && viewerActive) {
                 // Workmode ON -> turn OFF (suspend VM, which will also kill viewer)
@@ -85,30 +82,22 @@ Rectangle {
                 vmStartProcess.running = true
             }
         }
-        
+
         onEntered: {
             hovered = true
             parent.color = colors.surface
             showTooltip()
         }
-        
+
         onExited: {
             hovered = false
             parent.color = "transparent"
             tooltip.hide()
         }
-        
+
         function showTooltip() {
             tooltip.showForWidget(mouseArea, generateTooltipText())
         }
-    }
-
-    // Tooltip
-    Tooltip {
-        id: tooltip
-        backgroundColor: colors.surface
-        borderColor: colors.overlay
-        textColor: colors.text
     }
 
     // Check VM status and enforce clean state management

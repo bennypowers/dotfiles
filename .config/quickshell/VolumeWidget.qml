@@ -19,11 +19,11 @@ Rectangle {
 
     property int spacing: 8
     // Configurable appearance parameters
-    property real knobSize: parent.width - spacing * 2
-    property real knobRadius: 16
-    property real arcRadius: 12
+    property real knobSize: parent.width - spacing
+    property real knobRadius: 100
+    property real arcRadius: 16
     property real arcLineWidth: 3
-    property real volumeIconSize: 16
+    property real volumeIconSize: 18
     property real percentageSize: 10
     property int colorAnimationDuration: 150
     property real volumeStepSize: 0.05
@@ -53,8 +53,8 @@ Rectangle {
         // Circular volume knob
         Item {
             id: volumeKnob
-            width: 36
-            height: 36
+            width: 48
+            height: 48
             anchors.horizontalCenter: parent.horizontalCenter
 
             // Background circle with hover effect
@@ -75,36 +75,59 @@ Rectangle {
 
             // Larger mouse area for easier hovering
             MouseArea {
+                id: volumeMouseArea
                 anchors.centerIn: parent
                 width: 50
                 height: 50
                 hoverEnabled: true
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
+                property bool hovered: false
 
                 onEntered: {
+                    hovered = true
                     knobBackground.color = colors.surface
-                    var tooltipText = "<b>Volume Control</b><br/>Left click: Toggle speaker mute<br/>Right click: Open mixer<br/>Scroll: Adjust speaker volume"
-                    if (volumeWidget.defaultSource) {
-                        tooltipText += "<br/><br/><b>Dual Volume Display:</b><br/>Outer arc: Speaker volume (purple)<br/>Inner arc: Microphone volume (green)"
+                    showTooltip()
+                }
+
+                function showTooltip() {
+                    if (!tooltip.visible) {
+                        createTooltipContent()
+                        tooltip.showForWidget(volumeMouseArea)
                     }
-                    // Create content and show tooltip
-                    tooltip.contentItem = Qt.createQmlObject(`
-                        import QtQuick
-                        Text {
-                            text: "${tooltipText}"
-                            font.family: "${tooltip.fontFamily}"
-                            font.pixelSize: ${tooltip.fontSize}
-                            color: "${tooltip.textColor}"
-                            textFormat: Text.RichText
-                            wrapMode: Text.WordWrap
-                            width: Math.min(300, implicitWidth)
-                        }
-                    `, tooltip.contentContainer)
-                    tooltip.showForWidget(volumeWidget)
+                }
+
+                function createTooltipContent() {
+                    console.log("Creating VolumeTooltipContent...")
+                    var component = Qt.createComponent("VolumeTooltipContent.qml")
+                    console.log("Component status:", component.status)
+                    if (component.status === Component.Ready) {
+                        console.log("Component ready, creating object...")
+                        var contentItem = component.createObject(tooltip.contentContainer, {
+                            colors: colors,
+                            fontFamily: tooltip.fontFamily,
+                            fontSize: tooltip.fontSize,
+                            textColor: tooltip.textColor
+                        })
+                        console.log("Created content item:", contentItem)
+                        console.log("Content item width:", contentItem ? contentItem.width : "null")
+                        console.log("Content item height:", contentItem ? contentItem.height : "null")
+                        tooltip.contentItem = contentItem
+                        // Allow tooltip to handle its own hide animation and delay
+                        tooltip.disableInternalHover = false
+                    } else if (component.status === Component.Error) {
+                        console.log("VolumeWidget: Error creating tooltip component:", component.errorString())
+                    } else {
+                        console.log("VolumeWidget: Component not ready, status:", component.status)
+                    }
                 }
 
                 onExited: {
+                    hovered = false
                     knobBackground.color = colors.surface
+                    hideTooltip()
+                }
+
+                function hideTooltip() {
                     tooltip.hide()
                 }
 
@@ -250,12 +273,8 @@ Rectangle {
             return count
         }
 
-        implicitWidth: 350
-        implicitHeight: {
-            var baseHeight = 80  // Header + margins + padding
-            var channelHeight = 70  // Height per audio channel
-            return baseHeight + (availableChannels * channelHeight)
-        }
+        width: 350
+        height: 300
 
 
         onVisibleChanged: {
@@ -269,6 +288,7 @@ Rectangle {
             radius: 8
             border.color: colors.overlay
             border.width: 2
+            // clip: true
 
             // MouseArea to keep popup open when clicking inside and detect hover
             MouseArea {
@@ -284,7 +304,7 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.margins: 16
-                text: "🎚️ Audio Mixer"
+                text: "🎚️ Audio Mixer (DEBUG: Popup visible)"
                 font.family: "JetBrainsMono Nerd Font"
                 font.pixelSize: 16
                 font.bold: true
@@ -292,16 +312,39 @@ Rectangle {
             }
 
             Column {
-                anchors.centerIn: parent
-                anchors.margins: 16
-                spacing: 24
+                x: 16
+                y: 60
                 width: parent.width - 32
+                height: parent.height - 76
+                spacing: 16
+
+                // Debug: Show what devices are available
+                Text {
+                    width: parent.width
+                    text: "Debug: defaultSink=" + (volumeWidget.defaultSink ? "YES" : "NO") + 
+                          ", defaultSource=" + (volumeWidget.defaultSource ? "YES" : "NO")
+                    color: colors.text
+                    font.pixelSize: 10
+                }
 
                 // Speaker controls
                 Column {
                     width: parent.width
                     spacing: 8
-                    visible: volumeWidget.defaultSink !== null
+                    visible: volumeWidget.defaultSink !== null && volumeWidget.defaultSink !== undefined
+
+                    Rectangle {
+                        width: parent.width
+                        height: 40
+                        color: "blue"
+                        opacity: 0.8
+                        Text {
+                            anchors.centerIn: parent
+                            text: "SPEAKER SECTION DEBUG - visible: " + visible
+                            color: "white"
+                            font.pixelSize: 12
+                        }
+                    }
 
                     Text {
                         text: "🔊 " + (volumeWidget.defaultSink ? volumeWidget.defaultSink.description : "No Speaker")
@@ -402,7 +445,7 @@ Rectangle {
                 Column {
                     width: parent.width
                     spacing: 8
-                    visible: volumeWidget.defaultSource !== null
+                    visible: volumeWidget.defaultSource !== null && volumeWidget.defaultSource !== undefined
 
                     Text {
                         text: "🎤 " + (volumeWidget.defaultSource ? volumeWidget.defaultSource.description : "No Microphone")

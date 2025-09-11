@@ -13,9 +13,8 @@ Rectangle {
     property string currentLayout: "A"
     property string mainKeyboard: "diego-palacios-cantor-keyboard"
 
-    Colors {
-        id: colors
-    }
+    Colors { id: colors }
+    Tooltip { id: tooltip }
 
     // Listen to Hyprland raw events
     Connections {
@@ -71,7 +70,7 @@ Rectangle {
         anchors.fill: parent
         property bool hovered: false
         hoverEnabled: true
-        
+
         onClicked: {
             switchProcess.running = true
         }
@@ -87,7 +86,7 @@ Rectangle {
             parent.color = "transparent"
             tooltip.hide()
         }
-        
+
         function showTooltip() {
             tooltip.showForWidget(mouseArea, generateTooltipText())
         }
@@ -107,17 +106,9 @@ Rectangle {
         command: ["hyprctl", "switchxkblayout", "diego-palacios-cantor-keyboard", "next"]
     }
 
-    // Tooltip
-    Tooltip {
-        id: tooltip
-        backgroundColor: colors.surface
-        borderColor: colors.overlay
-        textColor: colors.text
-    }
-
     function generateTooltipText() {
         let text = `<b>Keyboard Layout</b><br/>`
-        
+
         if (currentLayout === "A") {
             text += `<b>Current:</b> English (US)<br/>`
             text += `<b>Next:</b> Hebrew`
@@ -128,9 +119,9 @@ Rectangle {
             text += `<b>Current:</b> Unknown<br/>`
             text += `<b>Action:</b> Click to switch`
         }
-        
+
         text += `<br/><br/><b>Click to switch layouts</b>`
-        
+
         return text
     }
 

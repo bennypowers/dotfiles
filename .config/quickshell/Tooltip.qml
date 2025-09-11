@@ -54,6 +54,7 @@ Window {
     // Hover management
     property bool tooltipHovered: false
     property var triggerWidget: null
+    property bool disableInternalHover: false
 
     // Scalable container for growth animation
     Item {
@@ -121,6 +122,7 @@ Window {
                 anchors.fill: parent
                 hoverEnabled: true
                 acceptedButtons: Qt.NoButton
+                enabled: !tooltipWindow.disableInternalHover
 
                 onEntered: {
                     console.log("🔵 Tooltip MouseArea entered - tooltipHovered set to true")
@@ -214,8 +216,8 @@ Window {
     property alias contentContainer: contentContainer
 
     function setTransformOrigin() {
-        // For right-side bar tooltips: grow from top-right (right-to-left)
-        scalableContainer.transformOrigin = Item.TopRight
+        // For right-side bar tooltips: grow from center-right (horizontal scaling)
+        scalableContainer.transformOrigin = Item.Right
     }
 
     // Growth animation
@@ -326,9 +328,8 @@ Window {
         if (tooltipY < 10) {
             tooltipY = 10
         }
-        if (tooltipY + height > 1080) {  // Assume 1080p screen height
-            tooltipY = 1080 - height - 10
-        }
+        // Remove restrictive height bounds check that was causing issues
+        // Bottom widgets should be able to show tooltips properly
 
         showAt(tooltipX, tooltipY, text || tooltipText, "right", width, height/2)
     }

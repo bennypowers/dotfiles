@@ -41,12 +41,7 @@ Rectangle {
     }
 
     // Tooltip
-    Tooltip {
-        id: tooltip
-        backgroundColor: colors.surface
-        borderColor: colors.overlay
-        textColor: colors.text
-    }
+    Tooltip { id: tooltip }
 
     Column {
         anchors.fill: parent

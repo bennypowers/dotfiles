@@ -30,6 +30,8 @@ Rectangle {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
+        propagateComposedEvents: true
+        acceptedButtons: Qt.NoButton  // Don't consume button events
     }
 
     Behavior on color {
@@ -193,6 +195,8 @@ Rectangle {
 
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                propagateComposedEvents: true
                 onClicked: function(mouse) {
                     if (mixerItem.node && mixerItem.node.audio) {
                         const newVolume = mouse.x / width
@@ -274,6 +278,7 @@ Rectangle {
                 id: muteMouseArea
                 anchors.fill: parent
                 hoverEnabled: true
+                propagateComposedEvents: true
                 onClicked: {
                     if (mixerItem.node && mixerItem.node.audio) {
                         mixerItem.node.audio.muted = !mixerItem.node.audio.muted
