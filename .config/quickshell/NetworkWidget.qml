@@ -28,10 +28,6 @@ Rectangle {
         id: colors
     }
 
-    // Smart anchor utility
-    SmartAnchor {
-        id: smartAnchor
-    }
 
     Component.onCompleted: {
         networkProcess.running = true
@@ -63,8 +59,15 @@ Rectangle {
         onEntered: {
             parent.color = colors.surface
             if (networkWidget.isConnected) {
-                var anchorInfo = smartAnchor.calculateTooltipPosition(networkWidget, 250, 180)
-                tooltip.showAt(anchorInfo.x, anchorInfo.y, generateTooltipText())
+                var tooltipWidth = 250
+                var tooltipHeight = 180
+                var widgetCenter = networkWidget.mapToGlobal(networkWidget.width/2, networkWidget.height/2)
+                var widgetLeftEdge = networkWidget.mapToGlobal(0, networkWidget.height/2)
+
+                var tooltipX = widgetLeftEdge.x - tooltipWidth
+                var tooltipY = widgetCenter.y - tooltipHeight/2
+
+                tooltip.showAt(tooltipX, tooltipY, generateTooltipText(), "right", tooltipWidth, tooltipHeight/2)
             }
         }
 

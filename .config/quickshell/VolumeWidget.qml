@@ -49,8 +49,8 @@ Rectangle {
         id: smartAnchor
     }
 
-    // Tooltip for mic/camera indicators (defined early to avoid reference errors)
-    SimpleTooltip {
+    // Panel tooltip for all hover information
+    PanelTooltip {
         id: tooltip
         backgroundColor: colors.surface
         borderColor: colors.overlay
@@ -98,16 +98,20 @@ Rectangle {
                     if (volumeWidget.defaultSource) {
                         tooltipText += "<br/><br/><b>Dual Volume Display:</b><br/>Outer arc: Speaker volume (purple)<br/>Inner arc: Microphone volume (green)"
                     }
-                    try {
-                        var anchorInfo = smartAnchor.calculateTooltipPosition(volumeWidget, 300, 120)
-                        tooltip.showAt(anchorInfo.x, anchorInfo.y, tooltipText)
-                    } catch (e) {
-                        tooltip.showAt(
-                            volumeWidget.mapToGlobal(volumeWidget.width, 0).x,
-                            volumeWidget.mapToGlobal(0, 0).y,
-                            tooltipText
-                        )
-                    }
+                    // Create content and show tooltip
+                    tooltip.contentItem = Qt.createQmlObject(`
+                        import QtQuick
+                        Text {
+                            text: "${tooltipText}"
+                            font.family: "${tooltip.fontFamily}"
+                            font.pixelSize: ${tooltip.fontSize}
+                            color: "${tooltip.textColor}"
+                            textFormat: Text.RichText
+                            wrapMode: Text.WordWrap
+                            width: Math.min(300, implicitWidth)
+                        }
+                    `, tooltip.contentContainer)
+                    tooltip.showForWidget(volumeWidget)
                 }
 
                 onExited: {
@@ -253,8 +257,19 @@ Rectangle {
                             status = "<b>Microphone:</b> Available (not in use)"
                         }
 
-                        var anchorInfo = smartAnchor.calculateTooltipPosition(volumeWidget, 200, 60)
-                        tooltip.showAt(anchorInfo.x, anchorInfo.y, status)
+                        tooltip.contentItem = Qt.createQmlObject(`
+                            import QtQuick
+                            Text {
+                                text: "${status}"
+                                font.family: "${tooltip.fontFamily}"
+                                font.pixelSize: ${tooltip.fontSize}
+                                color: "${tooltip.textColor}"
+                                textFormat: Text.RichText
+                                wrapMode: Text.WordWrap
+                                width: Math.min(200, implicitWidth)
+                            }
+                        `, tooltip.contentContainer)
+                        tooltip.showForWidget(volumeWidget)
                     }
                     onExited: {
                         tooltip.hide()
@@ -286,8 +301,19 @@ Rectangle {
                         var tooltipText = volumeWidget.cameraActive ?
                             "<b>Camera:</b> Active (in use)" :
                             "<b>Camera:</b> Inactive"
-                        var anchorInfo = smartAnchor.calculateTooltipPosition(volumeWidget, 200, 60)
-                        tooltip.showAt(anchorInfo.x, anchorInfo.y, tooltipText)
+                        tooltip.contentItem = Qt.createQmlObject(`
+                            import QtQuick
+                            Text {
+                                text: "${tooltipText}"
+                                font.family: "${tooltip.fontFamily}"
+                                font.pixelSize: ${tooltip.fontSize}
+                                color: "${tooltip.textColor}"
+                                textFormat: Text.RichText
+                                wrapMode: Text.WordWrap
+                                width: Math.min(200, implicitWidth)
+                            }
+                        `, tooltip.contentContainer)
+                        tooltip.showForWidget(volumeWidget)
                     }
                     onExited: {
                         tooltip.hide()

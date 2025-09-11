@@ -165,8 +165,15 @@ Column {
 
                     onEntered: {
                         if (parent.parent.item && parent.parent.item.title) {
-                            var anchorInfo = smartAnchor.calculateTooltipPosition(systemTrayWidget, 200, 60)
-                            tooltip.showAt(anchorInfo.x, anchorInfo.y, parent.parent.item.title)
+                            var tooltipWidth = 200
+                            var tooltipHeight = 60
+                            var widgetCenter = systemTrayWidget.mapToGlobal(systemTrayWidget.width/2, systemTrayWidget.height/2)
+                            var widgetLeftEdge = systemTrayWidget.mapToGlobal(0, systemTrayWidget.height/2)
+                            
+                            var tooltipX = widgetLeftEdge.x - tooltipWidth
+                            var tooltipY = widgetCenter.y - tooltipHeight/2
+                            
+                            tooltip.showAt(tooltipX, tooltipY, parent.parent.item.title, "right", tooltipWidth, tooltipHeight/2)
                         }
                     }
 

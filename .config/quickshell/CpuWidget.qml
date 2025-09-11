@@ -11,7 +11,13 @@ Rectangle {
     property real cpuUsage: 0
     property real animatedCpuUsage: 0  // Animated version of cpuUsage for needle
     property list<real> coreUsages: []  // Array to store individual core usage
-    property QtObject tooltipWindow: null  // Reference to tooltip window
+    // Panel tooltip for CPU metrics
+    PanelTooltip {
+        id: tooltip
+        backgroundColor: colors.surface
+        borderColor: colors.overlay
+        textColor: colors.text
+    }
     property list<real> tempCoreData: []  // Temporary array to accumulate core data
     property var tooltipUpdateFunction: null  // Reference to tooltip update function
     property real mouseX: 0  // Store mouse X position
@@ -260,48 +266,145 @@ Rectangle {
                 }
 
                 function showTooltip() {
-                    if (!cpuWidget.tooltipWindow) {
-                        var component = Qt.createComponent("CpuTooltip.qml")
-                        if (component.status === Component.Ready) {
-                            cpuWidget.tooltipWindow = component.createObject(null, {
-                                "transientParent": cpuWidget.Window.window,
-                                "fontFamily": "JetBrainsMono Nerd Font Mono",
-                                "fontSize": 14,
-                                "backgroundColor": colors.surface,
-                                "borderColor": colors.overlay,
-                                "textColor": colors.text
-                            })
-                        }
+                    if (!tooltip.visible) {
+                        createTooltipContent()
+                        tooltip.showForWidget(cpuWidget)
                     }
-
-                    updateTooltipContent()
-                    cpuWidget.tooltipUpdateFunction = updateTooltipContent
+                    cpuWidget.tooltipUpdateFunction = updateTooltipData
                 }
 
-                function updateTooltipContent() {
-                    if (cpuWidget.tooltipWindow) {
-                        if (cpuWidget.tooltipWindow.visible) {
-                            // Just update data if tooltip is already visible
-                            cpuWidget.tooltipWindow.updateData(cpuWidget.cpuUsage, cpuWidget.coreUsages, colors)
-                        } else {
-                            // Use smart anchor calculation for tooltip positioning
-                            try {
-                                var tooltipWidth = Math.max(200, cpuWidget.coreUsages.length * 16 + 32)
-                                var anchorInfo = smartAnchor.calculateTooltipPosition(cpuWidget, tooltipWidth, 160)
-                                cpuWidget.tooltipWindow.showAt(anchorInfo.x, anchorInfo.y, cpuWidget.cpuUsage, cpuWidget.coreUsages, colors)
-                            } catch (e) {
-                                // Fallback to original positioning
-                                var globalPos = mapToGlobal(40, 0)
-                                cpuWidget.tooltipWindow.showAt(globalPos.x, globalPos.y, cpuWidget.cpuUsage, cpuWidget.coreUsages, colors)
+                function createTooltipContent() {
+                    // Create EQ visualizer content for CPU cores (only once)
+                    var barWidth = 20
+                    var barSpacing = 4
+                    var maxBarHeight = 140
+                    
+                    tooltip.contentItem = Qt.createQmlObject(`
+                        import QtQuick
+                        Column {
+                            id: cpuContent
+                            spacing: 12
+                            
+                            // Overall CPU usage header
+                            Text {
+                                id: cpuHeader
+                                text: "CPU: 0%"
+                                font.family: "${tooltip.fontFamily}"
+                                font.pixelSize: ${tooltip.fontSize + 2}
+                                font.bold: true
+                                color: "${tooltip.textColor}"
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                            
+                            // EQ Visualizer bars
+                            Item {
+                                id: eqContainer
+                                width: Math.max(250, ${cpuWidget.coreUsages.length} * (${barWidth} + ${barSpacing}) + 40)
+                                height: ${maxBarHeight} + 80
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                
+                                Row {
+                                    anchors.centerIn: parent
+                                    spacing: ${barSpacing}
+                                    
+                                    Repeater {
+                                        id: coreRepeater
+                                        model: ${cpuWidget.coreUsages.length}
+                                        
+                                        Item {
+                                            width: ${barWidth}
+                                            height: ${maxBarHeight} + 20
+                                            
+                                            property real coreUsage: 0
+                                            property string coreColor: "${colors.green}"
+                                            
+                                            // Background bar
+                                            Rectangle {
+                                                width: ${barWidth}
+                                                height: ${maxBarHeight}
+                                                anchors.bottom: coreLabel.top
+                                                anchors.bottomMargin: 4
+                                                anchors.horizontalCenter: parent.horizontalCenter
+                                                color: "transparent"
+                                                border.color: "${tooltip.borderColor}"
+                                                border.width: 1
+                                                radius: 2
+                                                opacity: 0.3
+                                            }
+                                            
+                                            // Active usage bar
+                                            Rectangle {
+                                                id: usageBar
+                                                width: ${barWidth - 2}
+                                                height: Math.max(2, (${maxBarHeight} - 2) * (parent.coreUsage / 100))
+                                                anchors.bottom: parent.bottom
+                                                anchors.bottomMargin: 20
+                                                anchors.horizontalCenter: parent.horizontalCenter
+                                                color: parent.coreColor
+                                                radius: 1
+                                                
+                                                Behavior on height {
+                                                    NumberAnimation {
+                                                        duration: 300
+                                                        easing.type: Easing.OutQuad
+                                                    }
+                                                }
+                                                
+                                                Behavior on color {
+                                                    ColorAnimation { duration: 200 }
+                                                }
+                                            }
+                                            
+                                            // Core label
+                                            Text {
+                                                id: coreLabel
+                                                text: index.toString()
+                                                font.family: "${tooltip.fontFamily}"
+                                                font.pixelSize: ${tooltip.fontSize - 2}
+                                                color: "${tooltip.textColor}"
+                                                anchors.horizontalCenter: parent.horizontalCenter
+                                                anchors.bottom: parent.bottom
+                                                opacity: 0.8
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    `, tooltip.contentContainer)
+                }
+                
+                function updateTooltipData() {
+                    // Only update data without recreating content
+                    if (tooltip.contentItem && tooltip.visible) {
+                        var header = tooltip.contentItem.children[0]
+                        if (header) {
+                            header.text = "CPU: " + Math.round(cpuWidget.cpuUsage) + "%"
+                        }
+                        
+                        var eqContainer = tooltip.contentItem.children[1]
+                        if (eqContainer && eqContainer.children[0] && eqContainer.children[0].children) {
+                            var repeater = eqContainer.children[0].children[0]
+                            if (repeater && repeater.count) {
+                                for (var i = 0; i < repeater.count && i < cpuWidget.coreUsages.length; i++) {
+                                    var barItem = repeater.itemAt(i)
+                                    if (barItem) {
+                                        var usage = cpuWidget.coreUsages[i] || 0
+                                        barItem.coreUsage = usage
+                                        
+                                        if (usage < 25) barItem.coreColor = colors.green
+                                        else if (usage < 50) barItem.coreColor = colors.yellow
+                                        else if (usage < 75) barItem.coreColor = colors.peach
+                                        else barItem.coreColor = colors.red
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
                 function hideTooltip() {
-                    if (cpuWidget.tooltipWindow) {
-                        cpuWidget.tooltipWindow.hide()
-                    }
+                    tooltip.hide()
                     cpuWidget.tooltipUpdateFunction = null
                 }
             }

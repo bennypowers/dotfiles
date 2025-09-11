@@ -25,10 +25,6 @@ Rectangle {
         id: colors
     }
 
-    // Smart anchor utility
-    SmartAnchor {
-        id: smartAnchor
-    }
 
 
     Component.onCompleted: {
@@ -88,12 +84,15 @@ Rectangle {
         hoverEnabled: true
         onEntered: {
             parent.color = colors.surface
-            try {
-                var anchorInfo = smartAnchor.calculateTooltipPosition(workmodeWidget, 200, 100)
-                tooltip.showAt(anchorInfo.x, anchorInfo.y, generateTooltipText())
-            } catch (e) {
-                tooltip.showAt(workmodeWidget.mapToGlobal(workmodeWidget.width, 0).x, workmodeWidget.mapToGlobal(0, 0).y, generateTooltipText())
-            }
+            var tooltipWidth = 200
+            var tooltipHeight = 100
+            var widgetCenter = workmodeWidget.mapToGlobal(workmodeWidget.width/2, workmodeWidget.height/2)
+            var widgetLeftEdge = workmodeWidget.mapToGlobal(0, workmodeWidget.height/2)
+
+            var tooltipX = widgetLeftEdge.x - tooltipWidth
+            var tooltipY = widgetCenter.y - tooltipHeight/2
+
+            tooltip.showAt(tooltipX, tooltipY, generateTooltipText(), "right", tooltipWidth, tooltipHeight/2)
         }
         onExited: {
             parent.color = "transparent"

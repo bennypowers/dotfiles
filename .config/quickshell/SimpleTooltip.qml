@@ -1,58 +1,46 @@
 import QtQuick
-import QtQuick.Window
 
-Window {
+NodeTooltip {
     id: tooltipWindow
 
     property string tooltipText: ""
-    property alias transientParent: tooltipWindow.transientParent
-    property string fontFamily: "Liberation Mono"
-    property int fontSize: 14
-    property string backgroundColor: "#45475a"
-    property string borderColor: "#6c7086"
-    property string textColor: "#cdd6f4"
 
-    width: tooltipContent.width + 16
-    height: tooltipContent.height + 12
-
-    flags: Qt.ToolTip | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.BypassWindowManagerHint | Qt.WindowDoesNotAcceptFocus
-    color: "transparent"
-
-    Rectangle {
-        anchors.fill: parent
-        color: tooltipWindow.backgroundColor
-        border.color: tooltipWindow.borderColor
-        border.width: 1
-        radius: 6
-
-        Text {
-            id: tooltipContent
-            anchors.centerIn: parent
-            text: tooltipWindow.tooltipText
-            font.family: tooltipWindow.fontFamily
-            font.pixelSize: tooltipWindow.fontSize
-            color: tooltipWindow.textColor
-            horizontalAlignment: Text.AlignLeft
-            textFormat: Text.RichText
-            font.bold: false
-            font.italic: false
-            font.styleName: ""
-        }
+    Text {
+        id: tooltipContent
+        parent: contentContainer
+        anchors.centerIn: parent
+        text: tooltipWindow.tooltipText
+        font.family: tooltipWindow.fontFamily
+        font.pixelSize: tooltipWindow.fontSize
+        color: tooltipWindow.textColor
+        horizontalAlignment: Text.AlignLeft
+        textFormat: Text.RichText
+        font.bold: false
+        font.italic: false
+        font.styleName: ""
+        wrapMode: Text.WordWrap
+        width: Math.min(300, implicitWidth)
     }
 
-    function showAt(x, y, text) {
+    function showAt(x, y, text, side, connX, connY) {
         tooltipText = text
-        // Use the exact coordinates provided - smart anchor already calculated the right position
+        
+        // Set connection properties and show
+        connectionSide = side || "top"
+        connectionX = connX || width / 2
+        connectionY = connY || height / 2
+        
+        setTransformOrigin()
+        
         tooltipWindow.x = x
         tooltipWindow.y = y
+        
         visible = true
+        connectionStem.requestPaint()
+        showAnimation.start()
     }
 
     function updateText(text) {
         tooltipText = text
-    }
-
-    function hide() {
-        visible = false
     }
 }

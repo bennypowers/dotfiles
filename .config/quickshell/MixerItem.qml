@@ -20,10 +20,6 @@ Rectangle {
         id: colors
     }
 
-    // Smart anchor utility
-    SmartAnchor {
-        id: smartAnchor
-    }
 
     // Bind the node so we can read its properties
     PwObjectTracker { 
@@ -220,8 +216,15 @@ Rectangle {
                         mixerWidget = mixerWidget.parent
                     }
                     if (mixerWidget && mixerWidget.tooltip) {
-                        var anchorInfo = smartAnchor.calculateTooltipPosition(mixerItem, 200, 60)
-                        mixerWidget.tooltip.showAt(anchorInfo.x, anchorInfo.y, "Click to set volume, scroll to adjust")
+                        var tooltipWidth = 200
+                        var tooltipHeight = 60
+                        var widgetCenter = mixerItem.mapToGlobal(mixerItem.width/2, mixerItem.height/2)
+                        var widgetLeftEdge = mixerItem.mapToGlobal(0, mixerItem.height/2)
+
+                        var tooltipX = widgetLeftEdge.x - tooltipWidth
+                        var tooltipY = widgetCenter.y - tooltipHeight/2
+
+                        mixerWidget.tooltip.showAt(tooltipX, tooltipY, "Click to set volume, scroll to adjust", "right", tooltipWidth, tooltipHeight/2)
                     }
                 }
                 onExited: {
@@ -283,10 +286,17 @@ Rectangle {
                         mixerWidget = mixerWidget.parent
                     }
                     if (mixerWidget && mixerWidget.tooltip) {
-                        var anchorInfo = smartAnchor.calculateTooltipPosition(mixerItem, 200, 60)
+                        var tooltipWidth = 200
+                        var tooltipHeight = 60
+                        var widgetCenter = mixerItem.mapToGlobal(mixerItem.width/2, mixerItem.height/2)
+                        var widgetLeftEdge = mixerItem.mapToGlobal(0, mixerItem.height/2)
+
+                        var tooltipX = widgetLeftEdge.x - tooltipWidth
+                        var tooltipY = widgetCenter.y - tooltipHeight/2
+
                         var tooltipText = mixerItem.node && mixerItem.node.audio && mixerItem.node.audio.muted ? 
                                 "Click to unmute" : "Click to mute"
-                        mixerWidget.tooltip.showAt(anchorInfo.x, anchorInfo.y, tooltipText)
+                        mixerWidget.tooltip.showAt(tooltipX, tooltipY, tooltipText, "right", tooltipWidth, tooltipHeight/2)
                     }
                 }
                 onExited: {

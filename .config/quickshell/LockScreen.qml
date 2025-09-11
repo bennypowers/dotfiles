@@ -223,11 +223,7 @@ Window {
 
     // Handle authentication response
     Component.onCompleted: {
-        // Connect to PAM response handling
-        pamContext.onResponseRequired.connect(function() {
-            if (passwordField.text.length > 0) {
-                pamContext.respond(passwordField.text)
-            }
-        })
+        // PAM context is ready for use
+        console.log("LockScreen component loaded")
     }
 }
