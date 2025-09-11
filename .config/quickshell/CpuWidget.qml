@@ -278,133 +278,32 @@ Rectangle {
                 }
 
                 function createTooltipContent() {
-                    // Create EQ visualizer content for CPU cores (only once)
-                    var barWidth = 20
-                    var barSpacing = 4
-                    var maxBarHeight = 140
-
-                    tooltip.contentItem = Qt.createQmlObject(`
-                        import QtQuick
-                        Column {
-                            id: cpuContent
-                            spacing: 12
-
-                            // Overall CPU usage header
-                            Text {
-                                id: cpuHeader
-                                text: "CPU: 0%"
-                                font.family: "${tooltip.fontFamily}"
-                                font.pixelSize: ${tooltip.fontSize + 2}
-                                font.bold: true
-                                color: "${tooltip.textColor}"
-                                anchors.horizontalCenter: parent.horizontalCenter
-                            }
-
-                            // EQ Visualizer bars
-                            Item {
-                                id: eqContainer
-                                width: Math.max(250, ${cpuWidget.coreUsages.length} * (${barWidth} + ${barSpacing}) + 40)
-                                height: ${maxBarHeight} + 80
-                                anchors.horizontalCenter: parent.horizontalCenter
-
-                                Row {
-                                    anchors.centerIn: parent
-                                    spacing: ${barSpacing}
-
-                                    Repeater {
-                                        id: coreRepeater
-                                        model: ${cpuWidget.coreUsages.length}
-
-                                        Item {
-                                            width: ${barWidth}
-                                            height: ${maxBarHeight} + 20
-
-                                            property real coreUsage: 0
-                                            property string coreColor: "${colors.green}"
-
-                                            // Background bar
-                                            Rectangle {
-                                                width: ${barWidth}
-                                                height: ${maxBarHeight}
-                                                anchors.bottom: coreLabel.top
-                                                anchors.bottomMargin: 4
-                                                anchors.horizontalCenter: parent.horizontalCenter
-                                                color: "transparent"
-                                                border.color: "${tooltip.borderColor}"
-                                                border.width: 1
-                                                radius: 2
-                                                opacity: 0.3
-                                            }
-
-                                            // Active usage bar
-                                            Rectangle {
-                                                id: usageBar
-                                                width: ${barWidth - 2}
-                                                height: Math.max(2, (${maxBarHeight} - 2) * (parent.coreUsage / 100))
-                                                anchors.bottom: parent.bottom
-                                                anchors.bottomMargin: 20
-                                                anchors.horizontalCenter: parent.horizontalCenter
-                                                color: parent.coreColor
-                                                radius: 1
-
-                                                Behavior on height {
-                                                    NumberAnimation {
-                                                        duration: 300
-                                                        easing.type: Easing.OutQuad
-                                                    }
-                                                }
-
-                                                Behavior on color {
-                                                    ColorAnimation { duration: 200 }
-                                                }
-                                            }
-
-                                            // Core label
-                                            Text {
-                                                id: coreLabel
-                                                text: index.toString()
-                                                font.family: "${tooltip.fontFamily}"
-                                                font.pixelSize: ${tooltip.fontSize - 2}
-                                                color: "${tooltip.textColor}"
-                                                anchors.horizontalCenter: parent.horizontalCenter
-                                                anchors.bottom: parent.bottom
-                                                opacity: 0.8
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                    var component = Qt.createComponent("CpuTooltipContent.qml")
+                    if (component.status === Component.Ready) {
+                        var tooltipContent = component.createObject(tooltip.contentContainer, {
+                            cpuUsage: cpuWidget.cpuUsage,
+                            coreUsages: cpuWidget.coreUsages,
+                            colors: colors,
+                            fontFamily: tooltip.fontFamily,
+                            fontSize: tooltip.fontSize,
+                            textColor: tooltip.textColor
+                        })
+                        
+                        if (tooltipContent) {
+                            // Create live property bindings after initial creation
+                            tooltipContent.cpuUsage = Qt.binding(function() { return cpuWidget.cpuUsage })
+                            tooltipContent.coreUsages = Qt.binding(function() { return cpuWidget.coreUsages })
+                            
+                            tooltip.contentItem = tooltipContent
                         }
-                    `, tooltip.contentContainer)
+                    } else if (component.status === Component.Error) {
+                        console.log("CpuWidget: Error creating tooltip component:", component.errorString())
+                    }
                 }
 
                 function updateTooltipData() {
-                    // Only update data without recreating content
-                    if (tooltip.contentItem && tooltip.visible) {
-                        var header = tooltip.contentItem.children[0]
-                        if (header) {
-                            header.text = "CPU: " + Math.round(cpuWidget.cpuUsage) + "%"
-                        }
-
-                        var eqContainer = tooltip.contentItem.children[1]
-                        if (eqContainer && eqContainer.children[0] && eqContainer.children[0].children) {
-                            var repeater = eqContainer.children[0].children[0]
-                            if (repeater && repeater.count) {
-                                for (var i = 0; i < repeater.count && i < cpuWidget.coreUsages.length; i++) {
-                                    var barItem = repeater.itemAt(i)
-                                    if (barItem) {
-                                        var usage = cpuWidget.coreUsages[i] || 0
-                                        barItem.coreUsage = usage
-
-                                        if (usage < 25) barItem.coreColor = colors.green
-                                        else if (usage < 50) barItem.coreColor = colors.yellow
-                                        else if (usage < 75) barItem.coreColor = colors.peach
-                                        else barItem.coreColor = colors.red
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    // Component handles reactivity automatically through property bindings
+                    // No manual updates needed
                 }
 
                 function hideTooltip() {
