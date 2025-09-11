@@ -11,8 +11,8 @@ Rectangle {
     property real cpuUsage: 0
     property real animatedCpuUsage: 0  // Animated version of cpuUsage for needle
     property list<real> coreUsages: []  // Array to store individual core usage
-    // Panel tooltip for CPU metrics
-    PanelTooltip {
+    // Tooltip for CPU metrics
+    Tooltip {
         id: tooltip
         backgroundColor: colors.surface
         borderColor: colors.overlay
@@ -246,17 +246,21 @@ Rectangle {
 
             // Larger mouse area for easier hovering
             MouseArea {
+                id: mouseArea
                 anchors.centerIn: parent
                 width: 50
                 height: 50
                 hoverEnabled: true
+                property bool hovered: false
 
                 onEntered: {
+                    hovered = true
                     gaugeBackground.opacity = cpuWidget.backgroundOpacityHover
                     showTooltip()
                 }
 
                 onExited: {
+                    hovered = false
                     gaugeBackground.opacity = cpuWidget.backgroundOpacityIdle
                     hideTooltip()
                 }
@@ -268,7 +272,7 @@ Rectangle {
                 function showTooltip() {
                     if (!tooltip.visible) {
                         createTooltipContent()
-                        tooltip.showForWidget(cpuWidget)
+                        tooltip.showForWidget(mouseArea)
                     }
                     cpuWidget.tooltipUpdateFunction = updateTooltipData
                 }
@@ -278,13 +282,13 @@ Rectangle {
                     var barWidth = 20
                     var barSpacing = 4
                     var maxBarHeight = 140
-                    
+
                     tooltip.contentItem = Qt.createQmlObject(`
                         import QtQuick
                         Column {
                             id: cpuContent
                             spacing: 12
-                            
+
                             // Overall CPU usage header
                             Text {
                                 id: cpuHeader
@@ -295,29 +299,29 @@ Rectangle {
                                 color: "${tooltip.textColor}"
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
-                            
+
                             // EQ Visualizer bars
                             Item {
                                 id: eqContainer
                                 width: Math.max(250, ${cpuWidget.coreUsages.length} * (${barWidth} + ${barSpacing}) + 40)
                                 height: ${maxBarHeight} + 80
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                
+
                                 Row {
                                     anchors.centerIn: parent
                                     spacing: ${barSpacing}
-                                    
+
                                     Repeater {
                                         id: coreRepeater
                                         model: ${cpuWidget.coreUsages.length}
-                                        
+
                                         Item {
                                             width: ${barWidth}
                                             height: ${maxBarHeight} + 20
-                                            
+
                                             property real coreUsage: 0
                                             property string coreColor: "${colors.green}"
-                                            
+
                                             // Background bar
                                             Rectangle {
                                                 width: ${barWidth}
@@ -331,7 +335,7 @@ Rectangle {
                                                 radius: 2
                                                 opacity: 0.3
                                             }
-                                            
+
                                             // Active usage bar
                                             Rectangle {
                                                 id: usageBar
@@ -342,19 +346,19 @@ Rectangle {
                                                 anchors.horizontalCenter: parent.horizontalCenter
                                                 color: parent.coreColor
                                                 radius: 1
-                                                
+
                                                 Behavior on height {
                                                     NumberAnimation {
                                                         duration: 300
                                                         easing.type: Easing.OutQuad
                                                     }
                                                 }
-                                                
+
                                                 Behavior on color {
                                                     ColorAnimation { duration: 200 }
                                                 }
                                             }
-                                            
+
                                             // Core label
                                             Text {
                                                 id: coreLabel
@@ -373,7 +377,7 @@ Rectangle {
                         }
                     `, tooltip.contentContainer)
                 }
-                
+
                 function updateTooltipData() {
                     // Only update data without recreating content
                     if (tooltip.contentItem && tooltip.visible) {
@@ -381,7 +385,7 @@ Rectangle {
                         if (header) {
                             header.text = "CPU: " + Math.round(cpuWidget.cpuUsage) + "%"
                         }
-                        
+
                         var eqContainer = tooltip.contentItem.children[1]
                         if (eqContainer && eqContainer.children[0] && eqContainer.children[0].children) {
                             var repeater = eqContainer.children[0].children[0]
@@ -391,7 +395,7 @@ Rectangle {
                                     if (barItem) {
                                         var usage = cpuWidget.coreUsages[i] || 0
                                         barItem.coreUsage = usage
-                                        
+
                                         if (usage < 25) barItem.coreColor = colors.green
                                         else if (usage < 50) barItem.coreColor = colors.yellow
                                         else if (usage < 75) barItem.coreColor = colors.peach

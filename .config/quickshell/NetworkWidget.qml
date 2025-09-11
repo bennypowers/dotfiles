@@ -50,30 +50,33 @@ Rectangle {
     }
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
+        property bool hovered: false
+        hoverEnabled: true
+        
         onClicked: {
             clickProcess.running = true
         }
-        hoverEnabled: true
 
         onEntered: {
+            console.log("🟢 NetworkWidget MouseArea entered")
+            hovered = true
             parent.color = colors.surface
             if (networkWidget.isConnected) {
-                var tooltipWidth = 250
-                var tooltipHeight = 180
-                var widgetCenter = networkWidget.mapToGlobal(networkWidget.width/2, networkWidget.height/2)
-                var widgetLeftEdge = networkWidget.mapToGlobal(0, networkWidget.height/2)
-
-                var tooltipX = widgetLeftEdge.x - tooltipWidth
-                var tooltipY = widgetCenter.y - tooltipHeight/2
-
-                tooltip.showAt(tooltipX, tooltipY, generateTooltipText(), "right", tooltipWidth, tooltipHeight/2)
+                showTooltip()
             }
         }
 
         onExited: {
+            console.log("🔴 NetworkWidget MouseArea exited")
+            hovered = false
             parent.color = "transparent"
             tooltip.hide()
+        }
+        
+        function showTooltip() {
+            tooltip.showForWidget(mouseArea, generateTooltipText())
         }
     }
 
@@ -93,11 +96,11 @@ Rectangle {
             onRead: function(data) {
                 try {
                     if (data && data.trim()) {
-                        const line = data.trim()
-                        const parts = line.split(":")
+                        var line = data.trim()
+                        var parts = line.split(":")
                         if (parts.length >= 3 && parts[0] === "activated") {
-                            const connType = parts[1]
-                            const deviceName = parts[2]
+                            var connType = parts[1]
+                            var deviceName = parts[2]
 
                             // Check if it's ethernet or wifi
                             if (connType.includes("wifi") || connType.includes("wireless")) {
@@ -256,7 +259,7 @@ Rectangle {
     }
 
     // Tooltip
-    SimpleTooltip {
+    Tooltip {
         id: tooltip
         backgroundColor: colors.surface
         borderColor: colors.overlay

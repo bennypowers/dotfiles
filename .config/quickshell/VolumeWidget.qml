@@ -49,8 +49,8 @@ Rectangle {
         id: smartAnchor
     }
 
-    // Panel tooltip for all hover information
-    PanelTooltip {
+    // Tooltip for all hover information
+    Tooltip {
         id: tooltip
         backgroundColor: colors.surface
         borderColor: colors.overlay

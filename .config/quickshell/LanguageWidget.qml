@@ -67,18 +67,29 @@ Rectangle {
     }
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
+        property bool hovered: false
+        hoverEnabled: true
+        
         onClicked: {
             switchProcess.running = true
         }
-        hoverEnabled: true
 
         onEntered: {
+            hovered = true
             parent.color = colors.surface
+            showTooltip()
         }
 
         onExited: {
+            hovered = false
             parent.color = "transparent"
+            tooltip.hide()
+        }
+        
+        function showTooltip() {
+            tooltip.showForWidget(mouseArea, generateTooltipText())
         }
     }
 
@@ -94,6 +105,33 @@ Rectangle {
     Process {
         id: switchProcess
         command: ["hyprctl", "switchxkblayout", "diego-palacios-cantor-keyboard", "next"]
+    }
+
+    // Tooltip
+    Tooltip {
+        id: tooltip
+        backgroundColor: colors.surface
+        borderColor: colors.overlay
+        textColor: colors.text
+    }
+
+    function generateTooltipText() {
+        let text = `<b>Keyboard Layout</b><br/>`
+        
+        if (currentLayout === "A") {
+            text += `<b>Current:</b> English (US)<br/>`
+            text += `<b>Next:</b> Hebrew`
+        } else if (currentLayout === "א") {
+            text += `<b>Current:</b> Hebrew<br/>`
+            text += `<b>Next:</b> English (US)`
+        } else {
+            text += `<b>Current:</b> Unknown<br/>`
+            text += `<b>Action:</b> Click to switch`
+        }
+        
+        text += `<br/><br/><b>Click to switch layouts</b>`
+        
+        return text
     }
 
     Component.onCompleted: {

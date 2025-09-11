@@ -242,7 +242,7 @@ Column {
     }
 
     // Tooltip
-    SimpleTooltip {
+    Tooltip {
         id: tooltip
         backgroundColor: colors.surface
         borderColor: colors.overlay

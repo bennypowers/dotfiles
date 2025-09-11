@@ -69,7 +69,11 @@ Rectangle {
     }
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
+        property bool hovered: false
+        hoverEnabled: true
+        
         onClicked: {
             if (vmRunning && viewerActive) {
                 // Workmode ON -> turn OFF (suspend VM, which will also kill viewer)
@@ -81,28 +85,30 @@ Rectangle {
                 vmStartProcess.running = true
             }
         }
-        hoverEnabled: true
+        
         onEntered: {
+            hovered = true
             parent.color = colors.surface
-            var tooltipWidth = 200
-            var tooltipHeight = 100
-            var widgetCenter = workmodeWidget.mapToGlobal(workmodeWidget.width/2, workmodeWidget.height/2)
-            var widgetLeftEdge = workmodeWidget.mapToGlobal(0, workmodeWidget.height/2)
-
-            var tooltipX = widgetLeftEdge.x - tooltipWidth
-            var tooltipY = widgetCenter.y - tooltipHeight/2
-
-            tooltip.showAt(tooltipX, tooltipY, generateTooltipText(), "right", tooltipWidth, tooltipHeight/2)
+            showTooltip()
         }
+        
         onExited: {
+            hovered = false
             parent.color = "transparent"
             tooltip.hide()
+        }
+        
+        function showTooltip() {
+            tooltip.showForWidget(mouseArea, generateTooltipText())
         }
     }
 
     // Tooltip
-    SimpleTooltip {
+    Tooltip {
         id: tooltip
+        backgroundColor: colors.surface
+        borderColor: colors.overlay
+        textColor: colors.text
     }
 
     // Check VM status and enforce clean state management
