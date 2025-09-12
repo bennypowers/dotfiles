@@ -4,6 +4,9 @@ import Quickshell.Io
 Rectangle {
     id: cpuWidget
 
+    // Property to receive shell root reference  
+    property var shellRoot: null
+
     property real activeBandOpacity: 1.0
     property real animatedCpuUsage: 0  // Animated version of cpuUsage for needle
 
@@ -350,7 +353,17 @@ Rectangle {
                 // Tooltip for CPU metrics
                 Tooltip {
                     id: tooltip
-
+                    
+                    // Register with global shell for droplet border coordination
+                    onVisibleChanged: {
+                        if (cpuWidget.shellRoot) {
+                            if (visible) {
+                                cpuWidget.shellRoot.registerTooltip(this);
+                            } else {
+                                cpuWidget.shellRoot.unregisterTooltip(this);
+                            }
+                        }
+                    }
                 }
             }
         }

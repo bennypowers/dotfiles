@@ -50,6 +50,14 @@ Window {
 
     property alias transientParent: tooltipWindow.transientParent
     property var triggerWidget: null
+    
+    // Properties for droplet arc coordination with main shell
+    property bool dropletVisible: visible
+    property real dropletX: x
+    property real dropletY: y
+    property real dropletWidth: width
+    property real dropletHeight: height
+    property real dropletRadius: radius
 
     function forceHide() {
         hideDelay.start();
@@ -84,7 +92,6 @@ Window {
         tooltipWindow.y = y;
 
         visible = true;
-        connectionStem.requestPaint();
         showAnimation.start();
     }
 
@@ -100,25 +107,42 @@ Window {
             tooltipText = text;
         }
 
-        // Calculate position relative to widget
-        var widgetCenter, widgetLeftEdge;
+        // Calculate widget center for Y positioning
+        var widgetCenter;
         if (widget.mapToGlobal) {
             widgetCenter = widget.mapToGlobal(widget.width / 2, widget.height / 2);
-            widgetLeftEdge = widget.mapToGlobal(0, widget.height / 2);
         } else {
             // For MouseArea and other items without mapToGlobal, use parent
             widgetCenter = widget.parent.mapToGlobal(widget.x + widget.width / 2, widget.y + widget.height / 2);
-            widgetLeftEdge = widget.parent.mapToGlobal(widget.x, widget.y + widget.height / 2);
+        }
+
+        // Find the actual bar's left edge by traversing up to find the panel window
+        var panelWindow = widget;
+        while (panelWindow && panelWindow.toString().indexOf("PanelWindow") === -1) {
+            panelWindow = panelWindow.parent;
+        }
+        
+        var barLeftEdge;
+        if (panelWindow) {
+            // Get the panel window's global position
+            barLeftEdge = panelWindow.mapToGlobal(0, 0);
+        } else {
+            // Fallback: use widget's left edge if panel not found
+            if (widget.mapToGlobal) {
+                barLeftEdge = widget.mapToGlobal(0, widget.height / 2);
+            } else {
+                barLeftEdge = widget.parent.mapToGlobal(widget.x, widget.y + widget.height / 2);
+            }
         }
 
         var tooltipX, tooltipY;
         var connectionSide = "left";  // Default assumption: tooltip to the right of widget
 
         // For right-side panel: position tooltip to the LEFT of the panel
-        // Right edge of tooltip should align with left edge of bar, growing leftward
-        tooltipX = widgetLeftEdge.x - width;  // Right edge of tooltip at left edge of bar
+        // Right edge of tooltip should align with left edge of bar
+        tooltipX = barLeftEdge.x - width;  // Right edge of tooltip at left edge of bar
         tooltipY = widgetCenter.y - height / 2;
-        connectionSide = "right";  // Stem points right toward the panel
+        connectionSide = "right";  // Connection side toward the panel
 
         // Final bounds checking
         if (tooltipY < 10) {
@@ -139,9 +163,7 @@ Window {
     width: contentWidth + padding
 
     onVisibleChanged: {
-        if (visible) {
-            connectionStem.requestPaint();
-        }
+        // Tooltip visibility changed - droplet arcs will be handled by main shell
     }
 
     Colors {
@@ -156,15 +178,18 @@ Window {
         anchors.fill: parent
         scale: 0
 
-        // Main tooltip body with rounded corners
+        // Main tooltip body with asymmetric corners for droplet effect
         Rectangle {
             id: tooltipBody
 
             anchors.fill: parent
-            border.color: tooltipWindow.borderColor
-            border.width: 1
+            border.color: "transparent"  // Remove border - will be handled by continuous border
+            border.width: 0
             color: tooltipWindow.backgroundColor
-            radius: tooltipWindow.radius
+            topLeftRadius: tooltipWindow.radius
+            bottomLeftRadius: tooltipWindow.radius
+            topRightRadius: 0
+            bottomRightRadius: 0
 
             // Subtle drop shadow effect
             Rectangle {
@@ -243,71 +268,7 @@ Window {
         }
     }
 
-    // Connection stem that grows from the tooltip toward the parent widget
-    Canvas {
-        id: connectionStem
-
-        anchors.fill: parent
-        z: 10  // Above other content
-
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.reset();
-
-            // Calculate stem position based on connection side
-            var startX, startY, endX, endY;
-
-            switch (tooltipWindow.connectionSide) {
-            case "top":
-                startX = tooltipWindow.connectionX;
-                startY = 0;
-                endX = startX;
-                endY = -tooltipWindow.stemLength;
-                break;
-            case "bottom":
-                startX = tooltipWindow.connectionX;
-                startY = height;
-                endX = startX;
-                endY = height + tooltipWindow.stemLength;
-                break;
-            case "left":
-                startX = 0;
-                startY = tooltipWindow.connectionY;
-                endX = -tooltipWindow.stemLength;
-                endY = startY;
-                break;
-            case "right":
-                startX = width;
-                startY = tooltipWindow.connectionY;
-                endX = width + tooltipWindow.stemLength;
-                endY = startY;
-                break;
-            }
-
-            // Draw the connecting stem
-            ctx.strokeStyle = tooltipWindow.borderColor;
-            ctx.fillStyle = tooltipWindow.backgroundColor;
-            ctx.lineWidth = tooltipWindow.stemWidth;
-            ctx.lineCap = "round";
-
-            // Create a smooth curved connection
-            var controlOffset = tooltipWindow.stemLength * 0.6;
-            var controlX, controlY;
-
-            if (tooltipWindow.connectionSide === "top" || tooltipWindow.connectionSide === "bottom") {
-                controlX = startX;
-                controlY = startY + (endY - startY) * 0.3;
-            } else {
-                controlX = startX + (endX - startX) * 0.3;
-                controlY = startY;
-            }
-
-            ctx.beginPath();
-            ctx.moveTo(startX, startY);
-            ctx.quadraticCurveTo(controlX, controlY, endX, endY);
-            ctx.stroke();
-        }
-    }
+    // Note: Connection stem removed - droplet arcs handled by main shell border system
 
     // Growth animation
     SequentialAnimation {

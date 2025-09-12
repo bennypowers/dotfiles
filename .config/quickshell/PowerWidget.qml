@@ -4,6 +4,9 @@ import Quickshell
 Rectangle {
     id: powerWidget
 
+    // Property to receive shell root reference
+    property var shellRoot: null
+
     color: "transparent"
     radius: 8
 
@@ -20,7 +23,17 @@ Rectangle {
     // Tooltip for power actions
     Tooltip {
         id: tooltip
-
+        
+        // Register with global shell for droplet border coordination
+        onVisibleChanged: {
+            if (powerWidget.shellRoot) {
+                if (visible) {
+                    powerWidget.shellRoot.registerTooltip(this);
+                } else {
+                    powerWidget.shellRoot.unregisterTooltip(this);
+                }
+            }
+        }
     }
     Column {
         anchors.centerIn: parent
