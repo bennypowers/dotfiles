@@ -77,63 +77,6 @@ ShellRoot {
             lockScreen.show();
         }
     }
-
-    // Test Panel (disabled - can be re-enabled manually)
-    AuthTestPanel {
-        id: testPanel
-
-        lockScreen: lockScreen
-        polkitAuth: polkitAuth
-        polkitInterceptor: polkitSocketClient
-    }
-
-    // IPC Handler for test panel
-    IpcHandler {
-        function hideAuthTestPanel() {
-            testPanel.hideTestPanel();
-        }
-        function showAuthTestPanel() {
-            testPanel.showTestPanel();
-        }
-        function toggleAuthTestPanel() {
-            testPanel.toggleTestMode();
-        }
-
-        target: "authTestPanel"
-    }
-
-    // IPC Handler for authentication testing
-    IpcHandler {
-        function checkPolkitStatus() {
-            console.log("Polkit agent replaced:", polkitBackend.agentReplaced);
-        }
-        function enablePolkitIntercept() {
-            polkitInterceptor.enableInterceptMode();
-        }
-        function reloadUserInfo() {
-            polkitAuth.loadUserInfo();
-        }
-        function replacePolkitAgent() {
-            polkitBackend.replacePolkitAgent();
-        }
-        function restorePolkitAgent() {
-            polkitBackend.restorePolkitAgent();
-        }
-        function showPolkitAuth() {
-            polkitAuth.startAuthentication("org.example.direct", "Direct polkit authentication test");
-        }
-        function testInterceptor() {
-            polkitInterceptor.triggerTestAuth();
-        }
-        function testLockScreen() {
-            lockScreen.show();
-        }
-        function testPolkitAuth() {
-            polkitAuth.startAuthentication("org.example.test.ipc", "IPC test authentication");
-        }
-
-        target: "authTest"
-    }
     Colors {
         id: colors
 

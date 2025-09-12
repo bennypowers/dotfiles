@@ -79,46 +79,6 @@ Rectangle {
             }
         }
 
-        // Application name and media info
-        Column {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true
-            spacing: 1
-
-            Text {
-                color: (tooltipItem.colors || defaultColors).text
-                elide: Text.ElideRight
-                font.bold: true
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 9
-                text: {
-                    if (!tooltipItem.node)
-                        return "Unknown";
-
-                    // Determine device type and name
-                    var deviceType = "";
-                    var deviceName = "";
-
-                    if (tooltipItem.node.isSource) {
-                        deviceType = "🎤 ";  // Microphone icon for input
-                    } else if (tooltipItem.node.isSink) {
-                        deviceType = "🔊 ";  // Speaker icon for output
-                    }
-
-                    if (!tooltipItem.node.properties) {
-                        deviceName = tooltipItem.node.description || tooltipItem.node.name || "Unknown";
-                    } else {
-                        const app = tooltipItem.node.properties["application.name"] ?? (tooltipItem.node.description !== "" ? tooltipItem.node.description : tooltipItem.node.name);
-                        const media = tooltipItem.node.properties["media.name"];
-                        deviceName = media !== undefined && media !== "" ? `${app}` : app;
-                    }
-
-                    return deviceType + deviceName;
-                }
-                width: parent.width
-            }
-        }
-
         // Volume percentage display
         Text {
             Layout.preferredWidth: 30
