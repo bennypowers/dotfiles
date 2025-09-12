@@ -6,13 +6,11 @@ Item {
     // Signal to communicate action triggers back to parent
     signal actionRequested(int actionIndex)
 
+    // Property to receive colors from parent
+    property var colors
+
     height: 40
     width: 200
-
-    Colors {
-        id: colors
-
-    }
     Row {
         anchors.centerIn: parent
         spacing: 8

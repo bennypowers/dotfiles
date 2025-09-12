@@ -4,6 +4,9 @@ import Quickshell.Io
 Rectangle {
     id: cameraWidget
 
+    // Property to receive shell root reference
+    property var shellRoot: null
+
     property bool cameraActive: false
     property int colorAnimationDuration: 150
     property int deviceCheckInterval: 2000

@@ -5,6 +5,9 @@ import Quickshell.Services.SystemTray
 Column {
     id: systemTrayWidget
 
+    // Property to receive shell root reference
+    property var shellRoot: null
+
     property bool enableTextFallback: true
 
     // Icon fallback configuration - can be customized per user/system

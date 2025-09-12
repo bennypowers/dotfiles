@@ -8,9 +8,6 @@ import Quickshell.Io
 ShellRoot {
     id: shellRoot
 
-    // Global tooltip management for droplet border coordination
-    property var activeTooltip: null
-
     // Global font configuration
     readonly property string defaultFontFamily: colors.fontFamily
     readonly property int defaultFontSize: 12
@@ -23,14 +20,12 @@ ShellRoot {
     readonly property int panelTopMargin: 24
     readonly property int smallFontSize: 8
 
-    // Global function for tooltip registration
-    function registerTooltip(tooltip) {
-        activeTooltip = tooltip;
-    }
-    function unregisterTooltip(tooltip) {
-        if (activeTooltip === tooltip) {
-            activeTooltip = null;
-        }
+    objectName: "shellRoot"
+
+    // Make shellRoot globally accessible
+    Component.onCompleted: {
+        console.log("🌍 Setting global shellRoot reference");
+        Qt.application.globalShellRoot = shellRoot;
     }
 
     // Volume OSD
@@ -126,7 +121,6 @@ ShellRoot {
                         Layout.alignment: Qt.AlignCenter
                         Layout.preferredHeight: 60
                         Layout.preferredWidth: parent.width
-                        shellRoot: shellRoot
                     }
 
                     // Volume widget at bottom
@@ -177,6 +171,7 @@ ShellRoot {
                         Layout.leftMargin: 14
                         Layout.preferredHeight: 120
                         Layout.preferredWidth: parent.width
+                        // shellRoot: shellRoot  // Temporarily disabled due to binding loop
                     }
 
                     // Workmode widget (vm/WM) at very bottom
@@ -205,106 +200,6 @@ ShellRoot {
                         Layout.leftMargin: 8
                         Layout.preferredHeight: 40
                         Layout.preferredWidth: parent.width
-                        shellRoot: shellRoot
-                    }
-                }
-
-                // Continuous border for droplet effect
-                Canvas {
-                    id: dropletBorder
-
-                    function calculateArcPath(tooltipX, tooltipY, tooltipWidth, tooltipHeight, radius) {
-                        var ctx = getContext("2d");
-                        ctx.reset();
-
-                        if (!shellRoot.activeTooltip || !shellRoot.activeTooltip.dropletVisible) {
-                            return;
-                        }
-
-                        // Calculate tooltip position relative to panel
-                        var panelLeft = 0;
-                        var panelRight = width;
-                        var panelTop = 0;
-                        var panelBottom = height;
-
-                        // Calculate tooltip coordinates relative to panel
-                        var ttTop = tooltipY;
-                        var ttBottom = tooltipY + tooltipHeight;
-                        var ttLeft = tooltipX;
-                        var ttRight = tooltipX + tooltipWidth;
-
-                        // Arc geometry for 45-degree connections
-                        var arcRadius = radius;
-                        var topArcStartX = ttRight;
-                        var topArcStartY = ttTop + radius;
-                        var topArcEndX = panelLeft;
-                        var topArcEndY = ttTop;
-
-                        var bottomArcStartX = ttRight;
-                        var bottomArcStartY = ttBottom - radius;
-                        var bottomArcEndX = panelLeft;
-                        var bottomArcEndY = ttBottom;
-
-                        // Set stroke style
-                        ctx.strokeStyle = colors.overlay;
-                        ctx.lineWidth = 1;
-                        ctx.lineCap = "round";
-                        ctx.lineJoin = "round";
-
-                        // Draw continuous border path
-                        ctx.beginPath();
-
-                        // Start from panel top
-                        ctx.moveTo(panelLeft, panelTop);
-
-                        // Down panel to top arc connection
-                        ctx.lineTo(panelLeft, topArcEndY);
-
-                        // Top droplet arc (45-degree curve from panel to tooltip)
-                        var topControlX = topArcStartX + arcRadius * 0.707;  // 45-degree control point
-                        var topControlY = topArcStartY - arcRadius * 0.707;
-                        ctx.quadraticCurveTo(topControlX, topControlY, topArcStartX, topArcStartY);
-
-                        // Tooltip top edge
-                        ctx.lineTo(ttLeft + radius, ttTop);
-
-                        // Tooltip top-left corner
-                        ctx.arcTo(ttLeft, ttTop, ttLeft, ttTop + radius, radius);
-
-                        // Tooltip left edge
-                        ctx.lineTo(ttLeft, ttBottom - radius);
-
-                        // Tooltip bottom-left corner
-                        ctx.arcTo(ttLeft, ttBottom, ttLeft + radius, ttBottom, radius);
-
-                        // Tooltip bottom edge
-                        ctx.lineTo(bottomArcStartX, ttBottom);
-
-                        // Bottom droplet arc (45-degree curve from tooltip to panel)
-                        var bottomControlX = bottomArcStartX + arcRadius * 0.707;
-                        var bottomControlY = bottomArcStartY + arcRadius * 0.707;
-                        ctx.quadraticCurveTo(bottomControlX, bottomControlY, panelLeft, bottomArcEndY);
-
-                        // Down panel to bottom
-                        ctx.lineTo(panelLeft, panelBottom);
-
-                        // Stroke the path
-                        ctx.stroke();
-                    }
-
-                    anchors.fill: parent
-                    z: 100  // Above all panel content
-
-                    onPaint: {
-                        if (shellRoot.activeTooltip && shellRoot.activeTooltip.dropletVisible) {
-                            calculateArcPath(shellRoot.activeTooltip.dropletX - x  // Relative to panel
-                            , shellRoot.activeTooltip.dropletY - y, shellRoot.activeTooltip.dropletWidth, shellRoot.activeTooltip.dropletHeight, shellRoot.activeTooltip.dropletRadius);
-                        }
-                    }
-
-                    // Redraw when tooltip properties change
-                    Connections {
-                        target: shellRoot.activeTooltip
                     }
                 }
             }

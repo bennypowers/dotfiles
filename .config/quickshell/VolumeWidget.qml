@@ -7,6 +7,9 @@ import Quickshell._Window
 Rectangle {
     id: volumeWidget
 
+    // Property to receive shell root reference
+    property var shellRoot: null
+
     property real arcLineWidth: 3
     property real arcRadius: 16
     property int colorAnimationDuration: 150
@@ -57,6 +60,16 @@ Rectangle {
     Tooltip {
         id: tooltip
 
+        // Register with global shell for droplet border coordination
+        onVisibleChanged: {
+            if (volumeWidget.shellRoot) {
+                if (visible) {
+                    volumeWidget.shellRoot.registerTooltip(this);
+                } else {
+                    volumeWidget.shellRoot.unregisterTooltip(this);
+                }
+            }
+        }
     }
     Column {
         anchors.centerIn: parent

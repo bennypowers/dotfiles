@@ -1,39 +1,17 @@
 import QtQuick
 import Quickshell
 
-Rectangle {
+BaseWidget {
     id: powerWidget
 
-    // Property to receive shell root reference
-    property var shellRoot: null
-
-    color: "transparent"
-    radius: 8
+    Component.onCompleted: {
+        console.log("🔧 PowerWidget completed. shellRoot:", !!shellRoot);
+    }
 
     // Create our own overlay instance
     PowerOverlay {
         id: powerOverlay
 
-    }
-    Colors {
-        id: colors
-
-    }
-
-    // Tooltip for power actions
-    Tooltip {
-        id: tooltip
-        
-        // Register with global shell for droplet border coordination
-        onVisibleChanged: {
-            if (powerWidget.shellRoot) {
-                if (visible) {
-                    powerWidget.shellRoot.registerTooltip(this);
-                } else {
-                    powerWidget.shellRoot.unregisterTooltip(this);
-                }
-            }
-        }
     }
     Column {
         anchors.centerIn: parent

@@ -4,6 +4,9 @@ import Quickshell.Io
 Rectangle {
     id: networkWidget
 
+    // Property to receive shell root reference
+    property var shellRoot: null
+
     property string connectionName: ""
     property string connectionType: ""
     property int defaultWifiStrength: 75

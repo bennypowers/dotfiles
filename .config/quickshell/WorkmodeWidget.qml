@@ -4,6 +4,9 @@ import Quickshell.Io
 Rectangle {
     id: workmodeWidget
 
+    // Property to receive shell root reference
+    property var shellRoot: null
+
     property string iconOff: "󰠔"  // Grey empty outlined briefcase (workmode OFF)
 
     property string iconOn: "󰃖"  // Green filled briefcase (workmode ON)

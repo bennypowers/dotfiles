@@ -3,6 +3,8 @@ import QtQuick.Window
 
 Window {
     id: tooltipWindow
+    
+    property string debugId: "Tooltip_" + Math.random().toString(36).substr(2, 9)
 
     property string backgroundColor: color.base
     property string borderColor: color.crust
@@ -97,6 +99,7 @@ Window {
 
     // Smart positioning method for widgets
     function showForWidget(widget, text) {
+        console.log("🎯 [" + debugId + "] showForWidget called for widget:", widget);
         if (!widget)
             return;
 
@@ -122,25 +125,22 @@ Window {
             layoutParent = layoutParent.parent;
         }
 
-        var barLeftEdge;
-        if (layoutParent && layoutParent.parent && layoutParent.parent.mapToGlobal) {
-            // The ColumnLayout's parent should be the bar Rectangle
-            // Get the bar's left edge (x=0 relative to bar)
-            barLeftEdge = layoutParent.parent.mapToGlobal(0, 0);
+        // Calculate bar position based on widget position
+        // Since the layout parent is giving wrong coordinates, use widget position directly
+        var widgetGlobalPos;
+        if (widget.mapToGlobal) {
+            widgetGlobalPos = widget.mapToGlobal(0, 0);
         } else {
-            // Fallback: calculate based on widget position and known bar width
-            var widgetGlobalPos;
-            if (widget.mapToGlobal) {
-                widgetGlobalPos = widget.mapToGlobal(0, 0);
-            } else {
-                widgetGlobalPos = widget.parent.mapToGlobal(widget.x, widget.y);
-            }
-            // Assume bar width is 80px, widgets are positioned with some margin from left
-            barLeftEdge = {
-                x: widgetGlobalPos.x - 40,
-                y: widgetGlobalPos.y
-            }; // Rough estimate
+            widgetGlobalPos = widget.parent.mapToGlobal(widget.x, widget.y);
         }
+        console.log("🎯 Widget global position:", widgetGlobalPos.x, widgetGlobalPos.y);
+        
+        // Calculate bar left edge: widget is inside the bar, so bar left = widget global X - widget local X
+        // But we need to account for the margins and layout offsets
+        var barGlobalX = widgetGlobalPos.x - widget.x - 8; // 8px is the layout margin
+        var barGlobalY = widgetGlobalPos.y - widget.y;
+        var barLeftEdge = {x: barGlobalX, y: barGlobalY};
+        console.log("🎯 Calculated bar position:", barLeftEdge.x, barLeftEdge.y);
 
         var tooltipX, tooltipY;
         var connectionSide = "left";  // Default assumption: tooltip to the right of widget
@@ -158,6 +158,8 @@ Window {
         // Remove restrictive height bounds check that was causing issues
         // Bottom widgets should be able to show tooltips properly
 
+        console.log("🎯 Tooltip positioning - widgetCenter:", widgetCenter.x, widgetCenter.y, "barLeftEdge:", barLeftEdge.x, barLeftEdge.y);
+        console.log("🎯 Final tooltip position:", tooltipX, tooltipY);
         showAt(tooltipX, tooltipY, text || tooltipText, "right", width, height / 2);
     }
     function updateText(text) {
@@ -190,8 +192,6 @@ Window {
             id: tooltipBody
 
             anchors.fill: parent
-            border.color: "transparent"  // Remove border - will be handled by continuous border
-            border.width: 0
             bottomLeftRadius: tooltipWindow.radius
             bottomRightRadius: 0
             color: tooltipWindow.backgroundColor

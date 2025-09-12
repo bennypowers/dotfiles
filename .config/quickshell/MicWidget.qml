@@ -5,6 +5,9 @@ import Quickshell.Io
 Rectangle {
     id: micWidget
 
+    // Property to receive shell root reference
+    property var shellRoot: null
+
     property int colorAnimationDuration: 150
     property var defaultSource: Pipewire.defaultAudioSource
     property int deviceCheckInterval: 2000

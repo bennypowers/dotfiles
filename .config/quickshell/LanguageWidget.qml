@@ -7,6 +7,9 @@ import Quickshell.Hyprland
 Rectangle {
     id: languageWidget
 
+    // Property to receive shell root reference
+    property var shellRoot: null
+
     property string currentLayout: "A"
 
     // Languages configuration array for easy maintenance
