@@ -97,64 +97,28 @@ WlrLayershell {
         onClicked: powerOverlay.hide()
 
         // Power actions row
-        Row {
+        PowerActionsRow {
             anchors.centerIn: parent
-            spacing: itemSpacing
-
-            Repeater {
-                model: powerOverlay.actions
-
-                Item {
-                    id: actionItem
-                    width: itemSize
-                    height: itemSize
-
-                    property bool isHovered: mouseArea.containsMouse
-                    property bool isFocused: index === powerOverlay.currentIndex
-                    property bool isHighlighted: isHovered || isFocused
-
-                    // Highlight background
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: borderRadius
-                        color: "transparent"
-                        border.color: parent.isHighlighted ? colors.surface : "transparent"
-                        border.width: borderWidth
-                        opacity: parent.isHighlighted ? highlightOpacity : 0
-
-                        Behavior on opacity {
-                            NumberAnimation { duration: animationDuration }
-                        }
-                    }
-
-                    // Icon
-                    Text {
-                        anchors.centerIn: parent
-                        text: modelData.icon
-                        font.family: colors.fontFamily
-                        font.pixelSize: iconSize
-                        color: modelData.color
-                        opacity: parent.isHighlighted ? highlightOpacity : normalOpacity
-
-                        Behavior on opacity {
-                            NumberAnimation { duration: animationDuration }
-                        }
-                    }
-
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            powerOverlay.currentIndex = index
-                            modelData.action()
-                        }
-                        onEntered: powerOverlay.currentIndex = index
-
-                        // Prevent clicks from propagating to background
-                        onPressed: function(mouse) { mouse.accepted = true }
-                    }
-                }
+            
+            actions: powerOverlay.actions
+            iconSize: powerOverlay.iconSize
+            itemSpacing: powerOverlay.itemSpacing
+            itemSize: powerOverlay.itemSize
+            showBorders: true
+            borderRadius: powerOverlay.borderRadius
+            borderWidth: powerOverlay.borderWidth
+            animationDuration: powerOverlay.animationDuration
+            normalOpacity: powerOverlay.normalOpacity
+            highlightOpacity: powerOverlay.highlightOpacity
+            currentIndex: powerOverlay.currentIndex
+            
+            onActionTriggered: function(index, action) {
+                powerOverlay.currentIndex = index
+                action.action()
+            }
+            
+            onCurrentIndexChanged: {
+                powerOverlay.currentIndex = currentIndex
             }
         }
     }
