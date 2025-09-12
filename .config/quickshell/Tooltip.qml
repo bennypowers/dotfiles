@@ -36,6 +36,14 @@ Window {
         return 200;
     }
     property bool disableInternalHover: false
+    property real dropletHeight: height
+    property real dropletRadius: radius
+
+    // Properties for droplet arc coordination with main shell
+    property bool dropletVisible: visible
+    property real dropletWidth: width
+    property real dropletX: x
+    property real dropletY: y
     property string fontFamily: "JetBrainsMono Nerd Font Mono"
     property int fontSize: 14
     readonly property int padding: 16
@@ -50,14 +58,6 @@ Window {
 
     property alias transientParent: tooltipWindow.transientParent
     property var triggerWidget: null
-    
-    // Properties for droplet arc coordination with main shell
-    property bool dropletVisible: visible
-    property real dropletX: x
-    property real dropletY: y
-    property real dropletWidth: width
-    property real dropletHeight: height
-    property real dropletRadius: radius
 
     function forceHide() {
         hideDelay.start();
@@ -116,23 +116,30 @@ Window {
             widgetCenter = widget.parent.mapToGlobal(widget.x + widget.width / 2, widget.y + widget.height / 2);
         }
 
-        // Find the actual bar's left edge by traversing up to find the panel window
-        var panelWindow = widget;
-        while (panelWindow && panelWindow.toString().indexOf("PanelWindow") === -1) {
-            panelWindow = panelWindow.parent;
+        // Find the ColumnLayout parent (which is inside the bar Rectangle)
+        var layoutParent = widget;
+        while (layoutParent && layoutParent.toString().indexOf("ColumnLayout") === -1) {
+            layoutParent = layoutParent.parent;
         }
-        
+
         var barLeftEdge;
-        if (panelWindow) {
-            // Get the panel window's global position
-            barLeftEdge = panelWindow.mapToGlobal(0, 0);
+        if (layoutParent && layoutParent.parent && layoutParent.parent.mapToGlobal) {
+            // The ColumnLayout's parent should be the bar Rectangle
+            // Get the bar's left edge (x=0 relative to bar)
+            barLeftEdge = layoutParent.parent.mapToGlobal(0, 0);
         } else {
-            // Fallback: use widget's left edge if panel not found
+            // Fallback: calculate based on widget position and known bar width
+            var widgetGlobalPos;
             if (widget.mapToGlobal) {
-                barLeftEdge = widget.mapToGlobal(0, widget.height / 2);
+                widgetGlobalPos = widget.mapToGlobal(0, 0);
             } else {
-                barLeftEdge = widget.parent.mapToGlobal(widget.x, widget.y + widget.height / 2);
+                widgetGlobalPos = widget.parent.mapToGlobal(widget.x, widget.y);
             }
+            // Assume bar width is 80px, widgets are positioned with some margin from left
+            barLeftEdge = {
+                x: widgetGlobalPos.x - 40,
+                y: widgetGlobalPos.y
+            }; // Rough estimate
         }
 
         var tooltipX, tooltipY;
@@ -162,9 +169,9 @@ Window {
     height: contentHeight + padding
     width: contentWidth + padding
 
-    onVisibleChanged: {
-        // Tooltip visibility changed - droplet arcs will be handled by main shell
-    }
+    onVisibleChanged:
+    // Tooltip visibility changed - droplet arcs will be handled by main shell
+    {}
 
     Colors {
         id: color
@@ -185,11 +192,11 @@ Window {
             anchors.fill: parent
             border.color: "transparent"  // Remove border - will be handled by continuous border
             border.width: 0
+            bottomLeftRadius: tooltipWindow.radius
+            bottomRightRadius: 0
             color: tooltipWindow.backgroundColor
             topLeftRadius: tooltipWindow.radius
-            bottomLeftRadius: tooltipWindow.radius
             topRightRadius: 0
-            bottomRightRadius: 0
 
             // Subtle drop shadow effect
             Rectangle {

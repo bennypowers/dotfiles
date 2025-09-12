@@ -109,10 +109,10 @@ ShellRoot {
                 top: true
             }
             Rectangle {
-                id: panelBackground
+                id: bar
 
                 anchors.fill: parent
-                color: colors.crust
+                color: colors.base
 
                 ColumnLayout {
                     anchors.bottomMargin: panelBottomMargin
