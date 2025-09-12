@@ -4,22 +4,24 @@ import Quickshell.Services.Pipewire
 
 Rectangle {
     id: tooltipItem
+
+    property var colors
+    property real iconSize: 18
+    property real muteButtonSize: 20
+    required property var node
+    property real volumeSliderHeight: 6
+
     color: "transparent"  // No background for tooltip items
     radius: 6
 
-    required property var node
-    property real iconSize: 18
-    property real volumeSliderHeight: 6
-    property real muteButtonSize: 20
-    property var colors
-
     Colors {
         id: defaultColors
+
     }
 
     // Bind the node so we can read its properties
-    PwObjectTracker { 
-        objects: [node] 
+    PwObjectTracker {
+        objects: [node]
     }
 
     // No MouseArea here to avoid hover conflicts with tooltip
@@ -31,23 +33,24 @@ Rectangle {
 
         // Application icon
         Rectangle {
-            Layout.preferredWidth: tooltipItem.iconSize
             Layout.preferredHeight: tooltipItem.iconSize
+            Layout.preferredWidth: tooltipItem.iconSize
             color: "transparent"
 
             Image {
                 id: appIcon
+
                 anchors.centerIn: parent
-                width: tooltipItem.iconSize
+                fillMode: Image.PreserveAspectFit
                 height: tooltipItem.iconSize
                 smooth: true
-                fillMode: Image.PreserveAspectFit
-
                 source: {
-                    if (!tooltipItem.node || !tooltipItem.node.properties) return ""
-                    const icon = tooltipItem.node.properties["application.icon-name"] ?? "audio-volume-high-symbolic"
-                    return `image://icon/${icon}`
+                    if (!tooltipItem.node || !tooltipItem.node.properties)
+                        return "";
+                    const icon = tooltipItem.node.properties["application.icon-name"] ?? "audio-volume-high-symbolic";
+                    return `image://icon/${icon}`;
                 }
+                width: tooltipItem.iconSize
 
                 // Fallback text if icon fails to load
                 Rectangle {
@@ -58,18 +61,19 @@ Rectangle {
 
                     Text {
                         anchors.centerIn: parent
-                        text: {
-                            if (!tooltipItem.node) return "?"
-                            if (!tooltipItem.node.properties) {
-                                return tooltipItem.node.name ? tooltipItem.node.name.charAt(0).toUpperCase() : "?"
-                            }
-                            const appName = tooltipItem.node.properties["application.name"] ?? tooltipItem.node.name
-                            return appName ? appName.charAt(0).toUpperCase() : "?"
-                        }
+                        color: "white"
+                        font.bold: true
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 8
-                        font.bold: true
-                        color: "white"
+                        text: {
+                            if (!tooltipItem.node)
+                                return "?";
+                            if (!tooltipItem.node.properties) {
+                                return tooltipItem.node.name ? tooltipItem.node.name.charAt(0).toUpperCase() : "?";
+                            }
+                            const appName = tooltipItem.node.properties["application.name"] ?? tooltipItem.node.name;
+                            return appName ? appName.charAt(0).toUpperCase() : "?";
+                        }
                     }
                 }
             }
@@ -77,102 +81,108 @@ Rectangle {
 
         // Application name and media info
         Column {
-            Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
             spacing: 1
 
             Text {
-                width: parent.width
+                color: (tooltipItem.colors || defaultColors).text
+                elide: Text.ElideRight
+                font.bold: true
+                font.family: "JetBrainsMono Nerd Font"
+                font.pixelSize: 9
                 text: {
-                    if (!tooltipItem.node) return "Unknown"
+                    if (!tooltipItem.node)
+                        return "Unknown";
 
                     // Determine device type and name
-                    var deviceType = ""
-                    var deviceName = ""
+                    var deviceType = "";
+                    var deviceName = "";
 
                     if (tooltipItem.node.isSource) {
-                        deviceType = "🎤 "  // Microphone icon for input
+                        deviceType = "🎤 ";  // Microphone icon for input
                     } else if (tooltipItem.node.isSink) {
-                        deviceType = "🔊 "  // Speaker icon for output
+                        deviceType = "🔊 ";  // Speaker icon for output
                     }
 
                     if (!tooltipItem.node.properties) {
-                        deviceName = tooltipItem.node.description || tooltipItem.node.name || "Unknown"
+                        deviceName = tooltipItem.node.description || tooltipItem.node.name || "Unknown";
                     } else {
-                        const app = tooltipItem.node.properties["application.name"] ?? 
-                                   (tooltipItem.node.description !== "" ? tooltipItem.node.description : tooltipItem.node.name)
-                        const media = tooltipItem.node.properties["media.name"]
-                        deviceName = media !== undefined && media !== "" ? `${app}` : app
+                        const app = tooltipItem.node.properties["application.name"] ?? (tooltipItem.node.description !== "" ? tooltipItem.node.description : tooltipItem.node.name);
+                        const media = tooltipItem.node.properties["media.name"];
+                        deviceName = media !== undefined && media !== "" ? `${app}` : app;
                     }
 
-                    return deviceType + deviceName
+                    return deviceType + deviceName;
                 }
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 9
-                font.bold: true
-                color: (tooltipItem.colors || defaultColors).text
-                elide: Text.ElideRight
+                width: parent.width
             }
         }
 
         // Volume percentage display
         Text {
             Layout.preferredWidth: 30
-            text: {
-                if (!tooltipItem.node || !tooltipItem.node.audio) return "0%"
-                const volume = tooltipItem.node.audio.volume
-                if (isNaN(volume)) return "---"
-                return `${Math.floor(volume * 100)}%`
-            }
+            color: (tooltipItem.colors || defaultColors).subtext
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 8
-            color: (tooltipItem.colors || defaultColors).subtext
             horizontalAlignment: Text.AlignRight
+            text: {
+                if (!tooltipItem.node || !tooltipItem.node.audio)
+                    return "0%";
+                const volume = tooltipItem.node.audio.volume;
+                if (isNaN(volume))
+                    return "---";
+                return `${Math.floor(volume * 100)}%`;
+            }
         }
 
         // Volume slider (display only, no interaction)
         Rectangle {
-            Layout.preferredWidth: 60
-            Layout.preferredHeight: tooltipItem.volumeSliderHeight
             Layout.alignment: Qt.AlignVCenter
-            color: (tooltipItem.colors || defaultColors).surface
-            radius: tooltipItem.volumeSliderHeight / 2
+            Layout.preferredHeight: tooltipItem.volumeSliderHeight
+            Layout.preferredWidth: 60
             border.color: (tooltipItem.colors || defaultColors).overlay
             border.width: 1
+            color: (tooltipItem.colors || defaultColors).surface
+            radius: tooltipItem.volumeSliderHeight / 2
 
             Rectangle {
                 id: volumeFill
+
+                color: tooltipItem.node && tooltipItem.node.audio && tooltipItem.node.audio.muted ? (tooltipItem.colors || defaultColors).overlay : (tooltipItem.colors || defaultColors).mauve
                 height: parent.height
-                width: {
-                    if (!tooltipItem.node || !tooltipItem.node.audio) return 0
-                    const volume = tooltipItem.node.audio.volume
-                    if (isNaN(volume)) return 0
-                    return parent.width * volume
-                }
-                color: tooltipItem.node && tooltipItem.node.audio && tooltipItem.node.audio.muted ? 
-                       (tooltipItem.colors || defaultColors).overlay : (tooltipItem.colors || defaultColors).mauve
                 radius: parent.radius
+                width: {
+                    if (!tooltipItem.node || !tooltipItem.node.audio)
+                        return 0;
+                    const volume = tooltipItem.node.audio.volume;
+                    if (isNaN(volume))
+                        return 0;
+                    return parent.width * volume;
+                }
             }
         }
 
         // Mute button (display only, no interaction)
         Rectangle {
-            Layout.preferredWidth: tooltipItem.muteButtonSize
             Layout.preferredHeight: tooltipItem.muteButtonSize
+            Layout.preferredWidth: tooltipItem.muteButtonSize
             color: "transparent"
             radius: 4
 
             Text {
                 anchors.centerIn: parent
-                text: {
-                    if (!tooltipItem.node || !tooltipItem.node.audio) return "󰝟"
-                    return tooltipItem.node.audio.muted ? "󰝟" : "󰕾"
+                color: {
+                    if (!tooltipItem.node || !tooltipItem.node.audio)
+                        return (tooltipItem.colors || defaultColors).overlay;
+                    return tooltipItem.node.audio.muted ? (tooltipItem.colors || defaultColors).red : (tooltipItem.colors || defaultColors).green;
                 }
                 font.family: "JetBrainsMono Nerd Font"
                 font.pixelSize: 10
-                color: {
-                    if (!tooltipItem.node || !tooltipItem.node.audio) return (tooltipItem.colors || defaultColors).overlay
-                    return tooltipItem.node.audio.muted ? (tooltipItem.colors || defaultColors).red : (tooltipItem.colors || defaultColors).green
+                text: {
+                    if (!tooltipItem.node || !tooltipItem.node.audio)
+                        return "󰝟";
+                    return tooltipItem.node.audio.muted ? "󰝟" : "󰕾";
                 }
             }
         }

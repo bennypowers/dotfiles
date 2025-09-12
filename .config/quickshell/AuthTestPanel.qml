@@ -5,181 +5,171 @@ import Quickshell
 
 Window {
     id: testPanel
-    
+
+    property var lockScreen: null
+
     // Reference to main components (set from parent)
     property var polkitAuth: null
-    property var lockScreen: null
     property var polkitInterceptor: null
-    
+
+    function hideTestPanel() {
+        testPanel.visible = false;
+    }
+    function showTestPanel() {
+        testPanel.visible = true;
+    }
+
+    // IPC functions for test panel control
+    function toggleTestMode() {
+        testPanel.visible = !testPanel.visible;
+    }
+
+    height: 200
+    title: "Auth Test Panel"
+
     // Window properties
     visible: false
     width: 300
-    height: 200
-    title: "Auth Test Panel"
     x: 100
     y: 100
-    
-    // IPC functions for test panel control
-    function toggleTestMode() {
-        testPanel.visible = !testPanel.visible
+
+    Colors {
+        id: colors
+
     }
-    
-    function showTestPanel() {
-        testPanel.visible = true
-    }
-    
-    function hideTestPanel() {
-        testPanel.visible = false
-    }
-        
-        Colors { id: colors }
-    
     Rectangle {
         anchors.fill: parent
-        color: colors.base
         border.color: colors.blue
         border.width: 1
+        color: colors.base
         radius: colors.borderRadius
-        
+
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 15
             spacing: colors.spacing * 2
-            
+
             Text {
-                text: "Auth System Test"
+                Layout.alignment: Qt.AlignHCenter
                 color: colors.text
+                font.bold: true
                 font.family: colors.fontFamily
                 font.pixelSize: colors.textSize
-                font.bold: true
-                Layout.alignment: Qt.AlignHCenter
+                text: "Auth System Test"
             }
-            
             Button {
-                text: "Test Polkit Auth"
                 Layout.fillWidth: true
-                
+                text: "Test Polkit Auth"
+
                 background: Rectangle {
                     color: parent.pressed ? colors.sapphire : colors.blue
+                    implicitHeight: 32
                     opacity: parent.pressed ? 0.8 : 1.0
                     radius: colors.borderRadius
-                    implicitHeight: 32
                 }
-                
                 contentItem: Text {
-                    text: parent.text
                     color: colors.crust
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
                     horizontalAlignment: Text.AlignHCenter
+                    text: parent.text
                     verticalAlignment: Text.AlignVCenter
                 }
-                
+
                 onClicked: {
-                    console.log("Testing polkit authentication dialog")
+                    console.log("Testing polkit authentication dialog");
                     if (testPanel.polkitAuth) {
-                        testPanel.polkitAuth.startAuthentication(
-                            "org.example.test",
-                            "Test polkit authentication dialog"
-                        )
+                        testPanel.polkitAuth.startAuthentication("org.example.test", "Test polkit authentication dialog");
                     }
                 }
             }
-            
             Button {
-                text: "Test Lock Screen"
                 Layout.fillWidth: true
-                
+                text: "Test Lock Screen"
+
                 background: Rectangle {
                     color: parent.pressed ? colors.green : colors.sapphire
+                    implicitHeight: 32
                     opacity: parent.pressed ? 0.8 : 1.0
                     radius: colors.borderRadius
-                    implicitHeight: 32
                 }
-                
                 contentItem: Text {
-                    text: parent.text
                     color: colors.crust
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
                     horizontalAlignment: Text.AlignHCenter
+                    text: parent.text
                     verticalAlignment: Text.AlignVCenter
                 }
-                
+
                 onClicked: {
-                    console.log("Testing lock screen")
+                    console.log("Testing lock screen");
                     if (testPanel.lockScreen) {
-                        testPanel.lockScreen.show()
+                        testPanel.lockScreen.show();
                     }
                 }
             }
-            
             Button {
-                text: "Test Interceptor"
                 Layout.fillWidth: true
-                
+                text: "Test Interceptor"
+
                 background: Rectangle {
                     color: parent.pressed ? colors.mauve : colors.lavender
+                    implicitHeight: 32
                     opacity: parent.pressed ? 0.8 : 1.0
                     radius: colors.borderRadius
-                    implicitHeight: 32
                 }
-                
                 contentItem: Text {
-                    text: parent.text
                     color: colors.crust
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
                     horizontalAlignment: Text.AlignHCenter
+                    text: parent.text
                     verticalAlignment: Text.AlignVCenter
                 }
-                
+
                 onClicked: {
-                    console.log("Testing polkit interceptor")
+                    console.log("Testing polkit interceptor");
                     if (testPanel.polkitInterceptor) {
-                        testPanel.polkitInterceptor.triggerTestAuth()
+                        testPanel.polkitInterceptor.triggerTestAuth();
                     }
                 }
             }
-            
             Button {
-                text: "Enable Polkit Intercept"
                 Layout.fillWidth: true
-                
+                text: "Enable Polkit Intercept"
+
                 background: Rectangle {
                     color: parent.pressed ? colors.yellow : colors.peach
+                    implicitHeight: 32
                     opacity: parent.pressed ? 0.8 : 1.0
                     radius: colors.borderRadius
-                    implicitHeight: 32
                 }
-                
                 contentItem: Text {
-                    text: parent.text
                     color: colors.crust
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
                     horizontalAlignment: Text.AlignHCenter
+                    text: parent.text
                     verticalAlignment: Text.AlignVCenter
                 }
-                
+
                 onClicked: {
-                    console.log("Enabling polkit intercept via UI")
+                    console.log("Enabling polkit intercept via UI");
                     if (testPanel.polkitInterceptor) {
-                        testPanel.polkitInterceptor.enableInterceptMode()
+                        testPanel.polkitInterceptor.enableInterceptMode();
                     }
                 }
             }
-            
             Text {
-                text: "Use these buttons to test\nthe authentication system"
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: colors.spacing * 2
                 color: colors.subtext
                 font.family: colors.fontFamily
                 font.pixelSize: 10
-                Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
-                Layout.topMargin: colors.spacing * 2
+                text: "Use these buttons to test\nthe authentication system"
             }
-            
             Item {
                 Layout.fillHeight: true
             }

@@ -5,43 +5,46 @@ import Quickshell.Services.Pipewire
 
 Rectangle {
     id: mixerItem
-    color: mouseArea.containsMouse ? colors.surface : "transparent"
-    radius: 6
+
+    property int animationDuration: 200
+    property real iconSize: 20
+    property real muteButtonSize: 24
+    required property var node
+    property real volumeSliderHeight: 8
+
     border.color: colors.overlay
     border.width: mouseArea.containsMouse ? 1 : 0
+    color: mouseArea.containsMouse ? colors.surface : "transparent"
+    radius: 6
 
-    required property var node
-    property real iconSize: 20
-    property real volumeSliderHeight: 8
-    property real muteButtonSize: 24
-    property int animationDuration: 200
+    Behavior on border.width {
+        NumberAnimation {
+            duration: mixerItem.animationDuration
+        }
+    }
+    Behavior on color {
+        ColorAnimation {
+            duration: mixerItem.animationDuration
+        }
+    }
 
     Colors {
         id: colors
-    }
 
+    }
 
     // Bind the node so we can read its properties
-    PwObjectTracker { 
-        objects: [node] 
+    PwObjectTracker {
+        objects: [node]
     }
-
     MouseArea {
         id: mouseArea
+
+        acceptedButtons: Qt.NoButton  // Don't consume button events
         anchors.fill: parent
         hoverEnabled: true
         propagateComposedEvents: true
-        acceptedButtons: Qt.NoButton  // Don't consume button events
     }
-
-    Behavior on color {
-        ColorAnimation { duration: mixerItem.animationDuration }
-    }
-
-    Behavior on border.width {
-        NumberAnimation { duration: mixerItem.animationDuration }
-    }
-
     RowLayout {
         anchors.fill: parent
         anchors.margins: 8
@@ -49,23 +52,24 @@ Rectangle {
 
         // Application icon
         Rectangle {
-            Layout.preferredWidth: mixerItem.iconSize
             Layout.preferredHeight: mixerItem.iconSize
+            Layout.preferredWidth: mixerItem.iconSize
             color: "transparent"
 
             Image {
                 id: appIcon
+
                 anchors.centerIn: parent
-                width: mixerItem.iconSize
+                fillMode: Image.PreserveAspectFit
                 height: mixerItem.iconSize
                 smooth: true
-                fillMode: Image.PreserveAspectFit
-
                 source: {
-                    if (!mixerItem.node || !mixerItem.node.properties) return ""
-                    const icon = mixerItem.node.properties["application.icon-name"] ?? "audio-volume-high-symbolic"
-                    return `image://icon/${icon}`
+                    if (!mixerItem.node || !mixerItem.node.properties)
+                        return "";
+                    const icon = mixerItem.node.properties["application.icon-name"] ?? "audio-volume-high-symbolic";
+                    return `image://icon/${icon}`;
                 }
+                width: mixerItem.iconSize
 
                 // Fallback text if icon fails to load
                 Rectangle {
@@ -76,18 +80,19 @@ Rectangle {
 
                     Text {
                         anchors.centerIn: parent
-                        text: {
-                            if (!mixerItem.node) return "?"
-                            if (!mixerItem.node.properties) {
-                                return mixerItem.node.name ? mixerItem.node.name.charAt(0).toUpperCase() : "?"
-                            }
-                            const appName = mixerItem.node.properties["application.name"] ?? mixerItem.node.name
-                            return appName ? appName.charAt(0).toUpperCase() : "?"
-                        }
+                        color: "white"
+                        font.bold: true
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 10
-                        font.bold: true
-                        color: "white"
+                        text: {
+                            if (!mixerItem.node)
+                                return "?";
+                            if (!mixerItem.node.properties) {
+                                return mixerItem.node.name ? mixerItem.node.name.charAt(0).toUpperCase() : "?";
+                            }
+                            const appName = mixerItem.node.properties["application.name"] ?? mixerItem.node.name;
+                            return appName ? appName.charAt(0).toUpperCase() : "?";
+                        }
                     }
                 }
             }
@@ -95,149 +100,155 @@ Rectangle {
 
         // Application name and media info
         Column {
-            Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
             spacing: 2
 
             Text {
-                width: parent.width
+                color: colors.text
+                elide: Text.ElideRight
+                font.bold: true
+                font.family: "JetBrainsMono Nerd Font"
+                font.pixelSize: 10
                 text: {
-                    if (!mixerItem.node) return "Unknown"
+                    if (!mixerItem.node)
+                        return "Unknown";
 
                     // Determine device type and name
-                    var deviceType = ""
-                    var deviceName = ""
+                    var deviceType = "";
+                    var deviceName = "";
 
                     if (mixerItem.node.isSource) {
-                        deviceType = "🎤 "  // Microphone icon for input
+                        deviceType = "🎤 ";  // Microphone icon for input
                     } else if (mixerItem.node.isSink) {
-                        deviceType = "🔊 "  // Speaker icon for output
+                        deviceType = "🔊 ";  // Speaker icon for output
                     }
 
                     if (!mixerItem.node.properties) {
-                        deviceName = mixerItem.node.description || mixerItem.node.name || "Unknown"
+                        deviceName = mixerItem.node.description || mixerItem.node.name || "Unknown";
                     } else {
-                        const app = mixerItem.node.properties["application.name"] ?? 
-                                   (mixerItem.node.description !== "" ? mixerItem.node.description : mixerItem.node.name)
-                        const media = mixerItem.node.properties["media.name"]
-                        deviceName = media !== undefined && media !== "" ? `${app}` : app
+                        const app = mixerItem.node.properties["application.name"] ?? (mixerItem.node.description !== "" ? mixerItem.node.description : mixerItem.node.name);
+                        const media = mixerItem.node.properties["media.name"];
+                        deviceName = media !== undefined && media !== "" ? `${app}` : app;
                     }
 
-                    return deviceType + deviceName
+                    return deviceType + deviceName;
                 }
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 10
-                font.bold: true
-                color: colors.text
-                elide: Text.ElideRight
-            }
-
-            Text {
                 width: parent.width
-                text: {
-                    if (!mixerItem.node || !mixerItem.node.properties) return ""
-                    const media = mixerItem.node.properties["media.name"]
-                    return media !== undefined && media !== "" ? media : ""
-                }
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 8
+            }
+            Text {
                 color: colors.subtext
                 elide: Text.ElideRight
+                font.family: "JetBrainsMono Nerd Font"
+                font.pixelSize: 8
+                text: {
+                    if (!mixerItem.node || !mixerItem.node.properties)
+                        return "";
+                    const media = mixerItem.node.properties["media.name"];
+                    return media !== undefined && media !== "" ? media : "";
+                }
                 visible: text !== ""
+                width: parent.width
             }
         }
 
         // Volume percentage display
         Text {
             Layout.preferredWidth: 35
-            text: {
-                if (!mixerItem.node || !mixerItem.node.audio) return "0%"
-                const volume = mixerItem.node.audio.volume
-                if (isNaN(volume)) return "---"
-                return `${Math.floor(volume * 100)}%`
-            }
+            color: colors.subtext
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 9
-            color: colors.subtext
             horizontalAlignment: Text.AlignRight
+            text: {
+                if (!mixerItem.node || !mixerItem.node.audio)
+                    return "0%";
+                const volume = mixerItem.node.audio.volume;
+                if (isNaN(volume))
+                    return "---";
+                return `${Math.floor(volume * 100)}%`;
+            }
         }
 
         // Volume slider
         Rectangle {
-            Layout.preferredWidth: 80
-            Layout.preferredHeight: mixerItem.volumeSliderHeight
             Layout.alignment: Qt.AlignVCenter
-            color: colors.surface
-            radius: mixerItem.volumeSliderHeight / 2
+            Layout.preferredHeight: mixerItem.volumeSliderHeight
+            Layout.preferredWidth: 80
             border.color: colors.overlay
             border.width: 1
+            color: colors.surface
+            radius: mixerItem.volumeSliderHeight / 2
 
             Rectangle {
                 id: volumeFill
-                height: parent.height
-                width: {
-                    if (!mixerItem.node || !mixerItem.node.audio) return 0
-                    const volume = mixerItem.node.audio.volume
-                    if (isNaN(volume)) return 0
-                    return parent.width * volume
-                }
-                color: mixerItem.node && mixerItem.node.audio && mixerItem.node.audio.muted ? colors.overlay : colors.mauve
-                radius: parent.radius
 
-                Behavior on width {
-                    NumberAnimation { duration: mixerItem.animationDuration }
+                color: mixerItem.node && mixerItem.node.audio && mixerItem.node.audio.muted ? colors.overlay : colors.mauve
+                height: parent.height
+                radius: parent.radius
+                width: {
+                    if (!mixerItem.node || !mixerItem.node.audio)
+                        return 0;
+                    const volume = mixerItem.node.audio.volume;
+                    if (isNaN(volume))
+                        return 0;
+                    return parent.width * volume;
                 }
 
                 Behavior on color {
-                    ColorAnimation { duration: mixerItem.animationDuration }
+                    ColorAnimation {
+                        duration: mixerItem.animationDuration
+                    }
+                }
+                Behavior on width {
+                    NumberAnimation {
+                        duration: mixerItem.animationDuration
+                    }
                 }
             }
-
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
-                propagateComposedEvents: true
-                onClicked: function(mouse) {
-                    if (mixerItem.node && mixerItem.node.audio) {
-                        const newVolume = mouse.x / width
-                        mixerItem.node.audio.volume = Math.max(0, Math.min(1, newVolume))
-                    }
-                }
-
-                onWheel: function(wheel) {
-                    if (mixerItem.node && mixerItem.node.audio) {
-                        const delta = wheel.angleDelta.y > 0 ? 0.05 : -0.05
-                        const newVolume = Math.max(0, Math.min(1, mixerItem.node.audio.volume + delta))
-                        mixerItem.node.audio.volume = newVolume
-                    }
-                }
-
                 hoverEnabled: true
+                propagateComposedEvents: true
+
+                onClicked: function (mouse) {
+                    if (mixerItem.node && mixerItem.node.audio) {
+                        const newVolume = mouse.x / width;
+                        mixerItem.node.audio.volume = Math.max(0, Math.min(1, newVolume));
+                    }
+                }
                 onEntered: {
                     // Find the tooltip in the parent MixerWidget
-                    var mixerWidget = mixerItem.parent
+                    var mixerWidget = mixerItem.parent;
                     while (mixerWidget && !mixerWidget.hasOwnProperty('tooltip')) {
-                        mixerWidget = mixerWidget.parent
+                        mixerWidget = mixerWidget.parent;
                     }
                     if (mixerWidget && mixerWidget.tooltip) {
-                        var tooltipWidth = 200
-                        var tooltipHeight = 60
-                        var widgetCenter = mixerItem.mapToGlobal(mixerItem.width/2, mixerItem.height/2)
-                        var widgetLeftEdge = mixerItem.mapToGlobal(0, mixerItem.height/2)
+                        var tooltipWidth = 200;
+                        var tooltipHeight = 60;
+                        var widgetCenter = mixerItem.mapToGlobal(mixerItem.width / 2, mixerItem.height / 2);
+                        var widgetLeftEdge = mixerItem.mapToGlobal(0, mixerItem.height / 2);
 
-                        var tooltipX = widgetLeftEdge.x - tooltipWidth
-                        var tooltipY = widgetCenter.y - tooltipHeight/2
+                        var tooltipX = widgetLeftEdge.x - tooltipWidth;
+                        var tooltipY = widgetCenter.y - tooltipHeight / 2;
 
-                        mixerWidget.tooltip.showAt(tooltipX, tooltipY, "Click to set volume, scroll to adjust", "right", tooltipWidth, tooltipHeight/2)
+                        mixerWidget.tooltip.showAt(tooltipX, tooltipY, "Click to set volume, scroll to adjust", "right", tooltipWidth, tooltipHeight / 2);
                     }
                 }
                 onExited: {
-                    var mixerWidget = mixerItem.parent
+                    var mixerWidget = mixerItem.parent;
                     while (mixerWidget && !mixerWidget.hasOwnProperty('tooltip')) {
-                        mixerWidget = mixerWidget.parent
+                        mixerWidget = mixerWidget.parent;
                     }
                     if (mixerWidget && mixerWidget.tooltip) {
-                        mixerWidget.tooltip.hide()
+                        mixerWidget.tooltip.hide();
+                    }
+                }
+                onWheel: function (wheel) {
+                    if (mixerItem.node && mixerItem.node.audio) {
+                        const delta = wheel.angleDelta.y > 0 ? 0.05 : -0.05;
+                        const newVolume = Math.max(0, Math.min(1, mixerItem.node.audio.volume + delta));
+                        mixerItem.node.audio.volume = newVolume;
                     }
                 }
             }
@@ -245,72 +256,77 @@ Rectangle {
 
         // Mute button
         Rectangle {
-            Layout.preferredWidth: mixerItem.muteButtonSize
             Layout.preferredHeight: mixerItem.muteButtonSize
-            color: muteMouseArea.containsMouse ? colors.surface : "transparent"
-            radius: 4
+            Layout.preferredWidth: mixerItem.muteButtonSize
             border.color: colors.overlay
             border.width: muteMouseArea.containsMouse ? 1 : 0
+            color: muteMouseArea.containsMouse ? colors.surface : "transparent"
+            radius: 4
 
             Behavior on color {
-                ColorAnimation { duration: mixerItem.animationDuration }
+                ColorAnimation {
+                    duration: mixerItem.animationDuration
+                }
             }
 
             Text {
                 anchors.centerIn: parent
-                text: {
-                    if (!mixerItem.node || !mixerItem.node.audio) return "󰝟"
-                    return mixerItem.node.audio.muted ? "󰝟" : "󰕾"
+                color: {
+                    if (!mixerItem.node || !mixerItem.node.audio)
+                        return colors.overlay;
+                    return mixerItem.node.audio.muted ? colors.red : colors.green;
                 }
                 font.family: "JetBrainsMono Nerd Font"
                 font.pixelSize: 12
-                color: {
-                    if (!mixerItem.node || !mixerItem.node.audio) return colors.overlay
-                    return mixerItem.node.audio.muted ? colors.red : colors.green
+                text: {
+                    if (!mixerItem.node || !mixerItem.node.audio)
+                        return "󰝟";
+                    return mixerItem.node.audio.muted ? "󰝟" : "󰕾";
                 }
 
                 Behavior on color {
-                    ColorAnimation { duration: mixerItem.animationDuration }
+                    ColorAnimation {
+                        duration: mixerItem.animationDuration
+                    }
                 }
             }
-
             MouseArea {
                 id: muteMouseArea
+
                 anchors.fill: parent
                 hoverEnabled: true
                 propagateComposedEvents: true
+
                 onClicked: {
                     if (mixerItem.node && mixerItem.node.audio) {
-                        mixerItem.node.audio.muted = !mixerItem.node.audio.muted
+                        mixerItem.node.audio.muted = !mixerItem.node.audio.muted;
                     }
                 }
-
                 onEntered: {
-                    var mixerWidget = mixerItem.parent
+                    var mixerWidget = mixerItem.parent;
                     while (mixerWidget && !mixerWidget.hasOwnProperty('tooltip')) {
-                        mixerWidget = mixerWidget.parent
+                        mixerWidget = mixerWidget.parent;
                     }
                     if (mixerWidget && mixerWidget.tooltip) {
-                        var tooltipWidth = 200
-                        var tooltipHeight = 60
-                        var widgetCenter = mixerItem.mapToGlobal(mixerItem.width/2, mixerItem.height/2)
-                        var widgetLeftEdge = mixerItem.mapToGlobal(0, mixerItem.height/2)
+                        var tooltipWidth = 200;
+                        var tooltipHeight = 60;
+                        var widgetCenter = mixerItem.mapToGlobal(mixerItem.width / 2, mixerItem.height / 2);
+                        var widgetLeftEdge = mixerItem.mapToGlobal(0, mixerItem.height / 2);
 
-                        var tooltipX = widgetLeftEdge.x - tooltipWidth
-                        var tooltipY = widgetCenter.y - tooltipHeight/2
+                        var tooltipX = widgetLeftEdge.x - tooltipWidth;
+                        var tooltipY = widgetCenter.y - tooltipHeight / 2;
 
-                        var tooltipText = mixerItem.node && mixerItem.node.audio && mixerItem.node.audio.muted ? 
-                                "Click to unmute" : "Click to mute"
-                        mixerWidget.tooltip.showAt(tooltipX, tooltipY, tooltipText, "right", tooltipWidth, tooltipHeight/2)
+                        var tooltipText = mixerItem.node && mixerItem.node.audio && mixerItem.node.audio.muted ? "Click to unmute" : "Click to mute";
+                        mixerWidget.tooltip.showAt(tooltipX, tooltipY, tooltipText, "right", tooltipWidth, tooltipHeight / 2);
                     }
                 }
                 onExited: {
-                    var mixerWidget = mixerItem.parent
+                    var mixerWidget = mixerItem.parent;
                     while (mixerWidget && !mixerWidget.hasOwnProperty('tooltip')) {
-                        mixerWidget = mixerWidget.parent
+                        mixerWidget = mixerWidget.parent;
                     }
                     if (mixerWidget && mixerWidget.tooltip) {
-                        mixerWidget.tooltip.hide()
+                        mixerWidget.tooltip.hide();
                     }
                 }
             }

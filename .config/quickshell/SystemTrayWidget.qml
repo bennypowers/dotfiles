@@ -4,28 +4,39 @@ import Quickshell.Services.SystemTray
 
 Column {
     id: systemTrayWidget
-    spacing: 4
 
-    // Configurable parameters
-    property real itemSize: 42
+    property bool enableTextFallback: true
 
     // Icon fallback configuration - can be customized per user/system
     // iconExtensions: File extensions to try when applications specify custom icon paths
     // enableTextFallback: Whether to show first letter of app name when icons fail to load
     property var iconExtensions: [".png", ".svg", ".xpm", ""]
-    property bool enableTextFallback: true
 
-    Colors { id: colors }
-    Tooltip { id: tooltip }
-    SmartAnchor { id: smartAnchor }
+    // Configurable parameters
+    property real itemSize: 42
 
+    spacing: 4
+
+    Colors {
+        id: colors
+
+    }
+    Tooltip {
+        id: tooltip
+
+    }
+    SmartAnchor {
+        id: smartAnchor
+
+    }
     Repeater {
         model: SystemTray.items
-        delegate: Item {
-            width: systemTrayWidget.itemSize
-            height: systemTrayWidget.itemSize
 
+        delegate: Item {
             property var item: modelData
+
+            height: systemTrayWidget.itemSize
+            width: systemTrayWidget.itemSize
 
             Rectangle {
                 anchors.fill: parent
@@ -33,90 +44,96 @@ Column {
                 radius: 4
 
                 Item {
-                    anchors.centerIn: parent
-                    width: systemTrayWidget.itemSize * 0.8
-                    height: systemTrayWidget.itemSize * 0.8
-
                     property string processedIconSource: {
-                        if (!parent.parent.item || !parent.parent.item.icon) return ""
+                        if (!parent.parent.item || !parent.parent.item.icon)
+                            return "";
 
-                        var iconStr = parent.parent.item.icon.toString()
+                        var iconStr = parent.parent.item.icon.toString();
 
                         // Handle qspixmap scheme (direct pixmap data from applications)
                         if (iconStr.startsWith("image://qspixmap/")) {
-                            return iconStr
+                            return iconStr;
                         }
 
                         // Handle custom path format: iconname?path=/custom/path
                         // This is used by some applications (like Flatpak apps) to specify custom icon locations
                         if (iconStr.includes("?path=")) {
-                            var parts = iconStr.split("?path=")
+                            var parts = iconStr.split("?path=");
                             if (parts.length === 2) {
-                                var iconName = parts[0].replace("image://icon/", "")
-                                var iconPath = parts[1]
+                                var iconName = parts[0].replace("image://icon/", "");
+                                var iconPath = parts[1];
 
                                 // Try configured icon file extensions in the specified path
                                 // Return the first candidate - Image components will handle fallbacks
-                                return "file://" + iconPath + "/" + iconName + systemTrayWidget.iconExtensions[0]
+                                return "file://" + iconPath + "/" + iconName + systemTrayWidget.iconExtensions[0];
                             }
                         }
 
-                        return iconStr
+                        return iconStr;
                     }
+
+                    anchors.centerIn: parent
+                    height: systemTrayWidget.itemSize * 0.8
+                    width: systemTrayWidget.itemSize * 0.8
 
                     // Primary image attempt
                     Image {
                         id: primaryIcon
+
                         anchors.fill: parent
-                        source: parent.processedIconSource
-                        smooth: true
                         cache: false
                         fillMode: Image.PreserveAspectFit
+                        smooth: true
+                        source: parent.processedIconSource
+
                         onStatusChanged: {
                             // Silently handle icon loading errors
-                            if (status === Image.Error && source !== "") {
-                                // Icon failed to load, fallback will be handled by secondary icon or text
-                            }
+                            if (status === Image.Error && source !== "")
+                            // Icon failed to load, fallback will be handled by secondary icon or text
+                            {}
                         }
                     }
 
                     // Second attempt with different extension or fallback to icon theme
                     Image {
                         id: secondaryIcon
-                        anchors.fill: parent
-                        visible: primaryIcon.status !== Image.Ready
-                        source: {
-                            if (!parent.parent.parent.item || !parent.parent.parent.item.icon) return ""
 
-                            var iconStr = parent.parent.parent.item.icon.toString()
+                        anchors.fill: parent
+                        cache: false
+                        fillMode: Image.PreserveAspectFit
+                        smooth: true
+                        source: {
+                            if (!parent.parent.parent.item || !parent.parent.parent.item.icon)
+                                return "";
+
+                            var iconStr = parent.parent.parent.item.icon.toString();
 
                             // Don't provide secondary fallback for qspixmap - it's direct pixmap data
                             if (iconStr.startsWith("image://qspixmap/")) {
-                                return ""
+                                return "";
                             }
 
                             // If it was a custom path, try the second configured extension
                             if (iconStr.includes("?path=") && systemTrayWidget.iconExtensions.length > 1) {
-                                var parts = iconStr.split("?path=")
+                                var parts = iconStr.split("?path=");
                                 if (parts.length === 2) {
-                                    var iconName = parts[0].replace("image://icon/", "")
-                                    var iconPath = parts[1]
-                                    return "file://" + iconPath + "/" + iconName + systemTrayWidget.iconExtensions[1]
+                                    var iconName = parts[0].replace("image://icon/", "");
+                                    var iconPath = parts[1];
+                                    return "file://" + iconPath + "/" + iconName + systemTrayWidget.iconExtensions[1];
                                 }
                             }
 
                             // Otherwise try the icon through the icon theme
-                            var cleanIconName = iconStr.replace("image://icon/", "").split("?")[0]
-                            return "image://icon/" + cleanIconName
+                            var cleanIconName = iconStr.replace("image://icon/", "").split("?")[0];
+                            return "image://icon/" + cleanIconName;
                         }
-                        smooth: true
-                        cache: false
-                        fillMode: Image.PreserveAspectFit
+                        visible: primaryIcon.status !== Image.Ready
+
                         onStatusChanged: {
                             // Silently handle secondary icon loading errors
-                            if (status === Image.Error && source !== "") {
-                                // Secondary icon failed, text fallback will be used if enabled
-                            }
+                            if (status === Image.Error && source !== "")
+                            // Secondary icon failed, text fallback will be used if enabled
+                            {}
                         }
                     }
 
@@ -125,115 +142,108 @@ Column {
                         anchors.fill: parent
                         color: colors.blue
                         radius: 2
-                        visible: systemTrayWidget.enableTextFallback &&
-                                primaryIcon.status !== Image.Ready &&
-                                secondaryIcon.status !== Image.Ready
+                        visible: systemTrayWidget.enableTextFallback && primaryIcon.status !== Image.Ready && secondaryIcon.status !== Image.Ready
 
                         Text {
                             anchors.centerIn: parent
+                            color: "white"
+                            font.bold: true
+                            font.family: "JetBrainsMono Nerd Font"
+                            font.pixelSize: 12
                             text: {
                                 if (parent.parent.parent.item && parent.parent.parent.item.title) {
                                     // Use first letter of the application title as fallback
-                                    return parent.parent.parent.item.title.charAt(0).toUpperCase()
+                                    return parent.parent.parent.item.title.charAt(0).toUpperCase();
                                 }
-                                return "?"
+                                return "?";
                             }
-                            font.family: "JetBrainsMono Nerd Font"
-                            font.pixelSize: 12
-                            font.bold: true
-                            color: "white"
                         }
                     }
                 }
-
                 QsMenuAnchor {
                     id: menuAnchor
 
                     // Window will be set dynamically when opening menu
                 }
-
                 MouseArea {
                     id: mouse
+
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
                     anchors.fill: parent
                     hoverEnabled: true
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
-                    onEntered: {
-                        if (parent.parent.item && parent.parent.item.title) {
-                            var tooltipWidth = 200
-                            var tooltipHeight = 60
-                            var widgetCenter = systemTrayWidget.mapToGlobal(systemTrayWidget.width/2, systemTrayWidget.height/2)
-                            var widgetLeftEdge = systemTrayWidget.mapToGlobal(0, systemTrayWidget.height/2)
-
-                            var tooltipX = widgetLeftEdge.x - tooltipWidth
-                            var tooltipY = widgetCenter.y - tooltipHeight/2
-
-                            tooltip.showAt(tooltipX, tooltipY, parent.parent.item.title, "right", tooltipWidth, tooltipHeight/2)
-                        }
-                    }
-
-                    onExited: {
-                        tooltip.hide()
-                    }
-
-                    onClicked: function(mouse) {
+                    onClicked: function (mouse) {
                         if (parent.parent.item) {
                             if (mouse.button === 2 && parent.parent.item.hasMenu) {
                                 // Right click - open context menu
                                 if (parent.parent.item.menu) {
-                                    menuAnchor.menu = parent.parent.item.menu
+                                    menuAnchor.menu = parent.parent.item.menu;
                                 }
 
                                 // Set up window and anchor positioning
                                 try {
-                                    var window2 = systemTrayWidget.QsWindow
+                                    var window2 = systemTrayWidget.QsWindow;
                                     if (window2 && window2.window) {
-                                        menuAnchor.anchor.window = window2.window
+                                        menuAnchor.anchor.window = window2.window;
 
                                         // Use smart anchor calculation for context menu positioning
-                                        var anchorInfo = smartAnchor.calculateAnchor(systemTrayWidget, 200, 150)
-                                        menuAnchor.anchor.rect.x = anchorInfo.x
-                                        menuAnchor.anchor.rect.y = anchorInfo.y
-                                        menuAnchor.anchor.rect.width = 4
-                                        menuAnchor.anchor.rect.height = 4
+                                        var anchorInfo = smartAnchor.calculateAnchor(systemTrayWidget, 200, 150);
+                                        menuAnchor.anchor.rect.x = anchorInfo.x;
+                                        menuAnchor.anchor.rect.y = anchorInfo.y;
+                                        menuAnchor.anchor.rect.width = 4;
+                                        menuAnchor.anchor.rect.height = 4;
                                     }
-                                } catch (e) {
-                                    // Silently handle anchor setup errors
-                                }
+                                } catch (e)
+                                // Silently handle anchor setup errors
+                                {}
 
                                 try {
                                     if (menuAnchor.menu) {
-                                        menuAnchor.open()
+                                        menuAnchor.open();
                                     }
-                                } catch (e) {
-                                    // Silently handle menu open errors
-                                }
+                                } catch (e)
+                                // Silently handle menu open errors
+                                {}
                             } else if (mouse.button === Qt.LeftButton) {
                                 // Left click - activate
                                 try {
-                                    parent.parent.item.activate()
-                                } catch (e) {
-                                    // Silently handle activation errors
-                                }
+                                    parent.parent.item.activate();
+                                } catch (e)
+                                // Silently handle activation errors
+                                {}
                             } else if (mouse.button === Qt.RightButton) {
                                 // Right click - secondary activate (for items without menus)
                                 try {
-                                    parent.parent.item.secondaryActivate()
-                                } catch (e) {
-                                    // Silently handle secondary activation errors
-                                }
+                                    parent.parent.item.secondaryActivate();
+                                } catch (e)
+                                // Silently handle secondary activation errors
+                                {}
                             }
                         }
                     }
+                    onEntered: {
+                        if (parent.parent.item && parent.parent.item.title) {
+                            var tooltipWidth = 200;
+                            var tooltipHeight = 60;
+                            var widgetCenter = systemTrayWidget.mapToGlobal(systemTrayWidget.width / 2, systemTrayWidget.height / 2);
+                            var widgetLeftEdge = systemTrayWidget.mapToGlobal(0, systemTrayWidget.height / 2);
 
-                    onWheel: function(wheel) {
+                            var tooltipX = widgetLeftEdge.x - tooltipWidth;
+                            var tooltipY = widgetCenter.y - tooltipHeight / 2;
+
+                            tooltip.showAt(tooltipX, tooltipY, parent.parent.item.title, "right", tooltipWidth, tooltipHeight / 2);
+                        }
+                    }
+                    onExited: {
+                        tooltip.hide();
+                    }
+                    onWheel: function (wheel) {
                         if (parent.parent.item && parent.parent.item.scroll) {
-                            parent.parent.item.scroll(wheel.angleDelta.x, wheel.angleDelta.y)
+                            parent.parent.item.scroll(wheel.angleDelta.x, wheel.angleDelta.y);
                         }
                     }
                 }
             }
         }
     }
-
 }

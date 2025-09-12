@@ -9,33 +9,8 @@ import Quickshell.Io
 Item {
     id: polkitAuth
 
-    // Import colors
-    Colors { id: colors }
-
-    // Socket client property
-    property var socketClient
-
     // Properties for auth request data
     property string actionId: ""
-    property string message: ""
-    property bool authInProgress: false
-    property bool dialogVisible: false
-    property bool ipcMode: false  // Set to true when using quickshell-polkit-agent
-    property string currentCookie: ""  // Cookie for current polkit session
-    property bool fidoKeyPresent: false  // FIDO key detection
-    property bool fidoFallback: false    // FIDO timed out, now showing password fallback
-    property bool fidoRetrying: false    // FIDO retry in progress
-    property bool authTimedOut: false    // Authentication timed out or failed
-
-
-    property int windowWidth: 680
-    property int windowHeight: 420
-
-    // User information
-    property string currentUser: ""
-    property string userFullName: ""
-    property string userIconPath: ""
-
     property var actionMap: {
         "org.freedesktop.policykit.exec": "Run program as administrator",
         "org.freedesktop.systemd1.manage-units": "Manage system services",
@@ -48,89 +23,123 @@ Item {
         "org.freedesktop.packagekit.package-install": "Install software packages",
         "org.freedesktop.packagekit.package-remove": "Remove software packages"
     }
+    property bool authInProgress: false
+    property bool authTimedOut: false    // Authentication timed out or failed
 
-    // Load user information
-    function loadUserInfo() {
-        userInfoProcess.running = true
-    }
+    property string currentCookie: ""  // Cookie for current polkit session
 
-    function startFocusTimer() {
-      focusTimer.start()
-    }
+    // User information
+    property string currentUser: ""
+    property bool dialogVisible: false
+    property bool fidoFallback: false    // FIDO timed out, now showing password fallback
+    property bool fidoKeyPresent: false  // FIDO key detection
+    property bool fidoRetrying: false    // FIDO retry in progress
+    property bool ipcMode: false  // Set to true when using quickshell-polkit-agent
+    property string message: ""
 
-    // Function to start authentication
-    function startAuthentication(actionId, message, useIpcMode, cookie) {
-        polkitAuth.actionId = actionId
-        polkitAuth.message = message || "Authentication required"
-        polkitAuth.ipcMode = useIpcMode || false
-        polkitAuth.currentCookie = cookie || ""
+    // Socket client property
+    property var socketClient
+    property string userFullName: ""
+    property string userIconPath: ""
+    property int windowHeight: 420
+    property int windowWidth: 680
 
-        // Reset timeout and fallback state
-        polkitAuth.fidoFallback = false
-        polkitAuth.fidoRetrying = false
-        fidoRetryTimer.stop()
+    signal authCancelled
 
-        // Detect FIDO keys FIRST, before showing dialog
-        fidoDetector.running = true
-
-        // Small delay to let FIDO detection complete before showing dialog
-        Qt.callLater(function() {
-            polkitAuth.authInProgress = true
-            polkitAuth.dialogVisible = true
-
-            // Don't start PAM for ipc calls - the agent handles authentication
-            if (!polkitAuth.ipcMode) {
-                pamContext.start()
-            }
-        })
-    }
+    // Signals
+    signal authCompleted(bool success)
 
     // Function to cancel authentication
     function cancelAuthentication() {
         if (pamContext.active) {
-            pamContext.abort()
+            pamContext.abort();
         }
-        polkitAuth.authInProgress = false
-        polkitAuth.dialogVisible = false
-        polkitAuth.fidoFallback = false
-        polkitAuth.fidoRetrying = false
-        fidoRetryTimer.stop()
-        focusTimer.stop()
-        initialFocusTimer.stop()
-        polkitAuth.authCancelled()
+        polkitAuth.authInProgress = false;
+        polkitAuth.dialogVisible = false;
+        polkitAuth.fidoFallback = false;
+        polkitAuth.fidoRetrying = false;
+        fidoRetryTimer.stop();
+        focusTimer.stop();
+        initialFocusTimer.stop();
+        polkitAuth.authCancelled();
         // Only emit authCompleted for direct PAM mode, not IPC mode
         if (!polkitAuth.ipcMode) {
-            polkitAuth.authCompleted(false)
+            polkitAuth.authCompleted(false);
         }
     }
 
     // Function to get human-readable action names
     function getActionDisplayName(actionId) {
-        return polkitAuth.actionMap[actionId] || actionId
+        return polkitAuth.actionMap[actionId] || actionId;
     }
 
-    // Signals
-    signal authCompleted(bool success)
-    signal authCancelled()
+    // Load user information
+    function loadUserInfo() {
+        userInfoProcess.running = true;
+    }
+
+    // Function to start authentication
+    function startAuthentication(actionId, message, useIpcMode, cookie) {
+        polkitAuth.actionId = actionId;
+        polkitAuth.message = message || "Authentication required";
+        polkitAuth.ipcMode = useIpcMode || false;
+        polkitAuth.currentCookie = cookie || "";
+
+        // Reset timeout and fallback state
+        polkitAuth.fidoFallback = false;
+        polkitAuth.fidoRetrying = false;
+        fidoRetryTimer.stop();
+
+        // Detect FIDO keys FIRST, before showing dialog
+        fidoDetector.running = true;
+
+        // Small delay to let FIDO detection complete before showing dialog
+        Qt.callLater(function () {
+            polkitAuth.authInProgress = true;
+            polkitAuth.dialogVisible = true;
+
+            // Don't start PAM for ipc calls - the agent handles authentication
+            if (!polkitAuth.ipcMode) {
+                pamContext.start();
+            }
+        });
+    }
+    function startFocusTimer() {
+        focusTimer.start();
+    }
+
+    Component.onCompleted: {
+        // Get current user from environment
+        polkitAuth.currentUser = Quickshell.env("USER") || "user";
+        polkitAuth.userFullName = polkitAuth.currentUser; // Fallback
+        // Load user info from AccountsService
+        loadUserInfo();
+    }
+
+    // Import colors
+    Colors {
+        id: colors
+
+    }
 
     // AccountsService process with inline command
     Process {
         id: userInfoProcess
+
+        command: ["sh", "-c", "uid=$(id -u); busctl get-property org.freedesktop.Accounts /org/freedesktop/Accounts/User$uid org.freedesktop.Accounts.User IconFile 2>/dev/null && busctl get-property org.freedesktop.Accounts /org/freedesktop/Accounts/User$uid org.freedesktop.Accounts.User RealName 2>/dev/null"]
         running: false
-        command: [
-          "sh",
-          "-c",
-          "uid=$(id -u); busctl get-property org.freedesktop.Accounts /org/freedesktop/Accounts/User$uid org.freedesktop.Accounts.User IconFile 2>/dev/null && busctl get-property org.freedesktop.Accounts /org/freedesktop/Accounts/User$uid org.freedesktop.Accounts.User RealName 2>/dev/null"
-        ]
+
         stdout: StdioCollector {
             id: stdoutCollector
+
             onStreamFinished: {
-                var [[,iconPath], [,realName]] =
-                    this.text
-                        .split('\n')
-                        .map(l => l?.match(/s "(.+)"/) ??[])
-                if (iconPath) { polkitAuth.userIconPath = iconPath }
-                if (realName) { polkitAuth.userFullName = realName }
+                var [[, iconPath], [, realName]] = this.text.split('\n').map(l => l?.match(/s "(.+)"/) ?? []);
+                if (iconPath) {
+                    polkitAuth.userIconPath = iconPath;
+                }
+                if (realName) {
+                    polkitAuth.userFullName = realName;
+                }
             }
         }
     }
@@ -138,59 +147,48 @@ Item {
     // FIDO key detection
     Process {
         id: fidoDetector
+
         command: ["lsusb"]
         running: false
 
         stdout: StdioCollector {
             onStreamFinished: {
                 // Check for common FIDO key vendors
-                var output = this.text.toLowerCase()
-                polkitAuth.fidoKeyPresent = output.includes("yubico") ||
-                                          output.includes("feitian") ||
-                                          output.includes("nitrokey") ||
-                                          output.includes("1050:") ||  // Yubico vendor ID
-                                          output.includes("20a0:")     // Nitrokey vendor ID
+                var output = this.text.toLowerCase();
+                polkitAuth.fidoKeyPresent = output.includes("yubico") || output.includes("feitian") || output.includes("nitrokey") || output.includes("1050:") ||  // Yubico vendor ID
+                output.includes("20a0:");     // Nitrokey vendor ID
                 // Auto-submit for FIDO keys in IPC mode, but not when in fallback mode
                 if (polkitAuth.fidoKeyPresent && polkitAuth.ipcMode && polkitAuth.currentCookie && !polkitAuth.fidoFallback) {
-                    polkitAuth.authInProgress = true
+                    polkitAuth.authInProgress = true;
                     // Submit empty response to trigger FIDO auth
                     if (polkitAuth.socketClient) {
-                        polkitAuth.socketClient.submitAuthentication(polkitAuth.currentCookie, "")
+                        polkitAuth.socketClient.submitAuthentication(polkitAuth.currentCookie, "");
                     }
                 }
             }
         }
     }
 
-    Component.onCompleted: {
-        // Get current user from environment
-        polkitAuth.currentUser = Quickshell.env("USER") || "user"
-        polkitAuth.userFullName = polkitAuth.currentUser // Fallback
-        // Load user info from AccountsService
-        loadUserInfo()
-    }
-
     // PAM context for authentication
     PamContext {
         id: pamContext
+
         config: "system-auth"  // Use system auth config like sudo
 
-        onCompleted: function(result) {
-            polkitAuth.authInProgress = false
-            polkitAuth.dialogVisible = false
-            polkitAuth.authCompleted(result === PamResult.Success)
+        onCompleted: function (result) {
+            polkitAuth.authInProgress = false;
+            polkitAuth.dialogVisible = false;
+            polkitAuth.authCompleted(result === PamResult.Success);
         }
-
-        onError: function(error) {
-            polkitAuth.authInProgress = false
-            polkitAuth.dialogVisible = false
-            polkitAuth.authCompleted(false)
+        onError: function (error) {
+            polkitAuth.authInProgress = false;
+            polkitAuth.dialogVisible = false;
+            polkitAuth.authCompleted(false);
         }
-
-        onPamMessage: function(message) {
+        onPamMessage: function (message) {
             // Update UI with PAM prompts
             if (message && message.length > 0) {
-                authDialog.messageText = message
+                authDialog.messageText = message;
             }
         }
     }
@@ -198,13 +196,14 @@ Item {
     // Focus restoration timer for fallback mode
     Timer {
         id: focusTimer
+
         interval: 200
-        running: false
         repeat: false
+        running: false
 
         onTriggered: {
             if (authDialog.visible && passwordField.visible) {
-                passwordField.forceActiveFocus()
+                passwordField.forceActiveFocus();
             }
         }
     }
@@ -212,18 +211,20 @@ Item {
     // Aggressive focus timer for initial password mode
     Timer {
         id: initialFocusTimer
-        interval: 100
-        running: false
-        repeat: true
+
         property int attempts: 0
 
+        interval: 100
+        repeat: true
+        running: false
+
         onTriggered: {
-            attempts++
+            attempts++;
             if (authDialog.visible && passwordField.visible && !passwordField.activeFocus && attempts < 10) {
-                passwordField.forceActiveFocus()
+                passwordField.forceActiveFocus();
             } else {
-                attempts = 0
-                running = false
+                attempts = 0;
+                running = false;
             }
         }
     }
@@ -231,16 +232,17 @@ Item {
     // FIDO retry timeout timer
     Timer {
         id: fidoRetryTimer
+
         interval: 30000  // 30 second timeout for FIDO retry
-        running: false
         repeat: false
+        running: false
 
         onTriggered: {
             if (polkitAuth.fidoRetrying) {
-                polkitAuth.fidoRetrying = false
-                polkitAuth.fidoFallback = true
-                polkitAuth.authInProgress = false
-                focusTimer.start()
+                polkitAuth.fidoRetrying = false;
+                polkitAuth.fidoFallback = true;
+                polkitAuth.authInProgress = false;
+                focusTimer.start();
             }
         }
     }
@@ -248,81 +250,79 @@ Item {
     // Authentication dialog layer shell
     WlrLayershell {
         id: authDialog
-        visible: polkitAuth.dialogVisible
-        namespace: "quickshell-polkit-auth"
-        layer: WlrLayer.Overlay
-        exclusiveZone: 0
-        keyboardFocus: WlrKeyboardFocus.Exclusive
-
-        color: "transparent"
-
-        // Center on screen using margins
-        anchors.bottom: true
-        margins.bottom: (screen.height - height) / 2
-        margins.left: (screen.width - width) / 2
-
-        implicitWidth: Math.min(polkitAuth.windowWidth, screen.width - 40)
-        implicitHeight: Math.min(polkitAuth.fidoFallback ? polkitAuth.windowHeight : (polkitAuth.fidoKeyPresent ? 280 : 320), screen.height - 40)
 
         property string messageText: polkitAuth.message
 
+        // Center on screen using margins
+        anchors.bottom: true
+        color: "transparent"
+        exclusiveZone: 0
+        implicitHeight: Math.min(polkitAuth.fidoFallback ? polkitAuth.windowHeight : (polkitAuth.fidoKeyPresent ? 280 : 320), screen.height - 40)
+        implicitWidth: Math.min(polkitAuth.windowWidth, screen.width - 40)
+        keyboardFocus: WlrKeyboardFocus.Exclusive
+        layer: WlrLayer.Overlay
+        margins.bottom: (screen.height - height) / 2
+        margins.left: (screen.width - width) / 2
+        namespace: "quickshell-polkit-auth"
+        visible: polkitAuth.dialogVisible
+
         onVisibleChanged: {
             if (visible) {
-                passwordField.text = ""
+                passwordField.text = "";
                 // Force focus after a delay to ensure layer shell is ready
-                Qt.callLater(function() {
+                Qt.callLater(function () {
                     if (passwordField.visible) {
-                        passwordField.forceActiveFocus()
+                        passwordField.forceActiveFocus();
                         // Start aggressive focus timer for password-only mode
                         if (!polkitAuth.fidoKeyPresent) {
-                            initialFocusTimer.attempts = 0
-                            initialFocusTimer.start()
+                            initialFocusTimer.attempts = 0;
+                            initialFocusTimer.start();
                         }
                     }
-                })
+                });
             } else {
                 // Stop focus timers when dialog closes
-                initialFocusTimer.stop()
-                focusTimer.stop()
+                initialFocusTimer.stop();
+                focusTimer.stop();
             }
         }
 
         // Global ESC key handler
         Shortcut {
-            sequence: "Escape"
             enabled: polkitAuth.dialogVisible
+            sequence: "Escape"
+
             onActivated: {
-                console.log("ESC shortcut activated")
+                console.log("ESC shortcut activated");
                 // Handle ESC key same as cancel button
                 if (polkitAuth.ipcMode && polkitAuth.socketClient) {
-                    console.log("ESC: sending socket cancellation")
-                    polkitAuth.socketClient.cancelAuthentication()
+                    console.log("ESC: sending socket cancellation");
+                    polkitAuth.socketClient.cancelAuthentication();
                 } else {
-                    console.log("ESC: calling direct cancellation")
-                    polkitAuth.cancelAuthentication()
+                    console.log("ESC: calling direct cancellation");
+                    polkitAuth.cancelAuthentication();
                 }
             }
         }
-
         Rectangle {
             anchors.fill: parent
-            color: colors.base
-            border.color: colors.mauve  // Match Hyprland active border
-            border.width: 2
-            radius: 10  // Match Hyprland rounding
 
             // Smooth antialiasing for rounded corners
             antialiasing: true
+            border.color: colors.mauve  // Match Hyprland active border
+            border.width: 2
+            color: colors.base
+            radius: 10  // Match Hyprland rounding
 
             MouseArea {
                 anchors.fill: parent
+
                 onClicked: {
                     if (passwordField.visible) {
-                        passwordField.forceActiveFocus()
+                        passwordField.forceActiveFocus();
                     }
                 }
             }
-
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 20
@@ -335,24 +335,26 @@ Item {
 
                     // User avatar
                     Item {
-                        Layout.preferredWidth: 64
                         Layout.preferredHeight: 64
+                        Layout.preferredWidth: 64
 
                         // Real user avatar if available
                         Rectangle {
                             anchors.fill: parent
-                            radius: 24
-                            color: "transparent"
                             clip: true
+                            color: "transparent"
+                            radius: 24
                             visible: userAvatarImage.status === Image.Ready
 
                             Image {
                                 id: userAvatarImage
+
                                 anchors.fill: parent
-                                source: polkitAuth.userIconPath ? "file://" + polkitAuth.userIconPath : ""
                                 fillMode: Image.PreserveAspectCrop
+                                source: polkitAuth.userIconPath ? "file://" + polkitAuth.userIconPath : ""
+
                                 onStatusChanged: {
-                                    console.log("Avatar image status:", status, "source:", source)
+                                    console.log("Avatar image status:", status, "source:", source);
                                 }
                             }
                         }
@@ -360,135 +362,131 @@ Item {
                         // Fallback avatar with user initial
                         Rectangle {
                             anchors.fill: parent
-                            radius: 24
                             color: colors.blue
+                            radius: 24
                             visible: userAvatarImage.status !== Image.Ready
 
                             Text {
                                 anchors.centerIn: parent
-                                text: polkitAuth.userFullName.charAt(0).toUpperCase()
                                 color: colors.crust
+                                font.bold: true
                                 font.family: colors.fontFamily
                                 font.pixelSize: colors.largeTextSize
-                                font.bold: true
+                                text: polkitAuth.userFullName.charAt(0).toUpperCase()
                             }
                         }
                     }
-
                     ColumnLayout {
                         spacing: colors.spacing
 
                         Text {
-                            text: "Authentication Required"
                             color: colors.text
+                            font.bold: true
                             font.family: colors.fontFamily
                             font.pixelSize: colors.largeTextSize + 2
-                            font.bold: true
+                            text: "Authentication Required"
                         }
-
                         Text {
-                            text: {
-                                if (polkitAuth.fidoRetrying) {
-                                    return "Retrying security key authentication..."
-                                } else if (polkitAuth.fidoFallback) {
-                                    return "Security key timed out. Try again or enter password:"
-                                } else if (polkitAuth.fidoKeyPresent) {
-                                    return polkitAuth.authInProgress ? "Touch your security key..." : "Please use your security key"
-                                } else {
-                                    return "Please enter your password"
-                                }
-                            }
                             color: colors.subtext
                             font.family: colors.fontFamily
                             font.pixelSize: colors.textSize
+                            text: {
+                                if (polkitAuth.fidoRetrying) {
+                                    return "Retrying security key authentication...";
+                                } else if (polkitAuth.fidoFallback) {
+                                    return "Security key timed out. Try again or enter password:";
+                                } else if (polkitAuth.fidoKeyPresent) {
+                                    return polkitAuth.authInProgress ? "Touch your security key..." : "Please use your security key";
+                                } else {
+                                    return "Please enter your password";
+                                }
+                            }
                         }
                     }
                 }
 
                 // Message
                 Text {
-                    text: authDialog.messageText
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
                     color: colors.green
                     font.family: colors.fontFamily
                     font.pixelSize: colors.textSize
-                    wrapMode: Text.WordWrap
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter
                     horizontalAlignment: Text.AlignHCenter
+                    text: authDialog.messageText
+                    wrapMode: Text.WordWrap
                 }
 
                 // Human-readable action description
                 Text {
-                    text: polkitAuth.getActionDisplayName(polkitAuth.actionId)
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
                     color: colors.peach
                     font.family: colors.fontFamily
                     font.pixelSize: colors.textSize
-                    wrapMode: Text.WordWrap
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter
                     horizontalAlignment: Text.AlignHCenter
+                    text: polkitAuth.getActionDisplayName(polkitAuth.actionId)
+                    wrapMode: Text.WordWrap
                 }
 
                 // Password input field (hidden if FIDO key present, shown in fallback mode)
                 TextField {
                     id: passwordField
-                    placeholderText: "Enter password..."
-                    echoMode: TextInput.Password
+
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
+                    color: colors.text
+                    echoMode: TextInput.Password
+                    font.family: colors.fontFamily
+                    font.pixelSize: colors.textSize
+                    placeholderText: "Enter password..."
                     visible: !polkitAuth.fidoKeyPresent || polkitAuth.fidoFallback
 
+                    background: Rectangle {
+                        border.color: passwordField.activeFocus ? colors.blue : colors.overlay
+                        border.width: 1
+                        color: colors.surface
+                        radius: colors.borderRadius
+                    }
+
+                    Component.onCompleted: forceActiveFocus()
+                    Keys.onEscapePressed: {
+                        console.log("ESC pressed from password field");
+                        cancelButton.clicked();
+                    }
+                    Keys.onReturnPressed: authenticateButton.clicked()
                     onVisibleChanged: {
                         if (visible && authDialog.visible) {
                             if (polkitAuth.fidoFallback) {
                                 // Use normal timer for fallback mode
-                                focusTimer.start()
+                                focusTimer.start();
                             } else {
                                 // Use aggressive timer for password-only mode
-                                initialFocusTimer.attempts = 0
-                                initialFocusTimer.start()
+                                initialFocusTimer.attempts = 0;
+                                initialFocusTimer.start();
                             }
                         }
                     }
-
-                    background: Rectangle {
-                        color: colors.surface
-                        border.color: passwordField.activeFocus ? colors.blue : colors.overlay
-                        border.width: 1
-                        radius: colors.borderRadius
-                    }
-
-                    color: colors.text
-                    font.family: colors.fontFamily
-                    font.pixelSize: colors.textSize
-
-                    Keys.onReturnPressed: authenticateButton.clicked()
-                    Keys.onEscapePressed: {
-                        console.log("ESC pressed from password field")
-                        cancelButton.clicked()
-                    }
-
-                    Component.onCompleted: forceActiveFocus()
                 }
 
                 // Status indicator
                 Text {
-                    text: {
-                        if (polkitAuth.authInProgress) {
-                            if (polkitAuth.fidoRetrying) {
-                                return "Retrying FIDO authentication..."
-                            } else if (polkitAuth.fidoKeyPresent) {
-                                return "Waiting for security key..."
-                            } else {
-                                return "Authenticating..."
-                            }
-                        }
-                        return ""
-                    }
+                    Layout.alignment: Qt.AlignHCenter
                     color: colors.yellow
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
-                    Layout.alignment: Qt.AlignHCenter
+                    text: {
+                        if (polkitAuth.authInProgress) {
+                            if (polkitAuth.fidoRetrying) {
+                                return "Retrying FIDO authentication...";
+                            } else if (polkitAuth.fidoKeyPresent) {
+                                return "Waiting for security key...";
+                            } else {
+                                return "Authenticating...";
+                            }
+                        }
+                        return "";
+                    }
                     visible: polkitAuth.authInProgress
                 }
 
@@ -499,33 +497,34 @@ Item {
 
                     Button {
                         id: cancelButton
-                        text: "Cancel"
+
                         Layout.fillWidth: true
                         enabled: true  // Always enabled
+
+                        text: "Cancel"
 
                         background: Rectangle {
                             color: cancelButton.pressed ? colors.overlay : colors.surface
                             opacity: cancelButton.pressed ? 0.8 : 1.0
                             radius: colors.borderRadius
                         }
-
                         contentItem: Text {
-                            text: cancelButton.text
                             color: colors.text
                             font.family: colors.fontFamily
                             font.pixelSize: colors.smallTextSize
                             horizontalAlignment: Text.AlignHCenter
+                            text: cancelButton.text
                             verticalAlignment: Text.AlignVCenter
                         }
 
                         onClicked: {
                             // Send cancellation to polkit agent if in IPC mode
                             if (polkitAuth.ipcMode && polkitAuth.socketClient) {
-                                polkitAuth.socketClient.cancelAuthentication()
+                                polkitAuth.socketClient.cancelAuthentication();
                                 // Don't close dialog immediately - wait for authorization_result
                             } else {
                                 // For direct PAM mode, use full cancellation
-                                polkitAuth.cancelAuthentication()
+                                polkitAuth.cancelAuthentication();
                             }
                         }
                     }
@@ -533,9 +532,10 @@ Item {
                     // Try FIDO Again button (only in fallback mode)
                     Button {
                         id: tryFidoButton
-                        text: "Try Security Key Again"
+
                         Layout.fillWidth: true
                         enabled: !polkitAuth.authInProgress
+                        text: "Try Security Key Again"
                         visible: polkitAuth.fidoFallback
 
                         background: Rectangle {
@@ -543,38 +543,38 @@ Item {
                             opacity: tryFidoButton.pressed ? 0.8 : 1.0
                             radius: colors.borderRadius
                         }
-
                         contentItem: Text {
-                            text: tryFidoButton.text
                             color: colors.crust
                             font.family: colors.fontFamily
                             font.pixelSize: colors.smallTextSize
                             horizontalAlignment: Text.AlignHCenter
+                            text: tryFidoButton.text
                             verticalAlignment: Text.AlignVCenter
                         }
 
                         onClicked: {
-                            console.log("Retrying FIDO authentication")
-                            polkitAuth.fidoFallback = false
-                            polkitAuth.fidoRetrying = true
-                            polkitAuth.authInProgress = true
+                            console.log("Retrying FIDO authentication");
+                            polkitAuth.fidoFallback = false;
+                            polkitAuth.fidoRetrying = true;
+                            polkitAuth.authInProgress = true;
 
                             // Submit empty response to retry FIDO
                             if (polkitAuth.socketClient) {
-                                polkitAuth.socketClient.submitAuthentication(polkitAuth.currentCookie, "")
+                                polkitAuth.socketClient.submitAuthentication(polkitAuth.currentCookie, "");
                             }
 
                             // Reset retry state after timeout
-                            fidoRetryTimer.start()
+                            fidoRetryTimer.start();
                         }
                     }
 
                     // Authenticate with password button (in password mode or fallback mode)
                     Button {
                         id: authenticateButton
-                        text: "Authenticate"
+
                         Layout.fillWidth: true
                         enabled: !polkitAuth.authInProgress && passwordField.text.length > 0
+                        text: "Authenticate"
                         visible: !polkitAuth.fidoKeyPresent || polkitAuth.fidoFallback
 
                         background: Rectangle {
@@ -582,13 +582,12 @@ Item {
                             opacity: authenticateButton.pressed ? 0.8 : 1.0
                             radius: colors.borderRadius
                         }
-
                         contentItem: Text {
-                            text: authenticateButton.text
                             color: colors.crust
                             font.family: colors.fontFamily
                             font.pixelSize: colors.smallTextSize
                             horizontalAlignment: Text.AlignHCenter
+                            text: authenticateButton.text
                             verticalAlignment: Text.AlignVCenter
                         }
 
@@ -597,17 +596,17 @@ Item {
                                 // IPC mode - send to quickshell polkit agent
                                 // Submit via socket client
                                 if (polkitAuth.socketClient) {
-                                    polkitAuth.socketClient.submitAuthentication(polkitAuth.currentCookie, passwordField.text)
+                                    polkitAuth.socketClient.submitAuthentication(polkitAuth.currentCookie, passwordField.text);
                                 }
-                                passwordField.text = ""  // Clear password field
+                                passwordField.text = "";  // Clear password field
                                 // Keep dialog visible and show "processing" state
-                                polkitAuth.authInProgress = true
+                                polkitAuth.authInProgress = true;
                                 // Don't dismiss dialog yet - wait for result from polkit agent
                             } else {
                                 // Direct PAM mode
                                 if (pamContext.responseRequired && passwordField.text.length > 0) {
-                                    pamContext.respond(passwordField.text)
-                                    passwordField.text = ""  // Clear password field
+                                    pamContext.respond(passwordField.text);
+                                    passwordField.text = "";  // Clear password field
                                 }
                             }
                         }
@@ -620,6 +619,5 @@ Item {
                 }
             }
         }
-
     }
 }

@@ -6,90 +6,90 @@ import Quickshell.Services.Mpris
 
 Rectangle {
     id: mediaWidget
-    height: visible ? 40 : 0
+
+    property string mediaIcon: {
+        if (!player)
+            return "";
+
+        switch (player.playbackState) {
+        case "Playing":
+            return " ";
+        case "Paused":
+            return " ";
+        default:
+            return " ";
+        }
+    }
+    property MprisPlayer player: Mpris.players[0]
+
     color: "transparent"
+    height: visible ? 40 : 0
     radius: 8
     visible: Mpris.players.length > 0
 
-    property MprisPlayer player: Mpris.players[0]
-    
     Colors {
         id: colors
-    }
-    property string mediaIcon: {
-        if (!player) return ""
 
-        switch (player.playbackState) {
-            case "Playing": return " "
-            case "Paused": return " "
-            default: return " "
-        }
     }
-
     MouseArea {
         anchors.fill: parent
-        onClicked: {
-            if (player) {
-                player.playPause()
-            }
-        }
-        onWheel: function(wheel) {
-            if (player) {
-                if (wheel.angleDelta.y > 0) {
-                    player.next()
-                } else {
-                    player.previous()
-                }
-            }
-        }
         hoverEnabled: true
 
-        onEntered: {
-            parent.color = colors.surface
+        onClicked: {
+            if (player) {
+                player.playPause();
+            }
         }
-
+        onEntered: {
+            parent.color = colors.surface;
+        }
         onExited: {
-            parent.color = "transparent"
+            parent.color = "transparent";
+        }
+        onWheel: function (wheel) {
+            if (player) {
+                if (wheel.angleDelta.y > 0) {
+                    player.next();
+                } else {
+                    player.previous();
+                }
+            }
         }
     }
-
     Column {
         anchors.centerIn: parent
-        width: parent.width - 8
         spacing: 2
+        width: parent.width - 8
 
         Text {
-            text: mediaWidget.mediaIcon
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: colors.text
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: colors.smallIconSize
-            color: colors.text
-            anchors.horizontalCenter: parent.horizontalCenter
+            text: mediaWidget.mediaIcon
         }
-
         Text {
-            text: {
-                if (!player) return ""
-                const title = player.title || ""
-                const artist = player.artist || ""
-                if (title && artist) {
-                    return (artist + " - " + title).length > 15 ? 
-                           (artist + " - " + title).substring(0, 12) + "..." :
-                           artist + " - " + title
-                }
-                return title || artist || "Unknown"
-            }
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: colors.subtext
+            elide: Text.ElideRight
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: colors.smallTextSize
-            color: colors.subtext
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width
-            elide: Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
+            text: {
+                if (!player)
+                    return "";
+                const title = player.title || "";
+                const artist = player.artist || "";
+                if (title && artist) {
+                    return (artist + " - " + title).length > 15 ? (artist + " - " + title).substring(0, 12) + "..." : artist + " - " + title;
+                }
+                return title || artist || "Unknown";
+            }
+            width: parent.width
         }
     }
-
     ToolTip {
-        visible: parent.hovered && player
         text: player ? `${player.artist || "Unknown"} - ${player.title || "Unknown"}\n${player.album || ""}` : ""
+        visible: parent.hovered && player
     }
 }

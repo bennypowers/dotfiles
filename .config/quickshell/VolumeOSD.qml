@@ -7,34 +7,34 @@ import Quickshell.Widgets
 Scope {
     id: root
 
-    Colors {
-        id: colors
-    }
-
-    // Bind the pipewire node so its volume will be tracked
-    PwObjectTracker {
-        objects: [ Pipewire.defaultAudioSink ]
-    }
-
+    property bool shouldShowOsd: false
+    property bool watchedMuted: watchedSink && watchedSink.audio ? watchedSink.audio.muted : false
     property var watchedSink: Pipewire.defaultAudioSink
     property real watchedVolume: watchedSink && watchedSink.audio ? watchedSink.audio.volume : 0
-    property bool watchedMuted: watchedSink && watchedSink.audio ? watchedSink.audio.muted : false
-
-    onWatchedVolumeChanged: {
-        root.shouldShowOsd = true;
-        hideTimer.restart();
-    }
 
     onWatchedMutedChanged: {
         root.shouldShowOsd = true;
         hideTimer.restart();
     }
+    onWatchedVolumeChanged: {
+        root.shouldShowOsd = true;
+        hideTimer.restart();
+    }
 
-    property bool shouldShowOsd: false
+    Colors {
+        id: colors
 
+    }
+
+    // Bind the pipewire node so its volume will be tracked
+    PwObjectTracker {
+        objects: [Pipewire.defaultAudioSink]
+    }
     Timer {
         id: hideTimer
+
         interval: 1500
+
         onTriggered: root.shouldShowOsd = false
     }
 
@@ -44,22 +44,22 @@ Scope {
 
         PanelWindow {
             anchors.bottom: true
-            margins.bottom: screen.height / 4
-            exclusiveZone: 0
-
-            implicitWidth: 350
-            implicitHeight: 60
             color: "transparent"
+            exclusiveZone: 0
+            implicitHeight: 60
+            implicitWidth: 350
+            margins.bottom: screen.height / 4
 
             // An empty click mask prevents the window from blocking mouse events
-            mask: Region {}
+            mask: Region {
+            }
 
             Rectangle {
                 anchors.fill: parent
-                radius: 12
-                color: colors.base
                 border.color: colors.surface
                 border.width: 1
+                color: colors.base
+                radius: 12
 
                 RowLayout {
                     anchors {
@@ -67,53 +67,56 @@ Scope {
                         leftMargin: 15
                         rightMargin: 15
                     }
-
                     Text {
-                        text: {
-                            if (root.watchedMuted) return "󰖁"
-
-                            const volume = root.watchedVolume
-                            if (volume === 0) return "󰕿"
-                            if (volume < 0.33) return "󰖀"
-                            if (volume < 0.66) return "󰕾"
-                            return "󰕾"
-                        }
+                        Layout.preferredWidth: 40
+                        color: root.watchedMuted ? colors.red : colors.text
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: colors.iconSize
-                        color: root.watchedMuted ? colors.red : colors.text
-                        Layout.preferredWidth: 40
                         horizontalAlignment: Text.AlignHCenter
-                    }
+                        text: {
+                            if (root.watchedMuted)
+                                return "󰖁";
 
+                            const volume = root.watchedVolume;
+                            if (volume === 0)
+                                return "󰕿";
+                            if (volume < 0.33)
+                                return "󰖀";
+                            if (volume < 0.66)
+                                return "󰕾";
+                            return "󰕾";
+                        }
+                    }
                     Column {
                         Layout.fillWidth: true
                         spacing: 4
 
                         Rectangle {
-                            width: parent.width
+                            color: colors.surface
                             height: 8
                             radius: 4
-                            color: colors.surface
+                            width: parent.width
 
                             Rectangle {
-                                anchors {
-                                    left: parent.left
-                                    top: parent.top
-                                    bottom: parent.bottom
-                                }
-
-                                width: {
-                                    const sink = Pipewire.defaultAudioSink
-                                    if (!sink || !sink.audio) return 0
-                                    return parent.width * sink.audio.volume
+                                color: {
+                                    const sink = Pipewire.defaultAudioSink;
+                                    if (!sink || !sink.audio)
+                                        return colors.overlay;
+                                    return sink.audio.muted ? colors.red : colors.sapphire;
                                 }
                                 radius: parent.radius
-                                color: {
-                                    const sink = Pipewire.defaultAudioSink
-                                    if (!sink || !sink.audio) return colors.overlay
-                                    return sink.audio.muted ? colors.red : colors.sapphire
+                                width: {
+                                    const sink = Pipewire.defaultAudioSink;
+                                    if (!sink || !sink.audio)
+                                        return 0;
+                                    return parent.width * sink.audio.volume;
                                 }
 
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: 150
+                                    }
+                                }
                                 Behavior on width {
                                     NumberAnimation {
                                         duration: 150
@@ -121,10 +124,10 @@ Scope {
                                     }
                                 }
 
-                                Behavior on color {
-                                    ColorAnimation {
-                                        duration: 150
-                                    }
+                                anchors {
+                                    bottom: parent.bottom
+                                    left: parent.left
+                                    top: parent.top
                                 }
                             }
                         }

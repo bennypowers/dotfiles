@@ -6,94 +6,111 @@ import Quickshell.Services.Pam
 
 Window {
     id: lockScreen
-    visible: false
-    flags: Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint
-    color: "transparent"
 
-    // Cover all screens
-    width: Screen.desktopAvailableWidth
-    height: Screen.desktopAvailableHeight
-    x: 0
-    y: 0
-
-    Colors { id: colors }
-
-    // Properties
-    property bool locked: false
     property bool authInProgress: false
     property string currentUser: "User"
 
+    // Properties
+    property bool locked: false
+
+    signal lockRequested
+
     // Signals
-    signal unlocked()
-    signal lockRequested()
+    signal unlocked
 
-    // PAM context for authentication
-    PamContext {
-        id: pamContext
-        config: "login"  // Use login config for lock screen
-
-        onCompleted: function(result) {
-            console.log("Lock screen PAM auth completed:", result)
-            lockScreen.authInProgress = false
-
-            if (result === PamResult.Success) {
-                console.log("Lock screen unlocked successfully")
-                lockScreen.hide()
-                lockScreen.unlocked()
-            } else {
-                console.log("Lock screen authentication failed")
-                passwordField.text = ""
-                passwordField.forceActiveFocus()
-                errorText.text = "Authentication failed"
-                errorText.visible = true
-                errorTimer.start()
-            }
-        }
-
-        onError: function(error) {
-            console.log("Lock screen PAM auth error:", error)
-            lockScreen.authInProgress = false
-            passwordField.text = ""
-            passwordField.forceActiveFocus()
-            errorText.text = "Authentication error"
-            errorText.visible = true
-            errorTimer.start()
-        }
-
-        onPamMessage: function(message) {
-            console.log("Lock screen PAM message:", message)
-        }
+    function hide() {
+        console.log("Hiding lock screen");
+        lockScreen.locked = false;
+        lockScreen.visible = false;
+        lockScreen.authInProgress = false;
     }
 
     // Functions
     function show() {
-        console.log("Showing lock screen")
-        lockScreen.locked = true
-        lockScreen.visible = true
-        passwordField.text = ""
-        passwordField.forceActiveFocus()
-        errorText.visible = false
+        console.log("Showing lock screen");
+        lockScreen.locked = true;
+        lockScreen.visible = true;
+        passwordField.text = "";
+        passwordField.forceActiveFocus();
+        errorText.visible = false;
     }
-
-    function hide() {
-        console.log("Hiding lock screen")
-        lockScreen.locked = false
-        lockScreen.visible = false
-        lockScreen.authInProgress = false
-    }
-
     function startAuthentication() {
-        console.log("Starting lock screen authentication")
+        console.log("Starting lock screen authentication");
         if (passwordField.text.length === 0) {
-            errorText.text = "Please enter a password"
-            errorText.visible = true
-            errorTimer.start()
-            return
+            errorText.text = "Please enter a password";
+            errorText.visible = true;
+            errorTimer.start();
+            return;
         }
 
-        lockScreen.authInProgress = true
-        errorText.visible = false
-        pamContext.start()
+        lockScreen.authInProgress = true;
+        errorText.visible = false;
+        pamContext.start();
+    }
+
+    color: "transparent"
+    flags: Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint
+    height: Screen.desktopAvailableHeight
+    visible: false
+
+    // Cover all screens
+    width: Screen.desktopAvailableWidth
+    x: 0
+    y: 0
+
+    // Handle authentication response
+    Component.onCompleted: {
+        // PAM context is ready for use
+        console.log("LockScreen component loaded");
+    }
+
+    // Auto-focus password field when shown
+    onVisibleChanged: {
+        if (visible) {
+            passwordField.forceActiveFocus();
+        }
+    }
+
+    Colors {
+        id: colors
+
+    }
+
+    // PAM context for authentication
+    PamContext {
+        id: pamContext
+
+        config: "login"  // Use login config for lock screen
+
+        onCompleted: function (result) {
+            console.log("Lock screen PAM auth completed:", result);
+            lockScreen.authInProgress = false;
+
+            if (result === PamResult.Success) {
+                console.log("Lock screen unlocked successfully");
+                lockScreen.hide();
+                lockScreen.unlocked();
+            } else {
+                console.log("Lock screen authentication failed");
+                passwordField.text = "";
+                passwordField.forceActiveFocus();
+                errorText.text = "Authentication failed";
+                errorText.visible = true;
+                errorTimer.start();
+            }
+        }
+        onError: function (error) {
+            console.log("Lock screen PAM auth error:", error);
+            lockScreen.authInProgress = false;
+            passwordField.text = "";
+            passwordField.forceActiveFocus();
+            errorText.text = "Authentication error";
+            errorText.visible = true;
+            errorTimer.start();
+        }
+        onPamMessage: function (message) {
+            console.log("Lock screen PAM message:", message);
+        }
     }
 
     // Background
@@ -107,8 +124,8 @@ Window {
         // Lock screen content
         Item {
             anchors.centerIn: parent
-            width: 400
             height: 500
+            width: 400
 
             ColumnLayout {
                 anchors.fill: parent
@@ -116,85 +133,87 @@ Window {
 
                 // Time display
                 Text {
-                    text: Qt.formatDateTime(new Date(), "hh:mm")
+                    Layout.alignment: Qt.AlignHCenter
                     color: colors.text
+                    font.bold: true
                     font.family: colors.fontFamily
                     font.pixelSize: 72
-                    font.bold: true
-                    Layout.alignment: Qt.AlignHCenter
+                    text: Qt.formatDateTime(new Date(), "hh:mm")
                 }
 
                 // Date display
                 Text {
-                    text: Qt.formatDateTime(new Date(), "dddd, MMMM d")
+                    Layout.alignment: Qt.AlignHCenter
                     color: colors.subtext
                     font.family: colors.fontFamily
                     font.pixelSize: colors.textSize
-                    Layout.alignment: Qt.AlignHCenter
+                    text: Qt.formatDateTime(new Date(), "dddd, MMMM d")
                 }
 
                 // User info
                 Text {
-                    text: "Welcome back, " + lockScreen.currentUser
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: colors.spacing * 4
                     color: colors.green
                     font.family: colors.fontFamily
                     font.pixelSize: colors.textSize
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: colors.spacing * 4
+                    text: "Welcome back, " + lockScreen.currentUser
                 }
 
                 // Password input
                 TextField {
                     id: passwordField
-                    placeholderText: "Enter password to unlock..."
-                    echoMode: TextInput.Password
+
                     Layout.fillWidth: true
                     Layout.preferredHeight: 48
                     Layout.topMargin: colors.spacing * 4
-
-                    background: Rectangle {
-                        color: colors.surface
-                        border.color: passwordField.activeFocus ? colors.blue : colors.overlay
-                        border.width: 2
-                        radius: colors.borderRadius * 2
-                    }
-
                     color: colors.text
+                    echoMode: TextInput.Password
+                    enabled: !lockScreen.authInProgress
                     font.family: colors.fontFamily
                     font.pixelSize: colors.textSize
                     horizontalAlignment: TextInput.AlignHCenter
+                    placeholderText: "Enter password to unlock..."
 
-                    Keys.onReturnPressed: lockScreen.startAuthentication()
+                    background: Rectangle {
+                        border.color: passwordField.activeFocus ? colors.blue : colors.overlay
+                        border.width: 2
+                        color: colors.surface
+                        radius: colors.borderRadius * 2
+                    }
+
                     Keys.onEscapePressed: passwordField.text = ""
-
-                    enabled: !lockScreen.authInProgress
+                    Keys.onReturnPressed: lockScreen.startAuthentication()
                 }
 
                 // Error message
                 Text {
                     id: errorText
-                    text: ""
+
+                    Layout.alignment: Qt.AlignHCenter
                     color: colors.red
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
-                    Layout.alignment: Qt.AlignHCenter
+                    text: ""
                     visible: false
 
                     Timer {
                         id: errorTimer
+
                         interval: 3000
+
                         onTriggered: errorText.visible = false
                     }
                 }
 
                 // Status message
                 Text {
-                    text: lockScreen.authInProgress ? "Authenticating..." : "Type password and press Enter"
+                    Layout.alignment: Qt.AlignHCenter
                     color: lockScreen.authInProgress ? colors.yellow : colors.subtext
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
-                    Layout.alignment: Qt.AlignHCenter
                     opacity: lockScreen.authInProgress ? 1.0 : 0.7
+                    text: lockScreen.authInProgress ? "Authenticating..." : "Type password and press Enter"
                 }
 
                 // Spacer
@@ -204,26 +223,13 @@ Window {
 
                 // Instructions
                 Text {
-                    text: "Press Escape to clear • Enter to authenticate"
+                    Layout.alignment: Qt.AlignHCenter
                     color: colors.overlay
                     font.family: colors.fontFamily
                     font.pixelSize: 10
-                    Layout.alignment: Qt.AlignHCenter
+                    text: "Press Escape to clear • Enter to authenticate"
                 }
             }
         }
-    }
-
-    // Auto-focus password field when shown
-    onVisibleChanged: {
-        if (visible) {
-            passwordField.forceActiveFocus()
-        }
-    }
-
-    // Handle authentication response
-    Component.onCompleted: {
-        // PAM context is ready for use
-        console.log("LockScreen component loaded")
     }
 }

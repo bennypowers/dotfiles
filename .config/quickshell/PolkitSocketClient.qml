@@ -4,144 +4,133 @@ import Quickshell.Io
 Item {
     id: polkitSocketClient
 
-    // Public API
-    signal showAuthDialog(string actionId, string message, string iconName, string cookie)
-    signal authorizationResult(bool authorized, string actionId)
-    signal authorizationError(string error)
-    signal connected()
-    signal disconnected()
-    signal passwordRequest(string actionId, string request, bool echo, string cookie)
-
     property bool isConnected: socket.connected
-
     property string socketPath: ""
 
-    // Use native Socket component with proper configuration
-    Socket {
-        id: socket
-        path: "/run/user/1000/quickshell-polkit/quickshell-polkit"
-        connected: false
+    signal authorizationError(string error)
+    signal authorizationResult(bool authorized, string actionId)
+    signal connected
+    signal disconnected
+    signal passwordRequest(string actionId, string request, bool echo, string cookie)
 
-        onConnectedChanged: {
-            console.log("Socket connected changed:", connected, "path:", path)
-            if (connected) {
-                console.log("✅ Connected to quickshell-polkit-agent via Socket")
-                polkitSocketClient.connected()
-                retryTimer.stop()
-            } else {
-                console.log("❌ Disconnected from quickshell-polkit-agent")
-                polkitSocketClient.disconnected()
-                if (!retryTimer.running) {
-                    retryTimer.start()
-                }
-            }
-        }
+    // Public API
+    signal showAuthDialog(string actionId, string message, string iconName, string cookie)
 
-        onError: function(error) {
-            console.log("❌ Socket error:", error, "path:", path)
-            if (!retryTimer.running) {
-                retryTimer.start()
-            }
-        }
-
-        parser: SplitParser {
-            onRead: function(data) {
-                try {
-                    var message = JSON.parse(data)
-                    console.log("📥 Received from polkit agent", message.action_id || "", ":", message.message)
-                    polkitSocketClient.handleMessage(message)
-                } catch (e) {
-                    console.log("Invalid JSON from polkit agent:", e, "Raw:", data)
-                }
-            }
-        }
-
-        Component.onCompleted: {
-            console.log("🔄 Socket component ready, path:", path)
-            // Try to connect after a short delay
-            retryTimer.start()
-        }
+    function cancelAuthentication() {
+        if (!socket.connected)
+            return;
+        console.log("📤 Cancelling authentication");
+        const type = "cancel_authorization";
+        socket.write(JSON.stringify({
+            type
+        }) + "\n");
+        socket.flush();
     }
-
-    Component.onCompleted: {
-        socketPath = "/run/user/1000/quickshell-polkit/quickshell-polkit"
-        console.log("🔄 PolkitSocketClient initialized with path:", socketPath)
-    }
-
-    // Retry connection timer
-    Timer {
-        id: retryTimer
-        interval: 2000
-        running: false
-        repeat: false
-
-        onTriggered: {
-            console.log("🔄 Retrying connection to polkit agent...")
-            socket.connected = false
-            // Small delay before reconnecting
-            Qt.callLater(function() {
-                socket.connected = true
-            })
-        }
-    }
-
     function handleMessage(message) {
         switch (message.type) {
-            case "show_auth_dialog":
-                polkitSocketClient.showAuthDialog(
-                    message.action_id,
-                    message.message,
-                    message.icon_name,
-                    message.cookie
-                )
-                break
-
-            case "authorization_result":
-                polkitSocketClient.authorizationResult(
-                    message.authorized,
-                    message.action_id
-                )
-                break
-
-            case "authorization_error":
-                polkitSocketClient.authorizationError(message.error)
-                break
-
-            case "password_request":
-                polkitSocketClient.passwordRequest(
-                    message.action_id,
-                    message.request,
-                    message.echo,
-                    message.cookie
-                )
-                break;
-            case "welcome":
-                "👍"
-                break;
-
-            default:
-                console.log("Unknown message type from polkit agent:", message.type)
+        case "show_auth_dialog":
+            polkitSocketClient.showAuthDialog(message.action_id, message.message, message.icon_name, message.cookie);
+            break;
+        case "authorization_result":
+            polkitSocketClient.authorizationResult(message.authorized, message.action_id);
+            break;
+        case "authorization_error":
+            polkitSocketClient.authorizationError(message.error);
+            break;
+        case "password_request":
+            polkitSocketClient.passwordRequest(message.action_id, message.request, message.echo, message.cookie);
+            break;
+        case "welcome":
+            "👍";
+            break;
+        default:
+            console.log("Unknown message type from polkit agent:", message.type);
         }
     }
 
     // Submit authentication response
     function submitAuthentication(cookie, response) {
         if (!socket.connected) {
-            console.log("❌ Not connected to polkit agent")
-            return false
+            console.log("❌ Not connected to polkit agent");
+            return false;
         }
-        console.log("📤 Submitting authentication...")
-        const type = "submit_authentication"
-        socket.write(JSON.stringify({ type, cookie, response }) + "\n")
-        socket.flush()
-        return true
+        console.log("📤 Submitting authentication...");
+        const type = "submit_authentication";
+        socket.write(JSON.stringify({
+            type,
+            cookie,
+            response
+        }) + "\n");
+        socket.flush();
+        return true;
     }
 
-    function cancelAuthentication() {
-        if (!socket.connected) return
-        console.log("📤 Cancelling authentication")
-        const type = "cancel_authorization"
-        socket.write(JSON.stringify({ type }) + "\n")
-        socket.flush()
+    Component.onCompleted: {
+        socketPath = "/run/user/1000/quickshell-polkit/quickshell-polkit";
+        console.log("🔄 PolkitSocketClient initialized with path:", socketPath);
+    }
+
+    // Use native Socket component with proper configuration
+    Socket {
+        id: socket
+
+        connected: false
+        path: "/run/user/1000/quickshell-polkit/quickshell-polkit"
+
+        parser: SplitParser {
+            onRead: function (data) {
+                try {
+                    var message = JSON.parse(data);
+                    console.log("📥 Received from polkit agent", message.action_id || "", ":", message.message);
+                    polkitSocketClient.handleMessage(message);
+                } catch (e) {
+                    console.log("Invalid JSON from polkit agent:", e, "Raw:", data);
+                }
+            }
+        }
+
+        Component.onCompleted: {
+            console.log("🔄 Socket component ready, path:", path);
+            // Try to connect after a short delay
+            retryTimer.start();
+        }
+        onConnectedChanged: {
+            console.log("Socket connected changed:", connected, "path:", path);
+            if (connected) {
+                console.log("✅ Connected to quickshell-polkit-agent via Socket");
+                polkitSocketClient.connected();
+                retryTimer.stop();
+            } else {
+                console.log("❌ Disconnected from quickshell-polkit-agent");
+                polkitSocketClient.disconnected();
+                if (!retryTimer.running) {
+                    retryTimer.start();
+                }
+            }
+        }
+        onError: function (error) {
+            console.log("❌ Socket error:", error, "path:", path);
+            if (!retryTimer.running) {
+                retryTimer.start();
+            }
+        }
+    }
+
+    // Retry connection timer
+    Timer {
+        id: retryTimer
+
+        interval: 2000
+        repeat: false
+        running: false
+
+        onTriggered: {
+            console.log("🔄 Retrying connection to polkit agent...");
+            socket.connected = false;
+            // Small delay before reconnecting
+            Qt.callLater(function () {
+                socket.connected = true;
+            });
+        }
     }
 }
