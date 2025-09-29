@@ -29,6 +29,7 @@ Column {
             const now = new Date();
             timeText.text = Qt.formatTime(now, clockWidget.timeFormat);
             dateText.text = Qt.formatDate(now, clockWidget.dateFormat);
+            weekText.text = Qt.formatDate(now, clockWidget.weekFormat);
         }
     }
     Rectangle {

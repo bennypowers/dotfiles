@@ -20,11 +20,17 @@ ShellRoot {
     readonly property int panelTopMargin: 24
     readonly property int smallFontSize: 8
 
+    // Session detection
+    readonly property string currentDesktop: Qt.application.environment["XDG_CURRENT_DESKTOP"] || "Unknown"
+    readonly property bool isHyprland: currentDesktop === "Hyprland"
+    readonly property bool isNiri: currentDesktop === "NiRi"
+
     objectName: "shellRoot"
 
     // Make shellRoot globally accessible
     Component.onCompleted: {
         console.log("🌍 Setting global shellRoot reference");
+        console.log("🖥️  Current desktop session:", currentDesktop);
         Qt.application.globalShellRoot = shellRoot;
     }
 
