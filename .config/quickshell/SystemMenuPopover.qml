@@ -23,10 +23,16 @@ WlrLayershell {
 
     onVisibleChanged: {
         if (visible) {
-            scalableContainer.opacity = 0;
+            scalableContainer.scale = 0;
             showAnimation.start();
+            // Trigger margin animations by changing values
+            topLeftInset.margins.right = popoverWidth;
+            bottomRightInset.margins.top = contentColumn.height + popoverPadding * 2;
         } else {
             hideAnimation.start();
+            // Reset margins for next show
+            topLeftInset.margins.right = 0;
+            bottomRightInset.margins.top = 0;
         }
     }
 
@@ -48,8 +54,8 @@ WlrLayershell {
         id: scalableContainer
 
         anchors.fill: parent
-        opacity: 0
-        transformOrigin: Item.Right
+        scale: 0
+        transformOrigin: Item.TopRight
 
         // Background with rounded corners
         Rectangle {
@@ -121,7 +127,7 @@ WlrLayershell {
         duration: 150
         easing.type: Easing.OutQuad
         from: 0
-        properties: "opacity"
+        properties: "scale"
         target: scalableContainer
         to: 1
     }
@@ -132,7 +138,7 @@ WlrLayershell {
         duration: 150
         easing.type: Easing.InQuad
         from: 1
-        properties: "opacity"
+        properties: "scale"
         target: scalableContainer
         to: 0
     }
@@ -164,8 +170,15 @@ WlrLayershell {
             top: true
         }
         margins {
-            right: popoverWidth
+            right: 0
             top: 0
+
+            Behavior on right {
+                NumberAnimation {
+                    duration: 150
+                    easing.type: Easing.OutQuad
+                }
+            }
         }
         CornerShape {
             anchors.fill: parent
@@ -192,7 +205,14 @@ WlrLayershell {
         }
         margins {
             right: 0
-            top: contentColumn.height + popoverPadding * 2
+            top: 0
+
+            Behavior on top {
+                NumberAnimation {
+                    duration: 150
+                    easing.type: Easing.OutQuad
+                }
+            }
         }
         CornerShape {
             anchors.fill: parent
