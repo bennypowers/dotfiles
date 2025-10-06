@@ -108,7 +108,7 @@ Item {
     Process {
         id: hebrewDateProcess
 
-        command: ["bash", "-c", "hdate --hebrew --short"]
+        command: ["bash", "-c", "hebcal --lang he --city jerusalem -iT | head -1"]
 
         stdout: SplitParser {
             onRead: function (data) {
