@@ -146,6 +146,7 @@ ShellRoot {
                     CpuBarWidget {
                         Layout.alignment: Qt.AlignCenter
                         Layout.preferredWidth: parent.width
+                        screenWidth: rightPanel.screen ? rightPanel.screen.width : 0
                         shellRoot: shellRoot
                     }
 
