@@ -102,16 +102,11 @@ ShellRoot {
 
         PanelWindow {
             id: rightPanel
+
             property var modelData
 
             implicitWidth: 80
             screen: modelData
-
-            anchors {
-                bottom: true
-                right: true
-                top: true
-            }
 
             Component.onCompleted: {
                 console.log("📐 Right panel modelData:", modelData);
@@ -119,6 +114,11 @@ ShellRoot {
                 console.log("📐 Right panel screen.width:", screen ? screen.width : "screen is null");
             }
 
+            anchors {
+                bottom: true
+                right: true
+                top: true
+            }
             Rectangle {
                 id: bar
 
@@ -143,10 +143,10 @@ ShellRoot {
                     }
 
                     // CPU widget
-                    CpuWidget {
+                    CpuBarWidget {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredHeight: 60
                         Layout.preferredWidth: parent.width
+                        shellRoot: shellRoot
                     }
 
                     // Workspace switcher (minimap style) at top
