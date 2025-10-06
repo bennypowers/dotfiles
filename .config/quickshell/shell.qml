@@ -206,8 +206,6 @@ ShellRoot {
                     // Clock (centered)
                     ClockWidget {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredHeight: parent.height
-                        Layout.preferredWidth: 80
                     }
 
                     // Right spacer
