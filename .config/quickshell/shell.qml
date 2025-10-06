@@ -122,33 +122,21 @@ ShellRoot {
                     anchors.fill: parent
                     anchors.margins: 8
                     anchors.rightMargin: panelRightMargin
-                    anchors.topMargin: panelTopMargin
+                    // anchors.topMargin: panelTopMargin
+                    anchors.topMargin: 4
+
+                    // System Menu (replaces Volume, Mic, Network, Language, Power widgets)
+                    SystemMenuButton {
+                        Layout.alignment: Qt.AlignRight
+                        Layout.preferredHeight: 50
+                        Layout.rightMargin: 8
+                        shellRoot: shellRoot
+                    }
 
                     // CPU widget
                     CpuWidget {
                         Layout.alignment: Qt.AlignCenter
                         Layout.preferredHeight: 60
-                        Layout.preferredWidth: parent.width
-                    }
-
-                    // Volume widget at bottom
-                    VolumeWidget {
-                        Layout.leftMargin: 6
-                        Layout.preferredHeight: 60
-                        Layout.preferredWidth: parent.width
-                    }
-
-                    // Microphone widget
-                    MicWidget {
-                        Layout.leftMargin: 4
-                        Layout.preferredHeight: 40
-                        Layout.preferredWidth: parent.width
-                    }
-
-                    // Camera widget
-                    CameraWidget {
-                        Layout.leftMargin: 4
-                        Layout.preferredHeight: 40
                         Layout.preferredWidth: parent.width
                     }
 
@@ -166,37 +154,9 @@ ShellRoot {
                     // System tray
                     SystemTrayWidget {
                         Layout.leftMargin: 14
-                        Layout.preferredHeight: 120
+                        // Layout.preferredHeight: 120
                         Layout.preferredWidth: parent.width
                         // shellRoot: shellRoot  // Temporarily disabled due to binding loop
-                    }
-
-                    // Workmode widget (vm/WM) at very bottom
-                    WorkmodeWidget {
-                        Layout.leftMargin: 8
-                        Layout.preferredHeight: 40
-                        Layout.preferredWidth: parent.width
-                    }
-
-                    // Network widget at bottom
-                    NetworkWidget {
-                        Layout.leftMargin: 8
-                        Layout.preferredHeight: 40
-                        Layout.preferredWidth: parent.width
-                    }
-
-                    // Language switcher widget
-                    LanguageWidget {
-                        Layout.leftMargin: 8
-                        Layout.preferredHeight: 40
-                        Layout.preferredWidth: parent.width
-                    }
-
-                    // Power widget at very bottom
-                    PowerWidget {
-                        Layout.leftMargin: 8
-                        Layout.preferredHeight: 40
-                        Layout.preferredWidth: parent.width
                     }
                 }
             }
