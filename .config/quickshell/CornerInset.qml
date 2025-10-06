@@ -6,6 +6,7 @@ PanelWindow {
 
     property int radius: 16
     property color fillColor: "#000000"
+    property int rotation: 0
 
     color: "transparent"
     implicitHeight: radius
@@ -15,5 +16,6 @@ PanelWindow {
         anchors.fill: parent
         fillColor: cornerInset.fillColor
         radius: cornerInset.radius
+        rotation: cornerInset.rotation
     }
 }

@@ -217,7 +217,7 @@ ShellRoot {
         }
     }
 
-    // Corner inset between panels
+    // Corner inset between panels (top-right)
     Variants {
         model: Quickshell.screens
 
@@ -231,6 +231,75 @@ ShellRoot {
             anchors {
                 right: true
                 top: true
+            }
+        }
+    }
+
+    // Top-left corner
+    Variants {
+        model: Quickshell.screens
+
+        CornerInset {
+            property var modelData
+
+            fillColor: colors.black
+            radius: 16
+            rotation: 270
+            screen: modelData
+
+            anchors {
+                left: true
+                top: true
+            }
+            margins {
+                left: 0
+                top: 0
+            }
+        }
+    }
+
+    // Bottom-left corner
+    Variants {
+        model: Quickshell.screens
+
+        CornerInset {
+            property var modelData
+
+            fillColor: colors.black
+            radius: 16
+            rotation: 180
+            screen: modelData
+
+            anchors {
+                bottom: true
+                left: true
+            }
+            margins {
+                bottom: 0
+                left: 0
+            }
+        }
+    }
+
+    // Bottom-right corner
+    Variants {
+        model: Quickshell.screens
+
+        CornerInset {
+            property var modelData
+
+            fillColor: colors.black
+            radius: 16
+            rotation: 90
+            screen: modelData
+
+            anchors {
+                bottom: true
+                right: true
+            }
+            margins {
+                bottom: 0
+                right: 0
             }
         }
     }
