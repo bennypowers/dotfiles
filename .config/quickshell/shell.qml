@@ -2,15 +2,21 @@
 
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Shapes
 import Quickshell
 import Quickshell.Io
 
 ShellRoot {
     id: shellRoot
 
+    // Session detection
+    readonly property string currentDesktop: Qt.application.environment["XDG_CURRENT_DESKTOP"] || "Unknown"
+
     // Global font configuration
     readonly property string defaultFontFamily: colors.fontFamily
     readonly property int defaultFontSize: 12
+    readonly property bool isHyprland: currentDesktop === "Hyprland"
+    readonly property bool isNiri: currentDesktop === "NiRi"
     readonly property int largeFontSize: 14
     readonly property int panelBottomMargin: 24
     readonly property int panelLeftMargin: 0
@@ -19,11 +25,6 @@ ShellRoot {
     // Global margin configuration
     readonly property int panelTopMargin: 24
     readonly property int smallFontSize: 8
-
-    // Session detection
-    readonly property string currentDesktop: Qt.application.environment["XDG_CURRENT_DESKTOP"] || "Unknown"
-    readonly property bool isHyprland: currentDesktop === "Hyprland"
-    readonly property bool isNiri: currentDesktop === "NiRi"
 
     objectName: "shellRoot"
 
@@ -95,6 +96,7 @@ ShellRoot {
         id: colors
 
     }
+    // Right panel
     Variants {
         model: Quickshell.screens
 
@@ -113,7 +115,7 @@ ShellRoot {
                 id: bar
 
                 anchors.fill: parent
-                color: colors.base
+                color: colors.black
 
                 ColumnLayout {
                     anchors.bottomMargin: panelBottomMargin
@@ -153,17 +155,6 @@ ShellRoot {
                     // Workspace switcher (minimap style) at top
                     WorkspaceIndicator {
                         Layout.leftMargin: 8
-                        Layout.preferredWidth: parent.width
-                    }
-
-                    // Spacer to center clock
-                    Item {
-                        Layout.fillHeight: true
-                    }
-
-                    // Clock (centered)
-                    ClockWidget {
-                        Layout.preferredHeight: 60
                         Layout.preferredWidth: parent.width
                     }
 
@@ -208,6 +199,70 @@ ShellRoot {
                         Layout.preferredWidth: parent.width
                     }
                 }
+            }
+        }
+    }
+
+    // Top panel
+    Variants {
+        model: Quickshell.screens
+
+        PanelWindow {
+            property var modelData
+
+            implicitHeight: 48
+            screen: modelData
+
+            anchors {
+                left: true
+                right: true
+                top: true
+            }
+            Rectangle {
+                id: topBar
+
+                anchors.fill: parent
+                color: colors.black
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.margins: 8
+
+                    // Left spacer
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    // Clock (centered)
+                    ClockWidget {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.preferredHeight: parent.height
+                        Layout.preferredWidth: 80
+                    }
+
+                    // Right spacer
+                    Item {
+                        Layout.fillWidth: true
+                    }
+                }
+            }
+        }
+    }
+
+    // Corner inset between panels
+    Variants {
+        model: Quickshell.screens
+
+        CornerInset {
+            property var modelData
+
+            fillColor: colors.black
+            radius: 16
+            screen: modelData
+
+            anchors {
+                right: true
+                top: true
             }
         }
     }

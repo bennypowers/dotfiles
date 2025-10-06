@@ -2,6 +2,7 @@ import QtQuick
 
 QtObject {
     readonly property string base: "#1e1e2e"
+    readonly property string black: "#000000"
     readonly property string blue: "#89b4fa"
     readonly property int borderRadius: 4
     readonly property string crust: "#11111b"
