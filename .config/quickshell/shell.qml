@@ -101,6 +101,7 @@ ShellRoot {
         model: Quickshell.screens
 
         PanelWindow {
+            id: rightPanel
             property var modelData
 
             implicitWidth: 80
@@ -111,6 +112,13 @@ ShellRoot {
                 right: true
                 top: true
             }
+
+            Component.onCompleted: {
+                console.log("📐 Right panel modelData:", modelData);
+                console.log("📐 Right panel screen:", screen);
+                console.log("📐 Right panel screen.width:", screen ? screen.width : "screen is null");
+            }
+
             Rectangle {
                 id: bar
 
@@ -130,6 +138,7 @@ ShellRoot {
                         Layout.alignment: Qt.AlignRight
                         Layout.preferredHeight: 50
                         Layout.rightMargin: 8
+                        screenWidth: rightPanel.screen ? rightPanel.screen.width : 0
                         shellRoot: shellRoot
                     }
 

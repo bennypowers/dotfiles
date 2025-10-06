@@ -3,33 +3,39 @@ import QtQuick
 Rectangle {
     id: systemMenuButton
 
-    property var shellRoot: null
     property bool popoverVisible: false
+    property var shellRoot: null
+    property int screenWidth: 0
 
-    signal clicked()
+    signal clicked
+
+    onScreenWidthChanged: {
+        console.log("📐 SystemMenuButton screenWidth changed to:", screenWidth);
+    }
 
     color: "transparent"
-    height: 50
-    width: contentRow.width + 16  // Add padding
     radius: 8
+    // height: 50
+    width: contentRow.width + 16  // Add padding
 
     Colors {
         id: colors
+
     }
 
     // Indicator components - each manages its own state
     NetworkIndicator {
         id: networkIndicator
-    }
 
+    }
     CameraIndicator {
         id: cameraIndicator
-    }
 
+    }
     AudioIndicator {
         id: audioIndicator
-    }
 
+    }
     MouseArea {
         id: mouseArea
 
@@ -39,23 +45,21 @@ Rectangle {
         hoverEnabled: true
 
         onClicked: {
-            systemMenuButton.clicked()
-            systemMenuButton.popoverVisible = !systemMenuButton.popoverVisible
+            systemMenuButton.clicked();
+            systemMenuButton.popoverVisible = !systemMenuButton.popoverVisible;
         }
-
         onEntered: {
-            hovered = true
-            parent.color = colors.surface
+            hovered = true;
+            parent.color = colors.surface;
         }
-
         onExited: {
-            hovered = false
-            parent.color = "transparent"
+            hovered = false;
+            parent.color = "transparent";
         }
     }
-
     Row {
         id: contentRow
+
         anchors.centerIn: parent
         spacing: 8
 
@@ -83,8 +87,8 @@ Rectangle {
         Item {
             anchors.verticalCenter: parent.verticalCenter
             height: 18
-            width: 18
             visible: audioIndicator.shouldDisplay
+            width: 18
 
             Text {
                 anchors.centerIn: parent
@@ -106,16 +110,15 @@ Rectangle {
             }
         }
     }
-
     SystemMenuPopover {
         id: popover
 
+        screenWidth: systemMenuButton.screenWidth
         visible: systemMenuButton.popoverVisible
-        triggerButton: systemMenuButton
 
         onVisibleChanged: {
             if (!visible) {
-                systemMenuButton.popoverVisible = false
+                systemMenuButton.popoverVisible = false;
             }
         }
     }

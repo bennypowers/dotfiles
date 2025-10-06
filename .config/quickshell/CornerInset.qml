@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Shapes
 import Quickshell
 
 PanelWindow {
@@ -12,30 +11,9 @@ PanelWindow {
     implicitHeight: radius
     implicitWidth: radius
 
-    Shape {
+    CornerShape {
         anchors.fill: parent
-
-        ShapePath {
-            fillColor: cornerInset.fillColor
-            strokeColor: "transparent"
-
-            startX: 0
-            startY: 0
-
-            PathArc {
-                radiusX: cornerInset.radius
-                radiusY: cornerInset.radius
-                x: cornerInset.radius
-                y: cornerInset.radius
-            }
-            PathLine {
-                x: cornerInset.radius
-                y: 0
-            }
-            PathLine {
-                x: 0
-                y: 0
-            }
-        }
+        fillColor: cornerInset.fillColor
+        radius: cornerInset.radius
     }
 }

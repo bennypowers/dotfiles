@@ -1,35 +1,28 @@
 import QtQuick
-import QtQuick.Window
+import Quickshell.Wayland
 
-Window {
+WlrLayershell {
     id: popover
 
+    property int cornerRadius: 16
+    property int panelRightMargin: 22
     property int popoverPadding: 16
     property int popoverWidth: 380
+    property int rightPanelWidth: 80
+    property int screenWidth: 0
     property int sectionSpacing: 12
-    property var triggerButton: null
-
-    // Position popover to the left of the trigger button
-    function updatePosition() {
-        if (!triggerButton)
-            return;
-
-        // Get button's screen position
-        const buttonGlobal = triggerButton.mapToGlobal(0, 0);
-
-        // Position to the left of the button with a small gap
-        x = buttonGlobal.x - width - 12;
-        y = buttonGlobal.y;
-    }
+    property int topPanelHeight: 48
 
     color: "transparent"
-    flags: Qt.ToolTip | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    exclusiveZone: 0
     height: contentColumn.height + popoverPadding * 2
+    layer: WlrLayer.Overlay
+    namespace: "quickshell-system-menu"
+    visible: false
     width: popoverWidth
 
     onVisibleChanged: {
         if (visible) {
-            updatePosition();
             scalableContainer.opacity = 0;
             showAnimation.start();
         } else {
@@ -37,6 +30,14 @@ Window {
         }
     }
 
+    anchors {
+        right: true
+        top: true
+    }
+    margins {
+        right: 0
+        top: 0
+    }
     Colors {
         id: colors
 
@@ -55,11 +56,14 @@ Window {
             id: background
 
             anchors.fill: parent
-            color: colors.base
+            bottomLeftRadius: 16
+            bottomRightRadius: 0
+            color: colors.black
 
             // Drop shadow effect (simplified)
             layer.enabled: true
-            radius: 16
+            topLeftRadius: 0
+            topRightRadius: 16
         }
 
         // Content column
@@ -139,9 +143,61 @@ Window {
         z: -1
 
         onClicked: {
-            if (triggerButton) {
-                triggerButton.popoverVisible = false;
-            }
+            popover.visible = false;
+        }
+    }
+
+    // Top-left corner inset to join popover with top panel
+    WlrLayershell {
+        id: topLeftInset
+
+        color: "transparent"
+        exclusiveZone: 0
+        height: cornerRadius
+        layer: WlrLayer.Overlay
+        namespace: "quickshell-system-menu-corner-tl"
+        visible: popover.visible
+        width: cornerRadius
+
+        anchors {
+            right: true
+            top: true
+        }
+        margins {
+            right: popoverWidth
+            top: 0
+        }
+        CornerShape {
+            anchors.fill: parent
+            fillColor: colors.black
+            radius: cornerRadius
+        }
+    }
+
+    // Bottom-right corner inset to join popover with right panel
+    WlrLayershell {
+        id: bottomRightInset
+
+        color: "transparent"
+        exclusiveZone: 0
+        height: cornerRadius
+        layer: WlrLayer.Overlay
+        namespace: "quickshell-system-menu-corner-br"
+        visible: popover.visible
+        width: cornerRadius
+
+        anchors {
+            right: true
+            top: true
+        }
+        margins {
+            right: 0
+            top: contentColumn.height + popoverPadding * 2
+        }
+        CornerShape {
+            anchors.fill: parent
+            fillColor: colors.black
+            radius: cornerRadius
         }
     }
 }

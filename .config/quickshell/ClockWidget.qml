@@ -4,15 +4,15 @@ import Quickshell
 Row {
     id: clockWidget
 
-    property int dateFontSize: 12
-    readonly property string dateFormat: "MMM d"
+    property int dateFontSize: 18
+    readonly property string dateFormat: "dddd MMMM d"
 
     // Font properties with optional overrides - access root via Quickshell.root
     property string fontFamily: "Liberation Sans"
     property int timeFontSize: 18
 
     // Format properties
-    readonly property string timeFormat: "hh:mm"
+    readonly property string timeFormat: "h:mm AP"
 
     spacing: 8
 
@@ -27,7 +27,6 @@ Row {
             dateText.text = Qt.formatDate(now, clockWidget.dateFormat);
         }
     }
-
     Text {
         id: timeText
 
@@ -38,7 +37,6 @@ Row {
         font.pixelSize: clockWidget.timeFontSize
         text: Qt.formatTime(new Date(), clockWidget.timeFormat)
     }
-
     Text {
         id: dateText
 
