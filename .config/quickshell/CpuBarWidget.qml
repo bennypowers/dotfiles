@@ -183,7 +183,9 @@ Rectangle {
         anchors.fill: parent
 
         onClicked: {
+            console.log("🖱️  CpuBarWidget clicked! Current popoverVisible:", cpuBarWidget.popoverVisible);
             cpuBarWidget.popoverVisible = !cpuBarWidget.popoverVisible;
+            console.log("🖱️  CpuBarWidget new popoverVisible:", cpuBarWidget.popoverVisible);
         }
     }
     CpuStatsPopover {
@@ -211,10 +213,9 @@ Rectangle {
         uptime: cpuBarWidget.uptime
         visible: cpuBarWidget.popoverVisible
 
-        onVisibleChanged: {
-            if (!visible) {
-                cpuBarWidget.popoverVisible = false;
-            }
+        onCloseRequested: {
+            console.log("🔔 CpuStatsPopover closeRequested - setting popoverVisible = false");
+            cpuBarWidget.popoverVisible = false;
         }
     }
 

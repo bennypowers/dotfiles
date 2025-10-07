@@ -9,7 +9,6 @@ BasePopover {
 
     anchorSide: "left"
     cornerPositions: ["topLeft", "topRight"]
-    cornerTopMargin: 0  // Position corners flush with popover
     namespace: "quickshell-clock-popover"
 
     onVisibleChanged: {

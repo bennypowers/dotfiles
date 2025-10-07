@@ -45,8 +45,10 @@ Rectangle {
         hoverEnabled: true
 
         onClicked: {
+            console.log("🖱️  SystemMenuButton clicked! Current popoverVisible:", systemMenuButton.popoverVisible);
             systemMenuButton.clicked();
             systemMenuButton.popoverVisible = !systemMenuButton.popoverVisible;
+            console.log("🖱️  SystemMenuButton new popoverVisible:", systemMenuButton.popoverVisible);
         }
         onEntered: {
             hovered = true;
@@ -116,10 +118,9 @@ Rectangle {
         screenWidth: systemMenuButton.screenWidth
         visible: systemMenuButton.popoverVisible
 
-        onVisibleChanged: {
-            if (!visible) {
-                systemMenuButton.popoverVisible = false;
-            }
+        onCloseRequested: {
+            console.log("🔔 SystemMenuPopover closeRequested - setting popoverVisible = false");
+            systemMenuButton.popoverVisible = false;
         }
     }
 }

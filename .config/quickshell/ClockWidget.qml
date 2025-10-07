@@ -97,10 +97,9 @@ Item {
         topMargin: 0  // Flush with bottom of panel
         visible: clockWidget.popoverVisible
 
-        onVisibleChanged: {
-            if (!visible) {
-                clockWidget.popoverVisible = false;
-            }
+        onCloseRequested: {
+            console.log("🔔 ClockPopover closeRequested - setting popoverVisible = false");
+            clockWidget.popoverVisible = false;
         }
     }
 
@@ -108,7 +107,7 @@ Item {
     Process {
         id: hebrewDateProcess
 
-        command: ["bash", "-c", "hebcal --lang he --city jerusalem -iT | head -1"]
+        command: ["bash", "-c", "hebcal --lang he-x-NoNikud --city jerusalem -iT | head -1"]
 
         stdout: SplitParser {
             onRead: function (data) {
