@@ -122,7 +122,7 @@ WlrLayershell {
                 color: "transparent"
                 exclusiveZone: 0
                 keyboardFocus: WlrKeyboardFocus.None
-                layer: WlrLayer.Overlay  // Same layer as popover to avoid blocking panel
+                layer: WlrLayer.Top  // Below popover to avoid covering it
                 namespace: basePopover.namespace + "-backdrop"
 
                 MouseArea {

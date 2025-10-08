@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.Notifications
 
 ShellRoot {
     id: shellRoot
@@ -37,6 +38,123 @@ ShellRoot {
 
     // Volume OSD
     VolumeOSD {
+    }
+
+    // Notification Server
+    NotificationServer {
+        id: notificationServer
+
+        property var notificationContentMap: ({})  // Map notification ID to content item
+        property var readNotifications: ({})  // Track read notifications by ID
+        property int unreadCount: 0
+
+        // Enable all features
+        persistenceSupported: true
+        bodySupported: true
+        bodyMarkupSupported: true
+        bodyHyperlinksSupported: true
+        bodyImagesSupported: true
+        actionsSupported: true
+        actionIconsSupported: true
+        imageSupported: true
+        inlineReplySupported: true
+
+        onNotification: function(notification) {
+            console.log("Notification received:", notification.summary);
+
+            // Track the notification for history
+            notification.tracked = true;
+
+            // Increment unread count
+            unreadCount++;
+
+            console.log("Creating notification content component...");
+            // Create notification content
+            var content = notificationContentComponent.createObject(null, {
+                "notification": notification
+            });
+
+            if (!content) {
+                console.log("ERROR: Failed to create notification content");
+                return;
+            }
+
+            console.log("Content created, adding to container...");
+
+            // Store mapping
+            notificationContentMap[notification.id] = content;
+
+            // Add to container
+            if (notificationPopupContainer) {
+                notificationPopupContainer.addNotification(content);
+                console.log("Added to container, updating positions...");
+                updateNotificationPositions();
+            } else {
+                console.log("ERROR: notificationPopupContainer is null");
+            }
+
+            // Auto-dismiss timer
+            if (!notification.resident) {
+                var timeout = notification.expireTimeout > 0 ? notification.expireTimeout : 5000;
+                Qt.callLater(function() {
+                    var timer = Qt.createQmlObject('import QtQuick; Timer { interval: ' + timeout + '; running: true; repeat: false }', content);
+                    timer.triggered.connect(function() {
+                        if (!content.hovered && notification) {
+                            notification.expire();
+                        }
+                    });
+                });
+            }
+        }
+
+        function markAllAsRead() {
+            var notifications = trackedNotifications.values;
+            for (var i = 0; i < notifications.length; i++) {
+                readNotifications[notifications[i].id] = true;
+            }
+            unreadCount = 0;
+        }
+
+        function updateNotificationPositions() {
+            var contents = notificationPopupContainer.notificationContents;
+            for (var i = 0; i < contents.length; i++) {
+                if (contents[i]) {
+                    contents[i].isFirst = (i === 0);
+                    contents[i].isLast = (i === contents.length - 1);
+                }
+            }
+        }
+    }
+
+    // Notification popup container (single container for all notifications)
+    NotificationPopupContainer {
+        id: notificationPopupContainer
+        notificationServer: notificationServer
+    }
+
+    // Notification content component
+    Component {
+        id: notificationContentComponent
+
+        NotificationContent {
+            id: content
+
+            Connections {
+                target: notification
+
+                function onClosed(reason) {
+                    // Remove from container
+                    notificationPopupContainer.removeNotification(content);
+                    delete notificationServer.notificationContentMap[notification.id];
+                    notificationServer.updateNotificationPositions();
+
+                    // Decrement unread count if not already read
+                    if (!notificationServer.readNotifications[notification.id]) {
+                        notificationServer.unreadCount = Math.max(0, notificationServer.unreadCount - 1);
+                    }
+                }
+            }
+        }
     }
 
     // Polkit Authentication Handler
@@ -87,10 +205,6 @@ ShellRoot {
     // Lock Screen
     LockScreen {
         id: lockScreen
-
-        onLockRequested: {
-            lockScreen.show();
-        }
     }
     Colors {
         id: colors
@@ -197,6 +311,14 @@ ShellRoot {
                 RowLayout {
                     anchors.fill: parent
                     anchors.margins: 8
+                    spacing: 8
+
+                    // Notification icon (left side)
+                    NotificationIcon {
+                        Layout.alignment: Qt.AlignLeft
+                        notificationServer: notificationServer
+                        notificationContainer: notificationPopupContainer
+                    }
 
                     // Left spacer
                     Item {
