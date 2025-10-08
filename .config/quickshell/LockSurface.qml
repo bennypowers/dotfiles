@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Services.Pam
@@ -21,6 +20,12 @@ WlSessionLockSurface {
     function startAuthentication() {
         console.log("🔑 Starting lock screen authentication");
 
+        // If already authenticating, abort first
+        if (lockSurface.authInProgress && lockSurface.pamContext.active) {
+            console.log("🔑 Aborting previous auth attempt");
+            lockSurface.pamContext.abort();
+        }
+
         // If U2F is waiting and user entered password, abort and restart with password
         if (lockSurface.u2fPromptActive && passwordField.text.length > 0) {
             console.log("🔑 U2F active but user entered password - aborting U2F");
@@ -29,18 +34,18 @@ WlSessionLockSurface {
         }
 
         console.log("🔑 Password field length:", passwordField.text.length);
+        errorText.visible = false;
+
         if (passwordField.text.length === 0) {
             // No password - try U2F only
             console.log("🔑 No password, initiating auth (U2F will be tried first)");
             lockSurface.authInProgress = true;
             lockSurface.pendingPassword = "";
-            errorText.visible = false;
             lockSurface.pamContext.start();
         } else {
             // Password provided
             lockSurface.authInProgress = true;
             lockSurface.pendingPassword = passwordField.text;
-            errorText.visible = false;
             console.log("🔑 Calling pamContext.start() with password");
             lockSurface.pamContext.start();
         }
@@ -54,6 +59,23 @@ WlSessionLockSurface {
         if (visible) {
             passwordField.forceActiveFocus();
         }
+    }
+
+    Timer {
+        id: autoStartTimer
+        interval: 100
+        running: true
+        repeat: false
+        onTriggered: {
+            console.log("🔑 Auto-starting authentication for U2F");
+            lockSurface.authInProgress = true;
+            lockSurface.pendingPassword = "";
+            lockSurface.pamContext.start();
+        }
+    }
+
+    Component.onCompleted: {
+        console.log("🔒 LockSurface created for screen:", screen);
     }
 
     Colors {
@@ -77,27 +99,25 @@ WlSessionLockSurface {
                 spacing: colors.spacing * 8
 
                 // User avatar
-                Image {
-                    id: avatarImage
-
+                Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 96
                     Layout.preferredHeight: 96
-                    source: "file:///var/lib/AccountsService/icons/" + lockSurface.currentUser
-                    fillMode: Image.PreserveAspectCrop
-                    smooth: true
+                    radius: 48
+                    color: "transparent"
                     visible: lockSurface.currentUser !== ""
+                    clip: true
 
-                    onStatusChanged: {
-                        console.log("Avatar image status:", status, "source:", source);
-                    }
+                    Image {
+                        id: avatarImage
 
-                    layer.enabled: true
-                    layer.effect: OpacityMask {
-                        maskSource: Rectangle {
-                            width: 96
-                            height: 96
-                            radius: 48
+                        anchors.fill: parent
+                        source: "file:///var/lib/AccountsService/icons/" + lockSurface.currentUser
+                        fillMode: Image.PreserveAspectCrop
+                        smooth: true
+
+                        onStatusChanged: {
+                            console.log("Avatar image status:", status, "source:", source);
                         }
                     }
                 }
@@ -152,11 +172,10 @@ WlSessionLockSurface {
                     Layout.topMargin: colors.spacing * 4
                     color: colors.text
                     echoMode: TextInput.Password
-                    enabled: !lockSurface.authInProgress
                     font.family: colors.fontFamily
                     font.pixelSize: colors.textSize
                     horizontalAlignment: TextInput.AlignHCenter
-                    placeholderText: "Enter password to unlock..."
+                    placeholderText: "Or enter password..."
 
                     background: Rectangle {
                         border.color: passwordField.activeFocus ? colors.blue : colors.overlay
@@ -169,7 +188,18 @@ WlSessionLockSurface {
                         passwordField.forceActiveFocus();
                     }
 
-                    Keys.onEscapePressed: passwordField.text = ""
+                    onTextChanged: {
+                        // If user starts typing while U2F is active, switch to password auth
+                        if (lockSurface.u2fPromptActive && text.length > 0) {
+                            console.log("🔑 User typing password, switching from U2F");
+                            lockSurface.startAuthentication();
+                        }
+                    }
+
+                    Keys.onEscapePressed: {
+                        passwordField.text = "";
+                        errorText.visible = false;
+                    }
                     Keys.onReturnPressed: lockSurface.startAuthentication()
                 }
 
@@ -198,11 +228,11 @@ WlSessionLockSurface {
                     id: statusText
 
                     Layout.alignment: Qt.AlignHCenter
-                    color: lockSurface.authInProgress ? colors.yellow : colors.subtext
+                    color: lockSurface.u2fPromptActive ? colors.blue : (lockSurface.authInProgress ? colors.yellow : colors.subtext)
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
                     opacity: lockSurface.authInProgress ? 1.0 : 0.7
-                    text: lockSurface.authInProgress ? "Authenticating..." : "Type password and press Enter"
+                    text: lockSurface.u2fPromptActive ? "Touch your security key or enter password" : (lockSurface.authInProgress ? "Authenticating..." : "Press Enter or touch security key")
                 }
 
                 // Spacer
@@ -216,7 +246,7 @@ WlSessionLockSurface {
                     color: colors.overlay
                     font.family: colors.fontFamily
                     font.pixelSize: 10
-                    text: "Press Escape to clear • Enter to authenticate"
+                    text: "Security key or password • Escape to clear"
                 }
             }
         }
@@ -227,14 +257,32 @@ WlSessionLockSurface {
         target: lockSurface.pamContext
 
         function onError(error) {
-            console.log("Lock screen PAM auth error:", error);
+            console.log("❌ Lock screen PAM auth error:", error);
             lockSurface.authInProgress = false;
             lockSurface.pendingPassword = "";
+            lockSurface.u2fPromptActive = false;
             passwordField.text = "";
             passwordField.forceActiveFocus();
-            errorText.text = "Authentication failed";
+            errorText.text = "Authentication failed - Press Enter to retry";
             errorText.visible = true;
             errorTimer.start();
+        }
+
+        function onCompleted(result) {
+            console.log("🔐 Lock surface PAM completed:", result);
+
+            if (result !== PamResult.Success) {
+                console.log("❌ Auth failed, resetting...");
+                lockSurface.authInProgress = false;
+                lockSurface.pendingPassword = "";
+                lockSurface.u2fPromptActive = false;
+                passwordField.text = "";
+                passwordField.forceActiveFocus();
+                errorText.text = "Authentication failed - Press Enter to retry";
+                errorText.visible = true;
+                errorTimer.start();
+            }
+            // If success, the LockScreen.qml onCompleted handler will unlock
         }
 
         function onPamMessage() {

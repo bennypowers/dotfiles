@@ -200,7 +200,7 @@ binds {
     "Mod+f" { spawn "nautilus"; }
     "Mod+e" { spawn "thunderbird-bin"; }
     "Mod+b" { spawn "flatpak" "run" "app.zen_browser.zen"; }
-    "Mod+p" { spawn "vicinae"; }
+    "Mod+p" { spawn "vicinae" "toggle"; }
     "Mod+o" { toggle-overview; }
 
     "Mod+q" { close-window; }

@@ -106,16 +106,20 @@ QtObject {
         handler: Socket {
             onConnectedChanged: {
                 if (connected) {
-                    console.log("Lock socket: New connection");
+                    console.log("🔌 Lock socket: New connection");
                 } else {
-                    console.log("Lock socket: Connection dropped");
+                    console.log("🔌 Lock socket: Connection dropped");
                 }
+            }
+
+            onError: function(error) {
+                console.log("❌ Lock socket handler error:", error);
             }
 
             parser: SplitParser {
                 onRead: function(data) {
                     const cmd = data.trim();
-                    console.log("Lock socket command:", cmd);
+                    console.log("🔌 Lock socket command:", cmd);
 
                     if (cmd === "lock") {
                         lockScreen.show();
@@ -132,8 +136,17 @@ QtObject {
             }
         }
 
+        onActiveChanged: {
+            console.log("🔌 Lock socket active changed:", active);
+        }
+
         Component.onCompleted: {
-            console.log("Lock socket server started at:", path);
+            console.log("🔌 Lock socket server component completed");
+            console.log("🔌   - active:", active);
+            console.log("🔌   - path:", path);
+            // Explicitly activate the socket
+            active = true;
+            console.log("🔌   - activated:", active);
         }
     }
 
