@@ -1,0 +1,37 @@
+[Unit]
+Description=ComfyUI with ROCm and MIGraphX
+After=network-online.target
+
+[Container]
+Image=localhost/comfyui-rocm:latest
+AutoUpdate=local
+
+# GPU access
+AddDevice=/dev/kfd
+AddDevice=/dev/dri
+SecurityLabelDisable=true
+AddCapability=SYS_ADMIN
+
+# Group for GPU access
+GroupAdd=video
+
+# Volume mounts
+Volume=%h/.local/share/comfyui/models:/root/ComfyUI/models:z
+Volume=%h/.local/share/comfyui/output:/root/ComfyUI/output:z
+Volume=%h/.local/share/comfyui/custom_nodes:/root/ComfyUI/custom_nodes:z
+
+# Network
+PublishPort=8188:8188
+
+# PyTorch memory optimization
+Environment=PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+# Command line arguments
+Exec=python main.py --listen --lowvram --fp16-vae
+
+[Service]
+Restart=always
+TimeoutStartSec=300
+
+[Install]
+WantedBy=default.target
