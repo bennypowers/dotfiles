@@ -207,24 +207,6 @@ ShellRoot {
         id: lockScreen
     }
 
-    // Idle Monitor - Auto-lock on idle
-    IdleMonitor {
-        id: idleMonitor
-
-        idleTimeout: 5 * 60 * 1000  // 5 minutes
-        checkInterval: 30 * 1000     // Check every 30 seconds
-        enabled: true
-
-        onIdle: {
-            console.log("💤 System idle - locking screen");
-            lockScreen.show();
-        }
-
-        onActive: {
-            console.log("💤 System active again");
-        }
-    }
-
     Colors {
         id: colors
 
