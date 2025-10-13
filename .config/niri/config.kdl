@@ -1,22 +1,114 @@
-// NiRi configuration - matches Hyprland setup aesthetics and functionality
+prefer-no-csd
+
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+spawn-at-startup "swww-daemon"
 
 hotkey-overlay {
   skip-at-startup
   hide-not-bound
 }
 
-// Environment variables
 environment {
     HYPRCURSOR_THEME "phinger-cursors-dark"
-    HYPRCURSOR_SIZE "32"
+    HYPRCURSOR_SIZE "48"
     XCURSOR_THEME "phinger-cursors-dark"
-    XCURSOR_SIZE "32"
+    XCURSOR_SIZE "48"
     QT_QPA_PLATFORMTHEME "qt5ct"
     XDG_CURRENT_DESKTOP "NiRi"
     XDG_SESSION_DESKTOP "NiRi"
     XDG_SESSION_TYPE "wayland"
     XDG_DATA_DIRS "/usr/local/share:/usr/share:/var/lib/flatpak/exports/share:/home/bennyp/.local/share/flatpak/exports/share"
+}
+
+cursor {
+  xcursor-theme "phinger-cursors-dark"
+  xcursor-size 48
+}
+
+workspace "workmode"
+
+// niri >v25.08
+// workspace "workmode" {
+//   layout {
+//     preset-column-widths {
+//       proportion 1
+//     }
+//   }
+//
+//   window-rule {
+//     open-fullscreen true
+//   }
+// }
+
+binds {
+    "Mod+h" { focus-column-left; }
+    "Mod+j" { focus-window-down; }
+    "Mod+k" { focus-window-up; }
+    "Mod+l" { focus-column-right; }
+
+    "Mod+Shift+h" { move-column-left; }
+    "Mod+Shift+j" { move-window-down; }
+    "Mod+Shift+k" { move-window-up; }
+    "Mod+Shift+l" { move-column-right; }
+
+    "Mod+Shift+f" { fullscreen-window; }
+
+    "Mod+Tab" { focus-window-down-or-column-right; }
+    "Mod+Shift+Tab" { focus-window-up-or-column-left; }
+
+    // Workspace navigation
+    "Mod+Ctrl+h" { consume-or-expel-window-left; }
+    "Mod+Ctrl+l" { consume-or-expel-window-right; }
+
+    // Window controls
+    "Mod+c" { toggle-window-floating; }
+    "Mod+u" { switch-preset-column-width; }
+    "Mod+i" { toggle-column-tabbed-display; }
+
+    // Applications
+    "Mod+t" repeat=false { spawn "kitty"; }
+    "Mod+f" repeat=false { spawn "nautilus"; }
+    "Mod+e" repeat=false { spawn "thunderbird-bin"; }
+    "Mod+b" repeat=false { spawn "flatpak" "run" "app.zen_browser.zen"; }
+    "Mod+p" repeat=false { spawn "vicinae" "toggle"; }
+    "Mod+o" repeat=false { toggle-overview; }
+
+    "Mod+q" { close-window; }
+    "Mod+Shift+q" { quit; }
+
+    // Special workspaces
+    "Mod+w" { focus-workspace "workmode"; }
+    "Mod+Shift+w" { move-window-to-workspace "workmode"; }
+
+    "MouseForward" { toggle-overview; }
+
+    "Mod+WheelScrollDown" { focus-workspace-down; }
+    "Mod+WheelScrollUp" { focus-workspace-up; }
+    "Mod+WheelScrollRight" { focus-column-left; }
+    "Mod+WheelScrollLeft" { focus-column-right; }
+
+    // Media keys
+    "XF86AudioRaiseVolume" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    "XF86AudioLowerVolume" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    "XF86AudioMute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    "XF86AudioMicMute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    "XF86MonBrightnessUp" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%+"; }
+    "XF86MonBrightnessDown" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%-"; }
+
+    // Media control
+    "XF86AudioNext" { spawn "uwsm" "app" "--" "playerctl" "next"; }
+    "XF86AudioPause" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
+    "XF86AudioPlay" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
+    "XF86AudioPrev" { spawn "uwsm" "app" "--" "playerctl" "previous"; }
+
+    // Screenshots
+    "Print" { screenshot; }
+    "Mod+Print" { screenshot-window; }
+    "Mod+Shift+Print" { screenshot-screen; }
+
+    // VM viewer
+    "Mod+v" { spawn "uwsm" "app" "--" "virt-viewer" "--hotkeys=release-cursor=shift+escape" "--connect" "qemu:///system"; }
 }
 
 // Input configuration
@@ -43,7 +135,6 @@ input {
     }
 }
 
-// Monitor configuration
 output "DP-1" {
     mode "5120x2160@120.000"
     scale 1
@@ -54,26 +145,47 @@ output "DP-2" {
     scale 1
 }
 
-// Layout configuration - scrollable tiling
 layout {
     gaps 16
     center-focused-column "never"
     always-center-single-column
+
     preset-column-widths {
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
+        proportion 1.0
     }
-    default-column-width { proportion 0.5; }
+
+    default-column-width {
+      proportion 0.33333;
+    }
+
     focus-ring {
-        width 2
+        width 4
         active-color "#c6a0f6"  // catppuccin macchiato mauve
         inactive-color "#494d64" // catppuccin macchiato surface1
     }
+
     border {
-        width 2
+        off
+        width 4
         active-color "#c6a0f6"  // catppuccin macchiato mauve
         inactive-color "#494d64" // catppuccin macchiato surface1
+    }
+
+    shadow {
+        on
+        softness 30
+        spread 5
+        offset x=0 y=5
+        draw-behind-window true
+        color "#00000070"
+    }
+
+    struts {
+        top 48
+        bottom 48
     }
 }
 
@@ -87,54 +199,58 @@ layer-rule {
     }
 }
 
+layer-rule {
+    match namespace="hyprpaper"
+    place-within-backdrop true
+}
+
 // Window rules
 window-rule {
   geometry-corner-radius 12
   clip-to-geometry true
 }
 
-window-rule {
-    match app-id="floating-sysmon"
-    default-column-width { fixed 1600; }
-    open-floating true
-}
-
+// kitty
 window-rule {
   match app-id="kitty"
   default-column-width { proportion 0.25; }
 }
 
+// Bitwarden extension
 window-rule {
-    match app-id="zen" title="Extension:.*"
+    match app-id="zen" title=".*Bitwarden.*"
     open-floating true
+    max-width 500
+    max-height 800
+    block-out-from "screen-capture"
 }
 
-window-rule {
-    match app-id="zen" title="Bitwarden"
-    open-floating true
-}
-
+// Network manager
 window-rule {
     match title=".*Network Manager.*"
     open-floating true
 }
 
+// Overskride (bluetooth gui)
 window-rule {
     match title="overskride"
     open-floating true
 }
 
+// Aisleriot
 window-rule {
     match app-id="sol"
     default-column-width { fixed 1120; }
     open-floating true
 }
 
+// Nautilus previewer
 window-rule {
     match app-id="org.gnome.NautilusPreviewer"
     open-floating true
 }
 
+// Virt viewer (workmode)
 window-rule {
   match app-id="virt-viewer" title="silverblue.*"
   open-on-workspace "workmode"
@@ -142,132 +258,3 @@ window-rule {
   open-focused true
 }
 
-// Workspace configuration
-workspace "magic"
-workspace "workmode"
-
-// Animations - matching Hyprland's smooth feel
-animations {
-    slowdown 1.0
-    window-open {
-        duration-ms 150
-        curve "ease-out-cubic"
-    }
-    window-close {
-        duration-ms 150
-        curve "ease-out-cubic"
-    }
-    window-movement {
-        duration-ms 200
-        curve "ease-out-cubic"
-    }
-    workspace-switch {
-        duration-ms 200
-        curve "ease-out-cubic"
-    }
-}
-
-// Prefer no server-side decorations
-prefer-no-csd
-
-// Keybindings - ported from Hyprland configuration
-binds {
-    // Mod key
-    "Mod+h" { focus-column-left; }
-    "Mod+j" { focus-window-down; }
-    "Mod+k" { focus-window-up; }
-    "Mod+l" { focus-column-right; }
-
-    "Mod+Shift+h" { move-column-left; }
-    "Mod+Shift+j" { move-window-down; }
-    "Mod+Shift+k" { move-window-up; }
-    "Mod+Shift+l" { move-column-right; }
-    "Mod+Shift+f" { fullscreen-window; }
-
-    "Mod+Tab" { focus-window-down-or-column-right; }
-    "Mod+Shift+Tab" { focus-window-up-or-column-left; }
-
-    // Workspace navigation
-    "Mod+Ctrl+h" { consume-or-expel-window-left; }
-    "Mod+Ctrl+l" { consume-or-expel-window-right; }
-
-    // Window controls
-    "Mod+c" { toggle-window-floating; }
-    "Mod+u" { switch-preset-column-width; }
-
-    // Applications
-    "Mod+t" { spawn "kitty"; }
-    "Mod+f" { spawn "nautilus"; }
-    "Mod+e" { spawn "thunderbird-bin"; }
-    "Mod+b" { spawn "flatpak" "run" "app.zen_browser.zen"; }
-    "Mod+p" { spawn "vicinae" "toggle"; }
-    "Mod+o" { toggle-overview; }
-
-    "Mod+q" { close-window; }
-    "Mod+Shift+q" { quit; }
-
-    // Workspace switching (1-10)
-    "Mod+1" { focus-workspace 1; }
-    "Mod+2" { focus-workspace 2; }
-    "Mod+3" { focus-workspace 3; }
-    "Mod+4" { focus-workspace 4; }
-    "Mod+5" { focus-workspace 5; }
-    "Mod+6" { focus-workspace 6; }
-    "Mod+7" { focus-workspace 7; }
-    "Mod+8" { focus-workspace 8; }
-    "Mod+9" { focus-workspace 9; }
-    "Mod+0" { focus-workspace 10; }
-
-    // Move to workspace
-    "Mod+Shift+1" { move-window-to-workspace 1; }
-    "Mod+Shift+2" { move-window-to-workspace 2; }
-    "Mod+Shift+3" { move-window-to-workspace 3; }
-    "Mod+Shift+4" { move-window-to-workspace 4; }
-    "Mod+Shift+5" { move-window-to-workspace 5; }
-    "Mod+Shift+6" { move-window-to-workspace 6; }
-    "Mod+Shift+7" { move-window-to-workspace 7; }
-    "Mod+Shift+8" { move-window-to-workspace 8; }
-    "Mod+Shift+9" { move-window-to-workspace 9; }
-    "Mod+Shift+0" { move-window-to-workspace 10; }
-
-    // Special workspaces
-    "Mod+s" { focus-workspace "magic"; }
-    "Mod+Shift+s" { move-window-to-workspace "magic"; }
-    "Mod+w" { focus-workspace "workmode"; }
-    "Mod+Shift+w" { move-window-to-workspace "workmode"; }
-
-    "MouseForward" { toggle-overview; }
-
-    // Navigation with arrow keys and mouse
-    "Mod+Left" { focus-workspace-down; }
-    "Mod+Right" { focus-workspace-up; }
-    "Mod+WheelScrollDown" { focus-workspace-down; }
-    "Mod+WheelScrollUp" { focus-workspace-up; }
-    "Mod+WheelScrollRight" { focus-column-left; }
-    "Mod+WheelScrollLeft" { focus-column-right; }
-
-    // Media keys
-    "XF86AudioRaiseVolume" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
-    "XF86AudioLowerVolume" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
-    "XF86AudioMute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    "XF86AudioMicMute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
-    "XF86MonBrightnessUp" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%+"; }
-    "XF86MonBrightnessDown" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%-"; }
-
-    // Media control
-    "XF86AudioNext" { spawn "uwsm" "app" "--" "playerctl" "next"; }
-    "XF86AudioPause" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
-    "XF86AudioPlay" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
-    "XF86AudioPrev" { spawn "uwsm" "app" "--" "playerctl" "previous"; }
-
-    // Screenshots
-    "Print" { screenshot; }
-    "Mod+Print" { screenshot-window; }
-    "Mod+Shift+Print" { screenshot-screen; }
-
-    // Notifications
-    "Mod+n" { spawn "uwsm" "app" "--" "swaync-client" "-t"; }
-
-    // VM viewer
-    "Mod+v" { spawn "uwsm" "app" "--" "virt-viewer" "--hotkeys=release-cursor=shift+escape" "--connect" "qemu:///system"; }
-}
