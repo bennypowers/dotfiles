@@ -349,11 +349,16 @@ ShellRoot {
 
             fillColor: colors.black
             radius: 16
+            rotation: 0
             screen: modelData
 
             anchors {
                 right: true
                 top: true
+            }
+            margins {
+                right: 0
+                top: 0
             }
         }
     }
