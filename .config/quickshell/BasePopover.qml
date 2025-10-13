@@ -43,6 +43,9 @@ WlrLayershell {
     // Visibility state
     default property alias content: contentContainer.data
 
+    // Transform origin for scale animation
+    property int transformOrigin: anchorSide === "left" ? Item.TopLeft : Item.TopRight
+
     // Signal emitted when backdrop is clicked
     signal closeRequested()
 
@@ -153,7 +156,7 @@ WlrLayershell {
 
         anchors.fill: parent
         scale: 0
-        transformOrigin: anchorSide === "left" ? Item.TopLeft : Item.TopRight
+        transformOrigin: basePopover.transformOrigin
 
         // Top-left corner (drawn inside window)
         CornerShape {
