@@ -1,0 +1,10 @@
+[Unit]
+Description=Check quickshell lock socket and reload config if missing
+After=quickshell.service
+ConditionPathExists=/run/user/1000/quickshell
+
+[Service]
+Type=oneshot
+# Check if socket exists, if not reload quickshell config by touching shell.qml
+ExecStart=/bin/bash -c 'if [ ! -S /run/user/1000/quickshell-lock.sock ]; then echo "Lock socket missing, triggering reload..."; touch /home/bennyp/.config/quickshell/shell.qml; sleep 2; if [ ! -S /run/user/1000/quickshell-lock.sock ]; then echo "WARNING: Socket still missing after reload!"; exit 1; fi; else echo "Lock socket healthy"; fi'
+StandardOutput=journal
