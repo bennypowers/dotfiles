@@ -51,4 +51,3 @@ if status is-interactive
     glab completion -s fish | source
   end
 end
-

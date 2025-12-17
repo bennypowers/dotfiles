@@ -26,23 +26,9 @@ BasePopover {
             width: parent.width
         }
 
-        // Network Section
-        SystemMenuNetworkSection {
-            id: networkSection
-
-            width: parent.width
-        }
-
-        // Language Section
-        SystemMenuLanguageSection {
-            id: languageSection
-
-            width: parent.width
-        }
-
-        // Workmode Section
-        SystemMenuWorkmodeSection {
-            id: workmodeSection
+        // Quick Settings (replaces individual Network, Language, Workmode sections)
+        SystemMenuQuickSettings {
+            id: quickSettings
 
             width: parent.width
         }

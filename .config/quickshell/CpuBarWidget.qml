@@ -28,6 +28,18 @@ Rectangle {
     property list<real> tempCoreData: []
     property int updateInterval: 2000
     property string uptime: ""
+    property real cpuTemp: 0
+    property real cpuPower: 0
+    property real gpuUsage: 0
+    property real gpuVramTotal: 0
+    property real gpuVramUsed: 0
+    property real gpuTemp: 0
+    property real gpuPower: 0
+    property var gpuUsageHistory: []
+    property var gpuVramHistory: []
+    property var gpuTempHistory: []
+    property var gpuPowerHistory: []
+    property int maxHistoryPoints: 60
 
     color: "transparent"
 
@@ -44,12 +56,18 @@ Rectangle {
         console.log("🔧 CpuBarWidget loaded");
         cpuProcess.running = true;
         coreProcess.running = true;
+        cpuTempProcess.running = true;
+        cpuPowerProcess.running = true;
         ramProcess.running = true;
         ramDetailsProcess.running = true;
         uptimeProcess.running = true;
         diskProcess.running = true;
         diskIOProcess.running = true;
         networkProcess.running = true;
+        gpuUsageProcess.running = true;
+        gpuMemoryProcess.running = true;
+        gpuTempProcess.running = true;
+        gpuPowerProcess.running = true;
     }
 
     Colors {
@@ -192,12 +210,23 @@ Rectangle {
         id: statsPopover
 
         coreUsages: cpuBarWidget.coreUsages
+        cpuPower: cpuBarWidget.cpuPower
+        cpuTemp: cpuBarWidget.cpuTemp
         cpuUsage: cpuBarWidget.cpuUsage
         diskRead: cpuBarWidget.diskRead
         diskTotal: cpuBarWidget.diskTotal
         diskUsage: cpuBarWidget.diskUsage
         diskUsed: cpuBarWidget.diskUsed
         diskWrite: cpuBarWidget.diskWrite
+        gpuPower: cpuBarWidget.gpuPower
+        gpuPowerHistory: cpuBarWidget.gpuPowerHistory
+        gpuTemp: cpuBarWidget.gpuTemp
+        gpuTempHistory: cpuBarWidget.gpuTempHistory
+        gpuUsage: cpuBarWidget.gpuUsage
+        gpuUsageHistory: cpuBarWidget.gpuUsageHistory
+        gpuVramHistory: cpuBarWidget.gpuVramHistory
+        gpuVramTotal: cpuBarWidget.gpuVramTotal
+        gpuVramUsed: cpuBarWidget.gpuVramUsed
         networkDown: cpuBarWidget.networkDown
         networkUp: cpuBarWidget.networkUp
         ramTotal: cpuBarWidget.ramTotal
@@ -266,6 +295,50 @@ Rectangle {
             if (cpuBarWidget.tempCoreData.length > 0) {
                 cpuBarWidget.coreUsages = cpuBarWidget.tempCoreData.slice();
                 cpuBarWidget.tempCoreData = [];
+            }
+        }
+    }
+
+    // CPU Temperature process
+    Process {
+        id: cpuTempProcess
+
+        command: ["bash", "-c", "cat /sys/class/hwmon/hwmon2/temp1_input 2>/dev/null || echo 0"]
+
+        stdout: SplitParser {
+            onRead: function (data) {
+                try {
+                    if (data && data.trim()) {
+                        const temp = parseFloat(data.trim()) / 1000; // Convert millidegrees to degrees
+                        if (!isNaN(temp)) {
+                            cpuBarWidget.cpuTemp = temp;
+                        }
+                    }
+                } catch (e) {
+                    console.log("CpuBarWidget: Error parsing CPU temperature:", e);
+                }
+            }
+        }
+    }
+
+    // CPU Power process (may require permissions)
+    Process {
+        id: cpuPowerProcess
+
+        command: ["bash", "-c", "cat /sys/class/powercap/intel-rapl:0/energy_uj 2>/dev/null > /tmp/cpu_energy1; sleep 0.5; cat /sys/class/powercap/intel-rapl:0/energy_uj 2>/dev/null > /tmp/cpu_energy2; awk 'NR==FNR{e1=$1;next} {e2=$1; if(e2>=e1) print (e2-e1)*2/1000000; else print 0}' /tmp/cpu_energy1 /tmp/cpu_energy2 2>/dev/null || echo 0"]
+
+        stdout: SplitParser {
+            onRead: function (data) {
+                try {
+                    if (data && data.trim()) {
+                        const power = parseFloat(data.trim());
+                        if (!isNaN(power)) {
+                            cpuBarWidget.cpuPower = power;
+                        }
+                    }
+                } catch (e) {
+                    console.log("CpuBarWidget: Error parsing CPU power:", e);
+                }
             }
         }
     }
@@ -403,6 +476,124 @@ Rectangle {
             }
         }
     }
+
+    // GPU Usage process
+    Process {
+        id: gpuUsageProcess
+
+        command: ["bash", "-c", "cat /sys/class/drm/card0/device/gpu_busy_percent 2>/dev/null || echo 0"]
+
+        stdout: SplitParser {
+            onRead: function (data) {
+                try {
+                    if (data && data.trim()) {
+                        const usage = parseFloat(data.trim());
+                        if (!isNaN(usage)) {
+                            cpuBarWidget.gpuUsage = usage;
+                            // Update history
+                            var history = cpuBarWidget.gpuUsageHistory.slice();
+                            history.push(usage);
+                            if (history.length > cpuBarWidget.maxHistoryPoints) {
+                                history.shift();
+                            }
+                            cpuBarWidget.gpuUsageHistory = history;
+                        }
+                    }
+                } catch (e) {
+                    console.log("CpuBarWidget: Error parsing GPU usage:", e);
+                }
+            }
+        }
+    }
+
+    // GPU Memory process
+    Process {
+        id: gpuMemoryProcess
+
+        command: ["bash", "-c", "cat /sys/class/drm/card0/device/mem_info_vram_used /sys/class/drm/card0/device/mem_info_vram_total 2>/dev/null | awk '{sum+=$1} END {print sum}' | xargs -I {} bash -c 'echo $(cat /sys/class/drm/card0/device/mem_info_vram_used 2>/dev/null || echo 0) $(cat /sys/class/drm/card0/device/mem_info_vram_total 2>/dev/null || echo 1)'"]
+
+        stdout: SplitParser {
+            onRead: function (data) {
+                try {
+                    if (data && data.trim()) {
+                        const parts = data.trim().split(" ");
+                        if (parts.length === 2) {
+                            cpuBarWidget.gpuVramUsed = parseFloat(parts[0]) / (1024 * 1024 * 1024); // Convert bytes to GB
+                            cpuBarWidget.gpuVramTotal = parseFloat(parts[1]) / (1024 * 1024 * 1024); // Convert bytes to GB
+                            // Update history (percentage)
+                            const vramPercent = cpuBarWidget.gpuVramTotal > 0 ? (cpuBarWidget.gpuVramUsed / cpuBarWidget.gpuVramTotal) * 100 : 0;
+                            var history = cpuBarWidget.gpuVramHistory.slice();
+                            history.push(vramPercent);
+                            if (history.length > cpuBarWidget.maxHistoryPoints) {
+                                history.shift();
+                            }
+                            cpuBarWidget.gpuVramHistory = history;
+                        }
+                    }
+                } catch (e) {
+                    console.log("CpuBarWidget: Error parsing GPU memory:", e);
+                }
+            }
+        }
+    }
+
+    // GPU Temperature process
+    Process {
+        id: gpuTempProcess
+
+        command: ["bash", "-c", "cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input 2>/dev/null || echo 0"]
+
+        stdout: SplitParser {
+            onRead: function (data) {
+                try {
+                    if (data && data.trim()) {
+                        const temp = parseFloat(data.trim()) / 1000; // Convert millidegrees to degrees
+                        if (!isNaN(temp)) {
+                            cpuBarWidget.gpuTemp = temp;
+                            // Update history
+                            var history = cpuBarWidget.gpuTempHistory.slice();
+                            history.push(temp);
+                            if (history.length > cpuBarWidget.maxHistoryPoints) {
+                                history.shift();
+                            }
+                            cpuBarWidget.gpuTempHistory = history;
+                        }
+                    }
+                } catch (e) {
+                    console.log("CpuBarWidget: Error parsing GPU temperature:", e);
+                }
+            }
+        }
+    }
+
+    // GPU Power process
+    Process {
+        id: gpuPowerProcess
+
+        command: ["bash", "-c", "cat /sys/class/drm/card0/device/hwmon/hwmon0/power1_average 2>/dev/null || echo 0"]
+
+        stdout: SplitParser {
+            onRead: function (data) {
+                try {
+                    if (data && data.trim()) {
+                        const power = parseFloat(data.trim()) / 1000000; // Convert microwatts to watts
+                        if (!isNaN(power)) {
+                            cpuBarWidget.gpuPower = power;
+                            // Update history
+                            var history = cpuBarWidget.gpuPowerHistory.slice();
+                            history.push(power);
+                            if (history.length > cpuBarWidget.maxHistoryPoints) {
+                                history.shift();
+                            }
+                            cpuBarWidget.gpuPowerHistory = history;
+                        }
+                    }
+                } catch (e) {
+                    console.log("CpuBarWidget: Error parsing GPU power:", e);
+                }
+            }
+        }
+    }
     Timer {
         interval: cpuBarWidget.updateInterval
         repeat: true
@@ -411,12 +602,18 @@ Rectangle {
         onTriggered: {
             cpuProcess.running = true;
             coreProcess.running = true;
+            cpuTempProcess.running = true;
+            cpuPowerProcess.running = true;
             ramProcess.running = true;
             ramDetailsProcess.running = true;
             uptimeProcess.running = true;
             diskProcess.running = true;
             diskIOProcess.running = true;
             networkProcess.running = true;
+            gpuUsageProcess.running = true;
+            gpuMemoryProcess.running = true;
+            gpuTempProcess.running = true;
+            gpuPowerProcess.running = true;
         }
     }
 }

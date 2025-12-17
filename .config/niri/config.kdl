@@ -10,9 +10,9 @@ hotkey-overlay {
 }
 
 environment {
-    HYPRCURSOR_THEME "phinger-cursors-dark"
+    HYPRCURSOR_THEME "phinger-cursors-light"
     HYPRCURSOR_SIZE "48"
-    XCURSOR_THEME "phinger-cursors-dark"
+    XCURSOR_THEME "phinger-cursors-light"
     XCURSOR_SIZE "48"
     QT_QPA_PLATFORMTHEME "qt5ct"
     XDG_CURRENT_DESKTOP "NiRi"
@@ -22,93 +22,84 @@ environment {
 }
 
 cursor {
-  xcursor-theme "phinger-cursors-dark"
+  xcursor-theme "phinger-cursors-light"
   xcursor-size 48
 }
 
-workspace "workmode"
-
-// niri >v25.08
-// workspace "workmode" {
-//   layout {
-//     preset-column-widths {
-//       proportion 1
-//     }
-//   }
-//
-//   window-rule {
-//     open-fullscreen true
-//   }
-// }
-
 binds {
-    "Mod+h" { focus-column-left; }
-    "Mod+j" { focus-window-down; }
-    "Mod+k" { focus-window-up; }
-    "Mod+l" { focus-column-right; }
+    Mod+Escape repeat=false { spawn "loginctl" "lock-session"; }
 
-    "Mod+Shift+h" { move-column-left; }
-    "Mod+Shift+j" { move-window-down; }
-    "Mod+Shift+k" { move-window-up; }
-    "Mod+Shift+l" { move-column-right; }
+    Mod+Shift+q repeat=false { quit; }
 
-    "Mod+Shift+f" { fullscreen-window; }
+    Mod+h { focus-column-left; }
+    Mod+j { focus-window-down; }
+    Mod+k { focus-window-up; }
+    Mod+l { focus-column-right; }
 
-    "Mod+Tab" { focus-window-down-or-column-right; }
-    "Mod+Shift+Tab" { focus-window-up-or-column-left; }
+    Mod+Shift+h { move-column-left; }
+    Mod+Shift+j { move-window-down; }
+    Mod+Shift+k { move-window-up; }
+    Mod+Shift+l { move-column-right; }
+
+    Mod+Shift+f repeat=false { fullscreen-window; }
+
+    Mod+Tab { focus-window-down-or-column-right; }
+    Mod+Shift+Tab { focus-window-up-or-column-left; }
 
     // Workspace navigation
-    "Mod+Ctrl+h" { consume-or-expel-window-left; }
-    "Mod+Ctrl+l" { consume-or-expel-window-right; }
+    Mod+Ctrl+h { consume-or-expel-window-left; }
+    Mod+Ctrl+l { consume-or-expel-window-right; }
 
     // Window controls
-    "Mod+c" { toggle-window-floating; }
-    "Mod+u" { switch-preset-column-width; }
-    "Mod+i" { toggle-column-tabbed-display; }
+    Mod+c { toggle-window-floating; }
+    Mod+i { toggle-column-tabbed-display; }
+
+    Mod+u { switch-preset-column-width; }
+    Mod+Shift+u { switch-preset-column-width-back; }
 
     // Applications
-    "Mod+t" repeat=false { spawn "kitty"; }
-    "Mod+f" repeat=false { spawn "nautilus"; }
-    "Mod+e" repeat=false { spawn "thunderbird-bin"; }
-    "Mod+b" repeat=false { spawn "flatpak" "run" "app.zen_browser.zen"; }
-    "Mod+p" repeat=false { spawn "vicinae" "toggle"; }
-    "Mod+o" repeat=false { toggle-overview; }
+    Mod+t repeat=false { spawn "kitty-smart-launch"; }
+    Mod+f repeat=false { spawn "nautilus"; }
+    Mod+e repeat=false { spawn "thunderbird-bin"; }
+    Mod+b repeat=false { spawn "flatpak" "run" "app.zen_browser.zen"; }
+    Mod+p repeat=false { spawn "vicinae" "toggle"; }
+    Mod+o repeat=false { toggle-overview; }
 
-    "Mod+q" { close-window; }
-    "Mod+Shift+q" { quit; }
+    Mod+w { close-window; }
 
-    // Special workspaces
-    "Mod+w" { focus-workspace "workmode"; }
-    "Mod+Shift+w" { move-window-to-workspace "workmode"; }
+    Mod+Ctrl+k { focus-workspace-up; }
+    Mod+Ctrl+j { focus-workspace-down; }
+    Mod+Shift+Ctrl+k { move-window-to-workspace-up; }
+    Mod+Shift+Ctrl+j { move-window-to-workspace-down; }
 
-    "MouseForward" { toggle-overview; }
+    MouseForward { toggle-overview; }
 
-    "Mod+WheelScrollDown" { focus-workspace-down; }
-    "Mod+WheelScrollUp" { focus-workspace-up; }
-    "Mod+WheelScrollRight" { focus-column-left; }
-    "Mod+WheelScrollLeft" { focus-column-right; }
+    Mod+WheelScrollDown { focus-column-left; }
+    Mod+WheelScrollUp { focus-column-right; }
+    Mod+WheelScrollRight { focus-column-left; }
+    Mod+WheelScrollLeft { focus-column-right; }
 
     // Media keys
-    "XF86AudioRaiseVolume" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
-    "XF86AudioLowerVolume" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
-    "XF86AudioMute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    "XF86AudioMicMute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
-    "XF86MonBrightnessUp" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%+"; }
-    "XF86MonBrightnessDown" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%-"; }
+    XF86AudioRaiseVolume { spawn "uwsm" "app" "--" "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume { spawn "uwsm" "app" "--" "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    XF86AudioMute { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioMicMute { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    XF86MonBrightnessUp { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%+"; }
+    XF86MonBrightnessDown { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%-"; }
 
     // Media control
-    "XF86AudioNext" { spawn "uwsm" "app" "--" "playerctl" "next"; }
-    "XF86AudioPause" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
-    "XF86AudioPlay" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
-    "XF86AudioPrev" { spawn "uwsm" "app" "--" "playerctl" "previous"; }
+    XF86AudioNext { spawn "uwsm" "app" "--" "playerctl" "next"; }
+    XF86AudioPause { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
+    XF86AudioPlay { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
+    XF86AudioPrev { spawn "uwsm" "app" "--" "playerctl" "previous"; }
 
     // Screenshots
-    "Print" { screenshot; }
-    "Mod+Print" { screenshot-window; }
-    "Mod+Shift+Print" { screenshot-screen; }
+    Print { screenshot; }
+    Mod+Print { screenshot-window; }
+    Mod+Shift+Print { screenshot-screen; }
 
     // VM viewer
-    "Mod+v" { spawn "uwsm" "app" "--" "virt-viewer" "--hotkeys=release-cursor=shift+escape" "--connect" "qemu:///system"; }
+    Mod+v { spawn "uwsm" "app" "--" "virt-viewer" "--hotkeys=release-cursor=shift+escape" "--connect" "qemu:///system"; }
 }
 
 // Input configuration
@@ -135,14 +126,23 @@ input {
     }
 }
 
-output "DP-1" {
+output "DP-2" {
     mode "5120x2160@120.000"
+    position x=0 y=0
     scale 1
 }
 
-output "DP-2" {
-    mode "5120x2160@120.000"
-    scale 1
+output "HDMI-A-1" {
+    position x=3900 y=2160
+    hot-corners {
+      off
+    }
+    layout {
+        struts {
+            top 0
+            bottom 0
+        }
+    }
 }
 
 layout {
@@ -151,6 +151,7 @@ layout {
     always-center-single-column
 
     preset-column-widths {
+        proportion 0.15
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
@@ -176,11 +177,11 @@ layout {
 
     shadow {
         on
-        softness 30
-        spread 5
+        softness 25
+        spread 4
         offset x=0 y=5
         draw-behind-window true
-        color "#00000070"
+        color "#00000090"
     }
 
     struts {
@@ -225,6 +226,11 @@ window-rule {
     block-out-from "screen-capture"
 }
 
+window-rule {
+  match app-id="com.saivert.pwvucontrol"
+  max-width 600
+}
+
 // Network manager
 window-rule {
     match title=".*Network Manager.*"
@@ -250,11 +256,22 @@ window-rule {
     open-floating true
 }
 
-// Virt viewer (workmode)
+// Virt viewer
 window-rule {
   match app-id="virt-viewer" title="silverblue.*"
-  open-on-workspace "workmode"
   open-fullscreen true
   open-focused true
 }
 
+// Steam Games (matches all steam apps)
+window-rule {
+  match app-id="steam_app_.*"
+  open-fullscreen true
+  open-focused true
+}
+
+window-rule {
+  match title="Cyberpunk 2077 (C) 2020 by CD Projekt Red"
+  open-fullscreen true
+  open-focused true
+}

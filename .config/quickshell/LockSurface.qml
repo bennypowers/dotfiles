@@ -1,7 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Services.Pam
 
@@ -10,10 +12,14 @@ WlSessionLockSurface {
 
     required property PamContext pamContext
     required property string currentUser
+    required property var screenCaptureMap
+    required property bool isLocked
 
     property bool authInProgress: false
     property string pendingPassword: ""
-    property bool u2fPromptActive: false
+    property string pamPrompt: ""
+    property bool capsLockOn: false
+    property string currentKeyboardLayout: ""
 
     signal unlockRequested()
 
@@ -26,67 +32,91 @@ WlSessionLockSurface {
             lockSurface.pamContext.abort();
         }
 
-        // If U2F is waiting and user entered password, abort and restart with password
-        if (lockSurface.u2fPromptActive && passwordField.text.length > 0) {
-            console.log("🔑 U2F active but user entered password - aborting U2F");
-            lockSurface.pamContext.abort();
-            lockSurface.u2fPromptActive = false;
-        }
-
         console.log("🔑 Password field length:", passwordField.text.length);
         errorText.visible = false;
 
-        if (passwordField.text.length === 0) {
-            // No password - try U2F only
-            console.log("🔑 No password, initiating auth (U2F will be tried first)");
-            lockSurface.authInProgress = true;
-            lockSurface.pendingPassword = "";
-            lockSurface.pamContext.start();
-        } else {
-            // Password provided
-            lockSurface.authInProgress = true;
-            lockSurface.pendingPassword = passwordField.text;
-            console.log("🔑 Calling pamContext.start() with password");
-            lockSurface.pamContext.start();
-        }
+        // Start PAM authentication with whatever password we have (empty for security key only)
+        lockSurface.authInProgress = true;
+        lockSurface.pendingPassword = passwordField.text;
+        lockSurface.pamContext.start();
         console.log("🔑 pamContext.start() called, active:", lockSurface.pamContext.active);
     }
 
     color: colors.base
 
-    // Auto-focus password field when shown
-    onVisibleChanged: {
-        if (visible) {
+    // Auto-focus password field and start monitoring when locked
+    onIsLockedChanged: {
+        if (isLocked) {
             passwordField.forceActiveFocus();
+            keyboardLayoutProcess.running = true;
+            capsLockProcess.running = true;
         }
     }
 
-    Timer {
-        id: autoStartTimer
-        interval: 100
-        running: true
-        repeat: false
-        onTriggered: {
-            console.log("🔑 Auto-starting authentication for U2F");
-            lockSurface.authInProgress = true;
-            lockSurface.pendingPassword = "";
-            lockSurface.pamContext.start();
-        }
-    }
-
-    Component.onCompleted: {
-        console.log("🔒 LockSurface created for screen:", screen);
-    }
 
     Colors {
         id: colors
     }
 
-    // Background
-    Rectangle {
+    // Background - blurred screenshot of the screen
+    Item {
         anchors.fill: parent
-        color: colors.base
-        opacity: 0.95
+
+        // Render the captured screen via ShaderEffectSource
+        ShaderEffectSource {
+            id: captureTexture
+            anchors.fill: parent
+            sourceItem: lockSurface.screen ? lockSurface.screenCaptureMap[lockSurface.screen.name] : null
+            visible: sourceItem !== null && sourceItem.hasContent
+            live: false
+            hideSource: false  // Don't hide source - it's already offscreen
+            smooth: true
+            mipmap: false
+            textureSize: Qt.size(width, height)
+
+            onSourceItemChanged: {
+                if (sourceItem) {
+                    // Force refresh the texture
+                    scheduleUpdate()
+                }
+            }
+        }
+
+        Connections {
+            target: lockSurface.screen && lockSurface.screenCaptureMap[lockSurface.screen.name] ? lockSurface.screenCaptureMap[lockSurface.screen.name] : null
+
+            function onHasContentChanged() {
+                if (target.hasContent) {
+                    captureTexture.scheduleUpdate()
+                }
+            }
+        }
+
+        // Blur the captured screen
+        FastBlur {
+            id: blurredBackground
+            anchors.fill: parent
+            source: captureTexture
+            radius: 128  // Very high blur radius to obscure all text
+            visible: captureTexture.visible
+            cached: true
+        }
+
+        // Fallback: solid background if capture not available
+        Rectangle {
+            anchors.fill: parent
+            color: colors.base
+            opacity: 0.95
+            visible: !captureTexture.visible
+        }
+
+        // Dark overlay for better text contrast (on top of blurred capture)
+        Rectangle {
+            anchors.fill: parent
+            color: colors.base
+            opacity: 0.5
+            visible: blurredBackground.visible
+        }
 
         // Lock screen content
         Item {
@@ -172,15 +202,19 @@ WlSessionLockSurface {
                     Layout.topMargin: colors.spacing * 4
                     color: colors.text
                     echoMode: TextInput.Password
+                    enabled: !lockSurface.authInProgress  // Disable while authenticating to prevent faillock
                     font.family: colors.fontFamily
                     font.pixelSize: colors.textSize
                     horizontalAlignment: TextInput.AlignHCenter
                     placeholderText: "Or enter password..."
 
                     background: Rectangle {
-                        border.color: passwordField.activeFocus ? colors.blue : colors.overlay
+                        border.color: passwordField.enabled
+                            ? (passwordField.activeFocus ? colors.blue : colors.overlay)
+                            : colors.overlay
                         border.width: 2
-                        color: colors.surface
+                        color: passwordField.enabled ? colors.surface : colors.mantle
+                        opacity: passwordField.enabled ? 1.0 : 0.6
                         radius: colors.borderRadius * 2
                     }
 
@@ -189,10 +223,9 @@ WlSessionLockSurface {
                     }
 
                     onTextChanged: {
-                        // If user starts typing while U2F is active, switch to password auth
-                        if (lockSurface.u2fPromptActive && text.length > 0) {
-                            console.log("🔑 User typing password, switching from U2F");
-                            lockSurface.startAuthentication();
+                        // Clear error when user starts typing
+                        if (text.length > 0) {
+                            errorText.visible = false;
                         }
                     }
 
@@ -213,14 +246,21 @@ WlSessionLockSurface {
                     font.pixelSize: colors.smallTextSize
                     text: ""
                     visible: false
+                }
 
-                    Timer {
-                        id: errorTimer
+                // PAM prompt message
+                Text {
+                    id: pamPromptText
 
-                        interval: 3000
-
-                        onTriggered: errorText.visible = false
-                    }
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
+                    color: colors.blue
+                    font.family: colors.fontFamily
+                    font.pixelSize: colors.smallTextSize
+                    horizontalAlignment: Text.AlignHCenter
+                    text: lockSurface.pamPrompt
+                    visible: lockSurface.pamPrompt !== ""
+                    wrapMode: Text.WordWrap
                 }
 
                 // Status message
@@ -228,16 +268,61 @@ WlSessionLockSurface {
                     id: statusText
 
                     Layout.alignment: Qt.AlignHCenter
-                    color: lockSurface.u2fPromptActive ? colors.blue : (lockSurface.authInProgress ? colors.yellow : colors.subtext)
+                    color: lockSurface.authInProgress ? colors.yellow : colors.subtext
                     font.family: colors.fontFamily
                     font.pixelSize: colors.smallTextSize
                     opacity: lockSurface.authInProgress ? 1.0 : 0.7
-                    text: lockSurface.u2fPromptActive ? "Touch your security key or enter password" : (lockSurface.authInProgress ? "Authenticating..." : "Press Enter or touch security key")
+                    text: lockSurface.authInProgress ? "Authenticating..." : "Press Enter to authenticate"
                 }
 
                 // Spacer
                 Item {
                     Layout.fillHeight: true
+                }
+
+                // Keyboard indicators (capslock and layout)
+                RowLayout {
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: colors.spacing * 4
+                    visible: lockSurface.capsLockOn || lockSurface.currentKeyboardLayout !== ""
+
+                    // Capslock indicator
+                    Rectangle {
+                        Layout.preferredWidth: capsLockText.width + colors.spacing * 4
+                        Layout.preferredHeight: capsLockText.height + colors.spacing * 2
+                        color: colors.yellow
+                        radius: colors.borderRadius
+                        visible: lockSurface.capsLockOn
+
+                        Text {
+                            id: capsLockText
+                            anchors.centerIn: parent
+                            color: colors.base
+                            font.family: colors.fontFamily
+                            font.pixelSize: colors.smallTextSize
+                            font.bold: true
+                            text: "⇪ CAPS LOCK"
+                        }
+                    }
+
+                    // Keyboard layout indicator
+                    Rectangle {
+                        Layout.preferredWidth: layoutText.width + colors.spacing * 4
+                        Layout.preferredHeight: layoutText.height + colors.spacing * 2
+                        color: colors.blue
+                        radius: colors.borderRadius
+                        visible: lockSurface.currentKeyboardLayout !== ""
+
+                        Text {
+                            id: layoutText
+                            anchors.centerIn: parent
+                            color: colors.base
+                            font.family: colors.fontFamily
+                            font.pixelSize: colors.smallTextSize
+                            font.bold: true
+                            text: lockSurface.currentKeyboardLayout
+                        }
+                    }
                 }
 
                 // Instructions
@@ -260,12 +345,11 @@ WlSessionLockSurface {
             console.log("❌ Lock screen PAM auth error:", error);
             lockSurface.authInProgress = false;
             lockSurface.pendingPassword = "";
-            lockSurface.u2fPromptActive = false;
+            lockSurface.pamPrompt = "";
             passwordField.text = "";
             passwordField.forceActiveFocus();
-            errorText.text = "Authentication failed - Press Enter to retry";
+            errorText.text = error;
             errorText.visible = true;
-            errorTimer.start();
         }
 
         function onCompleted(result) {
@@ -275,12 +359,11 @@ WlSessionLockSurface {
                 console.log("❌ Auth failed, resetting...");
                 lockSurface.authInProgress = false;
                 lockSurface.pendingPassword = "";
-                lockSurface.u2fPromptActive = false;
+                lockSurface.pamPrompt = "";
                 passwordField.text = "";
                 passwordField.forceActiveFocus();
-                errorText.text = "Authentication failed - Press Enter to retry";
+                errorText.text = "Authentication failed";
                 errorText.visible = true;
-                errorTimer.start();
             }
             // If success, the LockScreen.qml onCompleted handler will unlock
         }
@@ -292,28 +375,89 @@ WlSessionLockSurface {
 
             const msg = lockSurface.pamContext.message || "";
 
-            // Check if this is a U2F prompt
-            if (msg.toLowerCase().includes("touch") || msg.toLowerCase().includes("u2f") || msg.toLowerCase().includes("fido")) {
-                console.log("📨 U2F prompt detected");
-                lockSurface.u2fPromptActive = true;
-                statusText.text = "Touch your security key or enter password";
-                // Don't respond - wait for U2F or password
-                return;
-            }
+            // Display PAM's message to the user
+            lockSurface.pamPrompt = msg;
 
-            // If PAM is requesting a password response, provide it
+            // If PAM is requesting a response, provide what we have
             if (lockSurface.pamContext.responseRequired) {
-                if (lockSurface.pendingPassword) {
-                    console.log("📨 Responding to PAM with password (length:", lockSurface.pendingPassword.length, ")");
-                    lockSurface.pamContext.respond(lockSurface.pendingPassword);
-                    console.log("📨 Response sent to PAM");
-                    lockSurface.u2fPromptActive = false;
-                } else {
-                    console.log("📨 PAM wants response but no password provided - sending empty");
-                    lockSurface.pamContext.respond("");
-                }
+                console.log("📨 Responding to PAM with password (length:", lockSurface.pendingPassword.length, ")");
+                lockSurface.pamContext.respond(lockSurface.pendingPassword);
+                console.log("📨 Response sent to PAM");
             } else {
-                console.log("📨 Not responding - responseRequired:", lockSurface.pamContext.responseRequired);
+                console.log("📨 PAM message is informational only (no response required)");
+            }
+        }
+    }
+
+    // Monitor capslock state
+    Timer {
+        id: capsLockTimer
+        interval: 500  // Poll every 500ms
+        repeat: true
+        running: lockSurface.isLocked
+
+        onTriggered: {
+            capsLockProcess.running = true;
+        }
+    }
+
+    Process {
+        id: capsLockProcess
+
+        command: ["cat", "/sys/class/leds/input2::capslock/brightness"]
+
+        stdout: SplitParser {
+            onRead: function(data) {
+                const brightness = parseInt(data.trim());
+                lockSurface.capsLockOn = (brightness === 1);
+            }
+        }
+    }
+
+    // Get keyboard layout
+    Timer {
+        id: keyboardLayoutTimer
+        interval: 1000  // Poll every second
+        repeat: true
+        running: lockSurface.isLocked
+
+        onTriggered: {
+            keyboardLayoutProcess.running = true;
+        }
+    }
+
+    Process {
+        id: keyboardLayoutProcess
+
+        command: ["niri", "msg", "keyboard-layouts"]
+
+        stdout: SplitParser {
+            onRead: function(data) {
+                // Parse output like:
+                // Keyboard layouts:
+                //  * 0 English (US)
+                //    1 Hebrew (Adelman)
+                const lines = data.trim().split('\n');
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    // Look for the line with * (active layout)
+                    if (line.startsWith('*')) {
+                        // Extract layout name after the number
+                        const match = line.match(/\*\s+\d+\s+(.+)/);
+                        if (match && match[1]) {
+                            const layoutName = match[1];
+                            // Shorten the layout name for display
+                            if (layoutName.includes("English")) {
+                                lockSurface.currentKeyboardLayout = "EN";
+                            } else if (layoutName.includes("Hebrew")) {
+                                lockSurface.currentKeyboardLayout = "עב";
+                            } else {
+                                lockSurface.currentKeyboardLayout = layoutName;
+                            }
+                        }
+                        break;
+                    }
+                }
             }
         }
     }

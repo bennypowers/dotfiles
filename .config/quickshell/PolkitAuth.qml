@@ -37,6 +37,10 @@ Item {
     property bool ipcMode: false  // Set to true when using quickshell-polkit-agent
     property string message: ""
 
+    // PAM prompt data (passed verbatim from C++)
+    property string pamPromptText: ""    // The exact prompt text from PAM
+    property bool pamPromptEcho: false   // Whether PAM wants input echoed
+
     // Socket client property
     property var socketClient
     property string userFullName: ""
@@ -429,6 +433,21 @@ Item {
                     wrapMode: Text.WordWrap
                 }
 
+                // PAM prompt text (displayed verbatim from PAM)
+                Text {
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.topMargin: 15
+                    color: polkitAuth.pamPromptEcho ? colors.blue : colors.yellow
+                    font.family: colors.fontFamily
+                    font.pixelSize: colors.textSize + 2
+                    font.weight: Font.Medium
+                    horizontalAlignment: Text.AlignHCenter
+                    text: polkitAuth.pamPromptText
+                    visible: polkitAuth.pamPromptText.length > 0
+                    wrapMode: Text.WordWrap
+                }
+
                 // Password input field (hidden if FIDO key present, shown in fallback mode)
                 TextField {
                     id: passwordField
@@ -436,11 +455,25 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
                     color: colors.text
-                    echoMode: TextInput.Password
+                    // Respect PAM's echo flag: hide input when echo=false (passwords)
+                    echoMode: polkitAuth.pamPromptEcho ? TextInput.Normal : TextInput.Password
                     font.family: colors.fontFamily
                     font.pixelSize: colors.textSize
                     placeholderText: "Enter password..."
-                    visible: !polkitAuth.fidoKeyPresent || polkitAuth.fidoFallback
+                    // Hide password field for FIDO prompts, show for actual password prompts
+                    visible: {
+                        // Parse PAM prompt to detect FIDO/U2F
+                        var promptLower = polkitAuth.pamPromptText.toLowerCase();
+                        var isFidoPrompt = polkitAuth.pamPromptEcho && (
+                            promptLower.includes("u2f") ||
+                            promptLower.includes("fido") ||
+                            promptLower.includes("security key") ||
+                            promptLower.includes("insert") ||
+                            promptLower.includes("touch your")
+                        );
+                        // Show field only if NOT a FIDO prompt
+                        return !isFidoPrompt;
+                    }
 
                     background: Rectangle {
                         border.color: passwordField.activeFocus ? colors.blue : colors.overlay

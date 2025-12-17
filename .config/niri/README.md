@@ -116,7 +116,7 @@ Navigation uses vim-style keys (hjkl):
 - **Mod+Ctrl+h/l**: Consume/expel window
 
 Applications:
-- **Mod+t**: Kitty terminal
+- **Mod+t**: Kitty terminal (context-aware: opens in focused terminal's cwd, or home directory otherwise)
 - **Mod+f**: Nautilus file manager
 - **Mod+e**: Thunderbird
 - **Mod+b**: Zen Browser (flatpak)

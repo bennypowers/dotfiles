@@ -187,13 +187,35 @@ ShellRoot {
             }
         }
         onPasswordRequest: function (actionId, request, echo, cookie) {
-            // This indicates FIDO timed out and fell back to password
-            polkitAuth.fidoFallback = true;
-            polkitAuth.fidoRetrying = false;
-            polkitAuth.authInProgress = false;
-            // Update the cookie for this new password session
+            // Store PAM prompt data verbatim
+            polkitAuth.pamPromptText = request;
+            polkitAuth.pamPromptEcho = echo;
             polkitAuth.currentCookie = cookie;
-            // Dialog should now show both "Try FIDO Again" and password input
+
+            // Parse the prompt to determine if it's FIDO or password
+            // FIDO prompts typically have echo=true and mention U2F/FIDO/device
+            var isFidoPrompt = echo && (
+                request.toLowerCase().includes("u2f") ||
+                request.toLowerCase().includes("fido") ||
+                request.toLowerCase().includes("security key") ||
+                request.toLowerCase().includes("insert") ||
+                request.toLowerCase().includes("touch your")
+            );
+
+            if (isFidoPrompt) {
+                console.log("Detected FIDO prompt:", request);
+                // This is a FIDO prompt, not a password fallback
+                // Keep showing FIDO UI state
+                polkitAuth.fidoFallback = false;
+                polkitAuth.authInProgress = true;
+            } else {
+                console.log("Detected password prompt:", request);
+                // This is an actual password prompt (FIDO fallback or direct password)
+                polkitAuth.fidoFallback = true;
+                polkitAuth.fidoRetrying = false;
+                polkitAuth.authInProgress = false;
+            }
+
             // Trigger focus restoration
             polkitAuth.startFocusTimer();
         }

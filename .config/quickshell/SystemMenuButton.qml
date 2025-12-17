@@ -62,7 +62,9 @@ Rectangle {
     Row {
         id: contentRow
 
-        anchors.centerIn: parent
+        anchors.right: parent.right
+        anchors.rightMargin: 8
+        anchors.verticalCenter: parent.verticalCenter
         spacing: 8
 
         // Camera icon - only shown when camera is active

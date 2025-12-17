@@ -6,7 +6,9 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Services.Pam
 
-QtObject {
+pragma ComponentBehavior: Bound
+
+Item {
     id: lockScreen
 
     property bool locked: false
@@ -14,19 +16,70 @@ QtObject {
 
     signal unlocked
 
+    property var screenCaptureMap: ({})
+
+    // Background screen captures (only active when about to lock)
+    Repeater {
+        id: screenCaptures
+        model: Quickshell.screens
+
+        Item {
+            id: captureItem
+            required property var modelData
+
+            ScreencopyView {
+                id: capture
+                captureSource: captureItem.modelData
+                live: false  // Single frame only
+                paintCursor: false
+                visible: true  // Must be visible to render (even if hidden offscreen)
+
+                // Set explicit size to match screen
+                width: captureItem.modelData.width
+                height: captureItem.modelData.height
+
+                // Store reference for LockSurface to access
+                Component.onCompleted: {
+                    lockScreen.screenCaptureMap[captureItem.modelData.name] = capture
+                }
+            }
+        }
+    }
+
+    // IPC handler for lock/unlock commands
+    property IpcHandler ipcHandler: IpcHandler {
+        target: "lockscreen"
+
+        function lock() {
+            console.log("🔒 IPC lock() called");
+            lockScreen.show();
+        }
+
+        function unlock() {
+            console.log("🔓 IPC unlock() called");
+            lockScreen.hide();
+        }
+    }
+
     function show() {
-        console.log("Showing lock screen");
-        lockScreen.locked = true;
-        sessionLock.locked = true;
+        // Capture all screens before showing lock
+        for (const screenName in lockScreen.screenCaptureMap) {
+            const capture = lockScreen.screenCaptureMap[screenName];
+            if (capture) {
+                capture.captureFrame();
+            }
+        }
+
+        // Delay showing lock to ensure capture completes
+        Qt.callLater(() => {
+            lockScreen.locked = true;
+            sessionLock.locked = true;
+        });
     }
 
     function hide() {
-        console.log("🔓 Hiding lock screen");
-        console.log("🔓 Setting lockScreen.locked = false");
         lockScreen.locked = false;
-        console.log("🔓 Setting sessionLock.locked = false");
         sessionLock.locked = false;
-        console.log("🔓 Lock screen hide complete");
     }
 
     // PAM context for authentication
@@ -36,18 +89,11 @@ QtObject {
         config: "login"  // Use login config for lock screen
 
         onCompleted: function (result) {
-            console.log("🔐 Lock screen PAM auth completed:", result);
-            console.log("🔐 Result type:", typeof result);
-            console.log("🔐 PamResult.Success:", PamResult.Success);
-
             if (result === PamResult.Success) {
-                console.log("✅ Lock screen unlocked successfully");
                 lockScreen.hide();
                 lockScreen.unlocked();
-            } else {
-                console.log("❌ Lock screen authentication failed, result:", result);
-                // The LockSurface will handle the error display
             }
+            // The LockSurface will handle the error display
         }
 
         onPamMessage: function (message) {
@@ -73,6 +119,8 @@ QtObject {
             LockSurface {
                 pamContext: lockScreen.pamContext
                 currentUser: lockScreen.currentUser
+                screenCaptureMap: lockScreen.screenCaptureMap
+                isLocked: lockScreen.locked
                 onUnlockRequested: lockScreen.hide()
             }
         }
@@ -96,59 +144,6 @@ QtObject {
         }
     }
 
-    // Socket server to trigger lock via command
-    property SocketServer lockSocket: SocketServer {
-        id: lockSocket
-
-        active: true
-        path: "/run/user/1000/quickshell-lock.sock"
-
-        handler: Socket {
-            onConnectedChanged: {
-                if (connected) {
-                    console.log("🔌 Lock socket: New connection");
-                } else {
-                    console.log("🔌 Lock socket: Connection dropped");
-                }
-            }
-
-            onError: function(error) {
-                console.log("❌ Lock socket handler error:", error);
-            }
-
-            parser: SplitParser {
-                onRead: function(data) {
-                    const cmd = data.trim();
-                    console.log("🔌 Lock socket command:", cmd);
-
-                    if (cmd === "lock") {
-                        lockScreen.show();
-                    } else if (cmd === "unlock") {
-                        lockScreen.hide();
-                    } else if (cmd === "status") {
-                        if (lockScreen.locked) {
-                            write("locked\n");
-                        } else {
-                            write("unlocked\n");
-                        }
-                    }
-                }
-            }
-        }
-
-        onActiveChanged: {
-            console.log("🔌 Lock socket active changed:", active);
-        }
-
-        Component.onCompleted: {
-            console.log("🔌 Lock socket server component completed");
-            console.log("🔌   - active:", active);
-            console.log("🔌   - path:", path);
-            // Explicitly activate the socket
-            active = true;
-            console.log("🔌   - activated:", active);
-        }
-    }
 
     Component.onCompleted: {
         console.log("LockScreen component loaded");

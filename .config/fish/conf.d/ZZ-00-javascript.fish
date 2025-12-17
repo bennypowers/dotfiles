@@ -3,7 +3,7 @@ set -gx NPM_CONFIG_PREFIX $HOME/.local/
 set -x NODE_ENV
 set -x NODE_OPTIONS --max_old_space_size=4096
 # pnpm
-set -gx PNPM_HOME "/var/home/bennyp/.local/share/pnpm"
+set -gx PNPM_HOME "$HOME/.local/share/pnpm"
 if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end

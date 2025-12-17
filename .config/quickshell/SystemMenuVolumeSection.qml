@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 import Quickshell.Services.Pipewire
 
 Column {
@@ -17,29 +18,93 @@ Column {
         id: colors
     }
 
-    // Header with label and mute button
+    // Volume slider
     Row {
         width: parent.width
-        spacing: 8
+        spacing: 12
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
             color: colors.text
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
-            font.bold: true
-            text: "Volume"
+            font.pixelSize: 16
+            text: isMuted ? "󰝟" : (currentVolume > 0.7 ? "󰕾" : currentVolume > 0.3 ? "󰖀" : "󰕿")
         }
 
-        Item {
-            width: parent.width - muteButton.width - 100
-            height: 1
+        Slider {
+            id: volumeSlider
+
+            anchors.verticalCenter: parent.verticalCenter
+            width: parent.width - 60
+            implicitHeight: 24
+
+            from: 0
+            to: 1
+            value: currentVolume
+
+            onMoved: {
+                if (defaultSink && defaultSink.audio) {
+                    defaultSink.audio.volume = value
+                }
+            }
+
+            background: Rectangle {
+                x: volumeSlider.leftPadding
+                y: volumeSlider.topPadding + volumeSlider.availableHeight / 2 - height / 2
+                width: volumeSlider.availableWidth
+                height: 4
+                radius: 2
+                color: colors.surface
+
+                Rectangle {
+                    width: volumeSlider.visualPosition * parent.width
+                    height: parent.height
+                    color: colors.blue
+                    radius: 2
+                }
+            }
+
+            handle: Rectangle {
+                id: volumeHandle
+                x: volumeSlider.leftPadding + volumeSlider.visualPosition * (volumeSlider.availableWidth - width)
+                y: volumeSlider.topPadding + volumeSlider.availableHeight / 2 - height / 2
+                width: 16
+                height: 16
+                radius: 8
+                color: colors.text
+                border.color: colors.blue
+                border.width: 2
+
+                // Tooltip on handle
+                Rectangle {
+                    anchors.bottom: parent.top
+                    anchors.bottomMargin: 8
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: tooltipText.width + 12
+                    height: tooltipText.height + 8
+                    radius: 4
+                    color: colors.surface
+                    border.color: colors.blue
+                    border.width: 1
+                    visible: volumeSlider.pressed || volumeSlider.hovered
+
+                    Text {
+                        id: tooltipText
+                        anchors.centerIn: parent
+                        color: colors.text
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 10
+                        text: Math.round(currentVolume * 100) + "%"
+                    }
+                }
+            }
         }
 
-        // Mute button
+        // Mute button (moved from header)
         Rectangle {
-            id: muteButton
+            id: volumeMuteButton
 
+            anchors.verticalCenter: parent.verticalCenter
             width: 36
             height: 24
             radius: 12
@@ -71,74 +136,7 @@ Column {
         }
     }
 
-    // Volume slider
-    Row {
-        width: parent.width
-        spacing: 12
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            color: colors.text
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 16
-            text: isMuted ? "󰝟" : (currentVolume > 0.7 ? "󰕾" : currentVolume > 0.3 ? "󰖀" : "󰕿")
-        }
-
-        Slider {
-            id: volumeSlider
-
-            anchors.verticalCenter: parent.verticalCenter
-            width: parent.width - 60
-
-            from: 0
-            to: 1
-            value: currentVolume
-
-            onMoved: {
-                if (defaultSink && defaultSink.audio) {
-                    defaultSink.audio.volume = value
-                }
-            }
-
-            background: Rectangle {
-                x: volumeSlider.leftPadding
-                y: volumeSlider.topPadding + volumeSlider.availableHeight / 2 - height / 2
-                width: volumeSlider.availableWidth
-                height: 4
-                radius: 2
-                color: colors.surface
-
-                Rectangle {
-                    width: volumeSlider.visualPosition * parent.width
-                    height: parent.height
-                    color: colors.blue
-                    radius: 2
-                }
-            }
-
-            handle: Rectangle {
-                x: volumeSlider.leftPadding + volumeSlider.visualPosition * (volumeSlider.availableWidth - width)
-                y: volumeSlider.topPadding + volumeSlider.availableHeight / 2 - height / 2
-                width: 16
-                height: 16
-                radius: 8
-                color: colors.text
-                border.color: colors.blue
-                border.width: 2
-            }
-        }
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            color: colors.subtext
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 12
-            text: Math.round(currentVolume * 100) + "%"
-            width: 40
-        }
-    }
-
-    // Microphone row
+    // Microphone slider
     Row {
         width: parent.width
         spacing: 12
@@ -147,27 +145,86 @@ Column {
             anchors.verticalCenter: parent.verticalCenter
             color: isMicMuted ? colors.red : colors.text
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 14
-            text: "󰍬"
+            font.pixelSize: 16
+            text: isMicMuted ? "󰍭" : "󰍬"
         }
 
-        Text {
+        Slider {
+            id: micSlider
+
+            property real currentMicVolume: defaultSource && defaultSource.ready && defaultSource.audio && !isNaN(defaultSource.audio.volume) ? defaultSource.audio.volume : 0.5
+
             anchors.verticalCenter: parent.verticalCenter
-            color: colors.text
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 12
-            text: "Microphone"
+            width: parent.width - 60
+            implicitHeight: 24
+
+            from: 0
+            to: 1
+            value: currentMicVolume
+
+            onMoved: {
+                if (defaultSource && defaultSource.audio) {
+                    defaultSource.audio.volume = value
+                }
+            }
+
+            background: Rectangle {
+                x: micSlider.leftPadding
+                y: micSlider.topPadding + micSlider.availableHeight / 2 - height / 2
+                width: micSlider.availableWidth
+                height: 4
+                radius: 2
+                color: colors.surface
+
+                Rectangle {
+                    width: micSlider.visualPosition * parent.width
+                    height: parent.height
+                    color: colors.green
+                    radius: 2
+                }
+            }
+
+            handle: Rectangle {
+                id: micHandle
+                x: micSlider.leftPadding + micSlider.visualPosition * (micSlider.availableWidth - width)
+                y: micSlider.topPadding + micSlider.availableHeight / 2 - height / 2
+                width: 16
+                height: 16
+                radius: 8
+                color: colors.text
+                border.color: colors.green
+                border.width: 2
+
+                // Tooltip on handle
+                Rectangle {
+                    anchors.bottom: parent.top
+                    anchors.bottomMargin: 8
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: micTooltipText.width + 12
+                    height: micTooltipText.height + 8
+                    radius: 4
+                    color: colors.surface
+                    border.color: colors.green
+                    border.width: 1
+                    visible: micSlider.pressed || micSlider.hovered
+
+                    Text {
+                        id: micTooltipText
+                        anchors.centerIn: parent
+                        color: colors.text
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 10
+                        text: Math.round(micSlider.currentMicVolume * 100) + "%"
+                    }
+                }
+            }
         }
 
-        Item {
-            width: parent.width - micMuteButton.width - 100
-            height: 1
-        }
-
-        // Mic mute toggle
+        // Mic mute button (moved from header)
         Rectangle {
-            id: micMuteButton
+            id: micMuteButtonInline
 
+            anchors.verticalCenter: parent.verticalCenter
             width: 36
             height: 24
             radius: 12
@@ -175,9 +232,9 @@ Column {
 
             Text {
                 anchors.centerIn: parent
-                color: colors.text
+                color: isMicMuted ? colors.text : colors.base
                 font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 12
+                font.pixelSize: 14
                 text: isMicMuted ? "󰍭" : "󰍬"
             }
 

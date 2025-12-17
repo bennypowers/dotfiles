@@ -10,6 +10,8 @@ BasePopover {
     // Stats properties
     property real cpuUsage: 0
     property list<real> coreUsages: []
+    property real cpuTemp: 0
+    property real cpuPower: 0
     property real ramUsage: 0
     property real ramTotal: 0
     property real ramUsed: 0
@@ -21,6 +23,15 @@ BasePopover {
     property real diskWrite: 0
     property real networkDown: 0
     property real networkUp: 0
+    property real gpuUsage: 0
+    property real gpuVramTotal: 0
+    property real gpuVramUsed: 0
+    property real gpuTemp: 0
+    property real gpuPower: 0
+    property var gpuUsageHistory: []
+    property var gpuVramHistory: []
+    property var gpuTempHistory: []
+    property var gpuPowerHistory: []
 
     anchorSide: "right"
     cornerPositions: ["topLeft", "bottomRight"]
@@ -96,6 +107,323 @@ BasePopover {
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 10
                         text: `${(popover.ramUsed / 1024).toFixed(1)} / ${(popover.ramTotal / 1024).toFixed(1)} GB`
+                    }
+                }
+            }
+        }
+
+        // CPU Details (Temperature & Power)
+        Row {
+            spacing: 24
+            width: parent.width
+
+            // Temperature
+            Column {
+                spacing: 4
+                width: (parent.width - parent.spacing) / 2
+
+                Text {
+                    color: colors.subtext
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 11
+                    text: "CPU TEMP"
+                }
+
+                Row {
+                    spacing: 4
+
+                    Text {
+                        property string tempColor: {
+                            if (popover.cpuTemp < 50)
+                                return colors.green;
+                            else if (popover.cpuTemp < 70)
+                                return colors.yellow;
+                            else if (popover.cpuTemp < 85)
+                                return colors.peach;
+                            else
+                                return colors.red;
+                        }
+
+                        color: tempColor
+                        font.bold: true
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 20
+                        text: `${Math.round(popover.cpuTemp)}°C`
+                    }
+                }
+            }
+
+            // Power
+            Column {
+                spacing: 4
+                width: (parent.width - parent.spacing) / 2
+
+                Text {
+                    color: colors.subtext
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 11
+                    text: "CPU POWER"
+                }
+
+                Text {
+                    color: colors.text
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 20
+                    text: popover.cpuPower > 0 ? `${Math.round(popover.cpuPower)} W` : "N/A"
+                }
+            }
+        }
+
+        // GPU Section (Usage & VRAM)
+        Row {
+            spacing: 24
+            width: parent.width
+
+            // GPU Usage
+            Column {
+                spacing: 4
+                width: (parent.width - parent.spacing) / 2
+
+                Text {
+                    color: colors.subtext
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 11
+                    text: "GPU"
+                }
+
+                Text {
+                    color: colors.text
+                    font.bold: true
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 32
+                    text: `${Math.round(popover.gpuUsage)}%`
+                }
+            }
+
+            // GPU VRAM
+            Column {
+                spacing: 4
+                width: (parent.width - parent.spacing) / 2
+
+                Text {
+                    color: colors.subtext
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 11
+                    text: "VRAM"
+                }
+
+                Row {
+                    spacing: 12
+
+                    Text {
+                        property real vramUsagePercent: popover.gpuVramTotal > 0 ? (popover.gpuVramUsed / popover.gpuVramTotal) * 100 : 0
+
+                        color: colors.text
+                        font.bold: true
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 32
+                        text: `${Math.round(vramUsagePercent)}%`
+                    }
+
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: colors.overlay
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 10
+                        text: `${popover.gpuVramUsed.toFixed(1)} / ${popover.gpuVramTotal.toFixed(1)} GB`
+                    }
+                }
+            }
+        }
+
+        // GPU Details (Temperature & Power)
+        Row {
+            spacing: 24
+            width: parent.width
+
+            // Temperature
+            Column {
+                spacing: 4
+                width: (parent.width - parent.spacing) / 2
+
+                Text {
+                    color: colors.subtext
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 11
+                    text: "GPU TEMP"
+                }
+
+                Row {
+                    spacing: 4
+
+                    Text {
+                        property string tempColor: {
+                            if (popover.gpuTemp < 60)
+                                return colors.green;
+                            else if (popover.gpuTemp < 75)
+                                return colors.yellow;
+                            else if (popover.gpuTemp < 85)
+                                return colors.peach;
+                            else
+                                return colors.red;
+                        }
+
+                        color: tempColor
+                        font.bold: true
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 20
+                        text: `${Math.round(popover.gpuTemp)}°C`
+                    }
+                }
+            }
+
+            // Power
+            Column {
+                spacing: 4
+                width: (parent.width - parent.spacing) / 2
+
+                Text {
+                    color: colors.subtext
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 11
+                    text: "GPU POWER"
+                }
+
+                Text {
+                    color: colors.text
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 20
+                    text: `${Math.round(popover.gpuPower)} W`
+                }
+            }
+        }
+
+        // GPU Graphs Section
+        Column {
+            spacing: 8
+            width: parent.width
+
+            Text {
+                color: colors.subtext
+                font.family: "JetBrainsMono Nerd Font"
+                font.pixelSize: 12
+                text: "GPU Metrics"
+            }
+
+            // Usage and VRAM graphs (side by side)
+            Row {
+                spacing: 12
+                width: parent.width
+
+                // GPU Usage Graph
+                Column {
+                    spacing: 4
+                    width: (parent.width - parent.spacing) / 2
+
+                    Text {
+                        color: colors.overlay
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 10
+                        text: "Usage %"
+                    }
+
+                    GpuGraph {
+                        dataPoints: popover.gpuUsageHistory
+                        fillColor: colors.blue
+                        height: 60
+                        lineColor: colors.blue
+                        maxValue: 100
+                        minValue: 0
+                        width: parent.width
+                    }
+                }
+
+                // VRAM Graph
+                Column {
+                    spacing: 4
+                    width: (parent.width - parent.spacing) / 2
+
+                    Text {
+                        color: colors.overlay
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 10
+                        text: "VRAM %"
+                    }
+
+                    GpuGraph {
+                        dataPoints: popover.gpuVramHistory
+                        fillColor: colors.sapphire
+                        height: 60
+                        lineColor: colors.sapphire
+                        maxValue: 100
+                        minValue: 0
+                        width: parent.width
+                    }
+                }
+            }
+
+            // Temperature and Power graphs (side by side)
+            Row {
+                spacing: 12
+                width: parent.width
+
+                // Temperature Graph
+                Column {
+                    spacing: 4
+                    width: (parent.width - parent.spacing) / 2
+
+                    Text {
+                        color: colors.overlay
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 10
+                        text: "Temp °C"
+                    }
+
+                    GpuGraph {
+                        property real maxTemp: {
+                            if (popover.gpuTempHistory.length === 0)
+                                return 100;
+                            var max = Math.max(...popover.gpuTempHistory);
+                            return Math.max(max * 1.1, 60);
+                        }
+
+                        dataPoints: popover.gpuTempHistory
+                        fillColor: colors.peach
+                        height: 60
+                        lineColor: colors.peach
+                        maxValue: maxTemp
+                        minValue: 0
+                        width: parent.width
+                    }
+                }
+
+                // Power Graph
+                Column {
+                    spacing: 4
+                    width: (parent.width - parent.spacing) / 2
+
+                    Text {
+                        color: colors.overlay
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 10
+                        text: "Power W"
+                    }
+
+                    GpuGraph {
+                        property real maxPower: {
+                            if (popover.gpuPowerHistory.length === 0)
+                                return 300;
+                            var max = Math.max(...popover.gpuPowerHistory);
+                            return Math.max(max * 1.1, 100);
+                        }
+
+                        dataPoints: popover.gpuPowerHistory
+                        fillColor: colors.yellow
+                        height: 60
+                        lineColor: colors.yellow
+                        maxValue: maxPower
+                        minValue: 0
+                        width: parent.width
                     }
                 }
             }
