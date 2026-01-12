@@ -6,8 +6,8 @@
     "width": 32,
     "position": "right",
     "padding": {
-      "top": 1,
-      "right": 1
+      "top": 2,
+      "right": 2
     }
   },
   "modules": [
@@ -20,11 +20,6 @@
     "board",
     "cpu",
     "gpu",
-    "display",
-    {
-      "type": "keyboard"
-    },
-    "mouse",
     {
       "type": "memory",
       "format": "{1} / {2} ({3})"
@@ -34,8 +29,18 @@
       "format": "{1} / {2} ({3})"
     },
     "disk",
-    "battery",
-    "poweradapter",
+    {
+      "type": "display",
+      "format": "{inch}\" {name} {width}x{height}"
+    },
+    {
+      "type": "keyboard",
+      "ignores": ["Diego Palacios cantor Keyboard"]
+    },
+    {
+      "type":"mouse",
+      "ignores": ["Diego Palacios cantor Mouse"]
+    },
     "break",
     {
       "type": "custom",
@@ -53,14 +58,15 @@
     },
     "de",
     "wm",
-    "wmtheme",
-    "theme",
-    "icons",
-    "font",
-    "cursor",
+    // "wmtheme",
+    // "theme",
+    // "icons",
+    // "font",
+    // "cursor",
     "terminal",
     "terminalfont",
-    "locale",
+    "editor",
+    // "locale",
     "break",
     "colors"
   ]
