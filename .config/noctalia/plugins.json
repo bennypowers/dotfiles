@@ -1,0 +1,57 @@
+{
+    "sources": [
+        {
+            "enabled": true,
+            "name": "Official Noctalia Plugins",
+            "url": "https://github.com/noctalia-dev/noctalia-plugins"
+        },
+        {
+            "enabled": false,
+            "name": "Bennyp's Plugins",
+            "url": "https://github.com/bennypowers/noctalia-plugins/"
+        }
+    ],
+    "states": {
+        "640d96:bar-widget-background-apps": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/bennypowers/noctalia-plugins/"
+        },
+        "640d96:bar-widget-hebrew-calendar": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/bennypowers/noctalia-plugins/"
+        },
+        "640d96:bar-widget-thread-bars": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/bennypowers/noctalia-plugins/"
+        },
+        "640d96:polkit-agent": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/bennypowers/noctalia-plugins/"
+        },
+        "bar-widget-background-apps": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+        },
+        "bar-widget-hebrew-calendar": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+        },
+        "bar-widget-thread-bars": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+        },
+        "desktop-widget-thread-bars": {
+            "enabled": false,
+            "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+        },
+        "polkit-agent": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+        },
+        "screen-recorder": {
+            "enabled": true,
+            "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+        }
+    },
+    "version": 1
+}

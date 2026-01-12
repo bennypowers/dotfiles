@@ -2,6 +2,7 @@ prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+spawn-sh-at-startup "systemctl --user import-environment XDG_DATA_DIRS QT_QPA_PLATFORMTHEME"
 spawn-at-startup "swww-daemon"
 
 hotkey-overlay {
@@ -27,7 +28,9 @@ cursor {
 }
 
 binds {
-    Mod+Escape repeat=false { spawn "loginctl" "lock-session"; }
+    // Mod+Escape repeat=false { spawn "loginctl" "lock-session"; }
+    Mod+Escape repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+    Mod+Comma repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle"; }
 
     Mod+Shift+q repeat=false { quit; }
 
@@ -58,11 +61,13 @@ binds {
     Mod+Shift+u { switch-preset-column-width-back; }
 
     // Applications
-    Mod+t repeat=false { spawn "kitty-smart-launch"; }
-    Mod+f repeat=false { spawn "nautilus"; }
-    Mod+e repeat=false { spawn "thunderbird-bin"; }
-    Mod+b repeat=false { spawn "flatpak" "run" "app.zen_browser.zen"; }
-    Mod+p repeat=false { spawn "vicinae" "toggle"; }
+    Mod+t repeat=false { spawn "uwsm" "app" "--" "kitty-smart-launch"; }
+    Mod+f repeat=false { spawn "uwsm" "app" "--" "nautilus"; }
+    Mod+e repeat=false { spawn "uwsm" "app" "--" "thunderbird-bin"; }
+    Mod+b repeat=false { spawn "uwsm" "app" "--" "flatpak" "run" "app.zen_browser.zen"; }
+    // Mod+p repeat=false { spawn "vicinae" "toggle"; }
+    Mod+p repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+    Mod+S repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
     Mod+o repeat=false { toggle-overview; }
 
     Mod+w { close-window; }
@@ -166,6 +171,7 @@ layout {
         width 4
         active-color "#c6a0f6"  // catppuccin macchiato mauve
         inactive-color "#494d64" // catppuccin macchiato surface1
+        active-gradient from="#f38ba8" to="#f2cdcd" in="oklch shorter hue"
     }
 
     border {
@@ -185,7 +191,7 @@ layout {
     }
 
     struts {
-        top 48
+        // top 48
         bottom 48
     }
 }
@@ -221,8 +227,8 @@ window-rule {
 window-rule {
     match app-id="zen" title=".*Bitwarden.*"
     open-floating true
-    max-width 500
-    max-height 800
+    // max-width 500
+    // max-height 800
     block-out-from "screen-capture"
 }
 
@@ -263,6 +269,27 @@ window-rule {
   open-focused true
 }
 
+// Virt viewer
+window-rule {
+  match app-id="virt-manager" title="Virtual Machine Manager"
+  open-floating true
+  open-maximized false
+  default-window-height { fixed 290; }
+  default-column-width { fixed 650; }
+  max-height 290
+  max-width 650
+}
+
+window-rule {
+  match app-id="com.saivert.pwvucontrol"
+  open-floating true
+}
+
+window-rule {
+  match app-id="com.libretro.RetroArch"
+  open-floating true
+}
+
 // Steam Games (matches all steam apps)
 window-rule {
   match app-id="steam_app_.*"
@@ -275,3 +302,4 @@ window-rule {
   open-fullscreen true
   open-focused true
 }
+
