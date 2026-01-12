@@ -18,7 +18,9 @@
 	f = !git ls-files | grep -i
 	fush = push --force
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-	pt = push --tags
+	h = push
+	ht = push --tags
+  p = pull
 	ra = rebase --abort
 	rc = rebase --continue
 	ri = rebase --interactive
