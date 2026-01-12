@@ -8,7 +8,7 @@ return {
   dependencies = { 'catppuccin/nvim' },
   config = function()
     require('bufferline').setup {
-      highlights = require('catppuccin.groups.integrations.bufferline').get_theme(),
+      highlights = require('catppuccin.special.bufferline').get_theme(),
       options = {
         separator_style = 'slope',
         diagnostics = 'nvim_lsp',

@@ -1,7 +1,7 @@
 ---@type vim.lsp.ClientConfig
 return {
   cmd = { 'emmet-language-server', '--stdio' },
-  root_markers = {'.git'},
+  root_markers = { '.git' },
   filetypes = {
     'html',
     'htmlangular',
@@ -24,5 +24,8 @@ return {
     'typescriptreact',
     'webc',
   },
+  init_options = {
+    showExpandedAbbreviation = 'always',
+    showSuggestionsAsSnippets = true,
+  },
 }
-

@@ -1,11 +1,16 @@
-return { 'chrisgrieser/nvim-origami',
+return {
+  'chrisgrieser/nvim-origami',
   opts = {
     foldtext = {
       enabled = true,
       padding = 1,
       lineCount = {
-        template = " (:%d)",
+        template = ' (:%d)',
       },
+    },
+    foldKeymaps = {
+      setup = true, -- modifies `h`, `l`, and `$`
+      hOnlyOpensOnFirstColumn = true,
     },
   },
   init = function()

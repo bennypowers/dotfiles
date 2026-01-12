@@ -8,7 +8,7 @@ require 'commands'
 require 'aucmds'
 require 'mappings'
 
-require 'lazy'.setup('plugins', {
+require('lazy').setup('plugins', {
   dev = {
     path = '~/Developer',
     patterns = { 'bennypowers' },
@@ -16,9 +16,9 @@ require 'lazy'.setup('plugins', {
   },
   performance = {
     rtp = {
-      paths = { "/usr/share/vim/vimfiles/" },
+      paths = { '/usr/share/vim/vimfiles/' },
     },
   },
 })
 
-vim.cmd.colorscheme 'catppuccin-macchiato'
+require('matugen').setup()

@@ -18,8 +18,10 @@ return {
     'eslint.config.cts',
   },
   filetypes = {
-    'javascript', 'javascriptreact',
-    'typescript', 'typescriptreact',
+    'javascript',
+    'javascriptreact',
+    'typescript',
+    'typescriptreact',
     'html',
   },
   root_markers = {
@@ -43,15 +45,11 @@ return {
   },
   handlers = {
     ['eslint/openDoc'] = function(_, result)
-      if result then
-        vim.ui.open(result.url)
-      end
+      if result then vim.ui.open(result.url) end
       return {}
     end,
     ['eslint/confirmESLintExecution'] = function(_, result)
-      if not result then
-        return
-      end
+      if not result then return end
       return 4 -- approved
     end,
     ['eslint/probeFailed'] = function()
@@ -68,16 +66,16 @@ return {
       local client = unpack(vim.lsp.get_clients { bufnr = 0, name = 'eslint' })
       if client then
         client:request_sync('workspace/executeCommand', {
-                              command = 'eslint.applyAllFixes',
-                              arguments = {
-                                {
-                                  uri = vim.uri_from_bufnr(0),
-                                  version = vim.lsp.util.buf_versions[0],
-                                },
-                              },
-                            }, nil, 0)
+          command = 'eslint.applyAllFixes',
+          arguments = {
+            {
+              uri = vim.uri_from_bufnr(0),
+              version = vim.lsp.util.buf_versions[0],
+            },
+          },
+        }, nil, 0)
       end
-    end
+    end,
   },
   settings = {
     validate = 'on',

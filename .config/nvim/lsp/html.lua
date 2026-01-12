@@ -1,10 +1,15 @@
-local cfg = require'lsp'
+local cfg = require 'lsp'
 
 ---html language server
 ---@type vim.lsp.ClientConfig
 return {
   cmd = { 'vscode-html-language-server', '--stdio' },
-  filetypes = { 'html', 'templ', 'njk', 'svg' },
+  filetypes = {
+    'html',
+    'templ',
+    'njk',
+    'svg',
+  },
   root_markers = { 'package.json', '.git' },
   single_file_support = true,
   init_options = {
@@ -12,9 +17,9 @@ return {
     embeddedLanguages = { css = true, javascript = true },
     configurationSection = { 'html', 'css', 'javascript' },
   },
-  capabilities = cfg.capabilities({
+  capabilities = cfg.capabilities {
     documentFormattingProvider = true,
-  }),
+  },
   settings = {
     html = {
       format = {

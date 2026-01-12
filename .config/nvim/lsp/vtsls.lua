@@ -16,7 +16,7 @@ return {
   name = 'TypeScript',
   cmd = { 'vtsls', '--stdio' },
   root_markers = {'tsconfig.json', 'package.json', 'jsconfig.json', '.git'},
-  root_dir = cfg.required_root_markers {'jsconfig.json', 'tsconfig.json'},
+  root_dir = cfg.required_root_markers {'package.json', 'jsconfig.json', 'tsconfig.json'},
   filetypes = {
     'javascript',
     'javascriptreact',
