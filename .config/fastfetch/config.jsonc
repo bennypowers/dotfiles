@@ -10,6 +10,9 @@
       "right": 2
     }
   },
+  "general": {
+    "dsForceDrm": true
+  },
   "modules": [
     "title",
     "separator",
