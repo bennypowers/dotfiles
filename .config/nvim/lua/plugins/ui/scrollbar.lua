@@ -1,4 +1,4 @@
 return { 'petertriho/nvim-scrollbar',
-  enabled = true,
+  enabled = false,
   opts = {},
 }

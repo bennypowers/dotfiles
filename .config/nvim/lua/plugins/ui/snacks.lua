@@ -34,7 +34,9 @@ return { 'folke/snacks.nvim',
   opts = {
     explorer = { enabled = false },
     git = { enabled = false },
-    image = { enabled = false },
+    image = { enabled = true },
+    indent = { enabled = true },
+    scroll = { enabled = true },
     dashboard = {
       sections = {
         {

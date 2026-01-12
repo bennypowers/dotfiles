@@ -42,7 +42,7 @@ end
 
 return {
   'mhartington/formatter.nvim',
-  enabled = true,
+  enabled = false,
   config = function()
     require('formatter').setup {
       filetype = {
