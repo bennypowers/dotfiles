@@ -6,6 +6,8 @@
 # https://www.reddit.com/r/Gentoo/comments/ydzkml/nodejs_is_it_ok_to_install_global_packages/
 export NPM_CONFIG_PREFIX=$HOME/.local/
 export PATH="/home/$USER/go/bin:/home/$USER/.local/bin:$NPM_CONFIG_PREFIX/bin:$PATH"
+export QT_QPA_PLATFORMTHEME=qt6ct
+export XDG_DATA_DIRS="$HOME/.var/app/com.valvesoftware.Steam/data/icons:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$XDG_DATA_DIRS"
 
 if [[ $- != *i* ]] ; then
   # Shell is non-interactive.  Be done now!
