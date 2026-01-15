@@ -4,11 +4,9 @@ return {
   version = 'v4.*',
   enabled = true,
   lazy = true,
-  event = 'ColorScheme',
-  dependencies = { 'catppuccin/nvim' },
+  event = 'VeryLazy',
   config = function()
     require('bufferline').setup {
-      highlights = require('catppuccin.special.bufferline').get_theme(),
       options = {
         separator_style = 'slope',
         diagnostics = 'nvim_lsp',

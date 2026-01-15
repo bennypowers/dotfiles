@@ -6,6 +6,6 @@ return {
   dependencies = { 'SmiteshP/nvim-navic', 'nvim-tree/nvim-web-devicons' },
   opts = {
     attach_navic = false, -- prevent barbecue from automatically attaching nvim-navic
-    theme = 'catppuccin'
+    theme = 'catppuccin',
   },
 }

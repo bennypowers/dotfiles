@@ -20,5 +20,3 @@ require('lazy').setup('plugins', {
     },
   },
 })
-
-require('matugen').setup()
