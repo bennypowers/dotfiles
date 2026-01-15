@@ -1,0 +1,25 @@
+// when not using noctalia
+layout {
+    focus-ring {
+        width 4
+        active-color "#c6a0f6"  // catppuccin macchiato mauve
+        inactive-color "#494d64" // catppuccin macchiato surface1
+        active-gradient from="#f38ba8" to="#f2cdcd" in="oklch shorter hue"
+    }
+
+    border {
+        off
+        width 4
+        active-color "#c6a0f6"  // catppuccin macchiato mauve
+        inactive-color "#494d64" // catppuccin macchiato surface1
+    }
+
+    shadow {
+        on
+        softness 25
+        spread 4
+        offset x=0 y=5
+        draw-behind-window true
+        color "#00000090"
+    }
+}

@@ -5,6 +5,8 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 spawn-sh-at-startup "systemctl --user import-environment XDG_DATA_DIRS QT_QPA_PLATFORMTHEME"
 spawn-at-startup "swww-daemon"
 
+include "noctalia.kdl"
+
 hotkey-overlay {
   skip-at-startup
   hide-not-bound
@@ -167,35 +169,13 @@ layout {
       proportion 0.33333;
     }
 
-    focus-ring {
-        width 4
-        active-color "#c6a0f6"  // catppuccin macchiato mauve
-        inactive-color "#494d64" // catppuccin macchiato surface1
-        active-gradient from="#f38ba8" to="#f2cdcd" in="oklch shorter hue"
-    }
-
-    border {
-        off
-        width 4
-        active-color "#c6a0f6"  // catppuccin macchiato mauve
-        inactive-color "#494d64" // catppuccin macchiato surface1
-    }
-
-    shadow {
-        on
-        softness 25
-        spread 4
-        offset x=0 y=5
-        draw-behind-window true
-        color "#00000090"
-    }
-
     struts {
-        // top 48
+        top 12
         bottom 48
     }
 }
 
+// qpa
 layer-rule {
     match namespace="quickshell-polkit-agent"
     shadow {
@@ -206,6 +186,8 @@ layer-rule {
     }
 }
 
+
+// hyprpaper
 layer-rule {
     match namespace="hyprpaper"
     place-within-backdrop true
@@ -232,9 +214,11 @@ window-rule {
     block-out-from "screen-capture"
 }
 
+// pwvucontrol
 window-rule {
   match app-id="com.saivert.pwvucontrol"
   max-width 600
+  open-floating true
 }
 
 // Network manager
@@ -262,14 +246,7 @@ window-rule {
     open-floating true
 }
 
-// Virt viewer
-window-rule {
-  match app-id="virt-viewer" title="silverblue.*"
-  open-fullscreen true
-  open-focused true
-}
-
-// Virt viewer
+// Virt manager
 window-rule {
   match app-id="virt-manager" title="Virtual Machine Manager"
   open-floating true
@@ -280,11 +257,7 @@ window-rule {
   max-width 650
 }
 
-window-rule {
-  match app-id="com.saivert.pwvucontrol"
-  open-floating true
-}
-
+// Retroarch
 window-rule {
   match app-id="com.libretro.RetroArch"
   open-floating true
@@ -293,12 +266,6 @@ window-rule {
 // Steam Games (matches all steam apps)
 window-rule {
   match app-id="steam_app_.*"
-  open-fullscreen true
-  open-focused true
-}
-
-window-rule {
-  match title="Cyberpunk 2077 (C) 2020 by CD Projekt Red"
   open-fullscreen true
   open-focused true
 }
