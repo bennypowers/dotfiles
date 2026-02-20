@@ -2,8 +2,22 @@ local ignores = {
   'nusah/keymap.json',
 }
 
+---@param dir string
+---@return string|nil
+local function find_project_root(dir)
+  local git_dir = vim.fs.find('.git', { path = dir, upward = true, type = 'directory' })[1]
+  if git_dir then
+    return vim.fs.dirname(git_dir)
+  end
+  local package_json = vim.fs.find('package.json', { path = dir, upward = true, type = 'file' })[1]
+  if package_json then
+    return vim.fs.dirname(package_json)
+  end
+  return nil
+end
+
 ---Adapted from MunifTanjim/prettier.nvim
----@param project_root string
+---@param project_root string|nil
 ---@return boolean
 local function prettier_config_file_exists(project_root)
   return (not not project_root)
@@ -11,12 +25,15 @@ local function prettier_config_file_exists(project_root)
     or vim.tbl_count(vim.fn.glob('prettier.config.*', true, true)) > 0
 end
 
----@param project_root string
+---@param project_root string|nil
 ---@return boolean
 local function prettier_package_json_key_exists(project_root)
+  if not project_root then
+    return false
+  end
   local ok, has_prettier_key = pcall(function()
-    local package_json_blob =
-      table.concat(vim.fn.readfile(require('lspconfig.util').path.join(project_root, '/package.json')))
+    local package_json_path = vim.fs.joinpath(project_root, 'package.json')
+    local package_json_blob = table.concat(vim.fn.readfile(package_json_path))
     local package_json = vim.json.decode(package_json_blob) or {}
     return not not package_json.prettier
   end)
@@ -26,8 +43,7 @@ end
 ---@return boolean
 local function has_prettier()
   local startpath = vim.fn.getcwd()
-  local project_root = require('lspconfig.util').find_git_ancestor(startpath)
-    or require('lspconfig.util').find_package_json_ancestor(startpath)
+  local project_root = find_project_root(startpath)
   return prettier_config_file_exists(project_root) or prettier_package_json_key_exists(project_root)
 end
 

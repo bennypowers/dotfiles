@@ -1,14 +1,19 @@
-return { 'folke/noice.nvim',
+---@type vim.lsp.Config
+return {
+  'folke/noice.nvim',
   enabled = true,
   event = 'VeryLazy',
   dependencies = {
     'MunifTanjim/nui.nvim',
-    -- 'rcarriga/nvim-notify',
   },
   config = function()
-    if vim.fn.has'gui_running' == 0 then
-      require'noice'.setup {
+    if vim.fn.has 'gui_running' == 0 then
+      require('noice').setup {
         lsp = {
+          hover = {
+            -- https://github.com/folke/noice.nvim/issues/1052#issuecomment-3772468702
+            enabled = false,
+          },
           -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
           override = {
             ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
@@ -28,7 +33,7 @@ return { 'folke/noice.nvim',
           cmdline_popup = {
             border = {
               style = 'none',
-              padding = {1, 3},
+              padding = { 1, 3 },
             },
             filter_options = {},
             win_options = {
