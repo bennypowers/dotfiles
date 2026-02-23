@@ -8,7 +8,16 @@ return {
     -- 'design-tokens-language-server',
   },
   root_markers = { '.git', 'package.json' },
-  filetypes = { 'css', 'json', 'yaml' },
+  filetypes = {
+    'css',
+    'html',
+    'javascript',
+    'javascriptreact',
+    'json',
+    'typescript',
+    'typescriptreact',
+    'yaml',
+  },
   settings = {
     dtls = {
       groupMarkers = {
