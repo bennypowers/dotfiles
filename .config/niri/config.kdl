@@ -3,7 +3,7 @@ prefer-no-csd
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 spawn-sh-at-startup "systemctl --user import-environment XDG_DATA_DIRS QT_QPA_PLATFORMTHEME"
-spawn-at-startup "swww-daemon"
+// spawn-at-startup "swww-daemon"
 
 include "noctalia.kdl"
 
@@ -22,6 +22,10 @@ environment {
     XDG_SESSION_DESKTOP "NiRi"
     XDG_SESSION_TYPE "wayland"
     XDG_DATA_DIRS "/usr/local/share:/usr/share:/var/lib/flatpak/exports/share:/home/bennyp/.local/share/flatpak/exports/share"
+    NIRI_ENABLE_COLOR_MANAGEMENT "1"
+    WLR_DRM_NO_ATOMIC "0"
+    GIO_EXTRA_MODULES "/usr/lib64/gio/modules"
+    GSETTINGS_BACKEND "dconf"
 }
 
 cursor {
@@ -45,6 +49,11 @@ binds {
     Mod+Shift+j { move-window-down; }
     Mod+Shift+k { move-window-up; }
     Mod+Shift+l { move-column-right; }
+
+    Mod+Alt+k { focus-workspace-up; }
+    Mod+Alt+j { focus-workspace-down; }
+    Mod+Shift+Alt+k { move-window-to-workspace-up; }
+    Mod+Shift+Alt+j { move-window-to-workspace-down; }
 
     Mod+Shift+f repeat=false { fullscreen-window; }
 
@@ -73,11 +82,6 @@ binds {
     Mod+o repeat=false { toggle-overview; }
 
     Mod+w { close-window; }
-
-    Mod+Ctrl+k { focus-workspace-up; }
-    Mod+Ctrl+j { focus-workspace-down; }
-    Mod+Shift+Ctrl+k { move-window-to-workspace-up; }
-    Mod+Shift+Ctrl+j { move-window-to-workspace-down; }
 
     MouseForward { toggle-overview; }
 
@@ -122,6 +126,7 @@ input {
 
     mouse {
         natural-scroll
+        accel-speed 0.25
     }
 
     touchpad {
@@ -133,10 +138,12 @@ input {
     }
 }
 
-output "DP-2" {
+output "DP-1" {
     mode "5120x2160@120.000"
     position x=0 y=0
     scale 1
+    variable-refresh-rate
+    // bit-depth 10
 }
 
 output "HDMI-A-1" {
@@ -159,6 +166,7 @@ layout {
 
     preset-column-widths {
         proportion 0.15
+        proportion 0.25
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
@@ -269,4 +277,16 @@ window-rule {
   open-fullscreen true
   open-focused true
 }
+
+// Steam Games (matches all steam apps)
+window-rule {
+  match app-id="gamescope"
+  open-fullscreen true
+  open-focused true
+}
+
+
+
+
+include "./noctalia.kdl"
 
