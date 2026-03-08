@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=org.gnome.World.PikaBackup
+X-XDP-Autostart=org.gnome.World.PikaBackup
+Exec=flatpak run --command=pika-backup-monitor org.gnome.World.PikaBackup
+X-Flatpak=org.gnome.World.PikaBackup

@@ -4,6 +4,14 @@
 .LSOverride
 
 CLAUDE.local.md
+.claude
+!.claude/CLAUDE.md
+.coderabbit
+
+.openshot_qt
+.sane/xsane
+.vcpkg
+.wine
 
 # Icon must end with two \r
 Icon
@@ -48,8 +56,14 @@ node_modules
 .cache
 .cargo
 .config/VSCodium
+.cmake/packages
+.config/abiword/profile
 .config/fish/fish_variables
+.config/evolution/sources
 .config/gcloud
+.config/goa-1.0
+.config/gtk-*/noctalia.css
+.config/geary/goa_account_*
 .config/fish/conf.d/env.fish
 .config/Yubico
 .config/karabiner/automatic_backups

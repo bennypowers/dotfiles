@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "cem": {
+      "type": "local",
+      "command": "cem",
+      "tools": ["*"],
+      "args": ["mcp"]
+    }
+  }
+}

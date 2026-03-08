@@ -1,25 +1,18 @@
 os:
   editPreset: nvim
-
 gui:
   theme:
     selectedLineBgColor:
       - underline
     selectedRangeBgColor:
       - underline
-
 git:
-  paging:
-    colorArg: always
-    pager: >
-      delta
-      --paging=never
-      --detect-dark-light=auto
-      --hyperlinks
-      --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+  pagers:
+    - colorArg: always
+      pager: >
+        delta --paging=never --detect-dark-light=auto --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
 
 quitOnTopLevelReturn: true
-
 # catppuccin macchiatto
 theme:
   activeBorderColor:
@@ -41,6 +34,5 @@ theme:
     - '#cdd6f4'
   searchingActiveBorderColor:
     - '#f9e2af'
-
 authorColors:
   '*': '#b4befe'

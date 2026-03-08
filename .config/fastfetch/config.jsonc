@@ -24,6 +24,11 @@
     "cpu",
     "gpu",
     {
+      "type": "display",
+      "format": "{inch}\" {name} {width}x{height}"
+    },
+    "poweradapter",
+    {
       "type": "memory",
       "format": "{1} / {2} ({3})"
     },
@@ -33,16 +38,16 @@
     },
     "disk",
     {
-      "type": "display",
-      "format": "{inch}\" {name} {width}x{height}"
-    },
-    {
       "type": "keyboard",
-      "ignores": ["Diego Palacios cantor Keyboard"]
+      "ignores": [
+        "Diego Palacios cantor Keyboard"
+      ]
     },
     {
-      "type":"mouse",
-      "ignores": ["Diego Palacios cantor Mouse"]
+      "type": "mouse",
+      "ignores": [
+        "Diego Palacios cantor Mouse"
+      ]
     },
     "break",
     {

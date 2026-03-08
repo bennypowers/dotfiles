@@ -16,7 +16,7 @@ fi
 while IFS= read -r line; do
     # Skip empty lines and comments
     [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
-    
+
     # Check if process is running
     if pidof "$line" > /dev/null 2>&1; then
         exit 0  # Process found, inhibit suspend
@@ -26,6 +26,10 @@ done < "$PROCESS_FILE"
 # Check for Steam games specifically (not Steam UI processes)
 # Look for processes that are children of steam and running game executables
 if pgrep -f "\.local/share/Steam/steamapps" > /dev/null 2>&1; then
+    exit 0  # Steam game found, inhibit suspend
+fi
+
+if pgrep -f "gamescope-wl" > /dev/null 2>&1; then
     exit 0  # Steam game found, inhibit suspend
 fi
 
