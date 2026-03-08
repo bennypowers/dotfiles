@@ -84,6 +84,8 @@ node_modules
 .config/noctalia/settings.json
 .config/niri/noctalia.kdl
 .config/pulse
+.config/rncbc.org
+.config/nvm/null
 .config/systemd/**/*.wants
 .config/tmux/plugins/tpm
 .config/yazi/flavors/noctalia.yazi/flavor.toml
