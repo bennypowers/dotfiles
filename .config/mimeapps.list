@@ -4,9 +4,21 @@ video/mp4=org.gnome.Showtime.desktop;
 video/webm=org.gnome.Showtime.desktop;
 text/plain=nvim.desktop;dev.zed.Zed.desktop;
 image/png=org.gnome.Loupe.desktop;
+audio/flac=io.bassi.Amberol.desktop;
+image/jpeg=org.gnome.Loupe.desktop;
+application/json=dev.zed.Zed.desktop;
+image/svg+xml=org.inkscape.Inkscape.desktop;
+text/css=org.gnome.TextEditor.desktop;
 
 [Default Applications]
 video/mp4=org.gnome.Showtime.desktop
 video/webm=org.gnome.Showtime.desktop
 text/plain=dev.zed.Zed.desktop
 image/png=org.gnome.Loupe.desktop
+audio/flac=io.bassi.Amberol.desktop
+image/jpeg=org.gnome.Loupe.desktop
+application/json=dev.zed.Zed.desktop
+image/svg+xml=org.inkscape.Inkscape.desktop
+text/css=org.gnome.TextEditor.desktop
+x-scheme-handler/http=app.zen_browser.zen.desktop
+x-scheme-handler/https=app.zen_browser.zen.desktop

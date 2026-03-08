@@ -1,0 +1,48 @@
+# Carnage configuration file
+
+[global]
+# User interface theme
+# Preferred to be set directly through Carnage
+theme = "textual-dark"
+
+# Privilege escalation backend for administrative commands
+# Options: auto, pkexec, sudo, doas, none
+privilege_backend = "auto"
+
+# Initial tab selected
+# Options: news, glsas, browse, use, overlays
+initial_tab = "news"
+
+[browse]
+# Default flags for package search with eix
+# These are passed to eix commands
+search_flags = ["-f", "2"]
+
+# Minimum characters required before starting search
+# Lower values may hinder performance
+minimum_characters = 3
+
+[overlays]
+# Ignore warnings within overlays
+ignore_warnings = false
+
+# Skip counting packages in overlays (faster but less informative)
+# When false, package counts will be fetched but may take longer
+skip_package_counting = true
+
+# Maximum age for overlay cache in hours
+# Overlay data will be refreshed after this time
+cache_max_age = 72
+
+# URL to fetch overlay metadata from
+# Change this only if you need to use a different overlay list source
+overlay_source = "https://api.gentoo.org/overlays/repositories.xml"
+
+[use]
+# Minimum characters required before starting USE flag search
+# Lower values may hinder performance
+minimum_characters = 3
+
+# Maximum age for USE flag cache in hours
+# USE flag data will be refreshed after this time
+cache_max_age = 96

@@ -1,2 +1,31 @@
 nvim/plugin/packer_compiled.lua
 fish/conf.d/env.fish
+.copilot
+GIMP
+GREYC
+Ladybird
+antimicrox
+cava
+chromium
+configstore
+elogviewer
+gmic
+google-chrome-for-testing
+gtk-2.0/gtkfilechooser.ini
+
+input-remapper-2
+**/Crash Reports/*
+opencode
+noctalia/plugins/
+!noctalia/plugins/**/settings.json
+nushell/env.nu
+kernel.org/qconf.conf
+
+# matugen
+gtk-3.0/gtk.css
+gtk-4.0/gtk.css
+qt5ct/colors/noctalia.conf
+qt6ct/colors/noctalia.conf
+noctalia/colors.json
+yazi/flavors/noctalia.yazi/flavor.toml
+zed/themes/noctalia.json

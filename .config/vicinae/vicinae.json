@@ -1,7 +1,12 @@
 {
+    "closeOnFocusLoss": false,
+    "considerPreedit": false,
     "faviconService": "twenty",
     "font": {
         "size": 16
+    },
+    "keybinding": "default",
+    "keybinds": {
     },
     "popToRootOnClose": false,
     "rootSearch": {
@@ -9,7 +14,7 @@
     },
     "theme": {
         "iconTheme": "Adwaita",
-        "name": "catppuccin-dark.json"
+        "name": "catppuccin-macchiato"
     },
     "window": {
         "csd": true,

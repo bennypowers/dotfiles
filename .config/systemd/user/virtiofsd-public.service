@@ -1,0 +1,12 @@
+[Unit]
+Description=virtiofsd for ~/Public directory (silverblue domain)
+After=local-fs.target
+
+[Service]
+Type=simple
+ExecStart=/usr/libexec/virtiofsd --socket-path=%t/virtiofsd-silverblue-public.sock --shared-dir=%h/Public --cache=auto
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
