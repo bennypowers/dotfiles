@@ -2,6 +2,7 @@ prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+spawn-sh-at-startup "noctalia-qs -c noctalia-shell"
 spawn-sh-at-startup "systemctl --user import-environment XDG_DATA_DIRS QT_QPA_PLATFORMTHEME"
 // spawn-at-startup "swww-daemon"
 
@@ -13,11 +14,12 @@ hotkey-overlay {
 }
 
 environment {
+    QT_SCALE_FACTOR "2"
+    QT_QPA_PLATFORMTHEME "qt6ct"
     HYPRCURSOR_THEME "phinger-cursors-light"
     HYPRCURSOR_SIZE "48"
     XCURSOR_THEME "phinger-cursors-light"
     XCURSOR_SIZE "48"
-    QT_QPA_PLATFORMTHEME "qt5ct"
     XDG_CURRENT_DESKTOP "NiRi"
     XDG_SESSION_DESKTOP "NiRi"
     XDG_SESSION_TYPE "wayland"
@@ -34,12 +36,13 @@ cursor {
 }
 
 binds {
-    // Mod+Escape repeat=false { spawn "loginctl" "lock-session"; }
-    Mod+Escape repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-    Mod+Comma repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle"; }
+    Mod+Escape repeat=false hotkey-overlay-title="Lock Screen" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+    Mod+Comma repeat=false hotkey-overlay-title="Noctalia Settings" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle"; }
 
-    Mod+Shift+q repeat=false { quit; }
+    // binds cheatsheet
+    Mod+f1 hotkey-overlay-title="Show Keybinds" { spawn "qs -c noctalia-shell ipc call plugin:keybind-cheatsheet toggle"; }
 
+    // # Workspace navigation
     Mod+h { focus-column-left; }
     Mod+j { focus-window-down; }
     Mod+k { focus-window-up; }
@@ -55,62 +58,54 @@ binds {
     Mod+Shift+Alt+k { move-window-to-workspace-up; }
     Mod+Shift+Alt+j { move-window-to-workspace-down; }
 
-    Mod+Shift+f repeat=false { fullscreen-window; }
-
     Mod+Tab { focus-window-down-or-column-right; }
     Mod+Shift+Tab { focus-window-up-or-column-left; }
-
-    // Workspace navigation
     Mod+Ctrl+h { consume-or-expel-window-left; }
     Mod+Ctrl+l { consume-or-expel-window-right; }
-
-    // Window controls
-    Mod+c { toggle-window-floating; }
-    Mod+i { toggle-column-tabbed-display; }
-
-    Mod+u { switch-preset-column-width; }
-    Mod+Shift+u { switch-preset-column-width-back; }
-
-    // Applications
-    Mod+t repeat=false { spawn "uwsm" "app" "--" "kitty-smart-launch"; }
-    Mod+f repeat=false { spawn "uwsm" "app" "--" "nautilus"; }
-    Mod+e repeat=false { spawn "uwsm" "app" "--" "thunderbird-bin"; }
-    Mod+b repeat=false { spawn "uwsm" "app" "--" "flatpak" "run" "app.zen_browser.zen"; }
-    // Mod+p repeat=false { spawn "vicinae" "toggle"; }
-    Mod+p repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-    Mod+S repeat=false { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
-    Mod+o repeat=false { toggle-overview; }
-
-    Mod+w { close-window; }
-
-    MouseForward { toggle-overview; }
 
     Mod+WheelScrollDown { focus-column-left; }
     Mod+WheelScrollUp { focus-column-right; }
     Mod+WheelScrollRight { focus-column-left; }
     Mod+WheelScrollLeft { focus-column-right; }
 
-    // Media keys
-    XF86AudioRaiseVolume { spawn "uwsm" "app" "--" "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
-    XF86AudioLowerVolume { spawn "uwsm" "app" "--" "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
-    XF86AudioMute { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    XF86AudioMicMute { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
-    XF86MonBrightnessUp { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%+"; }
-    XF86MonBrightnessDown { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%-"; }
+    // # Window controls
+    Mod+Shift+f repeat=false { fullscreen-window; }
+    Mod+c { toggle-window-floating; }
+    Mod+i { toggle-column-tabbed-display; }
+    Mod+w { close-window; }
+
+    Mod+u { switch-preset-column-width; }
+    Mod+Shift+u { switch-preset-column-width-back; }
+
+    // # Applications
+    Mod+t repeat=false hotkey-overlay-title="Terminal" { spawn "uwsm" "app" "--" "kitty-smart-launch"; }
+    Mod+f repeat=false hotkey-overlay-title="Files" { spawn "uwsm" "app" "--" "nautilus"; }
+    Mod+e repeat=false hotkey-overlay-title="Email" { spawn "uwsm" "app" "--" "geary"; }
+    Mod+b repeat=false hotkey-overlay-title="Browser" { spawn "uwsm" "app" "--" "flatpak" "run" "app.zen_browser.zen"; }
+    Mod+p repeat=false hotkey-overlay-title="Launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+    Mod+S repeat=false hotkey-overlay-title="Control Center" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
+    Mod+o repeat=false { toggle-overview; }
+
+    MouseForward { toggle-overview; }
+
+    // # Media keys
+    XF86AudioRaiseVolume hotkey-overlay-title="Volume Up" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume hotkey-overlay-title="Volume Dowm" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    XF86AudioMute hotkey-overlay-title="Mute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioMicMute hotkey-overlay-title="Mic Mute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    XF86MonBrightnessUp hotkey-overlay-title="Brightness Up" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%+"; }
+    XF86MonBrightnessDown hotkey-overlay-title="Brightness Down" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%-"; }
 
     // Media control
-    XF86AudioNext { spawn "uwsm" "app" "--" "playerctl" "next"; }
-    XF86AudioPause { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
-    XF86AudioPlay { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
-    XF86AudioPrev { spawn "uwsm" "app" "--" "playerctl" "previous"; }
+    XF86AudioNext hotkey-overlay-title="Next" { spawn "uwsm" "app" "--" "playerctl" "next"; }
+    XF86AudioPause hotkey-overlay-title="Play/Pause" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
+    XF86AudioPlay hotkey-overlay-title="Play/Pause" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
+    XF86AudioPrev hotkey-overlay-title="Previous" { spawn "uwsm" "app" "--" "playerctl" "previous"; }
 
     // Screenshots
     Print { screenshot; }
     Mod+Print { screenshot-window; }
     Mod+Shift+Print { screenshot-screen; }
-
-    // VM viewer
-    Mod+v { spawn "uwsm" "app" "--" "virt-viewer" "--hotkeys=release-cursor=shift+escape" "--connect" "qemu:///system"; }
 }
 
 // Input configuration
@@ -241,6 +236,22 @@ window-rule {
     open-floating true
 }
 
+// KRuler (screen ruler)
+window-rule {
+    match app-id="org.kde.kruler"
+    open-floating true
+}
+
+window-rule {
+    match title="ZynAddSubFX.*"
+    open-floating true
+}
+
+window-rule {
+    match app-id="org.gnome.Mines"
+    open-floating true
+}
+
 // Aisleriot
 window-rule {
     match app-id="sol"
@@ -265,28 +276,22 @@ window-rule {
   max-width 650
 }
 
+window-rule {
+  match title="silverblue on QEMU/KVM User session"
+  default-column-width { proportion 0.75; }
+}
+
 // Retroarch
 window-rule {
   match app-id="com.libretro.RetroArch"
   open-floating true
 }
 
-// Steam Games (matches all steam apps)
+// Flood It!
 window-rule {
-  match app-id="steam_app_.*"
-  open-fullscreen true
-  open-focused true
+  match app-id="io.github.tfuxu.floodit"
+  open-floating true
 }
-
-// Steam Games (matches all steam apps)
-window-rule {
-  match app-id="gamescope"
-  open-fullscreen true
-  open-focused true
-}
-
-
-
 
 include "./noctalia.kdl"
 

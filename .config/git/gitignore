@@ -82,7 +82,7 @@ node_modules
 .config/libvirt/storage
 .config/noctalia/colors.json
 .config/noctalia/settings.json
-.config/nushell/history.txt
+.config/niri/noctalia.kdl
 .config/pulse
 .config/systemd/**/*.wants
 .config/tmux/plugins/tpm
