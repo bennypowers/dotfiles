@@ -36,19 +36,15 @@
       "type": "swap",
       "format": "{1} / {2} ({3})"
     },
-    "disk",
     {
-      "type": "keyboard",
-      "ignores": [
-        "Diego Palacios cantor Keyboard"
+      "type": "disk",
+      "hideFS": [
+        "fuse.sshfs",
+        "sshfs"
       ]
     },
-    {
-      "type": "mouse",
-      "ignores": [
-        "Diego Palacios cantor Mouse"
-      ]
-    },
+    "keyboard",
+    "mouse",
     "break",
     {
       "type": "custom",
