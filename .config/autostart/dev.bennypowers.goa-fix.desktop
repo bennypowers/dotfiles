@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=GOA Fix
+Exec=sh -c "sleep 5; /usr/libexec/goa-daemon --replace"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
