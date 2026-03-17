@@ -1,0 +1,16 @@
+[Unit]
+Description=Noctalia Shell (Quickshell)
+Documentation=https://github.com/noctalia-dev/noctalia
+After=graphical-session.target
+PartOf=graphical-session.target
+Requisite=graphical-session.target
+Wants=hypridle.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/qs -c noctalia-shell
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

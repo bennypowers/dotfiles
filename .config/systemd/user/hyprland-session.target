@@ -1,7 +1,0 @@
-[Unit]
-Description=Hyprland Wayland Session
-After=graphical-session.target
-PartOf=graphical-session.target
-Wants=quickshell.service
-Wants=swaync.service
-Wants=hypridle.service

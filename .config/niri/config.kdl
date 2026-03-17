@@ -2,8 +2,8 @@ prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-spawn-sh-at-startup "noctalia-qs -c noctalia-shell"
-spawn-sh-at-startup "systemctl --user import-environment XDG_DATA_DIRS QT_QPA_PLATFORMTHEME"
+// noctalia is managed by systemd (noctalia.service)
+spawn-sh-at-startup "systemctl --user import-environment XDG_DATA_DIRS QT_QPA_PLATFORMTHEME QT_SCALE_FACTOR HYPRCURSOR_THEME HYPRCURSOR_SIZE XCURSOR_THEME XCURSOR_SIZE"
 // spawn-at-startup "swww-daemon"
 
 include "noctalia.kdl"
@@ -263,6 +263,12 @@ window-rule {
 window-rule {
     match app-id="org.gnome.NautilusPreviewer"
     open-floating true
+}
+
+window-rule {
+  match app-id="org.gnome.SwellFoop"
+  default-window-height { fixed 1145; }
+  default-column-width { fixed 1475; }
 }
 
 // Virt manager

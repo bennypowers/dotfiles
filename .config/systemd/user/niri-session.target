@@ -1,6 +1,0 @@
-[Unit]
-Description=NiRi Wayland Session
-After=graphical-session.target
-PartOf=graphical-session.target
-Wants=swaync.service
-Wants=hypridle.service

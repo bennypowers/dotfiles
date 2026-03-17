@@ -1,11 +1,15 @@
 [Unit]
 Description=Hyprland's idle daemon
 Documentation=https://wiki.hyprland.org/Hypr-Ecosystem/hypridle
+After=graphical-session.target
+PartOf=graphical-session.target
+Requisite=graphical-session.target
 
 [Service]
 Type=simple
 ExecStart=/usr/bin/hypridle
 Restart=on-failure
+RestartSec=2
 
 [Install]
 WantedBy=graphical-session.target
