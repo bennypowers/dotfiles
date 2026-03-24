@@ -1,7 +1,7 @@
 function toucan -d "Build and flash Toucan keyboard firmware"
     set -l workspace /home/bennyp/Developer/zmk/workspace
     set -l board seeeduino_xiao_ble
-    set -l extra_modules /home/bennyp/Developer/zmk/toucan-module
+    set -l extra_modules "/home/bennyp/Developer/zmk/toucan-module;$workspace/zmk-input-gestures;$workspace/zmk-input-processors;$workspace/cirque-input-module"
     set -l label (set -q ZMK_BOOT_LABEL; and echo $ZMK_BOOT_LABEL; or echo XIAO-BOOT)
 
     if test (count $argv) -lt 1
