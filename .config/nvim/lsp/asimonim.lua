@@ -4,8 +4,8 @@ return {
     'lsp-devtools',
     'agent',
     '--',
-    'design-tokens-language-server',
-    -- 'design-tokens-language-server',
+    'asimonim',
+    'lsp',
   },
   root_markers = { '.git', 'package.json' },
   filetypes = {
@@ -19,12 +19,9 @@ return {
     'yaml',
   },
   settings = {
-    dtls = {
+    asimonim = {
       groupMarkers = {
         '_',
-        '@',
-        'GROUP',
-        'HOOLI',
       },
     },
   },

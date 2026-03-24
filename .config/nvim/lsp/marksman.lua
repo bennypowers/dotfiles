@@ -1,7 +1,9 @@
 ---markdown marksman language server
 ---@type vim.lsp.ClientConfig
 return {
-  cmd = { 'marksman', 'server' },
+  cmd = { vim.fn.executable(vim.env.HOME .. '/.local/bin/marksman') == 1
+            and vim.env.HOME .. '/.local/bin/marksman'
+             or 'marksman', 'server' },
   filetypes = { 'markdown', 'markdown.mdx' },
   root_markers = { '.marksman.toml', '.git' },
   settings = {
