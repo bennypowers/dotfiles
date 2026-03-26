@@ -1,0 +1,17 @@
+[Unit]
+Description=SSHFS mount of NAS music library
+After=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/sshfs nas@nas.local:/home/nas/Public/Music %h/Music/JellyFin \
+  -o reconnect \
+  -o IdentityFile=%h/.ssh/id_ed25519 \
+  -o UserKnownHostsFile=%h/.ssh/known_hosts \
+  -o idmap=user \
+  -o default_permissions
+ExecStop=/usr/bin/fusermount3 -u %h/Music/JellyFin
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
