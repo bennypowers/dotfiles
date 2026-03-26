@@ -265,6 +265,18 @@ window-rule {
     open-floating true
 }
 
+// Camera
+window-rule {
+    match app-id="org.gnome.Snapshot"
+    open-floating true
+}
+
+// eye dropper
+window-rule {
+    match app-id="com.github.finefindus.eyedropper"
+    open-floating true
+}
+
 window-rule {
   match app-id="org.gnome.SwellFoop"
   default-window-height { fixed 1145; }
