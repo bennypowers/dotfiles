@@ -4,7 +4,7 @@ Documentation=https://github.com/noctalia-dev/noctalia
 After=graphical-session.target
 PartOf=graphical-session.target
 Requisite=graphical-session.target
-Wants=hypridle.service
+Wants=hypridle.service quickshell-polkit-agent.service
 
 [Service]
 Type=simple
