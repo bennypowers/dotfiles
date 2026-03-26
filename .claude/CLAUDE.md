@@ -15,8 +15,10 @@ unless the project already has a location set up for that
 - never force push to published branches.
    - In most of my repos, I squash PRs to maintain a nice history on main, so force pushing is unnecessary;
    - and in others' repos, it's rude to force push unless explicitly asked to by maintainers.
+- commit messages containing syntax like `@slot` or `@summary` (beginning with an @) must wrap those jsdoc-like tags in backticks, to avoid tagging github users inadvertently.
 
 ## Go
+- **Before every push**: run `golangci-lint run ./...` (full project, not just changed packages) and `go test ./... -count=1`. Fix all issues before pushing. Every push to a PR triggers CI and CodeRabbit; failed lint wastes a rate-limited review cycle.
 - Use `go vet`, `golangci-lint`, and `staticcheck` to improve all code prior to review and before pushing.
   Common examples:
   - replace `interface{}` with `any`
