@@ -61,6 +61,7 @@ node_modules
 .config/QtProject.conf
 .config/VSCodium
 .config/libreoffice
+.config/nvim/lua/matugen.lua
 .config/Yubico
 .config/abiword/profile
 .config/evolution/sources
@@ -93,6 +94,10 @@ node_modules
 .config/yazi/flavors/noctalia.yazi/flavor.toml
 .config/zed/themes/noctalia.json
 
+.dotnet
+
+.gnupg
+
 .local/bin
 .local/share/
 .local/state/
@@ -102,6 +107,7 @@ node_modules
 
 .gtkrc-2.0
 
+.nuget
 
 .steam
 .steampath
