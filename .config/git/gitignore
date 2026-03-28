@@ -57,8 +57,10 @@ node_modules
 .cargo
 .cmake/packages
 
+.config/Beyond-All-Reason
 .config/QtProject.conf
 .config/VSCodium
+.config/libreoffice
 .config/Yubico
 .config/abiword/profile
 .config/evolution/sources
