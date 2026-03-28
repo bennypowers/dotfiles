@@ -279,6 +279,7 @@ window-rule {
 
 window-rule {
   match app-id="org.gnome.SwellFoop"
+  open-floating true
   default-window-height { fixed 1145; }
   default-column-width { fixed 1475; }
 }
