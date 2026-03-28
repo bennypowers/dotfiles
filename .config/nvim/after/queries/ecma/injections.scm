@@ -5,7 +5,7 @@
 (call_expression
   function: (identifier) @_name
   (#any-of? @_name "css" "keyframes")
-  arguments: (template_string) @injection.content
-  (#offset! @injection.content 0 1 0 -1)
-  (#set! injection.include-children)
+  arguments: (template_string
+    (string_fragment) @injection.content)
+  (#set! injection.combined)
   (#set! injection.language "css"))
