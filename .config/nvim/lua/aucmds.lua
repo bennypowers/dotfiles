@@ -48,6 +48,17 @@ au('UIEnter', {
   end
 })
 
+au('TermClose', {
+  callback = function(ev)
+    local ns = vim.api.nvim_create_namespace('nvim.terminal.exitmsg')
+    vim.defer_fn(function()
+      if vim.api.nvim_buf_is_valid(ev.buf) then
+        vim.api.nvim_buf_clear_namespace(ev.buf, ns, 0, -1)
+      end
+    end, 10)
+  end,
+})
+
 au('LspAttach', {
   callback = function(args)
     if vim.lsp.document_color then
