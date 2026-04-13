@@ -1,7 +1,13 @@
+local u = require'utils'
+local command = vim.api.nvim_create_user_command
+local au = vim.api.nvim_create_autocmd
+local ag = vim.api.nvim_create_augroup
+
+u.pack 'iamcco/markdown-preview.nvim'
+
 vim.opt.formatoptions = 'cqw'
 vim.opt.textwidth = 80
 vim.opt.wrapmargin = 0
-vim.opt.softtabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
@@ -26,11 +32,6 @@ local function get_markdown_nodes(nodetype)
 end
 
 local get_table_nodes = get_markdown_nodes'pipe_table'
-local get_paragraph_nodes = get_markdown_nodes'paragraph'
-
-local function is_shortcode(node)
-  return vim.startswith(vim.trim(vim.treesitter.get_node_text(node, 0)), '{%')
-end
 
 local md_aucmd_group = ag('markdown_autoformat', {})
 
@@ -86,8 +87,8 @@ local function get_all_link_references()
   local parser = vim.treesitter.get_parser(0, 'markdown')
   local query = vim.treesitter.query.get('markdown', 'link_reference_definitions')
   local refs = {}
-  if query then
-    for _, tree in ipairs(parser:parse()) do
+  if query and parser then
+    for _, tree in ipairs(parser:parse() or {}) do
       for _, node in query:iter_captures(tree:root(), 0) do
         local label_node, dest_node = unpack(node:named_children())
         if label_node and dest_node then
@@ -126,13 +127,13 @@ local function append_text(text)
   )
 end
 
-command('MarkdownToggleLinkToRef', function(args)
+command('MarkdownToggleLinkToRef', function()
   local parser = vim.treesitter.get_parser(0, 'markdown_inline')
   local query = vim.treesitter.query.get('markdown_inline', 'toggle_links_ref')
   local _line, col = unpack(vim.api.nvim_win_get_cursor(0))
   local row = _line - 1
-  if not query then return end
-  for _, tree in ipairs(parser:parse()) do
+  if not query or not parser then return end
+  for _, tree in ipairs(parser:parse() or {}) do
     for id, node in query:iter_captures(tree:root(), 0) do
       if vim.treesitter.is_in_node_range(node, row, col) then
         local name = query.captures[id]

@@ -1,0 +1,30 @@
+local u = require'utils'
+
+u.pack 'echasnovski/mini.nvim'
+
+local function apply_lsp_highlights()
+  local hi = vim.api.nvim_set_hl
+  -- Let treesitter's more granular highlights show through
+  hi(0, '@lsp.mod.defaultLibrary.lua', { link = 'Special' })
+  hi(0, '@lsp.typemod.function.defaultLibrary.lua', { link = 'Special' })
+end
+
+local function apply_theme()
+  local ok, palette = pcall(require, 'matugen')
+  if ok then
+    require 'mini.base16'.setup { palette = palette }
+  end
+  apply_lsp_highlights()
+end
+
+-- Register SIGUSR1 handler for dynamic updates
+local signal = vim.uv.new_signal()
+if signal then
+  signal:start('sigusr1', vim.schedule_wrap(function()
+    package.loaded['matugen'] = nil
+    apply_theme()
+  end))
+end
+
+-- Apply theme on startup
+apply_theme()

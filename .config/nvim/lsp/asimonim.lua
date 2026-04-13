@@ -26,7 +26,7 @@ return {
     },
   },
   on_attach = function(_, bufnr)
-    if vim.lsp.document_color then vim.lsp.document_color.enable(true, bufnr, {
+    if vim.lsp.document_color then vim.lsp.document_color.enable(true, { bufnr = bufnr }, {
       style = 'virtual',
     }) end
   end,

@@ -1,6 +1,7 @@
 ---https://bennypowers.dev/cem/
 ---
-vim.lsp.set_log_level 'info'
+vim.lsp.log.set_level 'info'
+
 
 ---`cem lsp` provides editor features for custom-elements a.k.a. web components
 ---

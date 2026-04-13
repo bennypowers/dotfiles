@@ -1,4 +1,4 @@
-local cfg = require 'lsp'
+local u = require'utils'
 
 ---stylelint language server
 ---@type vim.lsp.ClientConfig
@@ -12,7 +12,8 @@ return {
     'vue',
     'wxss',
   },
-  root_dir = cfg.required_root_markers{
+  ---@diagnostic disable-next-line: assign-type-mismatch
+  root_dir = u.required_root_markers{
     '.stylelintrc',
     '.stylelintrc.cjs',
     '.stylelintrc.js',

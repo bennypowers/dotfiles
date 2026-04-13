@@ -1,3 +1,0 @@
-return {
-  'ionide/ionide-vim'
-}

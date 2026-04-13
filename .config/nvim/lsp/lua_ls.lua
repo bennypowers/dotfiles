@@ -38,10 +38,8 @@ return {
         enable = false, -- Do not send telemetry data containing a randomized but unique identifier
       },
       globals = {
-        'au',
+        'Snacks',
         'bit',
-        'ag',
-        'command',
         'describe',
         'it',
         'before_each',
@@ -49,9 +47,9 @@ return {
       },
       workspace = {
         library = {
-          '/usr/share/nvim/runtime/lua',
+          vim.env.VIMRUNTIME .. '/lua',
           '${3rd}/luv/library',
-          vim.fn.stdpath'data'..'/lazy',
+          vim.fn.stdpath 'data' .. '/site/pack',
         },
       }
     },

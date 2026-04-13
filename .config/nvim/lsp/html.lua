@@ -1,5 +1,3 @@
-local cfg = require 'lsp'
-
 ---html language server
 ---@type vim.lsp.ClientConfig
 return {
@@ -17,7 +15,7 @@ return {
     embeddedLanguages = { css = true, javascript = true },
     configurationSection = { 'html', 'css', 'javascript' },
   },
-  capabilities = cfg.capabilities {
+  capabilities = {
     documentFormattingProvider = true,
   },
   settings = {

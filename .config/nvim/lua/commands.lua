@@ -1,17 +1,11 @@
+local command = vim.api.nvim_create_user_command
 local get_cursor = vim.api.nvim_win_get_cursor
 local get_query = vim.treesitter.query.get
-local lsp = require 'commands.lsp'
+local u = require'utils'
 
 command('ClearNotifications', function()
-  local has_notify, notify = pcall(require, 'notify')
-  if has_notify then
-    notify.dismiss { silent = true }
-  elseif pcall(require, 'notifier') then
-    vim.cmd[[:NotifierClear]]
-  elseif pcall(require, 'noice') then
-    vim.cmd[[:Noice dismiss]]
-  end
-  vim.cmd[[nohlsearch|diffupdate|normal! <C-L><CR>]]
+  pcall(Snacks.notifier.hide)
+  vim.cmd [[nohlsearch|diffupdate|normal! <C-L><CR>]]
 end, {
   bang = true,
 })
@@ -37,13 +31,13 @@ command('HighlightRepeats', function(args)
   for line_text, amt in pairs(line_counts) do
     if amt >= 2 then
       local escaped = vim.fn.escape(line_text, [[".\^%*[]])
-      local command = 'syn match Repeat "^' .. escaped .. '$"'
+      local syn_cmd = 'syn match Repeat "^' .. escaped .. '$"'
       vim.notify(vim.inspect {
         line_text = line_text,
         escaped = escaped,
-        command = command,
+        command = syn_cmd,
       })
-      vim.fn.execute(command)
+      vim.fn.execute(syn_cmd)
     end
   end
 end, {
@@ -51,25 +45,25 @@ end, {
   range = '%'
 })
 
-command('LspStart', lsp.start, {
+command('LspStart', u.lsp_start, {
   desc = 'Manually launches a language server',
   nargs = '?',
-  complete = lsp.get_enabled_clients,
+  complete = u.get_enabled_lsp_clients,
 })
 
-command('LspRestart', lsp.restart, {
-  desc = 'Manually restart the given language client(s)',
+command('LspRestart', u.lsp_restart, {
+  desc = 'Restart LSP client(s), or pick from active clients',
   nargs = '?',
-  complete = lsp.get_active_clients,
+  complete = u.get_active_lsp_clients,
 })
 
-command('LspStop', lsp.stop, {
+command('LspStop', u.lsp_stop, {
   desc = 'Manually stops the given language client(s)',
   nargs = '?',
-  complete = lsp.get_active_clients,
+  complete = u.get_active_lsp_clients,
 })
 
-command('LspLog', lsp.log, {
+command('LspLog', u.lsp_log, {
   desc = 'Opens the Nvim LSP client log.',
 })
 
@@ -232,10 +226,7 @@ function M.toggle_markdown_link()
   end
 end
 
-command('CssInlineDefaultToValidJSDoc', function(args)
-  local ts_query = vim.treesitter.query.parse('typescript', [[
-    (comment) @comment
-  ]])
+command('CssInlineDefaultToValidJSDoc', function(_)
 
   local jsdoc_query = vim.treesitter.query.parse('jsdoc', [[
     (document
@@ -251,6 +242,7 @@ command('CssInlineDefaultToValidJSDoc', function(args)
   ]])
 
   local langtree = vim.treesitter.get_parser(0)
+  if not langtree then return end
 
   local kids = langtree:children()
 
@@ -261,7 +253,7 @@ command('CssInlineDefaultToValidJSDoc', function(args)
   if kids.jsdoc then
     local nvim_buf_set_text_calls = {}
     local jsdoc_tree = kids.jsdoc
-    for _, tree in ipairs(jsdoc_tree:parse()) do
+    for _, tree in ipairs(jsdoc_tree:parse() or {}) do
       for id, node in jsdoc_query:iter_captures(tree:root(), 0) do
         local cap = jsdoc_query.captures[id]
         if cap == 'value' then

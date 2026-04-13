@@ -1,0 +1,9 @@
+{
+    "diagnostics.globals": [
+        "nmap",
+        "vmap",
+        "imap",
+        "xomap",
+        "map"
+    ]
+}

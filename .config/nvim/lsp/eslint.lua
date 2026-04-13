@@ -1,9 +1,10 @@
-local cfg = require 'lsp'
+local u = require'utils'
 
 ---@type vim.lsp.ClientConfig
 return {
   cmd = { 'vscode-eslint-language-server', '--stdio' },
-  root_dir = cfg.required_root_markers {
+  ---@diagnostic disable-next-line: assign-type-mismatch
+  root_dir = u.required_root_markers {
     '.eslintrc',
     '.eslintrc.js',
     '.eslintrc.cjs',
@@ -40,7 +41,7 @@ return {
     'package.json',
     '.git',
   },
-  capabilities = cfg.capabilities {
+  capabilities = {
     documentFormattingProvider = true,
   },
   handlers = {
@@ -79,7 +80,7 @@ return {
   },
   settings = {
     validate = 'on',
-    packageManager = nil,
+    packageManager = vim.NIL,
     useESLintClass = false,
     experimental = {
       useFlatConfig = true,

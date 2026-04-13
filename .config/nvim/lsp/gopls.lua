@@ -5,6 +5,7 @@
 --- Google's lsp server for golang.
 
 local mod_cache = nil
+local au = vim.api.nvim_create_autocmd
 
 ---@param fname string
 ---@return string?
@@ -22,6 +23,7 @@ end
 return {
   cmd = { 'sh', '-c', 'GOTOOLCHAIN=auto gopls' },
   filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+  ---@diagnostic disable-next-line: assign-type-mismatch
   root_dir = function(bufnr, on_dir)
     local fname = vim.api.nvim_buf_get_name(bufnr)
     -- see: https://github.com/neovim/nvim-lspconfig/issues/804
@@ -45,34 +47,34 @@ return {
   end,
   settings = {
     gopls = {
-      buildFlags =  {"-tags=e2e"},
+      buildFlags = { '-tags=e2e' },
       semanticTokens = true,
       completion = {
         usePlaceholders = true,
       }
     }
   },
-  on_attach = function (client, bufnr)
-    au("BufWritePre", {
-      pattern = "*.go",
+  on_attach = function(_, _)
+    au('BufWritePre', {
+      pattern = '*.go',
       callback = function()
-        local params = vim.lsp.util.make_range_params(0, "utf-8")
-        params.context = {only = {"source.organizeImports"}}
+        local params = vim.lsp.util.make_range_params(0, 'utf-8') --[[@as table]]
+        params.context = { only = { 'source.organizeImports' } }
         -- buf_request_sync defaults to a 1000ms timeout. Depending on your
         -- machine and codebase, you may want longer. Add an additional
         -- argument after params if you find that you have to write the file
         -- twice for changes to be saved.
         -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-        local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+        local result = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
         for cid, res in pairs(result or {}) do
           for _, r in pairs(res.result or {}) do
             if r.edit then
-              local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+              local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or 'utf-16'
               vim.lsp.util.apply_workspace_edit(r.edit, enc)
             end
           end
         end
-        vim.lsp.buf.format({async = false})
+        vim.lsp.buf.format { async = false }
       end
     })
   end
