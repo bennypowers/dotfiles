@@ -1,0 +1,5 @@
+Some files and portions of files in this directory are derived from
+nvim-treesitter (https://github.com/nvim-treesitter/nvim-treesitter).
+
+See https://github.com/nvim-treesitter/nvim-treesitter/blob/main/LICENSE
+for the original license terms.
