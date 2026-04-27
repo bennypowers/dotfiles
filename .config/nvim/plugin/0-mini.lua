@@ -9,12 +9,23 @@ local function apply_lsp_highlights()
   hi(0, '@lsp.typemod.function.defaultLibrary.lua', { link = 'Special' })
 end
 
+local function apply_html_highlights(palette)
+  local hi = vim.api.nvim_set_hl
+  hi(0, '@tag.html', { fg = palette.base08 })
+  hi(0, '@tag.attribute.html', { fg = palette.base09 })
+  hi(0, '@tag.delimiter.html', { fg = palette.base04 })
+  hi(0, '@operator.html', { fg = palette.base04 })
+end
+
 local function apply_theme()
   local ok, palette = pcall(require, 'matugen')
   if ok then
     require 'mini.base16'.setup { palette = palette }
   end
   apply_lsp_highlights()
+  if ok then
+    apply_html_highlights(palette)
+  end
 end
 
 -- Register SIGUSR1 handler for dynamic updates

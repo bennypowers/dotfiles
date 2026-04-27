@@ -1,21 +1,21 @@
 return {
   -- Background tones
-  base00 = '#101414', -- Default Background
-  base01 = '#1d2020', -- Lighter Background (status bars)
-  base02 = '#272b2b', -- Selection Background
-  base03 = '#899393', -- Comments, Invisibles
+  base00 = '#111415', -- Default Background
+  base01 = '#1d2022', -- Lighter Background (status bars)
+  base02 = '#272a2c', -- Selection Background
+  base03 = '#8a9296', -- Comments, Invisibles
   -- Foreground tones
-  base04 = '#bec8c9', -- Dark Foreground (status bars)
-  base05 = '#e0e3e3', -- Default Foreground
-  base06 = '#e0e3e3', -- Light Foreground
-  base07 = '#e0e3e3', -- Lightest Foreground
+  base04 = '#c0c8cc', -- Dark Foreground (status bars)
+  base05 = '#e1e3e4', -- Default Foreground
+  base06 = '#e1e3e4', -- Light Foreground
+  base07 = '#e1e3e4', -- Lightest Foreground
   -- Accent colors
   base08 = '#ffb4ab', -- Variables, XML Tags, Errors
-  base09 = '#b5c7e9', -- Integers, Constants
-  base0A = '#b1cccd', -- Classes, Search Background
-  base0B = '#4cd9e0', -- Strings, Diff Inserted
-  base0C = '#b5c7e9', -- Regex, Escape Chars
-  base0D = '#4cd9e0', -- Functions, Methods
-  base0E = '#b1cccd', -- Keywords, Storage
+  base09 = '#c4c3eb', -- Integers, Constants
+  base0A = '#b3cad5', -- Classes, Search Background
+  base0B = '#5ed4fd', -- Strings, Diff Inserted
+  base0C = '#c4c3eb', -- Regex, Escape Chars
+  base0D = '#5ed4fd', -- Functions, Methods
+  base0E = '#b3cad5', -- Keywords, Storage
   base0F = '#93000a', -- Deprecated, Embedded Tags
 }
