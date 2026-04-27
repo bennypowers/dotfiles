@@ -1,0 +1,116 @@
+// All windows
+window-rule {
+  clip-to-geometry true
+  geometry-corner-radius 12
+  draw-border-with-background false
+  shadow {
+    on
+    spread 8
+    softness 16
+    offset x=2 y=2
+  }
+  border {
+    off
+    width 1
+    active-color "#ff8800"
+    inactive-color "#444444"
+  }
+  background-effect {
+    blur true
+    xray false
+  }
+  popups {
+    geometry-corner-radius 15
+    // opacity 0.5
+    background-effect {
+      blur true
+    }
+  }
+}
+
+// Floating windows
+window-rule {
+  match app-id="com.github.finefindus.eyedropper" // eye dropper
+  match app-id="com.libretro.RetroArch" // Retroarch
+  match app-id="com.saivert.pwvucontrol"
+  match app-id="dev.bennypowers.Shuk"
+  match app-id="io.gitlab.adhami3310.Impression" // Impression
+  match app-id="io.github.tfuxu.floodit" // Flood It!
+  match app-id="org.gnome.Mines"
+  match app-id="org.gnome.NautilusPreviewer" // Nautilus previewer
+  match app-id="org.gnome.Snapshot" // Camera
+  match app-id="org.gnome.SwellFoop"
+  match app-id="org.gnome.gitlab.wwarner.Solitaire"
+  match app-id="org.kde.kruler" // KRuler (screen ruler)
+  match app-id="org.raspberrypi.rpi-imager"
+  match app-id="sol"
+  match app-id="virt-manager" title="Virtual Machine Manager"
+  match app-id="zen" title=".*Bitwarden.*"
+  match title=".*Network Manager.*" // Network manager
+  match title="overskride" // Overskride (bluetooth gui)
+  open-floating true
+}
+
+// kitty
+window-rule {
+  match app-id="kitty"
+  default-column-width { proportion 0.25; }
+}
+
+// Iotas
+window-rule {
+  match app-id="org.gnome.World.Iotas"
+  default-column-width { proportion 0.15; }
+}
+
+// Bitwarden extension
+window-rule {
+  match app-id="zen" title=".*Bitwarden.*"
+  block-out-from "screen-capture"
+}
+
+// pwvucontrol
+window-rule {
+  match app-id="com.saivert.pwvucontrol"
+  max-width 600
+}
+
+// Aisleriot
+window-rule {
+  match app-id="sol"
+  default-column-width { fixed 1120; }
+}
+
+// SwellFoop
+window-rule {
+  match app-id="org.gnome.SwellFoop"
+  default-window-height { fixed 1145; }
+  default-column-width { fixed 1475; }
+}
+
+// Virt manager controls
+window-rule {
+  match app-id="virt-manager" title="Virtual Machine Manager"
+  open-maximized false
+  default-window-height { fixed 290; }
+  default-column-width { fixed 650; }
+  max-height 290
+  max-width 650
+}
+
+// Silverblue VM viewer
+window-rule {
+  match title="silverblue on QEMU/KVM User session"
+  default-column-width { proportion 0.75; }
+}
+
+window-rule {
+  match app-id="org.gnome.Fractal"
+  background-effect {
+    xray false
+  }
+  border {
+    off
+    width 0
+  }
+}

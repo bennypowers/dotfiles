@@ -1,12 +1,6 @@
-prefer-no-csd
-
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-// noctalia is managed by systemd (noctalia.service)
 spawn-sh-at-startup "systemctl --user import-environment XDG_DATA_DIRS QT_QPA_PLATFORMTHEME QT_SCALE_FACTOR HYPRCURSOR_THEME HYPRCURSOR_SIZE XCURSOR_THEME XCURSOR_SIZE"
-// spawn-at-startup "swww-daemon"
-
-include "noctalia.kdl"
 
 hotkey-overlay {
   skip-at-startup
@@ -14,136 +8,26 @@ hotkey-overlay {
 }
 
 environment {
-  QT_SCALE_FACTOR "2"
-  QT_QPA_PLATFORMTHEME "qt6ct"
-  HYPRCURSOR_THEME "phinger-cursors-light"
-  HYPRCURSOR_SIZE "48"
-  XCURSOR_THEME "phinger-cursors-light"
-  XCURSOR_SIZE "48"
-  XDG_CURRENT_DESKTOP "NiRi"
-  XDG_SESSION_DESKTOP "NiRi"
-  XDG_SESSION_TYPE "wayland"
-  XDG_DATA_DIRS "/usr/local/share:/usr/share:/var/lib/flatpak/exports/share:/home/bennyp/.local/share/flatpak/exports/share"
-  NIRI_ENABLE_COLOR_MANAGEMENT "1"
-  WLR_DRM_NO_ATOMIC "0"
   GIO_EXTRA_MODULES "/usr/lib64/gio/modules"
   GSETTINGS_BACKEND "dconf"
+  GTK_CSD "0"
+  HYPRCURSOR_SIZE "48"
+  HYPRCURSOR_THEME "phinger-cursors-light"
+  NIRI_ENABLE_COLOR_MANAGEMENT "1"
+  QT_QPA_PLATFORMTHEME "qt6ct"
+  QT_SCALE_FACTOR "2"
+  WLR_DRM_NO_ATOMIC "0"
+  XCURSOR_SIZE "48"
+  XCURSOR_THEME "phinger-cursors-light"
+  XDG_CURRENT_DESKTOP "NiRi"
+  XDG_DATA_DIRS "/usr/local/share:/usr/share:/var/lib/flatpak/exports/share:/home/bennyp/.local/share/flatpak/exports/share"
+  XDG_SESSION_DESKTOP "NiRi"
+  XDG_SESSION_TYPE "wayland"
 }
 
 cursor {
   xcursor-theme "phinger-cursors-light"
   xcursor-size 48
-}
-
-binds {
-  Mod+Escape repeat=false hotkey-overlay-title="Lock Screen" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-  Mod+Comma repeat=false hotkey-overlay-title="Noctalia Settings" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle"; }
-
-  // binds cheatsheet
-  Mod+f1 hotkey-overlay-title="Show Keybinds" { spawn "qs -c noctalia-shell ipc call plugin:keybind-cheatsheet toggle"; }
-
-  // # Workspace navigation
-  Mod+h { focus-column-left; }
-  Mod+j { focus-window-down; }
-  Mod+k { focus-window-up; }
-  Mod+l { focus-column-right; }
-
-  Mod+Shift+h { move-column-left; }
-  Mod+Shift+j { move-window-down; }
-  Mod+Shift+k { move-window-up; }
-  Mod+Shift+l { move-column-right; }
-
-  Mod+Alt+k { focus-workspace-up; }
-  Mod+Alt+j { focus-workspace-down; }
-  Mod+Shift+Alt+k { move-window-to-workspace-up; }
-  Mod+Shift+Alt+j { move-window-to-workspace-down; }
-
-  Mod+Tab { focus-window-down-or-column-right; }
-  Mod+Shift+Tab { focus-window-up-or-column-left; }
-  Mod+Ctrl+h { consume-or-expel-window-left; }
-  Mod+Ctrl+l { consume-or-expel-window-right; }
-
-  Mod+WheelScrollDown { focus-column-left; }
-  Mod+WheelScrollUp { focus-column-right; }
-  Mod+WheelScrollRight { focus-column-left; }
-  Mod+WheelScrollLeft { focus-column-right; }
-
-  // # Window controls
-  Mod+Shift+f repeat=false { fullscreen-window; }
-  Mod+c { toggle-window-floating; }
-  Mod+i { toggle-column-tabbed-display; }
-  Mod+w { close-window; }
-
-  Mod+u { switch-preset-column-width; }
-  Mod+Shift+u { switch-preset-column-width-back; }
-
-  // # Applications
-  Mod+t repeat=false hotkey-overlay-title="Terminal" { spawn "uwsm" "app" "--" "kitty-smart-launch"; }
-  Mod+f repeat=false hotkey-overlay-title="Files" { spawn "uwsm" "app" "--" "nautilus"; }
-  Mod+e repeat=false hotkey-overlay-title="Email" { spawn "uwsm" "app" "--" "geary"; }
-  Mod+b repeat=false hotkey-overlay-title="Browser" { spawn "uwsm" "app" "--" "flatpak" "run" "app.zen_browser.zen"; }
-  Mod+p repeat=false hotkey-overlay-title="Launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-  Mod+S repeat=false hotkey-overlay-title="Control Center" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
-  Mod+o repeat=false { toggle-overview; }
-
-  MouseForward { toggle-overview; }
-
-  // # Media keys
-  XF86AudioRaiseVolume hotkey-overlay-title="Volume Up" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
-  XF86AudioLowerVolume hotkey-overlay-title="Volume Dowm" { spawn "uwsm" "app" "--" "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
-  XF86AudioMute hotkey-overlay-title="Mute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-  XF86AudioMicMute hotkey-overlay-title="Mic Mute" { spawn "uwsm" "app" "--" "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
-  XF86MonBrightnessUp hotkey-overlay-title="Brightness Up" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%+"; }
-  XF86MonBrightnessDown hotkey-overlay-title="Brightness Down" { spawn "uwsm" "app" "--" "brightnessctl" "-e4" "-n2" "set" "5%-"; }
-
-  // Media control
-  XF86AudioNext hotkey-overlay-title="Next" { spawn "uwsm" "app" "--" "playerctl" "next"; }
-  XF86AudioPause hotkey-overlay-title="Play/Pause" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
-  XF86AudioPlay hotkey-overlay-title="Play/Pause" { spawn "uwsm" "app" "--" "playerctl" "play-pause"; }
-  XF86AudioPrev hotkey-overlay-title="Previous" { spawn "uwsm" "app" "--" "playerctl" "previous"; }
-
-  // Screenshots
-  Print { screenshot; }
-  Mod+Print { screenshot-window; }
-  Mod+Shift+Print { screenshot-screen; }
-}
-
-// Input configuration
-input {
-  focus-follows-mouse
-  touchpad { natural-scroll }
-  trackball { natural-scroll }
-
-  keyboard {
-    xkb {
-      layout "us,adelman"
-      options "grp:win_space_toggle"
-    }
-  }
-
-  mouse {
-    natural-scroll
-    accel-speed 0.25
-  }
-}
-
-output "DP-1" {
-  mode "5120x2160@120.000"
-  position x=0 y=0
-  scale 1
-  variable-refresh-rate
-  // bit-depth 10
-}
-
-output "HDMI-A-1" {
-  position x=3900 y=2160
-  hot-corners { off }
-  layout {
-    struts {
-      top 0
-      bottom 0
-    }
-  }
 }
 
 layout {
@@ -167,94 +51,8 @@ layout {
   }
 }
 
-// qpa
-layer-rule {
-  match namespace="quickshell-polkit-agent"
-  shadow {
-    on
-    spread 500
-    softness 0
-    offset x=0 y=0
-  }
-}
-
-
-// hyprpaper
-layer-rule {
-  match namespace="hyprpaper"
-  place-within-backdrop true
-}
-
-// Window rules
-window-rule {
-  geometry-corner-radius 12
-  clip-to-geometry true
-}
-
-// kitty
-window-rule {
-  match app-id="kitty"
-  default-column-width { proportion 0.25; }
-}
-
-// Bitwarden extension
-window-rule {
-  match app-id="zen" title=".*Bitwarden.*"
-  // max-width 500
-  // max-height 800
-  block-out-from "screen-capture"
-}
-
-// pwvucontrol
-window-rule {
-  match app-id="com.saivert.pwvucontrol"
-  max-width 600
-}
-
-// Aisleriot
-window-rule {
-  match app-id="sol"
-  default-column-width { fixed 1120; }
-}
-
-window-rule {
-  match app-id="org.gnome.SwellFoop"
-  default-window-height { fixed 1145; }
-  default-column-width { fixed 1475; }
-}
-
-// Virt manager
-window-rule {
-  match app-id="virt-manager" title="Virtual Machine Manager"
-  open-maximized false
-  default-window-height { fixed 290; }
-  default-column-width { fixed 650; }
-  max-height 290
-  max-width 650
-}
-
-window-rule {
-  match title="silverblue on QEMU/KVM User session"
-  default-column-width { proportion 0.75; }
-}
-
-window-rule {
-  match app-id="com.github.finefindus.eyedropper" // eye dropper
-  match app-id="com.libretro.RetroArch" // Retroarch
-  match app-id="com.saivert.pwvucontrol"
-  match app-id="io.github.tfuxu.floodit" // Flood It!
-  match app-id="org.gnome.Mines"
-  match app-id="org.gnome.NautilusPreviewer" // Nautilus previewer
-  match app-id="org.gnome.Snapshot" // Camera
-  match app-id="org.gnome.SwellFoop"
-  match app-id="org.kde.kruler" // KRuler (screen ruler)
-  match app-id="sol"
-  match app-id="virt-manager" title="Virtual Machine Manager"
-  match app-id="zen" title=".*Bitwarden.*"
-  match title=".*Network Manager.*" // Network manager
-  match title="overskride" // Overskride (bluetooth gui)
-  open-floating true
-}
-
-include "./noctalia.kdl"
-
+include "io.kdl"
+include "layers.kdl"
+include "bindings.kdl"
+include "windows.kdl"
+include "noctalia.kdl"

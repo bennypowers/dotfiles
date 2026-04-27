@@ -1,0 +1,38 @@
+// Input configuration
+input {
+  focus-follows-mouse
+  touchpad { natural-scroll; }
+  trackball { natural-scroll; }
+
+  keyboard {
+    xkb {
+      layout "us,adelman"
+      options "grp:win_space_toggle"
+    }
+  }
+
+  mouse {
+    natural-scroll;
+    accel-speed 0.25;
+  }
+}
+
+output "DP-1" {
+  mode "5120x2160@120.000"
+  position x=0 y=0
+  scale 1
+  variable-refresh-rate
+  // bit-depth 10
+}
+
+output "HDMI-A-1" {
+  position x=3900 y=2160
+  hot-corners { off; }
+  layout {
+    struts {
+      top 0
+      bottom 0
+    }
+  }
+}
+
