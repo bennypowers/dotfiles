@@ -13,11 +13,11 @@
       "src": "https://github.com/bennypowers/changesets.nvim"
     },
     "colorful-winsep.nvim": {
-      "rev": "84432d9966fafaa08dd9040c98b0011045d8e964",
+      "rev": "c4f1249fe6bf38f069188778d29eaac55ae8054f",
       "src": "https://github.com/nvim-zh/colorful-winsep.nvim"
     },
     "conform.nvim": {
-      "rev": "086a40dc7ed8242c03be9f47fbcee68699cc2395",
+      "rev": "dca1a190aa85f9065979ef35802fb77131911106",
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "coverage": {
@@ -37,12 +37,16 @@
       "src": "https://github.com/akinsho/git-conflict.nvim"
     },
     "gitsigns.nvim": {
-      "rev": "0d797daee85366bc242580e352a4f62d67557b84",
+      "rev": "6d808f99bd63303646794406e270bd553ad7792e",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "hologram.nvim": {
       "rev": "f5194f71ec1578d91b2e3119ff08e574e2eab542",
       "src": "https://github.com/edluffy/hologram.nvim"
+    },
+    "import-cost.nvim": {
+      "rev": "d61631842ae600e8c951861d2e2a77a1a147e371",
+      "src": "https://github.com/barrett-ruth/import-cost.nvim"
     },
     "ionide-vim": {
       "rev": "99fc1f5878631bad3598ea90dab91419623be066",
@@ -57,7 +61,7 @@
       "src": "https://github.com/folke/lazydev.nvim"
     },
     "lualine": {
-      "rev": "8811f3f3f4dc09d740c67e9ce399e7a541e2e5b2",
+      "rev": "a905eeebc4e63fdc48b5135d3bf8aea5618fb21c",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "lualine.nvim": {
@@ -69,11 +73,11 @@
       "src": "https://github.com/iamcco/markdown-preview.nvim"
     },
     "matchparen.nvim": {
-      "rev": "1a2dcbd026bf99b20b89345883d54823f80a2bee",
+      "rev": "18af2de00c4260c16cd9dd724046f7f16b047ee9",
       "src": "https://github.com/monkoose/matchparen.nvim"
     },
     "mini.nvim": {
-      "rev": "2431902e78b76f435542d1e606f08475360068ca",
+      "rev": "be81509b7160aa02264a59789164a2e1c4a6750a",
       "src": "https://github.com/echasnovski/mini.nvim"
     },
     "multicursor.nvim": {
@@ -96,30 +100,6 @@
       "rev": "a939e425e363319d952a6c35fb3f38b34041ded2",
       "src": "https://github.com/andythigpen/nvim-coverage"
     },
-    "nvim-dap": {
-      "rev": "45a69eba683a2c448dd9ecfc4de89511f0646b5f",
-      "src": "https://github.com/mfussenegger/nvim-dap"
-    },
-    "nvim-dap-go": {
-      "rev": "b4421153ead5d726603b02743ea40cf26a51ed5f",
-      "src": "https://github.com/leoluz/nvim-dap-go"
-    },
-    "nvim-dap-ui": {
-      "rev": "1a66cabaa4a4da0be107d5eda6d57242f0fe7e49",
-      "src": "https://github.com/rcarriga/nvim-dap-ui"
-    },
-    "nvim-dap-virtual-text": {
-      "rev": "fbdb48c2ed45f4a8293d0d483f7730d24467ccb6",
-      "src": "https://github.com/theHamsta/nvim-dap-virtual-text"
-    },
-    "nvim-dap-vscode-js": {
-      "rev": "03bd29672d7fab5e515fc8469b7d07cc5994bbf6",
-      "src": "https://github.com/mxsdev/nvim-dap-vscode-js"
-    },
-    "nvim-nio": {
-      "rev": "21f5324bfac14e22ba26553caf69ec76ae8a7662",
-      "src": "https://github.com/nvim-neotest/nvim-nio"
-    },
     "nvim-origami": {
       "rev": "67c15fd14037778644371487fc68855b530ccd7d",
       "src": "https://github.com/chrisgrieser/nvim-origami"
@@ -141,7 +121,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "nvim-ts-autotag": {
-      "rev": "8e1c0a389f20bf7f5b0dd0e00306c1247bda2595",
+      "rev": "88c1453db4ba7dd24131086fe51fdf74e587d275",
       "src": "https://github.com/windwp/nvim-ts-autotag"
     },
     "nvim-web-devicons": {
@@ -173,7 +153,7 @@
       "src": "https://github.com/simrat39/rust-tools.nvim"
     },
     "schemastore.nvim": {
-      "rev": "6d0329adb9c8cbe51b9a28299890a5eb104db7dc",
+      "rev": "c3709d579066ab8f9600f5b76ade2da5042ec1ac",
       "src": "https://github.com/b0o/schemastore.nvim"
     },
     "snacks.nvim": {
@@ -181,7 +161,7 @@
       "src": "https://github.com/folke/snacks.nvim"
     },
     "splitjoin.nvim": {
-      "rev": "4f4c3c91e9e3c52536f996f5305091ea9dd25f9f",
+      "rev": "371b5df7c9cef92225599e75ebc8c20434e1f9be",
       "src": "https://github.com/bennypowers/splitjoin.nvim"
     },
     "svgo.nvim": {

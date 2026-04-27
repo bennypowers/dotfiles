@@ -4,8 +4,9 @@ return {
   cmd = { 'vscode-html-language-server', '--stdio' },
   filetypes = {
     'html',
+    'handlebars',
+    'jinja',
     'templ',
-    'njk',
     'svg',
   },
   root_markers = { 'package.json', '.git' },

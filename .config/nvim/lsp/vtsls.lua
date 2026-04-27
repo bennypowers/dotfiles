@@ -1,4 +1,4 @@
-local u = require'utils'
+local u = require 'utils'
 
 ---https://github.com/yioneko/vtsls
 ---
@@ -15,21 +15,19 @@ local u = require'utils'
 return {
   name = 'TypeScript',
   cmd = { 'vtsls', '--stdio' },
-  root_markers = {'tsconfig.json', 'package.json', 'jsconfig.json', '.git'},
+  root_markers = { 'tsconfig.json', 'package.json', 'jsconfig.json', '.git' },
   ---@diagnostic disable-next-line: assign-type-mismatch
-  root_dir = u.required_root_markers {'package.json', 'jsconfig.json', 'tsconfig.json'},
+  root_dir = u.required_root_markers { 'package.json', 'jsconfig.json', 'tsconfig.json' },
   filetypes = {
     'javascript',
     'javascriptreact',
-    'javascript.jsx',
     'typescript',
     'typescriptreact',
-    'typescript.tsx',
   },
   settings = {
     typescript = {
       inlayHints = {
-        parameterNames = { enabled = "literals" },
+        parameterNames = { enabled = 'literals' },
         parameterTypes = { enabled = true },
         variableTypes = { enabled = true },
         propertyDeclarationTypes = { enabled = true },

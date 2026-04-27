@@ -22,7 +22,7 @@ end
 ---@type vim.lsp.ClientConfig
 return {
   cmd = { 'sh', '-c', 'GOTOOLCHAIN=auto gopls' },
-  filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+  filetypes = { 'go', 'gomod' },
   ---@diagnostic disable-next-line: assign-type-mismatch
   root_dir = function(bufnr, on_dir)
     local fname = vim.api.nvim_buf_get_name(bufnr)

@@ -8,9 +8,7 @@ return {
     'css',
     'less',
     'scss',
-    'sugarss',
     'vue',
-    'wxss',
   },
   ---@diagnostic disable-next-line: assign-type-mismatch
   root_dir = u.required_root_markers{

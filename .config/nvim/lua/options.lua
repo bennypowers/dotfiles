@@ -19,7 +19,7 @@ vim.opt.laststatus = 3
 vim.opt.linebreak = true
 vim.opt.list = true
 
-vim.opt.completeopt = {'menuone','noselect','popup'}
+vim.opt.completeopt = { 'menuone', 'noselect', 'popup' }
 vim.opt.winborder = 'rounded'
 
 vim.opt.mouse = 'a'
@@ -45,7 +45,7 @@ vim.opt.sessionoptions:append 'blank,buffers,curdir,folds,help,tabpages,winsize,
 vim.opt.shortmess:append 'I' -- no welcome message
 vim.opt.shortmess:append 'a' -- abbreviate built-in messages
 
-require'vim._core.ui2'.enable {
+require 'vim._core.ui2'.enable {
   enable = true,
   msg = {
     targets = 'msg',
@@ -57,13 +57,20 @@ require'vim._core.ui2'.enable {
 
 vim.filetype.add {
   extension = {
-    njk = 'html',
-    webc = 'html',
+    hbs           = 'handlebars',
+    handlebars    = 'handlebars',
+    mustache      = 'handlebars',
+    j2            = 'jinja',
+    twig          = 'jinja',
+    jinja         = 'jinja',
+    jinja2        = 'jinja',
+    njk           = 'jinja',
+    webc          = 'html',
     sketchpalette = 'json',
-    container = 'systemd',
-    volume = 'systemd',
-    network = 'systemd',
-    service = 'systemd',
+    container     = 'systemd',
+    volume        = 'systemd',
+    network       = 'systemd',
+    service       = 'systemd',
   },
 }
 

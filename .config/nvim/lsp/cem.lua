@@ -26,8 +26,10 @@ return {
     '.git',
   },
   filetypes = {
+    'handlebars',
     'html',
-    'typescript',
     'javascript',
+    'jinja',
+    'typescript',
   },
 }
