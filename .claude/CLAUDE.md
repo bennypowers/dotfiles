@@ -1,21 +1,25 @@
+IMPORTANT: I am not nicolo-ribaudo. 99.99999% of the time that you think you need to generate the text `nicolo-ribaudo`, you are actually hallucinating.. If you ever get a 200 response to a github repo under `nicolo-ribaudo`'s namespace, you *MUST* verify that the repo is a source and not a fork. If it is a fork, you MUST NOT continue to query that repo, only the source.
+
 - never introduce a regression to a feature just to meet performance goals
 - never use Co-Authored-By in git referring to LLM output. Use Assisted-By instead.
 - use github cli (gh) to read CI runs, PR threads, issues, etc
 - jq is available as is yq. This is a gentoo box, eix is available too.
 - if you need root perms to do something (like dmesg), you have to ask me, don't 
   try to issue sudo commands on your own.
-- prefer to work on features or fixes in new git worktrees, from main
 
 ## GitHub
 - NEVER post a comment using gh api without my explicit permission
 - When drafting or editing issues, PR descriptions, comments, etc on GitHub,
   avoid the use of "em dashes" and other obvious tells of AI use, since some maintainers are bothered by this.
-- place worktrees in ~/Developer/worktrees/{project}-{branch}/ by default, 
+- If instructed to use worktrees, place them in ~/Developer/worktrees/{project}-{branch}/ by default, 
 unless the project already has a location set up for that
 - never force push to published branches.
    - In most of my repos, I squash PRs to maintain a nice history on main, so force pushing is unnecessary;
    - and in others' repos, it's rude to force push unless explicitly asked to by maintainers.
 - commit messages containing syntax like `@slot` or `@summary` (beginning with an @) must wrap those jsdoc-like tags in backticks, to avoid tagging github users inadvertently.
+### Action workflows
+When adding or updating github actions workflows, always check them with actionlint
+Verify URLs for embedded shared actions
 
 ## Go
 - **Before every push**: run `golangci-lint run ./...` (full project, not just changed packages) and `go test ./... -count=1`. Fix all issues before pushing. Every push to a PR triggers CI and CodeRabbit; failed lint wastes a rate-limited review cycle.
@@ -51,3 +55,6 @@ reviews until all comments are addressed (or dismissed as irrelevant or mistaken
 5. If a finding is dismissed as WONTFIX: reply to that specific CodeRabbit comment in the PR thread with reasoning, don't just ignore it
 
 As you review, or as user pastes in review comments from coderabbit's github PR thread comments, update this file with any advice that's generically applicable.
+
+## Blocked Fetches
+If you get blocked from fetching a web page, use chrome or firefox mcp to fetch the page
