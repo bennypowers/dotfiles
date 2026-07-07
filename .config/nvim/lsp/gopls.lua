@@ -49,9 +49,7 @@ return {
     gopls = {
       buildFlags = { '-tags=e2e' },
       semanticTokens = true,
-      completion = {
-        usePlaceholders = true,
-      }
+      usePlaceholders = true, --completion
     }
   },
   on_attach = function(_, _)

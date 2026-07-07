@@ -2,7 +2,6 @@
 ---
 vim.lsp.log.set_level 'info'
 
-
 ---`cem lsp` provides editor features for custom-elements a.k.a. web components
 ---
 ---Install with go
@@ -31,5 +30,10 @@ return {
     'javascript',
     'jinja',
     'typescript',
+  },
+  settings = {
+    cem = {
+      inlayHints = true,
+    },
   },
 }

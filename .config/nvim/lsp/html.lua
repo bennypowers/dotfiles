@@ -5,7 +5,6 @@ return {
   filetypes = {
     'html',
     'handlebars',
-    'jinja',
     'templ',
     'svg',
   },

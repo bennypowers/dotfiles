@@ -1,4 +1,4 @@
-local u = require'utils'
+local u = require 'utils'
 
 ---stylelint language server
 ---@type vim.lsp.ClientConfig
@@ -11,7 +11,7 @@ return {
     'vue',
   },
   ---@diagnostic disable-next-line: assign-type-mismatch
-  root_dir = u.required_root_markers{
+  root_dir = u.required_root_markers {
     '.stylelintrc',
     '.stylelintrc.cjs',
     '.stylelintrc.js',
@@ -23,8 +23,8 @@ return {
   },
   settings = {
     stylelintplus = {
-      autoFixOnFormat = true,
-      autoFixOnSave = true,
+      -- autoFixOnFormat = true,
+      -- autoFixOnSave = true,
       cssInJs = false,
     },
   },
