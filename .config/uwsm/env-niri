@@ -1,0 +1,12 @@
+export GIO_EXTRA_MODULES="/usr/lib64/gio/modules"
+export GSETTINGS_BACKEND="dconf"
+export GTK_CSD="0"
+export NIRI_ENABLE_COLOR_MANAGEMENT="1"
+export QT_QPA_PLATFORMTHEME="qt6ct"
+export QT_SCALE_FACTOR="2"
+export XCURSOR_SIZE="48"
+export XCURSOR_THEME="phinger-cursors-light"
+export XDG_CURRENT_DESKTOP="niri"
+export XDG_SESSION_DESKTOP="niri"
+export XDG_SESSION_TYPE="wayland"
+
