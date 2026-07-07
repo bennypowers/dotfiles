@@ -17,14 +17,7 @@ window-rule {
   }
   background-effect {
     blur true
-    xray false
-  }
-  popups {
-    geometry-corner-radius 15
-    // opacity 0.5
-    background-effect {
-      blur true
-    }
+    xray true
   }
 }
 
@@ -32,6 +25,7 @@ window-rule {
 window-rule {
   match app-id="com.github.finefindus.eyedropper" // eye dropper
   match app-id="com.libretro.RetroArch" // Retroarch
+  match app-id="com.nextcloud.desktopclient.nextcloud"
   match app-id="com.saivert.pwvucontrol"
   match app-id="dev.bennypowers.Shuk"
   match app-id="io.gitlab.adhami3310.Impression" // Impression
@@ -45,7 +39,8 @@ window-rule {
   match app-id="org.raspberrypi.rpi-imager"
   match app-id="sol"
   match app-id="virt-manager" title="Virtual Machine Manager"
-  match app-id="zen" title=".*Bitwarden.*"
+  match app-id="app.zen_browser.zen" title=".*Bitwarden.*"
+  match app-id="app.zen_browser.zen" title="Picture-in-Picture"
   match title=".*Network Manager.*" // Network manager
   match title="overskride" // Overskride (bluetooth gui)
   open-floating true
@@ -57,6 +52,22 @@ window-rule {
   default-column-width { proportion 0.25; }
 }
 
+window-rule {
+  match app-id="org.gnome.Nautilus"
+  border {
+    off
+    width 1
+  }
+  shadow {
+    off
+    spread 0
+  }
+  background-effect {
+    blur false
+  }
+  draw-border-with-background true
+}
+
 // Iotas
 window-rule {
   match app-id="org.gnome.World.Iotas"
@@ -65,7 +76,7 @@ window-rule {
 
 // Bitwarden extension
 window-rule {
-  match app-id="zen" title=".*Bitwarden.*"
+  match app-id="app.zen_browser.zen" title=".*Bitwarden.*"
   block-out-from "screen-capture"
 }
 

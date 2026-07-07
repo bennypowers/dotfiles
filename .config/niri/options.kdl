@@ -1,0 +1,33 @@
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+hotkey-overlay {
+  skip-at-startup
+  hide-not-bound
+}
+
+cursor {
+  xcursor-theme "phinger-cursors-light"
+  xcursor-size 48
+}
+
+layout {
+  gaps 36
+  center-focused-column "never"
+  always-center-single-column
+  default-column-width { proportion 0.33333; }
+
+  preset-column-widths {
+    proportion 0.15
+    proportion 0.25
+    proportion 0.33333
+    proportion 0.5
+    proportion 0.66667
+    proportion 1.0
+  }
+
+  struts {
+    top 12
+    bottom 48
+  }
+}
+

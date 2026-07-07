@@ -1,9 +1,11 @@
 binds {
-  Mod+Escape repeat=false hotkey-overlay-title="Lock Screen" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-  Mod+Comma repeat=false hotkey-overlay-title="Noctalia Settings" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle"; }
+  // Mod+Escape repeat=false hotkey-overlay-title="Lock Screen" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+  Mod+Comma repeat=false hotkey-overlay-title="Noctalia Settings" { spawn-sh "noctalia msg settings-toggle"; }
+  Mod+p repeat=false hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
+  Mod+S repeat=false hotkey-overlay-title="Control Center" { spawn-sh "noctalia msg panel-toggle control-center"; }
 
   // binds cheatsheet
-  Mod+f1 hotkey-overlay-title="Show Keybinds" { spawn "qs -c noctalia-shell ipc call plugin:keybind-cheatsheet toggle"; }
+  // Mod+f1 hotkey-overlay-title="Show Keybinds" { spawn "qs -c noctalia-shell ipc call plugin:keybind-cheatsheet toggle"; }
 
   // # Workspace navigation
   Mod+h { focus-column-left; }
@@ -43,10 +45,8 @@ binds {
   // # Applications
   Mod+t repeat=false hotkey-overlay-title="Terminal" { spawn "uwsm" "app" "--" "kitty-smart-launch"; }
   Mod+f repeat=false hotkey-overlay-title="Files" { spawn "uwsm" "app" "--" "nautilus"; }
-  Mod+e repeat=false hotkey-overlay-title="Email" { spawn "uwsm" "app" "--" "geary"; }
+  Mod+e repeat=false hotkey-overlay-title="Email" { spawn "uwsm" "app" "--" "stamp"; }
   Mod+b repeat=false hotkey-overlay-title="Browser" { spawn "uwsm" "app" "--" "flatpak" "run" "app.zen_browser.zen"; }
-  Mod+p repeat=false hotkey-overlay-title="Launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-  Mod+S repeat=false hotkey-overlay-title="Control Center" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
   Mod+o repeat=false { toggle-overview; }
 
   MouseForward { toggle-overview; }
@@ -67,7 +67,9 @@ binds {
 
   // Screenshots
   Print { screenshot; }
+  // until my PR lands
   Mod+Print { screenshot-tile; }
+  // Mod+Print { screenshot-window; }
   Mod+Shift+Print { screenshot-screen; }
 }
 

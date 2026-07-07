@@ -1,58 +1,6 @@
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-
-spawn-sh-at-startup "systemctl --user import-environment XDG_DATA_DIRS QT_QPA_PLATFORMTHEME QT_SCALE_FACTOR HYPRCURSOR_THEME HYPRCURSOR_SIZE XCURSOR_THEME XCURSOR_SIZE"
-
-hotkey-overlay {
-  skip-at-startup
-  hide-not-bound
-}
-
-environment {
-  GIO_EXTRA_MODULES "/usr/lib64/gio/modules"
-  GSETTINGS_BACKEND "dconf"
-  GTK_CSD "0"
-  HYPRCURSOR_SIZE "48"
-  HYPRCURSOR_THEME "phinger-cursors-light"
-  NIRI_ENABLE_COLOR_MANAGEMENT "1"
-  QT_QPA_PLATFORMTHEME "qt6ct"
-  QT_SCALE_FACTOR "2"
-  WLR_DRM_NO_ATOMIC "0"
-  XCURSOR_SIZE "48"
-  XCURSOR_THEME "phinger-cursors-light"
-  XDG_CURRENT_DESKTOP "NiRi"
-  XDG_DATA_DIRS "/usr/local/share:/usr/share:/var/lib/flatpak/exports/share:/home/bennyp/.local/share/flatpak/exports/share"
-  XDG_SESSION_DESKTOP "NiRi"
-  XDG_SESSION_TYPE "wayland"
-}
-
-cursor {
-  xcursor-theme "phinger-cursors-light"
-  xcursor-size 48
-}
-
-layout {
-  gaps 16
-  center-focused-column "never"
-  always-center-single-column
-  default-column-width { proportion 0.33333; }
-
-  preset-column-widths {
-    proportion 0.15
-    proportion 0.25
-    proportion 0.33333
-    proportion 0.5
-    proportion 0.66667
-    proportion 1.0
-  }
-
-  struts {
-    top 12
-    bottom 48
-  }
-}
-
+include "options.kdl"
+include "noctalia.kdl"
+include "noctalia-layers.kdl"
 include "io.kdl"
-include "layers.kdl"
 include "bindings.kdl"
 include "windows.kdl"
-include "noctalia.kdl"
