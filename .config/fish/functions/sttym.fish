@@ -4,12 +4,15 @@ function sttym
     set -lx DXVK_HDR 1
     set -lx STEAM_DECK 0
 
+    joystickwake &
+
     gamescope \
+        --backend drm \
         -W 5120 -H 2160 -r 120 \
         --hdr-enabled \
         --hdr-sdr-content-nits 100 \
         --adaptive-sync \
         --fullscreen \
-        -e -- \
+        -e 2&>~/sttym.log -- \
         steam -gamepadui -forcedesktopui -extest
 end

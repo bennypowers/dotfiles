@@ -105,7 +105,7 @@ function detect-fisher-files -d "Detect Fisher-managed vs custom files and gener
     # Main function logic
     if set -q _flag_update_gitignore
         # Update global gitignore file
-        set -l gitignore_file "$HOME/.config/git/gitignore"
+        set -l gitignore_file "$HOME/.cfg/gitignore"
 
         if test -f $gitignore_file
             # Remove existing detect-fisher-files block
@@ -113,7 +113,7 @@ function detect-fisher-files -d "Detect Fisher-managed vs custom files and gener
         end
 
         # Append new block
-        _output_fisher_files >> $gitignore_file
+        _output_fisher_files >>$gitignore_file
         echo "Updated $gitignore_file with Fisher-managed files"
     else
         # Just output gitignore entries
