@@ -1,0 +1,13 @@
+[Unit]
+Description=Lock screen on sleep via logind PrepareForSleep
+After=graphical-session.target
+BindsTo=noctalia.service
+
+[Service]
+Type=simple
+ExecStart=%h/.config/systemd/user/scripts/sleep-lock.sh
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

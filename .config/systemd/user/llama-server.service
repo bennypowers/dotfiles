@@ -1,0 +1,18 @@
+[Unit]
+Description=llama.cpp Inference Server
+After=network.target
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+[Service]
+Type=simple
+ExecStart=%h/Developer/homelab/ollama/llama-server.sh
+Restart=on-failure
+RestartSec=10
+MemoryHigh=48G
+MemoryMax=52G
+OOMPolicy=kill
+OOMScoreAdjust=500
+
+[Install]
+WantedBy=default.target

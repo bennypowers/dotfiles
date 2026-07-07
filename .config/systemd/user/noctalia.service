@@ -4,11 +4,10 @@ Documentation=https://github.com/noctalia-dev/noctalia
 After=graphical-session.target
 PartOf=graphical-session.target
 Requisite=graphical-session.target
-Wants=hypridle.service quickshell-polkit-agent.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/qs -c noctalia-shell
+ExecStart=noctalia
 Restart=on-failure
 RestartSec=2
 
