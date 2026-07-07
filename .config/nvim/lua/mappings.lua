@@ -1,7 +1,6 @@
-local u = require'utils'
+local u = require 'utils'
 
 local function format_async() vim.lsp.buf.format { async = true } end
-local function open_diagnostics() vim.diagnostic.open_float { focus = false } end
 
 -- put without yanking
 u.nmap('<c-p>', '"_dP')
@@ -23,7 +22,10 @@ u.map('<A-j>', '<c-\\><c-N><c-w>j', 'Move cursor to window below', { mode = { 'i
 u.map('<A-k>', '<c-\\><c-N><c-w>k', 'Move cursor to window above', { mode = { 'i', 't' } })
 u.map('<A-l>', '<c-\\><c-N><c-w>l', 'Move cursor to window right', { mode = { 'i', 't' } })
 
-u.nmap('<leader>e', open_diagnostics, 'Open diagnostics in floating window')
+u.nmap('<leader>e', function()
+         vim.diagnostic.open_float { focus = false }
+       end, 'Open diagnostics in floating window')
+
 u.nmap('<leader>lf', format_async, 'Format file')
 
 u.nmap('grD', vim.lsp.buf.declaration, 'Go to declaration')

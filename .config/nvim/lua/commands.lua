@@ -311,5 +311,11 @@ end, {
   range = '%'
 })
 
+command('TrimTrailingWhitespace', function()
+  vim.cmd[[%s/\s\+$//e]]
+end, {
+  desc = 'Remove trailing whitespace from all lines',
+})
+
 return M
 

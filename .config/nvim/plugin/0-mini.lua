@@ -17,6 +17,26 @@ local function apply_html_highlights(palette)
   hi(0, '@operator.html', { fg = palette.base04 })
 end
 
+local function clear_column_backgrounds()
+  local hi = vim.api.nvim_set_hl
+  for _, group in ipairs {
+    'SignColumn', 'FoldColumn', 'LineNr', 'LineNrAbove', 'LineNrBelow', 'CursorLineNr',
+    'Folded',
+    'DiagnosticSignError', 'DiagnosticSignWarn', 'DiagnosticSignInfo', 'DiagnosticSignHint', 'DiagnosticSignOk',
+    'DiagnosticFloatingError', 'DiagnosticFloatingWarn', 'DiagnosticFloatingInfo', 'DiagnosticFloatingHint', 'DiagnosticFloatingOk',
+    'GitSignsAdd', 'GitSignsChange', 'GitSignsDelete', 'GitSignsUntracked',
+    'MiniDiffSignAdd', 'MiniDiffSignChange', 'MiniDiffSignDelete',
+  } do
+    local hl = vim.api.nvim_get_hl(0, { name = group })
+    if hl.link then
+      hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+    end
+    hl.bg = nil
+    hl.ctermbg = nil
+    hi(0, group, hl)
+  end
+end
+
 local function apply_theme()
   local ok, palette = pcall(require, 'matugen')
   if ok then
@@ -26,6 +46,7 @@ local function apply_theme()
   if ok then
     apply_html_highlights(palette)
   end
+  clear_column_backgrounds()
 end
 
 -- Register SIGUSR1 handler for dynamic updates

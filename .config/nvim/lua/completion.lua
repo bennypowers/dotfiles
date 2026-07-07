@@ -64,9 +64,8 @@ au('LspAttach', {
         local kind = vim.lsp.protocol.CompletionItemKind[item.kind] or 'Text'
         local icon = kind_icons[kind] or ''
         local label = item.label or ''
-        ---@cast item table
         item.abbr = icon .. ' ' .. label
-        item.kind = kind
+        item.kind_text = kind
         item.abbr_hlgroup = kind_hl[kind]
         return item
       end,

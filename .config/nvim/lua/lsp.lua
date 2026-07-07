@@ -31,6 +31,7 @@ vim.lsp.enable {
   'qmlls',
   'rust_analyzer',
   'stylelint_lsp',
+  'termux-language-server',
   'vtsls',
   'yamlls',
 }

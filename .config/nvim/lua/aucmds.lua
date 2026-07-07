@@ -2,13 +2,11 @@ local au = vim.api.nvim_create_autocmd
 local ag = vim.api.nvim_create_augroup
 
 au('BufEnter', {
-  group = ag('waybar_config', {}),
-  pattern = 'config',
+  pattern = { 'env', 'env-*' },
   callback = function(event)
-    if event.match == vim.fn.expand '~/.config/waybar/config' then
-      vim.bo.filetype = 'json'
-    end
-  end
+    print(event.match)
+    if vim.startswith(event.match, vim.fn.expand '~/.config/uwsm/env') then vim.bo.filetype = 'bash' end
+  end,
 })
 
 ---Highlight yanked text
@@ -16,9 +14,7 @@ au('BufEnter', {
 au('TextYankPost', {
   group = ag('yank_highlight', {}),
   pattern = '*',
-  callback = function()
-    vim.highlight.on_yank { higroup = 'IncSearch', timeout = 300 }
-  end,
+  callback = function() vim.highlight.on_yank { higroup = 'IncSearch', timeout = 300 } end,
 })
 
 -- Only setup gnvim when it attaches.
@@ -40,21 +36,19 @@ au('UIEnter', {
 
         gnvim.setup {
           cursor = {
-            blink_transition = 300
-          }
+            blink_transition = 300,
+          },
         }
       end
     end
-  end
+  end,
 })
 
 au('TermClose', {
   callback = function(ev)
-    local ns = vim.api.nvim_create_namespace('nvim.terminal.exitmsg')
+    local ns = vim.api.nvim_create_namespace 'nvim.terminal.exitmsg'
     vim.defer_fn(function()
-      if vim.api.nvim_buf_is_valid(ev.buf) then
-        vim.api.nvim_buf_clear_namespace(ev.buf, ns, 0, -1)
-      end
+      if vim.api.nvim_buf_is_valid(ev.buf) then vim.api.nvim_buf_clear_namespace(ev.buf, ns, 0, -1) end
     end, 10)
   end,
 })
@@ -63,8 +57,8 @@ au('LspAttach', {
   callback = function(args)
     if vim.lsp.document_color then
       vim.lsp.document_color.enable(true, { bufnr = args.buf }, {
-        style = 'virtual'
+        style = 'virtual',
       })
     end
-  end
+  end,
 })

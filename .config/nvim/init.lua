@@ -1,6 +1,6 @@
+require 'options'
 require 'aucmds'
 require 'commands'
 require 'completion'
 require 'lsp'
 require 'mappings'
-require 'options'
