@@ -1,0 +1,10 @@
+[theme]
+mode = "dark"
+
+[theme.templates.user.nvim_mini]
+input_path  = "~/.config/nvim/lua/matugen/template.lua"
+output_path = "~/.config/nvim/lua/matugen/init.lua"
+post_hook   = "bash '/home/bennyp/.config/nvim/lua/matugen/apply.sh'"
+
+[bar.main]
+position = "top"

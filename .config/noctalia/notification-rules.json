@@ -1,8 +1,0 @@
-{
-    "rules": [
-        {
-            "action": "hide",
-            "pattern": "Claude"
-        }
-    ]
-}
