@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=org.tabos.stamp
+X-XDP-Autostart=org.tabos.stamp
+Exec=stamp --hidden
